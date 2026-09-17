@@ -43,14 +43,14 @@ let fujiAdapter: FujiNeximAdapter | null = null;
 // Enterprise Security Hardening Middleware
 app.use(securityHeadersMiddleware);
 
-const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000,https://cleanroom.local')
+const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000,http://localhost:4000,http://127.0.0.1:4000,https://cleanroom.local')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === 'test') {
+    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.some(ao => origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) || process.env.NODE_ENV === 'test') {
       callback(null, true);
     } else {
       callback(new Error('CORS policy violation: Origin not allowed'));
@@ -165,7 +165,7 @@ app.get('/api-docs', (_req, res) => {
   res.send(`<!DOCTYPE html>
 <html>
 <head>
-  <title>Antigravity SMT MES - Interactive API Docs</title>
+  <title>SMT Manufacturing Execution System (MES) - Interactive API Docs</title>
   <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
 </head>
 <body>
@@ -219,8 +219,8 @@ for (const dir of possiblePublicDirs) {
 function printBanner(port: string | number, fujiPort: number) {
   const line = '='.repeat(80);
   console.log(`\n${line}`);
-  console.log('   🏭 ANTIGRAVITY SMT CLEANROOM MES - STANDALONE SIMULATOR & WORKSTATION');
-  console.log('   Complete Event-Driven Manufacturing Execution System (Phases 1-6)');
+  console.log('   🏭 SMT MANUFACTURING EXECUTION SYSTEM (MES)');
+  console.log('   Cleanroom Operations & Equipment Automation Platform');
   console.log(`${line}`);
   console.log(`  [System Architecture]  TypeScript + Node.js Engine (Dual Dialect SQLite / Postgres)`);
   console.log(`  [Operating Mode]        STANDALONE EMBEDDED SIMULATOR`);
@@ -260,7 +260,7 @@ function launchBrowser(url: string) {
 
 async function bootstrap() {
   try {
-    console.log('[API] Bootstrapping Antigravity SMT MES Engine...');
+    console.log('[API] Bootstrapping SMT MES Engine...');
     SecretsConfigManager.loadConfig();
     await initDatabase();
 

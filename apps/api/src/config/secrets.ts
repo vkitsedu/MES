@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 
 dotenv.config();
 
@@ -46,8 +47,9 @@ export class SecretsConfigManager {
       .map((s) => s.trim())
       .filter(Boolean);
 
-    const jwtSecret = customEnv.JWT_SECRET || 'dev-jwt-secret-do-not-use-in-production-min-32chars';
-    const apiKeySecret = customEnv.API_KEY_SECRET || 'dev-mes-api-key-secret-2026-strict-hygiene';
+    const defaultKey = crypto.randomBytes(32).toString('hex');
+    const jwtSecret = customEnv.JWT_SECRET || defaultKey;
+    const apiKeySecret = customEnv.API_KEY_SECRET || defaultKey;
 
     // Strict Production Gate
     if (nodeEnv === 'production') {

@@ -5,7 +5,8 @@ export type SplicingDecisionCode =
   | 'BLOCKED_REEL_NOT_FOUND'
   | 'BLOCKED_REEL_EXPIRED'
   | 'BLOCKED_MSL_EXPIRED'
-  | 'BLOCKED_REEL_NOT_USABLE';
+  | 'BLOCKED_REEL_NOT_USABLE'
+  | 'BLOCKED_REEL_NOT_CATALOGED';
 
 export type PrinterDecisionCode =
   | 'APPROVED'

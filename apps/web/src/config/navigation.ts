@@ -79,19 +79,19 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     requiredRoles: ['LINE_LEAD', 'QUALITY_LEAD', 'SYSTEM_ADMIN'],
     description: 'Multi-line bay OEE, takt time pacing, and bottleneck balancing',
     shortcut: '1',
-    allowGuestReadOnly: false,
+    allowGuestReadOnly: true,
     iconName: 'Split'
   },
   SUPERVISOR: {
     id: 'SUPERVISOR',
     domainId: 'EXECUTIVE',
-    label: 'Line 01 Supervisor',
-    shortLabel: 'Supervisor',
+    label: 'SMT Line Realtime Status',
+    shortLabel: 'Line Flow',
     code: 'SUP-01',
     requiredRoles: ['LINE_LEAD', 'QUALITY_LEAD', 'SYSTEM_ADMIN'],
-    description: 'Shift summary report, downtime Pareto, and feeder pickup health',
+    description: 'Machine flow strip, OEE arc dials, drop rate PPM, and downtime Pareto',
     shortcut: '2',
-    allowGuestReadOnly: false,
+    allowGuestReadOnly: true,
     iconName: 'Activity'
   },
 
@@ -167,7 +167,7 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     requiredRoles: ['QUALITY_LEAD', 'SYSTEM_ADMIN'],
     description: '21 CFR Part 11 lot release gate, electronic signatures, and audit trails',
     shortcut: '8',
-    allowGuestReadOnly: false,
+    allowGuestReadOnly: true,
     iconName: 'Shield'
   },
   GENEALOGY: {
@@ -217,7 +217,7 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     requiredRoles: ['QUALITY_LEAD', 'SYSTEM_ADMIN'],
     description: 'Fuji Nexim raw TCP frames and SHA-256 cryptographic audit ledger',
     shortcut: 'l',
-    allowGuestReadOnly: false,
+    allowGuestReadOnly: true,
     iconName: 'Terminal'
   }
 };

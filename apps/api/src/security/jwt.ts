@@ -22,8 +22,18 @@ export interface VerifyTokenResult {
 }
 
 export class TokenManager {
+  private static cachedSecret: string | null = null;
+
   private static get secret(): string {
-    return process.env.JWT_SECRET || 'antigravity-mes-enterprise-secret-key-4096';
+    if (process.env.JWT_SECRET) {
+      return process.env.JWT_SECRET;
+    }
+    if (!TokenManager.cachedSecret) {
+      // Runtime generation: avoids shipping static predictable secrets in portable distribution
+      const crypto = require('crypto');
+      TokenManager.cachedSecret = crypto.randomBytes(48).toString('hex');
+    }
+    return TokenManager.cachedSecret!;
   }
 
   private static readonly ISSUER = 'Antigravity-MES';

@@ -105,7 +105,7 @@ healthRouter.get('/ready', async (_req: Request, res: Response) => {
   const result = await performDeepHealthCheck();
   res.status(result.healthy ? 200 : 503).json({
     status: result.healthy ? 'HEALTHY' : 'UNHEALTHY',
-    system: 'Antigravity SMT MES Engine',
+    system: 'SMT MES Engine',
     timestamp: new Date().toISOString(),
     version: '0.2.0-smt',
     checks: result.checks
@@ -122,7 +122,7 @@ healthRouter.get('/', async (_req: Request, res: Response) => {
   const result = await performDeepHealthCheck();
   res.status(result.healthy ? 200 : 503).json({
     status: result.healthy ? 'HEALTHY' : 'UNHEALTHY',
-    system: 'Antigravity SMT MES Engine',
+    system: 'SMT MES Engine',
     timestamp: new Date().toISOString(),
     version: '0.2.0-smt',
     checks: result.checks

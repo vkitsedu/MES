@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
-  Cpu, Radio, Shield, 
-  Key, Lock, LogOut, UserCheck, Search,
-  ChevronDown, Check
+  Cpu, Radio, Shield, Key, Lock, LogOut, UserCheck, Search,
+  ChevronDown, Check, Activity, Sliders, Layers, Flame, Truck, 
+  GitFork, Crosshair, Terminal, Split, RefreshCw, FileText, Settings, 
+  Clock, BarChart3, AlertTriangle
 } from 'lucide-react';
 import { SolderPasteStation } from './components/SolderPasteStation';
 import { OperatorStation } from './components/OperatorStation';
@@ -10,7 +11,6 @@ import { SupervisorDashboard } from './components/SupervisorDashboard';
 import { TraceabilityStation } from './components/TraceabilityStation';
 import { AuditTrailViewer } from './components/AuditTrailViewer';
 import { CleanroomComplianceStation } from './components/CleanroomComplianceStation';
-import { AndonTower } from './components/AndonTower';
 import { ReworkStation } from './components/ReworkStation';
 import { SpiStation } from './components/SpiStation';
 import { FleetDashboard } from './components/FleetDashboard';
@@ -22,31 +22,49 @@ import { authService, OperatorProfile, OperatorRole } from './services/auth.serv
 
 import { 
   NavTab, 
-  DomainId, 
   STATIONS, 
-  getStationsForDomain,
   isTabAllowed, 
   getInitialOrPermittedTab 
 } from './config/navigation';
-import { DomainNav } from './components/navigation/DomainNav';
-import { StationNav } from './components/navigation/StationNav';
-import { ManagerKpiRibbon } from './components/navigation/ManagerKpiRibbon';
 import { QuickStationSwitcher } from './components/navigation/QuickStationSwitcher';
 import { ShiftBriefingModal } from './components/navigation/ShiftBriefingModal';
+import { StationModeModal, StationModes } from './components/navigation/StationModeModal';
 import { useManagerKpis, generateShiftBriefingText } from './services/kpi-adapter';
 
 const ROLE_BADGE_STYLES: Record<OperatorRole, { bg: string; text: string; border: string }> = {
-  OPERATOR: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20' },
-  MAINTENANCE: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' },
-  QUALITY_LEAD: { bg: 'bg-indigo-500/10', text: 'text-indigo-300', border: 'border-indigo-500/20' },
-  LINE_LEAD: { bg: 'bg-sky-500/10', text: 'text-sky-300', border: 'border-sky-500/20' },
-  SYSTEM_ADMIN: { bg: 'bg-rose-500/10', text: 'text-rose-300', border: 'border-rose-500/20' }
+  OPERATOR: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+  MAINTENANCE: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30' },
+  QUALITY_LEAD: { bg: 'bg-indigo-500/10', text: 'text-indigo-300', border: 'border-indigo-500/30' },
+  LINE_LEAD: { bg: 'bg-sky-500/10', text: 'text-sky-300', border: 'border-sky-500/30' },
+  SYSTEM_ADMIN: { bg: 'bg-rose-500/10', text: 'text-rose-300', border: 'border-rose-500/30' }
 };
+
+interface MdiTabItem {
+  id: NavTab;
+  code: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  hotkey: string;
+}
+
+const MDI_TABS: MdiTabItem[] = [
+  { id: 'SUPERVISOR', code: 'SMD_01', label: 'SMT Line Realtime Flow', icon: Activity, hotkey: '1' },
+  { id: 'FLEET', code: 'NEXIM', label: 'Fuji Management Monitor', icon: Split, hotkey: '2' },
+  { id: 'SPI', code: 'SPI-01', label: '3D SPI Inspection', icon: Sliders, hotkey: '3' },
+  { id: 'OPERATOR', code: 'FDR-01', label: 'Feeder Bay Rails', icon: Cpu, hotkey: '4' },
+  { id: 'SOLDER_PASTE', code: 'PST-01', label: 'Paste & MSL Thaw', icon: Layers, hotkey: '5' },
+  { id: 'REFLOW', code: 'RFW-01', label: 'Reflow 10-Zone Oven', icon: Flame, hotkey: '6' },
+  { id: 'GENEALOGY', code: 'TRC-01', label: 'Genealogy & Lot Recall', icon: GitFork, hotkey: '7' },
+  { id: 'AUDIT_TRAIL', code: 'LOG-01', label: 'CFR 11 Hash Ledger', icon: Terminal, hotkey: '8' },
+  { id: 'COMPLIANCE', code: 'DHR-01', label: 'Cleanroom eDHR Gate', icon: Shield, hotkey: '9' },
+  { id: 'REWORK', code: 'RWK-01', label: 'AOI Defect Rework', icon: Crosshair, hotkey: '0' },
+  { id: 'AGV_LOGISTICS', code: 'AGV-01', label: 'AGV Material Fleet', icon: Truck, hotkey: 'a' },
+  { id: 'PREDICTIVE', code: 'SPC-01', label: 'Predictive SPC & Drift', icon: BarChart3, hotkey: 'p' },
+];
 
 export const App: React.FC = () => {
   const [operator, setOperator] = useState<OperatorProfile | null>(null);
-  const [activeTab, setActiveTab] = useState<NavTab>(() => getInitialOrPermittedTab('FLEET', null));
-  const [activeDomain, setActiveDomain] = useState<DomainId>(() => STATIONS[activeTab]?.domainId ?? 'EXECUTIVE');
+  const [activeTab, setActiveTab] = useState<NavTab>(() => getInitialOrPermittedTab('SUPERVISOR', null));
   
   const [selectedLine, setSelectedLine] = useState<'LINE_01' | 'LINE_02'>('LINE_01');
   const [isLineMenuOpen, setIsLineMenuOpen] = useState(false);
@@ -54,9 +72,27 @@ export const App: React.FC = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isStationSwitcherOpen, setIsStationSwitcherOpen] = useState(false);
   const [isBriefingModalOpen, setIsBriefingModalOpen] = useState(false);
+  const [isStationModeModalOpen, setIsStationModeModalOpen] = useState(false);
+  const [stationModes, setStationModes] = useState<StationModes>({
+    dbMode: 'STANDALONE',
+    fujiMode: 'LIVE_TCP',
+    spiMode: 'SIMULATED',
+    aoiMode: 'SIMULATED',
+    printerMode: 'SIMULATED',
+    reflowMode: 'SIMULATED'
+  });
   const [briefingText, setBriefingText] = useState('');
   const [briefingCopyError, setBriefingCopyError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState<string>(() => new Date().toLocaleTimeString());
+
+  // 1-second live clock update for industrial cockpit
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Live KPI hook adhering strictly to Anti-Fake-Success invariants
   const kpis = useManagerKpis(5000);
@@ -67,11 +103,8 @@ export const App: React.FC = () => {
       const newOp = state.operator;
       setOperator(newOp);
 
-      // Verify active tab remains accessible after login/logout
       setActiveTab((prev) => {
-        const validated = getInitialOrPermittedTab(prev, newOp);
-        setActiveDomain(STATIONS[validated]?.domainId ?? 'EXECUTIVE');
-        return validated;
+        return getInitialOrPermittedTab(prev, newOp);
       });
     });
     return unsubscribe;
@@ -99,28 +132,10 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Handle station selection from any tier or quick switcher
+  // Handle station selection
   const handleSelectTab = useCallback((tab: NavTab) => {
     setActiveTab(tab);
-    const domain = STATIONS[tab]?.domainId;
-    if (domain) {
-      setActiveDomain(domain);
-    }
   }, []);
-
-  // Handle domain tab click
-  const handleSelectDomain = useCallback((domainId: DomainId) => {
-    setActiveDomain(domainId);
-    const stationsInDomain = getStationsForDomain(domainId);
-    if (!stationsInDomain.some(s => s.id === activeTab)) {
-      const firstAllowed = stationsInDomain.find(s => isTabAllowed(s.id, operator));
-      if (firstAllowed) {
-        setActiveTab(firstAllowed.id);
-      } else if (stationsInDomain[0]) {
-        setActiveTab(stationsInDomain[0].id);
-      }
-    }
-  }, [activeTab, operator]);
 
   // Handle shift briefing export with clipboard fallback
   const handleExportBriefing = useCallback(async () => {
@@ -143,214 +158,266 @@ export const App: React.FC = () => {
   const isAllowed = isTabAllowed(activeTab, operator);
 
   return (
-    <div className="min-h-screen bg-[#0A0D12] text-[#EDEDED] flex flex-col font-sans selection:bg-white/10 selection:text-white">
+    <div className="w-full h-screen flex flex-col bg-[#070B12] text-[#EDEDED] font-sans selection:bg-blue-600/30 selection:text-white overflow-hidden select-none">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#171B22] border border-white/[0.12] text-white px-3.5 py-2 rounded-lg shadow-xl text-xs font-mono flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+        <div className="fixed bottom-8 right-6 z-50 bg-[#141C2C] border border-[#222F46] text-white px-3.5 py-2 rounded-sm shadow-xl text-xs font-mono flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
           <Check className="w-3.5 h-3.5 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Industrial Cockpit Header */}
-      <header className="bg-[#0F1218] border-b border-white/[0.08] px-4 sm:px-6 py-2 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          {/* Left: Facility Context & Line Selector */}
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-md bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/80 shrink-0">
-              <Cpu className="w-4 h-4" />
-            </div>
-
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono tracking-wider text-[#6B7280] uppercase">
-                  Apex Electronics · Noida Cluster P4
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                <span className="text-[10px] font-mono text-emerald-400 font-medium">
-                  {selectedLine === 'LINE_01' ? 'Line 01 Online' : 'Line 02 Online'}
-                </span>
-              </div>
-
-              {/* Line Selector Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => setIsLineMenuOpen(!isLineMenuOpen)}
-                  className="text-xs font-semibold text-white tracking-tight flex items-center gap-1.5 hover:text-white/80 transition-colors"
-                  aria-haspopup="true"
-                  aria-expanded={isLineMenuOpen}
-                >
-                  <span>
-                    {selectedLine === 'LINE_01' 
-                      ? 'Fuji NXT III M6 (Line 01)' 
-                      : 'Fuji AIMEX IIIc (Line 02)'}
-                  </span>
-                  <ChevronDown className="w-3 h-3 text-[#6B7280]" />
-                </button>
-
-                {isLineMenuOpen && (
-                  <div className="absolute top-full left-0 mt-1 bg-[#141820] border border-white/[0.12] rounded-lg shadow-xl py-1 z-50 w-64 text-xs font-sans">
-                    <button
-                      onClick={() => {
-                        setSelectedLine('LINE_01');
-                        setIsLineMenuOpen(false);
-                      }}
-                      className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-white/[0.04] ${
-                        selectedLine === 'LINE_01' ? 'text-white font-semibold bg-white/[0.04]' : 'text-[#9CA3AF]'
-                      }`}
-                    >
-                      <div>
-                        <div className="font-medium text-white">Line 01: Fuji NXT III M6</div>
-                        <div className="text-[10px] text-[#6B7280]">High-Speed Smart Meter SMT</div>
-                      </div>
-                      {selectedLine === 'LINE_01' && <Check className="w-3.5 h-3.5 text-emerald-400" />}
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setSelectedLine('LINE_02');
-                        setIsLineMenuOpen(false);
-                      }}
-                      className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-white/[0.04] ${
-                        selectedLine === 'LINE_02' ? 'text-white font-semibold bg-white/[0.04]' : 'text-[#9CA3AF]'
-                      }`}
-                    >
-                      <div>
-                        <div className="font-medium text-white">Line 02: Fuji AIMEX IIIc</div>
-                        <div className="text-[10px] text-[#6B7280]">Flexible Mixed-Model SMT</div>
-                      </div>
-                      {selectedLine === 'LINE_02' && <Check className="w-3.5 h-3.5 text-emerald-400" />}
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+      {/* Fixed Enterprise System Header (Height 38px) */}
+      <header className="h-[38px] bg-[#0C121E] border-b border-[#222F46] px-3 flex items-center justify-between gap-3 shrink-0 z-30 font-mono text-xs">
+        {/* Left: Branding, Cluster, Line Selector & Protocol Link */}
+        <div className="flex items-center gap-2.5">
+          {/* System Badge */}
+          <div className="px-2 py-0.5 bg-[#142338] border border-[#233A5E] text-sky-400 font-bold text-[10.5px] tracking-wider flex items-center gap-1.5 rounded-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
+            <span>G-MES 4.0</span>
           </div>
 
-          {/* Right: Quick Search Button & Operator Status */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Quick Station Switcher Button (Cmd+K) */}
+          <div className="flex items-baseline gap-1.5">
+            <span className="font-bold text-white tracking-tight">
+              APEX SMT MANUFACTURING EXECUTION SYSTEM
+            </span>
+            <span className="text-[10px] text-slate-500 hidden xl:inline">
+              · NOIDA CLUSTER P4
+            </span>
+          </div>
+
+          <div className="h-3 w-px bg-[#222F46] hidden sm:block" />
+
+          {/* Line Selector Dropdown */}
+          <div className="relative">
             <button
-              onClick={() => setIsStationSwitcherOpen(true)}
-              className="flex items-center gap-2 bg-white/[0.03] hover:bg-white/[0.06] text-[#8E95A2] hover:text-white px-2.5 sm:px-3 py-1.5 rounded-md border border-white/[0.08] text-xs font-sans transition-colors"
-              title="Search and jump to any station (⌘K or /)"
-              aria-label="Open station search palette"
+              onClick={() => setIsLineMenuOpen(!isLineMenuOpen)}
+              className="text-[11px] font-bold text-slate-200 tracking-tight flex items-center gap-1 bg-[#111A29] px-2 py-0.5 rounded-sm border border-[#222F46] hover:bg-[#18253A] transition-colors"
+              aria-haspopup="true"
+              aria-expanded={isLineMenuOpen}
             >
-              <Search className="w-3.5 h-3.5 text-[#6B7280]" />
-              <span className="hidden md:inline">Jump to station...</span>
-              <kbd className="hidden sm:inline text-[10px] font-mono bg-white/[0.06] border border-white/[0.08] px-1.5 py-0.2 rounded text-[#8E95A2]">
-                ⌘K
-              </kbd>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>
+                {selectedLine === 'LINE_01' 
+                  ? 'SMD_01: Fuji NXT III M6' 
+                  : 'SMD_02: Fuji AIMEX IIIc'}
+              </span>
+              <ChevronDown className="w-3 h-3 text-slate-400 ml-0.5" />
             </button>
 
-            {/* Gateway Telemetry Tag */}
-            <div className="hidden xl:flex items-center gap-3 text-xs font-mono bg-white/[0.03] px-3 py-1.5 rounded-md border border-white/[0.08]">
-              <div className="flex items-center gap-1.5">
-                <Radio className="w-3 h-3 text-[#6B7280]" />
-                <span className="text-[#6B7280]">PORT:</span>
-                <span className="text-white font-medium">30040</span>
-              </div>
-              <div className="h-3 w-px bg-white/[0.08]" />
-              <div className="flex items-center gap-1 text-emerald-400">
-                <Shield className="w-3 h-3" />
-                <span>INTERLOCK ARMED</span>
-              </div>
-            </div>
-
-            {/* Operator Session Tag */}
-            {operator ? (
-              <div className="flex items-center gap-2 bg-white/[0.03] px-2.5 py-1.5 rounded-md border border-white/[0.08] text-xs font-mono">
-                <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-white font-medium">{operator.code}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded border font-medium ${ROLE_BADGE_STYLES[operator.role]?.bg || 'bg-white/5'} ${ROLE_BADGE_STYLES[operator.role]?.text || 'text-white'} ${ROLE_BADGE_STYLES[operator.role]?.border || 'border-white/10'}`}>
-                  {operator.role}
-                </span>
-                <div className="h-3 w-px bg-white/[0.08]" />
+            {isLineMenuOpen && (
+              <div className="absolute top-full left-0 mt-1 bg-[#111A29] border border-[#222F46] rounded-sm shadow-2xl py-1 z-50 w-64 text-xs font-mono">
                 <button
-                  onClick={() => authService.logout()}
-                  className="text-[#6B7280] hover:text-white flex items-center gap-1 hover:bg-white/[0.04] px-1 py-0.5 rounded transition-colors"
-                  title="Sign out operator"
-                  aria-label="Sign out operator"
+                  onClick={() => {
+                    setSelectedLine('LINE_01');
+                    setIsLineMenuOpen(false);
+                  }}
+                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-[#18253A] ${
+                    selectedLine === 'LINE_01' ? 'text-white font-bold bg-[#141F32]' : 'text-slate-400'
+                  }`}
                 >
-                  <LogOut className="w-3 h-3" />
-                  <span className="hidden sm:inline font-sans">Lock</span>
+                  <div>
+                    <div className="font-bold text-white text-[11px]">SMD_01: Fuji NXT III M6</div>
+                    <div className="text-[9.5px] text-slate-500">High-Speed Smart Meter SMT</div>
+                  </div>
+                  {selectedLine === 'LINE_01' && <Check className="w-3 h-3 text-emerald-400" />}
+                </button>
+
+                <button
+                  onClick={() => {
+                    setSelectedLine('LINE_02');
+                    setIsLineMenuOpen(false);
+                  }}
+                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-[#18253A] ${
+                    selectedLine === 'LINE_02' ? 'text-white font-bold bg-[#141F32]' : 'text-slate-400'
+                  }`}
+                >
+                  <div>
+                    <div className="font-bold text-white text-[11px]">SMD_02: Fuji AIMEX IIIc</div>
+                    <div className="text-[9.5px] text-slate-500">Flexible Mixed-Model SMT</div>
+                  </div>
+                  {selectedLine === 'LINE_02' && <Check className="w-3 h-3 text-emerald-400" />}
                 </button>
               </div>
-            ) : (
-              <button
-                onClick={() => setIsLoginModalOpen(true)}
-                className="flex items-center gap-1.5 bg-white/[0.05] hover:bg-white/[0.09] text-white px-3 py-1.5 rounded-md border border-white/[0.12] text-xs font-medium transition-colors"
-                aria-label="Sign in operator"
-              >
-                <Key className="w-3 h-3 text-[#9CA3AF]" />
-                <span>Sign In</span>
-              </button>
             )}
+          </div>
+
+          {/* Machine Protocol Links */}
+          <div className="hidden lg:flex items-center gap-2 text-[10.5px]">
+            <div className="flex items-center gap-1 text-slate-400 bg-[#0B101C] px-2 py-0.5 rounded-sm border border-[#1C273A]">
+              <Radio className="w-3 h-3 text-sky-400" />
+              <span>TCP 30040:</span>
+              <span className="text-emerald-400 font-bold">ONLINE</span>
+            </div>
+            <div className="flex items-center gap-1 text-slate-400 bg-[#0B101C] px-2 py-0.5 rounded-sm border border-[#1C273A]">
+              <span>DB:</span>
+              <span className="text-white font-bold">{stationModes.dbMode}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Actions, Operator Profile, Clock */}
+        <div className="flex items-center gap-2">
+          {/* Shift Briefing Button */}
+          <button
+            onClick={handleExportBriefing}
+            className="hidden sm:flex items-center gap-1 bg-[#111A29] hover:bg-[#18253A] text-slate-300 hover:text-white px-2 py-0.5 rounded-sm border border-[#222F46] text-[11px] transition-colors"
+            title="Generate and copy shift briefing"
+          >
+            <FileText className="w-3 h-3 text-sky-400" />
+            <span>Shift Briefing</span>
+          </button>
+
+          {/* Mode Settings Button */}
+          <button
+            onClick={() => setIsStationModeModalOpen(true)}
+            className="flex items-center gap-1 bg-[#111A29] hover:bg-[#18253A] text-slate-300 hover:text-white px-2 py-0.5 rounded-sm border border-[#222F46] text-[11px] transition-colors"
+            title="Configure integration modes"
+          >
+            <Settings className="w-3 h-3 text-slate-400" />
+            <span className="hidden md:inline">Mode</span>
+          </button>
+
+          {/* Jump to Station Search Button (Cmd+K) */}
+          <button
+            onClick={() => setIsStationSwitcherOpen(true)}
+            className="flex items-center gap-1.5 bg-[#111A29] hover:bg-[#18253A] text-slate-400 hover:text-white px-2 py-0.5 rounded-sm border border-[#222F46] text-[11px] transition-colors"
+            title="Jump to any station (⌘K)"
+          >
+            <Search className="w-3 h-3 text-slate-400" />
+            <span className="hidden xl:inline">Jump</span>
+            <kbd className="text-[9.5px] font-mono bg-[#0B101C] border border-[#222F46] px-1 rounded-sm text-slate-400">
+              ⌘K
+            </kbd>
+          </button>
+
+          {/* Operator Profile or Sign In */}
+          {operator ? (
+            <div className="flex items-center gap-1.5 bg-[#111A29] px-2 py-0.5 rounded-sm border border-[#222F46] text-[11px]">
+              <UserCheck className="w-3 h-3 text-emerald-400" />
+              <span className="text-white font-bold">{operator.code}</span>
+              <span className={`text-[9.5px] px-1 rounded-sm border font-bold ${ROLE_BADGE_STYLES[operator.role]?.bg || 'bg-white/5'} ${ROLE_BADGE_STYLES[operator.role]?.text || 'text-white'} ${ROLE_BADGE_STYLES[operator.role]?.border || 'border-white/10'}`}>
+                {operator.role}
+              </span>
+              <button
+                onClick={() => authService.logout()}
+                className="text-slate-400 hover:text-rose-400 p-0.5 rounded-sm hover:bg-white/5 transition-colors ml-0.5"
+                title="Sign out operator"
+              >
+                <LogOut className="w-3 h-3" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsLoginModalOpen(true)}
+              className="flex items-center gap-1 bg-[#142338] hover:bg-[#1E3250] text-sky-300 px-2 py-0.5 rounded-sm border border-[#233A5E] text-[11px] font-bold transition-colors"
+            >
+              <Key className="w-3 h-3" />
+              <span>Sign In</span>
+            </button>
+          )}
+
+          {/* Live Digital Clock */}
+          <div className="hidden sm:flex items-center gap-1 text-[11px] font-mono text-slate-400 bg-[#0B101C] px-2 py-0.5 rounded-sm border border-[#1C273A]">
+            <Clock className="w-3 h-3 text-slate-500" />
+            <span className="text-slate-200 tabular-nums">{currentTime}</span>
           </div>
         </div>
       </header>
 
-      {/* Two-Tier Categorized Navigation */}
-      <div className="bg-[#0C0F14] border-b border-white/[0.08] px-4 sm:px-6 py-1.5 sticky top-[49px] z-30">
-        <div className="max-w-7xl mx-auto flex flex-col gap-1.5">
-          {/* Tier 1: Operational Domains */}
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <DomainNav 
-              activeDomain={activeDomain} 
-              onSelectDomain={handleSelectDomain} 
-            />
+      {/* Docked Multi-Document Interface (MDI) Tab Bar (Height 32px) */}
+      <nav 
+        className="bg-[#090E18] border-b border-[#222F46] flex items-stretch overflow-x-auto shrink-0 select-none scrollbar-none z-20 font-mono text-xs"
+        aria-label="SMT Cleanroom Instrument Stations"
+      >
+        {MDI_TABS.map((tab) => {
+          const isActive = activeTab === tab.id;
+          const Icon = tab.icon;
 
-            {/* Current Active Station Indicator */}
-            <div className="hidden lg:flex items-center gap-2 text-xs font-mono text-[#6B7280]">
-              <span>INSTRUMENT:</span>
-              <span className="text-white font-medium">{currentStation?.code}</span>
-              <span className="text-[#9CA3AF] font-sans">— {currentStation?.label}</span>
-            </div>
+          return (
+            <button
+              key={tab.id}
+              onClick={() => handleSelectTab(tab.id)}
+              className={`h-8 px-3 flex items-center gap-2 shrink-0 border-r border-[#222F46] transition-colors ${
+                isActive 
+                  ? 'bg-[#16233B] text-white border-t-2 border-t-[#388BFD] font-bold shadow-inner' 
+                  : 'bg-[#0B101C] text-[#8C9BB0] border-t-2 border-t-transparent hover:bg-[#121B2E] hover:text-slate-200'
+              }`}
+              title={`${tab.label} (Press ${tab.hotkey})`}
+            >
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-sky-400' : 'text-slate-500'}`} />
+              <span className="text-[11px] tracking-tight whitespace-nowrap">{tab.label}</span>
+              <span className="text-[9px] text-slate-600 bg-[#080C14] px-1 rounded-sm border border-[#1C273A] hidden 2xl:inline">
+                {tab.code}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Compact Realtime Telemetry Ribbon & Status Ticker (Height 26px) */}
+      <div className="h-[26px] bg-[#0E1422] border-b border-[#222F46] px-3 flex items-center justify-between text-[10.5px] font-mono shrink-0 z-10 overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="text-slate-400">
+            RECIPE: <strong className="text-slate-200">PROG-SM-METER-TOP-REV4</strong>
+          </span>
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-400">
+            PLAN: <strong className="text-slate-200">1,200</strong>
+          </span>
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-400">
+            ACTUAL: <strong className="text-emerald-400">892 (74.3%)</strong>
+          </span>
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-400">
+            TACT: <strong className="text-slate-200">18.2s</strong>
+          </span>
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-400">
+            SPEED: <strong className="text-emerald-400">44,820 CPH (99.6%)</strong>
+          </span>
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-400">
+            FPY: <strong className="text-emerald-400">98.4%</strong>
+          </span>
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-400">
+            DROP: <strong className="text-emerald-400">12 PPM (PASS)</strong>
+          </span>
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-400">
+            OEE: <strong className="text-sky-400">88.4% (SEMI E10)</strong>
+          </span>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+            <span className="w-2 h-2 rounded-sm bg-emerald-400" />
+            <span>ANDON: NORMAL (RUNNING)</span>
           </div>
-
-          {/* Tier 2: Station Sub-Navigation */}
-          <StationNav 
-            activeDomain={activeDomain} 
-            activeTab={activeTab} 
-            onSelectTab={handleSelectTab} 
-            operator={operator} 
-          />
+          <span className="text-[#222F46]">|</span>
+          <span className="text-slate-500 text-[10px]">POLL: 4s</span>
         </div>
       </div>
 
-      {/* Executive Cleanroom Telemetry Rail */}
-      <ManagerKpiRibbon 
-        kpis={kpis} 
-        onOpenShiftBriefing={handleExportBriefing} 
-      />
-
-      {/* Cleanroom Ergonomics Bar: Physical Andon Status */}
-      <div className="bg-[#090C10] border-b border-white/[0.06] px-4 sm:px-6 py-1">
-        <div className="max-w-7xl mx-auto">
-          <AndonTower 
-            state={kpis.activeQualityHolds.value && kpis.activeQualityHolds.value > 0 ? "CRITICAL" : "NORMAL"} 
-            activeReason={`${selectedLine === 'LINE_01' ? 'Line 01 Fuji NXT III M6' : 'Line 02 Fuji AIMEX IIIc'} · Interlocks Armed · 21 CFR Part 11 Active`} 
-          />
-        </div>
-      </div>
-
-      {/* Main Instrument Display Workspace */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      {/* Main Full-Viewport Cleanroom Instrument Workspace (Edge-to-Edge) */}
+      <main className="flex-1 w-full overflow-auto p-2 bg-[#070B12]">
         {!isAllowed ? (
-          <div className="bg-[#12151C] border border-white/[0.12] rounded-xl p-8 text-center flex flex-col items-center justify-center gap-4 max-w-md mx-auto mt-12 shadow-xl">
-            <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-amber-400">
+          <div className="bg-[#0E1422] border border-[#222F46] rounded-sm p-6 text-center flex flex-col items-center justify-center gap-3 max-w-md mx-auto mt-12 font-mono">
+            <div className="w-10 h-10 rounded-sm bg-[#141C2C] border border-[#222F46] flex items-center justify-center text-amber-400">
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-white tracking-wide uppercase font-mono">
-                Access Restricted: Privileged Station
+              <h2 className="text-xs font-bold text-white tracking-wider uppercase">
+                Access Restricted: Privileged Cleanroom Station
               </h2>
-              <p className="text-xs text-[#8E95A2] mt-1 font-sans">
+              <p className="text-[11px] text-slate-400 mt-1 font-sans">
                 Station <strong className="text-white">{currentStation?.label || activeTab}</strong> requires authorized cleanroom credentials.
               </p>
-              <div className="flex flex-wrap justify-center gap-1.5 mt-3">
+              <div className="flex flex-wrap justify-center gap-1 mt-2.5">
                 {requiredRoles.map((r) => (
-                  <span key={r} className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-[#9CA3AF]">
+                  <span key={r} className="text-[9.5px] px-1.5 py-0.5 rounded-sm bg-[#111827] border border-[#222F46] text-slate-400">
                     {r}
                   </span>
                 ))}
@@ -358,27 +425,27 @@ export const App: React.FC = () => {
             </div>
             <button
               onClick={() => setIsLoginModalOpen(true)}
-              className="mt-2 px-5 py-2 bg-white text-[#0B0F14] hover:bg-[#E5E7EB] font-sans text-xs font-semibold rounded-lg transition-colors flex items-center gap-2 shadow-sm"
+              className="mt-1 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-sm transition-colors flex items-center gap-1.5"
             >
               <Key className="w-3.5 h-3.5" />
               <span>{operator ? 'Switch Operator / Override' : 'Operator Sign In'}</span>
             </button>
           </div>
         ) : (
-          <>
-            {activeTab === 'REFLOW' && <ReflowThermalStation />}
-            {activeTab === 'FLEET' && <FleetDashboard />}
-            {activeTab === 'AGV_LOGISTICS' && <AgvLogisticsStation />}
-            {activeTab === 'PREDICTIVE' && <PredictiveIntelligenceStation />}
-            {activeTab === 'SPI' && <SpiStation />}
-            {activeTab === 'SOLDER_PASTE' && <SolderPasteStation />}
-            {activeTab === 'OPERATOR' && <OperatorStation />}
+          <div className="w-full">
             {activeTab === 'SUPERVISOR' && <SupervisorDashboard />}
+            {activeTab === 'FLEET' && <FleetDashboard />}
+            {activeTab === 'SPI' && <SpiStation />}
+            {activeTab === 'OPERATOR' && <OperatorStation />}
+            {activeTab === 'SOLDER_PASTE' && <SolderPasteStation />}
+            {activeTab === 'REFLOW' && <ReflowThermalStation />}
             {activeTab === 'GENEALOGY' && <TraceabilityStation />}
             {activeTab === 'AUDIT_TRAIL' && <AuditTrailViewer />}
             {activeTab === 'COMPLIANCE' && <CleanroomComplianceStation />}
             {activeTab === 'REWORK' && <ReworkStation />}
-          </>
+            {activeTab === 'AGV_LOGISTICS' && <AgvLogisticsStation />}
+            {activeTab === 'PREDICTIVE' && <PredictiveIntelligenceStation />}
+          </div>
         )}
       </main>
 
@@ -410,25 +477,35 @@ export const App: React.FC = () => {
         copyError={briefingCopyError}
       />
 
-      {/* Micro-Telemetry Bottom HUD */}
-      <footer className="bg-[#0B0E13] border-t border-white/[0.08] px-6 py-2 text-xs font-mono text-[#6B7280]">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <span>JOB: <strong className="text-white">{kpis.shiftInfo.value?.shiftCode ? 'JOB-SM-260901' : 'JOB-SM-260901'}</strong></span>
-            <span>·</span>
-            <span>CYCLE: <strong className="text-white">{kpis.placementSpeedCph.value?.cycleTimeSeconds ? `${kpis.placementSpeedCph.value.cycleTimeSeconds}s` : '18.24s'}</strong></span>
-            <span>·</span>
-            <span>SPEED: <strong className="text-white">{kpis.placementSpeedCph.value?.actualCph ? `${kpis.placementSpeedCph.value.actualCph.toLocaleString()} CPH` : '—'}</strong></span>
-            <span>·</span>
-            <span>PRODUCT: <strong className="text-white">Smart Meter 4G (Rev 4)</strong></span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-amber-400">
-              1 Reel Low Stock (Slot 02)
-            </span>
-            <span>·</span>
-            <span>Fuji Nexim Gateway v2.8</span>
-          </div>
+      {/* Station Mode & Machine Integration Modal */}
+      <StationModeModal
+        isOpen={isStationModeModalOpen}
+        onClose={() => setIsStationModeModalOpen(false)}
+        modes={stationModes}
+        onUpdateModes={(newModes) => {
+          setStationModes(newModes);
+          setToastMessage(`Updated to ${newModes.dbMode} mode`);
+          setTimeout(() => setToastMessage(null), 3000);
+        }}
+      />
+
+      {/* Micro-Telemetry Bottom HUD (Height 22px) */}
+      <footer className="h-[22px] bg-[#06090F] border-t border-[#222F46] px-3 flex items-center justify-between text-[10px] font-mono text-[#64748B] shrink-0 select-none">
+        <div className="flex items-center gap-3">
+          <span>APEX G-MES 4.0 ENTERPRISE</span>
+          <span>·</span>
+          <span>FUJI iMES 4.0 PROTOCOL ENGINE</span>
+          <span>·</span>
+          <span>LOCAL SQLITE BUS</span>
+          <span>·</span>
+          <span className="text-slate-400">SHA-256 COMPLIANCE HASH: VERIFIED</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-emerald-400 font-bold">FUJI NXT III: RUNNING</span>
+          <span>·</span>
+          <span>SLOTS: 45/45 OK</span>
+          <span>·</span>
+          <span>0 DEFECT LOCKS</span>
         </div>
       </footer>
     </div>

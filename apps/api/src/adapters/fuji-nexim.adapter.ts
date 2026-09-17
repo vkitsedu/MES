@@ -4,7 +4,9 @@ import {
   FujiCommand,
   IFactoryIntegrationAdapter,
   mapFujiStatusToCanonical,
-  MesEventEnvelope
+  MesEventEnvelope,
+  FujiLoadCompAckItem,
+  FUJI_IMES_SUBSCRIBED_EVENTS
 } from '@mes/shared';
 import { EventIngestionService } from '../services/event-ingestion.service';
 import { SplicingAuthorizationService } from '../services/splicing-authorization.service';
@@ -73,19 +75,38 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
   private customAllowedSubnets: string[] | null = null;
   private machineRegistry: Map<string, FujiMachineMapping> = new Map();
 
+  private get siteId(): string {
+    return process.env.MES_SITE_ID || 'SITE-NOIDA-P4';
+  }
+
   constructor() {
-    // Pre-register standard SMT lines
+    // Check if dynamic configuration is provided via JSON in environment
+    if (process.env.FUJI_MACHINE_MAPPINGS) {
+      try {
+        const parsed = JSON.parse(process.env.FUJI_MACHINE_MAPPINGS);
+        if (Array.isArray(parsed)) {
+          for (const m of parsed) {
+            this.registerMachineMapping(m);
+          }
+          return;
+        }
+      } catch (err) {
+        console.warn('[Fuji Gateway] Failed to parse FUJI_MACHINE_MAPPINGS env var, falling back to defaults.');
+      }
+    }
+
+    // Default pre-registered SMT lines
     this.registerMachineMapping({
-      machineId: 'NXT01',
+      machineId: process.env.FUJI_NXT01_MACHINE_ID || 'NXT01',
       workCenterId: 'wc-nxt-01',
       lineId: 'line-smt-01',
-      ipAddress: '192.168.10.42'
+      ipAddress: process.env.FUJI_NXT01_IP || '192.168.10.42'
     });
     this.registerMachineMapping({
-      machineId: 'NXT02',
+      machineId: process.env.FUJI_NXT02_MACHINE_ID || 'NXT02',
       workCenterId: 'wc-nxt-02',
       lineId: 'line-smt-02',
-      ipAddress: '192.168.10.43'
+      ipAddress: process.env.FUJI_NXT02_IP || '192.168.10.43'
     });
   }
 
@@ -207,7 +228,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
     };
   }
 
-  public parseRawFrame(buffer: Buffer): { command: FujiCommand; seqId: number; payloadRaw: string; tokens: string[] } | null {
+  public parseRawFrame(buffer: Buffer): { command: FujiCommand; seqId: number; payloadRaw: string; tokens: string[]; lines?: string[] } | null {
     if (buffer.length < FUJI_FRAMING.HEADER_SIZE + 2) return null;
 
     const totalLength = buffer.readUInt32BE(0);
@@ -218,14 +239,22 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
     if (stx !== FUJI_FRAMING.STX || etx !== FUJI_FRAMING.ETX) return null;
 
     const bodyStr = buffer.toString('utf-8', FUJI_FRAMING.HEADER_SIZE + 1, FUJI_FRAMING.HEADER_SIZE + totalLength - 1);
-    const tokens = bodyStr.split('\t');
+    const lines = bodyStr.split(/\r?\n/).filter(line => line.trim().length > 0);
+    if (lines.length === 0) return null;
+
+    const headerLine = lines[0];
+    const isComma = headerLine.includes(',');
+    const tokens = isComma
+      ? headerLine.split(',').map(s => s.trim())
+      : headerLine.split('\t');
+
     if (tokens.length < 2) return null;
 
     const command = tokens[0] as FujiCommand;
     const seqId = parseInt(tokens[1], 10) || 0;
-    const payloadRaw = tokens.slice(2).join('\t');
+    const payloadRaw = lines.length > 1 ? lines.slice(1).join('\n') : tokens.slice(2).join(isComma ? ',' : '\t');
 
-    return { command, seqId, payloadRaw, tokens };
+    return { command, seqId, payloadRaw, tokens, lines };
   }
 
   public toCanonicalEvent(
@@ -247,7 +276,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
           sourceType: 'INTEGRATION_SOCKET',
           sourceId: `fuji-${parsedData.machineName || 'nxt'}`,
           sequenceId: seqId,
-          siteId: 'SITE-NOIDA-P4',
+          siteId: this.siteId,
           workCenterId,
           payload: {
             previousState: mapFujiStatusToCanonical(parsedData.previousStatus).state,
@@ -268,7 +297,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
           sourceType: 'INTEGRATION_SOCKET',
           sourceId: `fuji-${parsedData.machineName || 'nxt'}`,
           sequenceId: seqId,
-          siteId: 'SITE-NOIDA-P4',
+          siteId: this.siteId,
           workCenterId,
           payload: {
             panelBarcode: parsedData.panelNo ? `PNL-${parsedData.panelNo}` : 'PNL-AUTO',
@@ -289,7 +318,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
           sourceType: 'INTEGRATION_SOCKET',
           sourceId: `fuji-${parsedData.machineName || 'nxt'}`,
           sequenceId: seqId,
-          siteId: 'SITE-NOIDA-P4',
+          siteId: this.siteId,
           workCenterId,
           payload: {
             panelBarcode: parsedData.panelNo ? `PNL-${parsedData.panelNo}` : `PNL-SEQ-${seqId}`,
@@ -316,7 +345,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
           sourceType: 'INTEGRATION_SOCKET',
           sourceId: `fuji-${parsedData.machineName || 'nxt'}`,
           sequenceId: seqId,
-          siteId: 'SITE-NOIDA-P4',
+          siteId: this.siteId,
           workCenterId,
           payload: {
             slotNo: parseInt(parsedData.slotNo || '1', 10),
@@ -343,7 +372,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
           sourceType: 'INTEGRATION_SOCKET',
           sourceId: `fuji-${parsedData.machineName || 'nxt'}`,
           sequenceId: seqId,
-          siteId: 'SITE-NOIDA-P4',
+          siteId: this.siteId,
           workCenterId,
           payload: {
             moduleNo: parseInt(parsedData.moduleNo || '1', 10),
@@ -365,12 +394,50 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
     }
   }
 
-  public buildAckFrame(command: FujiCommand, seqId: number, resultOk: boolean, extraFields: string[] = []): Buffer {
+  public buildAckFrame(command: FujiCommand, seqId: number, resultOk: boolean, extraFields: string[] = [], useComma = false): Buffer {
     const ackCommand = `${command}_ACK`;
     const resultCode = resultOk ? '0' : '1';
+    const delimiter = useComma ? ',' : '\t';
     const bodyParts = [ackCommand, seqId.toString(), resultCode, ...extraFields];
-    const bodyStr = bodyParts.join('\t');
+    const bodyStr = bodyParts.join(delimiter);
 
+    const bodyBuffer = Buffer.from(bodyStr, 'utf-8');
+    const totalLength = 1 + bodyBuffer.length + 1; // STX + body + ETX
+
+    const frame = Buffer.alloc(FUJI_FRAMING.HEADER_SIZE + totalLength);
+    frame.writeUInt32BE(totalLength, 0);
+    frame[4] = FUJI_FRAMING.STX;
+    bodyBuffer.copy(frame, 5);
+    frame[frame.length - 1] = FUJI_FRAMING.ETX;
+
+    return frame;
+  }
+
+  /**
+   * Builds the official Fuji iMES 4.0 multiline LOADCOMPIV_ACK frame echoing verified slot states.
+   */
+  public buildLoadCompAckFrame(
+    seqId: number,
+    machineName: string,
+    moduleNo: string | number,
+    items: FujiLoadCompAckItem[],
+    useComma = false
+  ): Buffer {
+    const delim = useComma ? ',' : '\t';
+    const header = ['LOADCOMPIV_ACK', seqId.toString(), machineName, moduleNo.toString(), items.length.toString()].join(delim);
+    const itemLines = items.map(item =>
+      [
+        item.stageNo,
+        item.slotNo,
+        item.result,
+        item.partNumber,
+        item.feederId,
+        item.reelId,
+        item.remainingTime,
+        item.quantity
+      ].join(delim)
+    );
+    const bodyStr = [header, ...itemLines].join('\r\n');
     const bodyBuffer = Buffer.from(bodyStr, 'utf-8');
     const totalLength = 1 + bodyBuffer.length + 1; // STX + body + ETX
 
@@ -401,12 +468,32 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
 
     switch (command) {
       case 'MCSTATECHANGE':
+      case 'MCSTATECHANGEII':
         data.time = tokens[2];
         data.lineName = tokens[3];
         data.machineName = tokens[4];
         data.moduleNo = tokens[5];
         data.previousStatus = parseInt(tokens[6], 10);
         data.currentStatus = parseInt(tokens[7], 10);
+        break;
+
+      case 'PGCHANGEII':
+        data.time = tokens[2];
+        data.lineName = tokens[3];
+        data.machineName = tokens[4];
+        data.moduleNo = tokens[5];
+        data.laneNo = tokens[6];
+        data.programName = tokens[7];
+        data.numSlots = tokens[8];
+        break;
+
+      case 'BOMLIST':
+        data.time = tokens[2];
+        data.lineName = tokens[3];
+        data.machineName = tokens[4];
+        data.laneNo = tokens[5];
+        data.programName = tokens[6];
+        data.numBOM = tokens[7];
         break;
 
       case 'PRODSTARTED':
@@ -530,15 +617,17 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
     );
     const effectiveWorkCenterId = resolved.workCenterId;
 
+    const isComma = parsed.tokens[0].includes(',');
+
     // Handle Protocol Start Handshake (Dynamically reply with resolved machine ID)
     if (parsed.command === 'SETEV') {
       const ackMachine = parsed.tokens[2] || resolved.machineId;
-      socket.write(this.buildAckFrame('SETEV', parsed.seqId, true, [ackMachine]));
+      socket.write(this.buildAckFrame('SETEV', parsed.seqId, true, [ackMachine], isComma));
       return;
     }
     if (parsed.command === 'STARTEV') {
       const ackMachine = parsed.tokens[2] || resolved.machineId;
-      socket.write(this.buildAckFrame('STARTEV', parsed.seqId, true, [ackMachine]));
+      socket.write(this.buildAckFrame('STARTEV', parsed.seqId, true, [ackMachine], isComma));
       return;
     }
 
@@ -546,11 +635,117 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
     const isHold = this.isProductionHold || await ProductionHoldService.isHoldActive(resolved.lineId);
     if (isHold && (parsed.command === 'PRODSTARTED' || parsed.command === 'LOADCOMP' || parsed.command === 'LOADCOMPIV' || parsed.command === 'CHANGECOMP' || parsed.command === 'CHANGECOMPII')) {
       console.warn(`[Fuji Gateway] PRODUCTION HOLD ACTIVE on ${resolved.lineId} (${effectiveWorkCenterId}). Rejecting ${parsed.command}!`);
-      socket.write(this.buildAckFrame(parsed.command, parsed.seqId, false, ['HOLD_ACTIVE']));
+      socket.write(this.buildAckFrame(parsed.command, parsed.seqId, false, ['HOLD_ACTIVE'], isComma));
       return;
     }
 
-    // Splicing & Part Load Interlock (Unified SplicingAuthorizationService Gate)
+    // Recipe Verification Interlock (PGCHANGEII)
+    if (parsed.command === 'PGCHANGEII') {
+      const lineName = fields.lineName || parsed.tokens[3] || 'LINE01';
+      const machineName = fields.machineName || parsed.tokens[4] || resolved.machineId;
+      const moduleNo = parseInt(fields.moduleNo || parsed.tokens[5] || '1', 10);
+      const laneNo = parseInt(fields.laneNo || parsed.tokens[6] || '1', 10);
+      const programName = fields.programName || parsed.tokens[7] || 'UNKNOWN_RECIPE';
+
+      // Store recipe slot mappings if multiline payload is present
+      if (parsed.lines && parsed.lines.length > 1) {
+        const nowIso = new Date().toISOString();
+        for (let i = 1; i < parsed.lines.length; i += 2) {
+          const slotLine = parsed.lines[i];
+          const partLine = parsed.lines[i + 1];
+          if (!slotLine || !partLine) break;
+          const sTokens = slotLine.includes(',') ? slotLine.split(',') : slotLine.split('\t');
+          const stageNo = parseInt(sTokens[0] || '1', 10);
+          const slotNo = parseInt(sTokens[1] || '1', 10);
+          const partNo = partLine.trim();
+
+          await db.execute(`
+            INSERT INTO fuji_active_recipes (
+              id, line_name, machine_name, module_no, lane_no, program_name, stage_no, slot_no, part_number, verified_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          `, [uuidv4(), lineName, machineName, moduleNo, laneNo, programName, stageNo, slotNo, partNo, nowIso]);
+        }
+      }
+
+      if (isHold) {
+        socket.write(this.buildAckFrame('PGCHANGEII', parsed.seqId, false, [machineName, moduleNo.toString(), laneNo.toString(), programName], isComma));
+        return;
+      }
+
+      // Unlock line device display by sending PGCHANGEII_ACK with Result = 0 (OK)
+      socket.write(this.buildAckFrame('PGCHANGEII', parsed.seqId, true, [machineName, moduleNo.toString(), laneNo.toString(), programName], isComma));
+      return;
+    }
+
+    // BOM Notification (BOMLIST)
+    if (parsed.command === 'BOMLIST') {
+      const machineName = fields.machineName || parsed.tokens[4] || resolved.machineId;
+      const laneNo = fields.laneNo || parsed.tokens[5] || '1';
+      const programName = fields.programName || parsed.tokens[6] || 'UNKNOWN_BOM';
+
+      if (parsed.lines && parsed.lines.length > 1) {
+        const nowIso = new Date().toISOString();
+        for (let i = 1; i < parsed.lines.length; i++) {
+          const bLine = parsed.lines[i];
+          const bTokens = bLine.includes(',') ? bLine.split(',').map(s => s.trim()) : bLine.split('\t');
+          if (bTokens.length >= 3) {
+            const blockNo = parseInt(bTokens[0], 10) || 1;
+            const partNumber = bTokens[1];
+            const refDes = bTokens[2];
+            await db.execute(`
+              INSERT INTO pcb_bom_designators (
+                id, program_name, block_no, part_number, ref_des, created_at
+              ) VALUES (?, ?, ?, ?, ?, ?)
+            `, [uuidv4(), programName, blockNo, partNumber, refDes, nowIso]);
+          }
+        }
+      }
+
+      socket.write(this.buildAckFrame('BOMLIST', parsed.seqId, true, [machineName, laneNo, programName], isComma));
+      return;
+    }
+
+    // Multiline Splicing / Part Supply Interlock (LOADCOMPIV)
+    if (parsed.command === 'LOADCOMPIV' && parsed.lines && parsed.lines.length > 1) {
+      const machineName = fields.machineName || parsed.tokens[4] || resolved.machineId;
+      const moduleNo = fields.moduleNo || parsed.tokens[5] || '1';
+      const ackItems: FujiLoadCompAckItem[] = [];
+
+      for (let i = 1; i < parsed.lines.length; i++) {
+        const cLine = parsed.lines[i];
+        const cTokens = cLine.includes(',') ? cLine.split(',').map(s => s.trim()) : cLine.split('\t');
+        if (cTokens.length < 5) continue;
+        const stageNo = parseInt(cTokens[0], 10) || 1;
+        const slotNo = parseInt(cTokens[1], 10) || 1;
+        const partNo = cTokens[2] || '';
+        const feederId = cTokens[3] || '';
+        const reelId = cTokens[4] || '';
+        const quantity = parseInt(cTokens[9], 10) || 10000;
+
+        const decision = await SplicingAuthorizationService.authorizeSplicing({
+          workCenterId: effectiveWorkCenterId,
+          slotNo,
+          scannedPartNumber: partNo,
+          scannedReelId: reelId
+        });
+
+        ackItems.push({
+          stageNo,
+          slotNo,
+          result: (decision.allowed && !isHold) ? 0 : 1,
+          partNumber: partNo,
+          feederId,
+          reelId,
+          remainingTime: 999999,
+          quantity
+        });
+      }
+
+      socket.write(this.buildLoadCompAckFrame(parsed.seqId, machineName, moduleNo, ackItems, isComma));
+      return;
+    }
+
+    // Single-slot Splicing & Part Load Interlock
     if (parsed.command === 'LOADCOMP' || parsed.command === 'LOADCOMPIV' || parsed.command === 'CHANGECOMP' || parsed.command === 'CHANGECOMPII') {
       const slotNo = parseInt(fields.slotNo || parsed.tokens[8] || parsed.tokens[3] || '1', 10);
       const partNo = fields.partNo || parsed.tokens[9] || parsed.tokens[4] || '';
@@ -565,8 +760,40 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
 
       if (!decision.allowed) {
         console.warn(`[Fuji Gateway] SPLICING INTERLOCK BLOCKED (${decision.decisionCode}): Slot ${slotNo} - ${decision.reason}. Halting feeder!`);
-        socket.write(this.buildAckFrame(parsed.command, parsed.seqId, false)); // Result = 1 (NG)
+        socket.write(this.buildAckFrame(parsed.command, parsed.seqId, false, [], isComma)); // Result = 1 (NG)
         return;
+      }
+    }
+
+    // Pick & Nozzle Error Predictive Telemetry (PDERROR)
+    if (parsed.command === 'PDERROR') {
+      const machineId = fields.machineName || parsed.tokens[4] || resolved.machineId;
+      const moduleNo = parseInt(fields.moduleNo || parsed.tokens[5] || '1', 10);
+      const headId = fields.headId || parsed.tokens[11] || 'HEAD-01';
+      const nozzleId = fields.nozzleId || parsed.tokens[10] || 'NOZZLE-01';
+      const nowIso = new Date().toISOString();
+
+      try {
+        const existing = await db.query<any>(
+          'SELECT id, pick_count, error_count FROM machine_nozzle_telemetry WHERE machine_id = ? AND nozzle_id = ?',
+          [machineId, nozzleId]
+        );
+        if (existing.length > 0) {
+          const errs = Number(existing[0].error_count) + 1;
+          const picks = Math.max(Number(existing[0].pick_count), errs);
+          const rate = Number(((errs / picks) * 100).toFixed(3));
+          await db.execute(
+            'UPDATE machine_nozzle_telemetry SET error_count = ?, error_rate_pct = ?, last_error_at = ?, last_updated = ? WHERE id = ?',
+            [errs, rate, nowIso, nowIso, existing[0].id]
+          );
+        } else {
+          await db.execute(
+            'INSERT INTO machine_nozzle_telemetry (id, machine_id, module_no, head_id, nozzle_id, pick_count, error_count, error_rate_pct, last_error_at, last_updated) VALUES (?, ?, ?, ?, ?, 100, 1, 1.0, ?, ?)',
+            [uuidv4(), machineId, moduleNo, headId, nozzleId, nowIso, nowIso]
+          );
+        }
+      } catch (err: any) {
+        console.warn('[Fuji Gateway] Failed to record nozzle telemetry:', err.message);
       }
     }
 
@@ -823,6 +1050,77 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
 
   public isListening(): boolean {
     return !!(this.server && this.server.listening);
+  }
+
+  private clientSocket: net.Socket | null = null;
+  private clientConnected = false;
+
+  /**
+   * Connects outbound as a Host Computer (MES Client) to a physical Fuji NEXIM Central Server.
+   * Executes the standard iMES 4.0 4-step initialization handshake (SETEV 22 events -> STARTEV).
+   */
+  public connectToCentralServer(host: string, port = 30040, machineName = 'NXTR1'): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.clientSocket) {
+        this.clientSocket.destroy();
+      }
+
+      const socket = net.connect({ host, port }, () => {
+        this.clientConnected = true;
+        this.clientSocket = socket;
+        console.log(`[Fuji Gateway] Connected as Host Client to Fuji NEXIM Central Server at ${host}:${port}`);
+
+        // Step 1: Send SETEV with all 22 subscribed events
+        const eventLines = FUJI_IMES_SUBSCRIBED_EVENTS.map(ev => `${ev},1`).join('\r\n');
+        const setEvBody = `SETEV,1,${machineName},${FUJI_IMES_SUBSCRIBED_EVENTS.length}\r\n${eventLines}`;
+        const setEvBuffer = Buffer.from(setEvBody, 'utf-8');
+        const totalLength = 1 + setEvBuffer.length + 1;
+        const frame = Buffer.alloc(FUJI_FRAMING.HEADER_SIZE + totalLength);
+        frame.writeUInt32BE(totalLength, 0);
+        frame[4] = FUJI_FRAMING.STX;
+        setEvBuffer.copy(frame, 5);
+        frame[frame.length - 1] = FUJI_FRAMING.ETX;
+        socket.write(frame);
+
+        // Step 2: Send STARTEV to activate active notification
+        const startEvBody = `STARTEV,2,${machineName}`;
+        const startEvBuffer = Buffer.from(startEvBody, 'utf-8');
+        const sTotalLen = 1 + startEvBuffer.length + 1;
+        const sFrame = Buffer.alloc(FUJI_FRAMING.HEADER_SIZE + sTotalLen);
+        sFrame.writeUInt32BE(sTotalLen, 0);
+        sFrame[4] = FUJI_FRAMING.STX;
+        startEvBuffer.copy(sFrame, 5);
+        sFrame[sFrame.length - 1] = FUJI_FRAMING.ETX;
+        socket.write(sFrame);
+
+        resolve();
+      });
+
+      let socketBuffer: any = Buffer.alloc(0);
+      socket.on('data', async (chunk) => {
+        socketBuffer = Buffer.concat([socketBuffer, chunk]);
+        const extracted = FujiNeximAdapter.extractFrames(socketBuffer);
+        socketBuffer = extracted.remainder;
+        for (const frame of extracted.frames) {
+          await this.processSingleFrame(socket, frame, this.workCenterId);
+        }
+      });
+
+      socket.on('error', (err) => {
+        console.error(`[Fuji Gateway] Central Server connection error: ${err.message}`);
+        this.clientConnected = false;
+        reject(err);
+      });
+
+      socket.on('close', () => {
+        console.warn('[Fuji Gateway] Central Server connection closed.');
+        this.clientConnected = false;
+      });
+    });
+  }
+
+  public isClientConnected(): boolean {
+    return this.clientConnected;
   }
 }
 

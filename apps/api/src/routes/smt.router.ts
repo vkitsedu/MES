@@ -8,6 +8,7 @@ import { PrinterAuthorizationService } from '../services/printer-authorization.s
 import { requirePermission } from '../middleware/auth.middleware';
 import { Permission } from '../security/permissions';
 import { ProductionHoldService, HoldBroadcaster } from '../services/production-hold.service';
+import { FujiManagementMonitorService } from '../services/fuji-management-monitor.service';
 
 export const smtRouter = Router();
 
@@ -487,5 +488,30 @@ smtRouter.get('/hold/events', requirePermission(Permission.REPORTS_VIEW), (req: 
   });
 });
 
+// Fuji Nexim Management Monitor & SMT Line Flow Endpoints
+smtRouter.get('/management-monitor/fleet', requirePermission(Permission.REPORTS_VIEW), async (_req: Request, res: Response) => {
+  try {
+    const summary = await FujiManagementMonitorService.getFleetSummary();
+    res.json(summary);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
+smtRouter.get('/management-monitor/line/:lineId/diagnostics', requirePermission(Permission.REPORTS_VIEW), async (req: Request, res: Response) => {
+  try {
+    const diagnostics = await FujiManagementMonitorService.getLineDiagnostics(String(req.params.lineId));
+    res.json(diagnostics);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
+smtRouter.get('/management-monitor/line/:lineId/flow', requirePermission(Permission.REPORTS_VIEW), async (req: Request, res: Response) => {
+  try {
+    const flow = await FujiManagementMonitorService.getPhysicalLineFlow(String(req.params.lineId));
+    res.json(flow);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});

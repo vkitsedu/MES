@@ -243,7 +243,31 @@ export class MaterialGateModule implements IMaterialGateModule {
       }
     }
 
-    // Default approved if reel is new or not yet cataloged
+    // If reelId was provided but not found in component_reels, block it
+    if (scannedReelId) {
+      const decision: SplicingDecision = {
+        allowed: false,
+        decisionCode: 'BLOCKED_REEL_NOT_CATALOGED',
+        expectedPartNumber: expectedPart,
+        actualPartNumber: scannedPartNumber,
+        reelId: scannedReelId,
+        feederId: slot.feeder_id,
+        currentReelId: slot.current_reel_id,
+        reason: `Reel ${scannedReelId} is not registered in component_reels inventory. Quality quarantine active.`
+      };
+      await this.recordAuditGate(
+        'BOM',
+        decision.decisionCode,
+        scannedReelId,
+        decision.reason,
+        workCenterId,
+        operatorId,
+        false
+      );
+      return decision;
+    }
+
+    // Default approved if no reelId is required/provided and BOM part number matched
     const decision: SplicingDecision = {
       allowed: true,
       decisionCode: 'APPROVED',

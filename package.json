@@ -17,6 +17,7 @@
     "seed": "npm --workspace=@mes/api run seed",
     "simulate:fuji": "tsx apps/api/src/adapters/fuji-simulator.ts",
     "package:exe": "node scripts/build-standalone.mjs",
+    "build:portable": "node scripts/build-portable-win.mjs",
     "doctor": "tsx scripts/mes-doctor.ts",
     "check:hygiene": "bash scripts/check-entity-hygiene.sh",
     "soak": "NODE_OPTIONS=\"--expose-gc\" tsx scripts/soak-runner.ts",
