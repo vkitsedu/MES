@@ -195,7 +195,8 @@ export async function fetchManagerKpis(
   try {
     const shiftRes = await authService.authFetch('/api/v1/reports/shift-summary');
     if (shiftRes.ok) {
-      const shiftData = await shiftRes.json();
+      const rawShift = await shiftRes.json();
+      const shiftData = rawShift?.data || rawShift;
       if (shiftData) {
         const good = shiftData.goodQuantity || 0;
         const rejected = shiftData.rejectedQuantity || 0;
@@ -366,12 +367,12 @@ export function generateShiftBriefingText(kpis: ManagerKpisState, facilityName =
   const speed = kpis.placementSpeedCph.value;
   const holds = kpis.activeQualityHolds.value;
 
-  const oeeStr = oee !== null 
-    ? `${oee.oee.toFixed(1)}% (Avail: ${oee.availability.toFixed(1)}% | Perf: ${oee.performance.toFixed(1)}% | Quality: ${oee.quality.toFixed(1)}%)`
+  const oeeStr = oee !== null && oee.oee != null
+    ? `${Number(oee.oee).toFixed(1)}% (Avail: ${Number(oee.availability ?? 0).toFixed(1)}% | Perf: ${Number(oee.performance ?? 0).toFixed(1)}% | Quality: ${Number(oee.quality ?? 0).toFixed(1)}%)`
     : '[Telemetry Unavailable]';
 
-  const outputStr = fpy !== null 
-    ? `${fpy.goodPanels} Good Panels | ${fpy.rejectedPanels} Block Skips | FPY: ${fpy.fpyPct.toFixed(1)}%`
+  const outputStr = fpy !== null && fpy.fpyPct != null
+    ? `${fpy.goodPanels ?? 0} Good Panels | ${fpy.rejectedPanels ?? 0} Block Skips | FPY: ${Number(fpy.fpyPct).toFixed(1)}%`
     : '[Output Data Unavailable]';
 
   const speedStr = speed !== null && speed.actualCph > 0

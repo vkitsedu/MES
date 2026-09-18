@@ -91,7 +91,7 @@ export function DataTable<T extends Record<string, any>>({
   }, [filteredData, sortKey, sortDirection]);
 
   const handleExportCsv = () => {
-    const headers = columns.map(col => `"${col.header.replace(/"/g, '""')}"`);
+    const headers = columns.map(col => `"${String(col.header || '').replace(/"/g, '""')}"`);
     const rows = sortedData.map(row => {
       return columns.map(col => {
         const val = row[col.key as string];

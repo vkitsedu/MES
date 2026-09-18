@@ -77,7 +77,7 @@ export const DrillDownDrawer: React.FC<DrillDownDrawerProps> = ({
       item.timestamp,
       item.stationCode || 'ALL',
       item.category,
-      `"${item.title.replace(/"/g, '""')}"`,
+      `"${String(item.title || '').replace(/"/g, '""')}"`,
       item.severity,
       item.durationMinutes || 0,
       item.occurrences || 1

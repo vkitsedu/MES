@@ -216,11 +216,12 @@ export const ReworkStation: React.FC = () => {
       const res = await authService.authFetch(`/api/v1/aoi/panels/${panelBarcode}`);
       if (res.ok) {
         const json = await res.json();
-        if (json.success && json.data) {
-          setPanelStatus(json.data.panelStatus);
-          setUnits(json.data.units || FALLBACK_UNITS);
-          setDefects(json.data.defects || FALLBACK_DEFECTS);
-          localStorage.setItem(`mes_panel_${panelBarcode}`, JSON.stringify(json.data));
+        const data = json?.data ?? json;
+        if (data && json.success !== false) {
+          setPanelStatus(data.panelStatus || 'QUALITY_HOLD');
+          setUnits(data.units || FALLBACK_UNITS);
+          setDefects(data.defects || FALLBACK_DEFECTS);
+          localStorage.setItem(`mes_panel_${panelBarcode}`, JSON.stringify(data));
           return;
         }
       }
@@ -247,9 +248,10 @@ export const ReworkStation: React.FC = () => {
       const res = await authService.authFetch('/api/v1/aoi/cad/PROG-SM-METER-TOP-REV4/4?boardSide=TOP');
       if (res.ok) {
         const json = await res.json();
-        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-          setCadList(json.data);
-          localStorage.setItem('mes_cad_PROG-SM-METER-TOP-REV4', JSON.stringify(json.data));
+        const list = Array.isArray(json?.data) ? json.data : (Array.isArray(json) ? json : null);
+        if (list && list.length > 0) {
+          setCadList(list);
+          localStorage.setItem('mes_cad_PROG-SM-METER-TOP-REV4', JSON.stringify(list));
           return;
         }
       }
@@ -272,8 +274,9 @@ export const ReworkStation: React.FC = () => {
       const res = await authService.authFetch(`/api/v1/aoi/correlation/${panelBarcode}/${selectedUnit}/${selectedRefDes}`);
       if (res.ok) {
         const json = await res.json();
-        if (json.success && json.data) {
-          setCorrelation(json.data);
+        const data = json?.data ?? json;
+        if (data && json.success !== false) {
+          setCorrelation(data);
           return;
         }
       }
@@ -502,35 +505,35 @@ export const ReworkStation: React.FC = () => {
   const activeDefect = defects.find(d => d.unit_position === selectedUnit && d.ref_des === selectedRefDes);
 
   return (
-    <div className="space-y-6 font-mono">
+    <div className="space-y-4 font-mono">
       {/* Top Banner & Mode Switcher */}
-      <div className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-2xl p-5 shadow-2xl flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-red-950/40 border border-red-500/30 flex items-center justify-center text-red-400">
-            <Crosshair className="w-7 h-7 animate-pulse" />
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-[var(--mes-radius)] bg-rose-950/40 border border-rose-500/30 flex items-center justify-center text-rose-400">
+            <Crosshair className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-red-400">
-                PHASE 3 // CLOSED-LOOP 3D AOI & REWORK
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400">
+                PHASE 3 // CLOSED-LOOP 3D AOI &amp; REWORK
               </span>
-              <span className="text-white/30">•</span>
-              <span className="text-xs font-mono text-[var(--mes-status-pass)] font-bold">KOH YOUNG ZENITH & OMRON VT-S READY</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-[10px] font-mono text-emerald-400 font-bold">KOH YOUNG ZENITH &amp; OMRON VT-S READY</span>
             </div>
-            <h2 className="text-xl font-bold text-[var(--mes-text-primary)] tracking-tight flex items-center gap-2">
-              Cleanroom PCBA Rework Kiosk <span className="text-xs font-mono px-2 py-0.5 rounded bg-[var(--mes-bg-well)] text-[var(--mes-text-muted)] border border-[var(--mes-border)]/40">C12 TOP LAYER</span>
+            <h2 className="text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2 mt-0.5">
+              Cleanroom PCBA Rework Kiosk <span className="text-[10px] font-mono px-2 py-0.5 rounded-[var(--mes-radius)] bg-slate-900 text-slate-400 border border-slate-800">C12 TOP LAYER</span>
             </h2>
           </div>
         </div>
 
         {/* 3 Cleanroom Operating Modes */}
-        <div className="flex items-center gap-1 bg-[var(--mes-bg-well)] p-1.5 rounded-xl border border-[var(--mes-border)] font-mono text-xs">
+        <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-[var(--mes-radius)] border border-slate-800 font-mono text-xs">
           <button
             onClick={() => setRole('TECHNICIAN')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-colors ${
               role === 'TECHNICIAN'
-                ? 'bg-[var(--mes-bg-card)] text-[var(--mes-status-pass)] font-bold border border-[var(--mes-status-pass)]/40 shadow-sm'
-                : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
+                ? 'bg-slate-950 text-emerald-400 font-bold border border-emerald-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Wrench className="w-3.5 h-3.5" />
@@ -538,10 +541,10 @@ export const ReworkStation: React.FC = () => {
           </button>
           <button
             onClick={() => setRole('SUPERVISOR')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-colors ${
               role === 'SUPERVISOR'
-                ? 'bg-[var(--mes-bg-card)] text-[var(--mes-status-warn)] font-bold border border-[var(--mes-status-warn)]/40 shadow-sm'
-                : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
+                ? 'bg-slate-950 text-amber-400 font-bold border border-amber-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5" />
@@ -549,10 +552,10 @@ export const ReworkStation: React.FC = () => {
           </button>
           <button
             onClick={() => setRole('ENGINEER')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-colors ${
               role === 'ENGINEER'
-                ? 'bg-[var(--mes-bg-card)] text-[var(--mes-accent-primary)] font-bold border border-[var(--mes-accent-primary)]/40 shadow-sm'
-                : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
+                ? 'bg-slate-950 text-cyan-400 font-bold border border-cyan-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <UserCheck className="w-3.5 h-3.5" />
@@ -563,53 +566,53 @@ export const ReworkStation: React.FC = () => {
 
       {/* Action Notification Alert */}
       {actionMessage && (
-        <div className={`p-4 rounded-xl border font-mono text-sm flex items-center justify-between gap-3 ${
+        <div className={`p-3 rounded-[var(--mes-radius)] border font-mono text-xs flex items-center justify-between gap-3 ${
           actionMessage.type === 'success'
-            ? 'bg-[var(--mes-status-pass)]/10 border-[var(--mes-status-pass)]/40 text-[var(--mes-status-pass)]'
+            ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-400'
             : actionMessage.type === 'error'
-            ? 'bg-[var(--mes-status-fail)]/10 border-[var(--mes-status-fail)]/40 text-[var(--mes-status-fail)]'
-            : 'bg-[var(--mes-accent-primary)]/10 border-[var(--mes-accent-primary)]/40 text-[var(--mes-accent-primary)]'
+            ? 'bg-rose-950/20 border-rose-500/30 text-rose-400'
+            : 'bg-cyan-950/20 border-cyan-500/30 text-cyan-400'
         }`}>
           <div className="flex items-center gap-2">
-            {actionMessage.type === 'success' ? <CheckCircle2 className="w-5 h-5 flex-shrink-0" /> : <AlertTriangle className="w-5 h-5 flex-shrink-0" />}
+            {actionMessage.type === 'success' ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" /> : <AlertTriangle className="w-4 h-4 flex-shrink-0" />}
             <span>{actionMessage.text}</span>
           </div>
-          <button onClick={() => setActionMessage(null)} className="text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)] text-xs">✕</button>
+          <button onClick={() => setActionMessage(null)} className="text-slate-400 hover:text-slate-100 text-xs">✕</button>
         </div>
       )}
 
       {/* Multi-Up Panel & Unit Selector Bar */}
-      <div className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-2xl p-5 shadow-xl space-y-4">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-[var(--mes-text-muted)] uppercase tracking-wider">PANEL BARCODE:</span>
-            <div className="flex items-center gap-2 bg-[var(--mes-bg-well)] px-3 py-1.5 rounded-lg border border-[var(--mes-border)]">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">PANEL BARCODE:</span>
+            <div className="flex items-center gap-2 bg-slate-900 px-3 py-1 rounded-[var(--mes-radius)] border border-slate-800">
               <input
                 type="text"
                 value={panelBarcode}
                 onChange={(e) => setPanelBarcode(e.target.value.trim().toUpperCase())}
-                className="bg-transparent text-sm font-mono font-bold text-[var(--mes-text-primary)] outline-none w-48"
+                className="bg-transparent text-xs font-mono font-bold text-slate-100 outline-none w-44"
               />
-              <button onClick={loadPanelData} className="text-[var(--mes-status-pass)] hover:text-white transition-colors">
-                <RefreshCw className="w-4 h-4" />
+              <button onClick={loadPanelData} className="text-emerald-400 hover:text-slate-100 transition-colors">
+                <RefreshCw className="w-3.5 h-3.5" />
               </button>
             </div>
-            <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded-md border ${
+            <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-[var(--mes-radius)] border ${
               panelStatus === 'PASSED'
-                ? 'bg-[var(--mes-status-pass)]/10 text-[var(--mes-status-pass)] border-[var(--mes-status-pass)]/30'
-                : 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                : 'bg-rose-500/10 text-rose-400 border-rose-500/30 animate-pulse'
             }`}>
               {panelStatus}
             </span>
           </div>
 
-          <div className="text-xs font-mono text-[var(--mes-text-muted)]">
+          <div className="text-[10px] font-mono text-slate-400">
             6-UP MULTI-PANEL HIERARCHY (1 PANEL = 6 ASSEMBLED BOARDS)
           </div>
         </div>
 
         {/* 6-Up Multi-Panel Pills */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
           {[1, 2, 3, 4, 5, 6].map((unitNo) => {
             const unitObj = units.find(u => u.unit_position === unitNo);
             const status = unitObj ? unitObj.status : (unitNo === 3 ? 'QUALITY_HOLD' : 'PASSED');
@@ -620,30 +623,30 @@ export const ReworkStation: React.FC = () => {
               <button
                 key={unitNo}
                 onClick={() => setSelectedUnit(unitNo)}
-                className={`p-3 rounded-xl border text-left font-mono transition-all relative overflow-hidden ${
+                className={`p-2.5 rounded-[var(--mes-radius)] border text-left font-mono transition-colors relative overflow-hidden ${
                   isSelected
-                    ? 'ring-2 ring-[var(--mes-status-pass)] bg-[var(--mes-bg-card)] border-[var(--mes-border)] shadow-md'
-                    : 'bg-[var(--mes-bg-well)] border-[var(--mes-border)]/60 hover:border-[var(--mes-border)]'
+                    ? 'border-emerald-500 bg-slate-900 text-slate-100'
+                    : 'bg-slate-950 border-slate-800 hover:border-slate-700 text-slate-300'
                 }`}
               >
                 {isHold && (
-                  <div className="absolute top-0 right-0 w-2 h-2 rounded-full bg-red-500 animate-ping m-1.5" />
+                  <div className="absolute top-0 right-0 w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping m-1.5" />
                 )}
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-[var(--mes-text-muted)] font-bold">UNIT {unitNo}</span>
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                  <span className="text-[10px] text-slate-400 font-bold">UNIT {unitNo}</span>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-[var(--mes-radius)] border ${
                     status === 'PASSED' || status === 'RELEASED'
-                      ? 'bg-[var(--mes-status-pass)]/20 text-[var(--mes-status-pass)]'
+                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
                       : isHold
-                      ? 'bg-red-500/20 text-red-400 font-bold'
+                      ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
                       : status === 'REWORK_PASSED'
-                      ? 'bg-teal-500/20 text-teal-300'
-                      : 'bg-amber-500/20 text-amber-300'
+                      ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+                      : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                   }`}>
                     {status}
                   </span>
                 </div>
-                <div className="text-xs font-bold text-[var(--mes-text-primary)] truncate">
+                <div className="text-xs font-bold text-slate-100 truncate tabular-nums">
                   {unitObj?.unit_serial_number || `SN-MTR-0042-U${unitNo}`}
                 </div>
               </button>
@@ -653,32 +656,32 @@ export const ReworkStation: React.FC = () => {
       </div>
 
       {/* Two Column Layout: CAD Visualizer + Rework Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left Column (7 cols): Vector SVG PCB CAD Map */}
-        <div className="lg:col-span-7 bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-2xl p-5 shadow-2xl flex flex-col">
-          <div className="flex items-center justify-between mb-3">
+        <div className="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 flex flex-col">
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800/80">
             <div className="flex items-center gap-2 font-mono text-xs">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--mes-status-pass)]" />
-              <span className="text-[var(--mes-text-primary)] font-bold">UNIT {selectedUnit} CAD VECTOR VIEW</span>
-              <span className="text-white/40">|</span>
-              <span className="text-[var(--mes-text-muted)]">TOP LAYER (X: 0..45mm, Y: 0..60mm)</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="text-slate-100 font-bold uppercase tracking-wider">UNIT {selectedUnit} CAD VECTOR VIEW</span>
+              <span className="text-slate-700">|</span>
+              <span className="text-slate-400">TOP LAYER (X: 0..45mm, Y: 0..60mm)</span>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono">
-              <span className="flex items-center gap-1 text-red-400">
-                <span className="w-2.5 h-2.5 rounded bg-red-500 animate-pulse" />
+              <span className="flex items-center gap-1 text-rose-400">
+                <span className="w-2 h-2 rounded-xs bg-rose-500 animate-pulse" />
                 DEFECT (TOMBSTONE)
               </span>
-              <span className="flex items-center gap-1 text-[var(--mes-status-pass)] ml-2">
-                <span className="w-2.5 h-2.5 rounded bg-[var(--mes-status-pass)]" />
+              <span className="flex items-center gap-1 text-emerald-400 ml-2">
+                <span className="w-2 h-2 rounded-xs bg-emerald-400" />
                 NOMINAL
               </span>
             </div>
           </div>
 
           {/* Scaled PCB SVG Board Visualizer */}
-          <div className="relative flex-1 bg-[var(--mes-bg-well)] rounded-xl border border-[var(--mes-border)] p-4 min-h-[360px] flex items-center justify-center overflow-hidden">
+          <div className="relative flex-1 bg-slate-950 rounded-[var(--mes-radius)] border border-slate-800 p-4 min-h-[360px] flex items-center justify-center overflow-hidden">
             {/* PCB Trace grid pattern overlay */}
-            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(var(--mes-status-pass)_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#34D399_1px,transparent_1px)] [background-size:16px_16px]" />
 
             <svg
               viewBox="0 0 550 320"
@@ -690,21 +693,21 @@ export const ReworkStation: React.FC = () => {
                 y="20"
                 width="510"
                 height="280"
-                rx="10"
-                fill="#0B1A14"
-                stroke="#1B4D3E"
-                strokeWidth="3"
+                rx="2"
+                fill="#061A12"
+                stroke="#134E36"
+                strokeWidth="2"
               />
 
               {/* Fiducials & Ground Planes */}
-              <circle cx="45" cy="45" r="5" fill="#C9A84E" stroke="#E5C158" strokeWidth="1.5" />
-              <circle cx="505" cy="45" r="5" fill="#C9A84E" stroke="#E5C158" strokeWidth="1.5" />
-              <circle cx="45" cy="275" r="5" fill="#C9A84E" stroke="#E5C158" strokeWidth="1.5" />
-              <circle cx="505" cy="275" r="5" fill="#C9A84E" stroke="#E5C158" strokeWidth="1.5" />
+              <circle cx="45" cy="45" r="4.5" fill="#FBBF24" stroke="#D97706" strokeWidth="1" />
+              <circle cx="505" cy="45" r="4.5" fill="#FBBF24" stroke="#D97706" strokeWidth="1" />
+              <circle cx="45" cy="275" r="4.5" fill="#FBBF24" stroke="#D97706" strokeWidth="1" />
+              <circle cx="505" cy="275" r="4.5" fill="#FBBF24" stroke="#D97706" strokeWidth="1" />
 
               {/* Silkscreen lines */}
-              <rect x="35" y="35" width="480" height="250" fill="none" stroke="#FFFFFF" strokeWidth="0.75" strokeDasharray="4 4" opacity="0.4" />
-              <text x="45" y="65" fill="#FFFFFF" opacity="0.6" fontSize="10" fontFamily="monospace">
+              <rect x="35" y="35" width="480" height="250" fill="none" stroke="#F8FAFC" strokeWidth="0.75" strokeDasharray="4 4" opacity="0.25" />
+              <text x="45" y="65" fill="#F8FAFC" opacity="0.5" fontSize="10" fontFamily="monospace">
                 PROG-SM-METER-TOP // U{selectedUnit}
               </text>
 
@@ -736,11 +739,11 @@ export const ReworkStation: React.FC = () => {
                           y={localY - height / 2 - 8}
                           width={width + 16}
                           height={height + 16}
-                          rx="6"
-                          fill="#FF3B30"
+                          rx="4"
+                          fill="#F43F5E"
                           fillOpacity="0.25"
-                          stroke="#FF3B30"
-                          strokeWidth="2"
+                          stroke="#F43F5E"
+                          strokeWidth="1.5"
                           strokeDasharray="3 3"
                           className="animate-pulse"
                         />
@@ -752,17 +755,17 @@ export const ReworkStation: React.FC = () => {
                         y={localY - height / 2}
                         width={width}
                         height={height}
-                        rx={isIc ? 3 : 2}
-                        fill={isDefective ? '#7F1D1D' : isSelected ? '#1E3A8A' : isIc ? '#1F2937' : '#374151'}
-                        stroke={isDefective ? '#EF4444' : isSelected ? '#60A5FA' : '#9CA3AF'}
-                        strokeWidth={isSelected ? 2.5 : 1.2}
+                        rx={isIc ? 2 : 1}
+                        fill={isDefective ? '#881337' : isSelected ? '#1E3A8A' : isIc ? '#0F172A' : '#1E293B'}
+                        stroke={isDefective ? '#F43F5E' : isSelected ? '#38BDF8' : '#475569'}
+                        strokeWidth={isSelected ? 2 : 1}
                       />
 
                       {/* Pads for passives */}
                       {!isIc && (
                         <>
-                          <rect x={localX - width / 2} y={localY - height / 2} width="6" height={height} fill="#D1D5DB" />
-                          <rect x={localX + width / 2 - 6} y={localY - height / 2} width="6" height={height} fill="#D1D5DB" />
+                          <rect x={localX - width / 2} y={localY - height / 2} width="5" height={height} fill="#94A3B8" />
+                          <rect x={localX + width / 2 - 5} y={localY - height / 2} width="5" height={height} fill="#94A3B8" />
                         </>
                       )}
 
@@ -770,7 +773,7 @@ export const ReworkStation: React.FC = () => {
                       <text
                         x={localX}
                         y={localY + 3}
-                        fill={isDefective ? '#FCA5A5' : '#FFFFFF'}
+                        fill={isDefective ? '#FECDD3' : '#F8FAFC'}
                         fontSize="9"
                         fontWeight="bold"
                         fontFamily="monospace"
@@ -782,8 +785,8 @@ export const ReworkStation: React.FC = () => {
                       {/* Defect Callout Indicator */}
                       {isDefective && (
                         <g>
-                          <line x1={localX} y1={localY - height / 2} x2={localX + 30} y2={localY - height / 2 - 25} stroke="#EF4444" strokeWidth="1.5" />
-                          <rect x={localX + 25} y={localY - height / 2 - 40} width="115" height="18" rx="3" fill="#991B1B" stroke="#EF4444" strokeWidth="1" />
+                          <line x1={localX} y1={localY - height / 2} x2={localX + 30} y2={localY - height / 2 - 25} stroke="#F43F5E" strokeWidth="1.5" />
+                          <rect x={localX + 25} y={localY - height / 2 - 40} width="115" height="18" rx="2" fill="#881337" stroke="#F43F5E" strokeWidth="1" />
                           <text x={localX + 30} y={localY - height / 2 - 27} fill="#FFFFFF" fontSize="9" fontFamily="monospace" fontWeight="bold">
                             ⚠ {activeDefect.defect_type}
                           </text>
@@ -793,7 +796,7 @@ export const ReworkStation: React.FC = () => {
                   );
                 })
               ) : (
-                <text x="275" y="160" fill="var(--mes-text-muted)" fontSize="14" textAnchor="middle" fontFamily="monospace">
+                <text x="275" y="160" fill="#64748B" fontSize="14" textAnchor="middle" fontFamily="monospace">
                   Loading CAD Coordinates for Unit {selectedUnit}...
                 </text>
               )}
@@ -801,32 +804,32 @@ export const ReworkStation: React.FC = () => {
           </div>
 
           {/* Bottom Component Details Bar */}
-          <div className="mt-4 p-3 bg-[var(--mes-bg-well)] rounded-xl border border-[var(--mes-border)] flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+          <div className="mt-3 p-3 bg-slate-900 rounded-[var(--mes-radius)] border border-slate-800 flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
             <div className="flex items-center gap-4">
               <div>
-                <span className="text-[var(--mes-text-muted)]">SELECTED: </span>
-                <strong className="text-[var(--mes-status-pass)] text-sm">{selectedRefDes}</strong>
+                <span className="text-slate-400">SELECTED: </span>
+                <strong className="text-emerald-400 text-sm font-mono">{selectedRefDes}</strong>
               </div>
               <div>
-                <span className="text-[var(--mes-text-muted)]">MPN: </span>
-                <strong className="text-[var(--mes-text-primary)]">{correlation?.partNumber || 'C0402-100NF-16V'}</strong>
+                <span className="text-slate-400">MPN: </span>
+                <strong className="text-slate-100">{correlation?.partNumber || 'C0402-100NF-16V'}</strong>
               </div>
               <div>
-                <span className="text-[var(--mes-text-muted)]">PACKAGE: </span>
-                <strong className="text-[var(--mes-text-primary)]">{correlation?.packageType || '0402'}</strong>
+                <span className="text-slate-400">PACKAGE: </span>
+                <strong className="text-slate-100">{correlation?.packageType || '0402'}</strong>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
               <div>
-                <span className="text-[var(--mes-text-muted)]">CAD COORD: </span>
-                <strong className="text-[var(--mes-text-primary)]">
-                  X: {correlation?.cadCoordinates.xMm.toFixed(2)}mm, Y: {correlation?.cadCoordinates.yMm.toFixed(2)}mm
+                <span className="text-slate-400">CAD COORD: </span>
+                <strong className="text-slate-100 tabular-nums">
+                  X: {Number(correlation?.cadCoordinates?.xMm ?? 0).toFixed(2)}mm, Y: {Number(correlation?.cadCoordinates?.yMm ?? 0).toFixed(2)}mm
                 </strong>
               </div>
               <div>
-                <span className="text-[var(--mes-text-muted)]">MAX CYCLES: </span>
-                <strong className="text-[var(--mes-status-warn)]">
+                <span className="text-slate-400">MAX CYCLES: </span>
+                <strong className="text-amber-400 tabular-nums">
                   {verificationResult?.maxReworkCycles ?? 2} (JEDEC)
                 </strong>
               </div>
@@ -835,67 +838,67 @@ export const ReworkStation: React.FC = () => {
         </div>
 
         {/* Right Column (5 cols): Rework Action / Mode Panels */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-4">
           {/* 1. TECHNICIAN MODE: Verify & Replace */}
           {role === 'TECHNICIAN' && (
-            <div className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-2xl p-5 shadow-2xl space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-[var(--mes-text-primary)] flex items-center gap-2 font-mono">
-                  <Wrench className="w-5 h-5 text-[var(--mes-status-pass)]" />
+            <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                <h3 className="text-xs font-bold text-slate-100 flex items-center gap-2 font-mono uppercase tracking-wider">
+                  <Wrench className="w-4 h-4 text-emerald-400" />
                   REWORK EXECUTION BENCH
                 </h3>
-                <span className="text-xs font-mono text-[var(--mes-status-pass)] bg-[var(--mes-status-pass)]/10 px-2 py-0.5 rounded border border-[var(--mes-status-pass)]/30 font-bold">
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-[var(--mes-radius)] border border-emerald-500/30 font-bold">
                   READY
                 </span>
               </div>
 
               {/* Status Warning if Hold */}
               {activeUnitInfo?.status === 'QUALITY_HOLD' && (
-                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl font-mono text-xs text-red-400 flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <div className="p-2.5 bg-rose-950/20 border border-rose-500/30 rounded-[var(--mes-radius)] font-mono text-xs text-rose-300 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-400" />
                   <div>
-                    <strong>UNIT ON QUALITY HOLD:</strong> Optical defect recorded on {selectedRefDes} ({activeDefect?.defect_type || 'TOMBSTONE'}). Replace component with verified reel.
+                    <strong className="text-rose-200">UNIT ON QUALITY HOLD:</strong> Optical defect recorded on {selectedRefDes} ({activeDefect?.defect_type || 'TOMBSTONE'}). Replace component with verified reel.
                   </div>
                 </div>
               )}
 
               {/* Replacement Reel Scanner Input */}
               <div className="space-y-2 font-mono text-xs">
-                <label className="text-[var(--mes-text-muted)]">SCAN REPLACEMENT REEL LOT BARCODE:</label>
+                <label className="text-slate-400 text-[10px] uppercase">SCAN REPLACEMENT REEL LOT BARCODE:</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={replacementReelId}
                     onChange={(e) => setReplacementReelId(e.target.value.trim().toUpperCase())}
-                    className="flex-1 bg-[var(--mes-bg-well)] border border-[var(--mes-border)] rounded-xl px-3 py-2 text-sm text-[var(--mes-text-primary)] outline-none focus:border-[var(--mes-status-pass)]"
+                    className="flex-1 bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] px-3 py-1.5 text-xs text-slate-100 outline-none focus:border-cyan-500"
                   />
                   <button
                     onClick={handleVerifyReplacement}
-                    className="px-4 py-2 bg-[var(--mes-bg-card)] hover:bg-[var(--mes-bg-card-hover)] text-[var(--mes-status-pass)] font-bold rounded-xl border border-[var(--mes-status-pass)]/40 flex items-center gap-1.5 transition-all shadow-sm"
+                    className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-emerald-400 font-semibold rounded-[var(--mes-radius)] border border-emerald-500/40 flex items-center gap-1.5 transition-colors text-xs"
                   >
-                    <Search className="w-4 h-4" />
+                    <Search className="w-3.5 h-3.5" />
                     <span>VERIFY</span>
                   </button>
                 </div>
 
                 {/* Preset Chips */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  <span className="text-[10px] text-[var(--mes-text-muted)]">Presets:</span>
+                <div className="flex flex-wrap gap-1.5 pt-0.5">
+                  <span className="text-[10px] text-slate-400">Presets:</span>
                   <button
                     onClick={() => setReplacementReelId('REEL-MUR-98125-SPLICE')}
-                    className="text-[10px] px-2 py-0.5 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-card)] text-[var(--mes-status-pass)] rounded border border-[var(--mes-border)]/60 transition-colors"
+                    className="text-[10px] px-2 py-0.5 bg-slate-900 hover:bg-slate-800 text-emerald-400 rounded-[var(--mes-radius)] border border-slate-800 transition-colors"
                   >
                     REEL-MUR-98125 (VALID 100nF)
                   </button>
                   <button
                     onClick={() => setReplacementReelId('REEL-EXPIRED-TEST-01')}
-                    className="text-[10px] px-2 py-0.5 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-card)] text-red-400 rounded border border-[var(--mes-border)]/60 transition-colors"
+                    className="text-[10px] px-2 py-0.5 bg-slate-900 hover:bg-slate-800 text-rose-400 rounded-[var(--mes-radius)] border border-slate-800 transition-colors"
                   >
                     EXPIRED-TEST-01 (MSL FAIL)
                   </button>
                   <button
                     onClick={() => setReplacementReelId('REEL-VSH-44120')}
-                    className="text-[10px] px-2 py-0.5 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-card)] text-amber-400 rounded border border-[var(--mes-border)]/60 transition-colors"
+                    className="text-[10px] px-2 py-0.5 bg-slate-900 hover:bg-slate-800 text-amber-400 rounded-[var(--mes-radius)] border border-slate-800 transition-colors"
                   >
                     REEL-VSH-44120 (BOM MISMATCH)
                   </button>
@@ -904,20 +907,20 @@ export const ReworkStation: React.FC = () => {
 
               {/* Verification Assessment Badge */}
               {verificationResult && (
-                <div className={`p-3 rounded-xl border font-mono text-xs space-y-1.5 ${
+                <div className={`p-2.5 rounded-[var(--mes-radius)] border font-mono text-xs space-y-1 ${
                   verificationResult.valid
-                    ? 'bg-[var(--mes-status-pass)]/10 border-[var(--mes-status-pass)]/40 text-[var(--mes-status-pass)]'
-                    : 'bg-red-500/10 border-red-500/40 text-red-400'
+                    ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-400'
+                    : 'bg-rose-950/20 border-rose-500/30 text-rose-300'
                 }`}>
-                  <div className="flex items-center justify-between font-bold">
+                  <div className="flex items-center justify-between font-bold text-[11px]">
                     <span>{verificationResult.valid ? '✓ VERIFICATION PASSED' : '✕ VERIFICATION FAILED'}</span>
-                    <span>CYCLE {verificationResult.currentCycle} OF {verificationResult.maxReworkCycles}</span>
+                    <span className="tabular-nums">CYCLE {verificationResult.currentCycle} OF {verificationResult.maxReworkCycles}</span>
                   </div>
-                  <div className="text-[var(--mes-text-primary)]">
+                  <div className="text-slate-200">
                     BOM Expected: <strong>{verificationResult.expectedMpn}</strong> | Scanned: <strong>{verificationResult.replacementMpn}</strong>
                   </div>
                   {verificationResult.errors && verificationResult.errors.length > 0 && (
-                    <div className="text-red-300">
+                    <div className="text-rose-400">
                       Reason: {verificationResult.errors.join('; ')}
                     </div>
                   )}
@@ -927,31 +930,31 @@ export const ReworkStation: React.FC = () => {
               {/* Action Button */}
               <button
                 onClick={handleExecuteRework}
-                className="w-full py-3 bg-[var(--mes-status-pass)] hover:opacity-90 text-[var(--mes-bg-base)] font-mono font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all shadow-[var(--mes-status-pass)]/20"
+                className="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-mono font-bold rounded-[var(--mes-radius)] flex items-center justify-center gap-2 transition-colors border border-emerald-400"
               >
-                <Zap className="w-5 h-5" />
+                <Zap className="w-4 h-4" />
                 <span>EXECUTE COMPONENT REPLACEMENT</span>
               </button>
 
               {/* Mandatory Post-Rework Re-Inspection Gate */}
-              <div className="pt-3 border-t border-[var(--mes-border)] space-y-2">
+              <div className="pt-2.5 border-t border-slate-800/80 space-y-2">
                 <div className="flex items-center justify-between font-mono text-xs">
-                  <span className="text-[var(--mes-text-muted)]">POST-REWORK RE-INSPECTION GATE:</span>
-                  <span className="text-[var(--mes-status-warn)] font-bold">MANDATORY</span>
+                  <span className="text-slate-400 text-[10px] uppercase">POST-REWORK RE-INSPECTION GATE:</span>
+                  <span className="text-amber-400 font-bold text-[10px]">MANDATORY</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => handlePostReworkInspection('PASS')}
-                    className="py-2.5 bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 font-mono font-bold text-xs rounded-xl border border-emerald-500/40 flex items-center justify-center gap-1.5 transition-colors"
+                    className="py-1.5 bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-400 font-mono font-bold text-xs rounded-[var(--mes-radius)] border border-emerald-500/40 flex items-center justify-center gap-1.5 transition-colors"
                   >
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>AOI RE-INSPECT PASS</span>
                   </button>
                   <button
                     onClick={() => handlePostReworkInspection('FAIL')}
-                    className="py-2.5 bg-red-600/30 hover:bg-red-600/50 text-red-300 font-mono font-bold text-xs rounded-xl border border-red-500/40 flex items-center justify-center gap-1.5 transition-colors"
+                    className="py-1.5 bg-rose-950/40 hover:bg-rose-900/40 text-rose-400 font-mono font-bold text-xs rounded-[var(--mes-radius)] border border-rose-500/40 flex items-center justify-center gap-1.5 transition-colors"
                   >
-                    <XCircle className="w-4 h-4" />
+                    <XCircle className="w-3.5 h-3.5" />
                     <span>AOI RE-INSPECT FAIL</span>
                   </button>
                 </div>
@@ -961,41 +964,41 @@ export const ReworkStation: React.FC = () => {
 
           {/* 2. SUPERVISOR MODE: Sentinel Trends & Interlock Clear */}
           {role === 'SUPERVISOR' && (
-            <div className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-2xl p-5 shadow-2xl space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-[var(--mes-text-primary)] flex items-center gap-2 font-mono">
-                  <ShieldAlert className="w-5 h-5 text-[var(--mes-status-warn)]" />
+            <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                <h3 className="text-xs font-bold text-slate-100 flex items-center gap-2 font-mono uppercase tracking-wider">
+                  <ShieldAlert className="w-4 h-4 text-amber-400" />
                   REPEAT DEFECT SENTINEL
                 </h3>
-                <span className="text-xs font-mono text-[var(--mes-status-warn)] bg-[var(--mes-status-warn)]/10 px-2 py-0.5 rounded border border-[var(--mes-status-warn)]/30 font-bold">
+                <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-[var(--mes-radius)] border border-amber-500/30 font-bold">
                   SUPERVISOR LOCKOUT
                 </span>
               </div>
 
               <div className="space-y-3 font-mono text-xs">
-                <div className="p-3 bg-[var(--mes-bg-well)] rounded-xl border border-[var(--mes-border)] space-y-2">
-                  <div className="text-[var(--mes-text-muted)]">ACTIVE QUALITY RULES FOR PROGRAM:</div>
-                  <div className="grid grid-cols-2 gap-2 text-[var(--mes-text-primary)]">
-                    <div>Consecutive Limit: <strong className="text-red-400">3 panels</strong></div>
-                    <div>Sliding Window: <strong className="text-[var(--mes-status-warn)]">5 in 20 panels</strong></div>
-                    <div>Interlock Action: <strong className="text-[var(--mes-status-pass)]">HOLD SMT PICK & PLACE</strong></div>
-                    <div>Interlock Scope: <strong className="text-[var(--mes-text-secondary)]">Fuji NXT III (wc-nxt-01)</strong></div>
+                <div className="p-2.5 bg-slate-900 rounded-[var(--mes-radius)] border border-slate-800 space-y-1.5">
+                  <div className="text-slate-400 text-[10px] uppercase">ACTIVE QUALITY RULES FOR PROGRAM:</div>
+                  <div className="grid grid-cols-2 gap-2 text-slate-200">
+                    <div>Consecutive Limit: <strong className="text-rose-400">3 panels</strong></div>
+                    <div>Sliding Window: <strong className="text-amber-400">5 in 20 panels</strong></div>
+                    <div>Interlock Action: <strong className="text-emerald-400">HOLD SMT PICK &amp; PLACE</strong></div>
+                    <div>Interlock Scope: <strong className="text-slate-300">Fuji NXT III (wc-nxt-01)</strong></div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[var(--mes-text-muted)]">CLEAR INTERLOCK AUTHORIZATION REASON:</label>
+                <div className="space-y-1.5">
+                  <label className="text-slate-400 text-[10px] uppercase">CLEAR INTERLOCK AUTHORIZATION REASON:</label>
                   <textarea
                     rows={2}
                     value={clearInterlockReason}
                     onChange={(e) => setClearInterlockReason(e.target.value)}
-                    className="w-full bg-[var(--mes-bg-well)] border border-[var(--mes-border)] rounded-xl p-2.5 text-xs text-[var(--mes-text-primary)] outline-none focus:border-[var(--mes-status-warn)]"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] p-2 text-xs text-slate-100 outline-none focus:border-amber-500 resize-none"
                   />
                 </div>
 
                 <button
                   onClick={handleClearInterlock}
-                  className="w-full py-3 bg-[var(--mes-status-warn)] hover:opacity-90 text-[var(--mes-bg-base)] font-mono font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all shadow-[var(--mes-status-warn)]/20"
+                  className="w-full py-2 bg-amber-600 hover:bg-amber-500 text-slate-950 font-mono font-bold rounded-[var(--mes-radius)] flex items-center justify-center gap-2 transition-colors border border-amber-400"
                 >
                   <Radio className="w-4 h-4" />
                   <span>CLEAR PRODUCTION HOLD INTERLOCK</span>
@@ -1006,29 +1009,29 @@ export const ReworkStation: React.FC = () => {
 
           {/* 3. ENGINEER MODE: Formal Engineering Disposition */}
           {role === 'ENGINEER' && (
-            <div className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-2xl p-5 shadow-2xl space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-[var(--mes-text-primary)] flex items-center gap-2 font-mono">
-                  <UserCheck className="w-5 h-5 text-[var(--mes-accent-primary)]" />
+            <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                <h3 className="text-xs font-bold text-slate-100 flex items-center gap-2 font-mono uppercase tracking-wider">
+                  <UserCheck className="w-4 h-4 text-cyan-400" />
                   ENGINEERING DISPOSITION
                 </h3>
-                <span className="text-xs font-mono text-[var(--mes-accent-primary)] bg-[var(--mes-accent-primary)]/10 px-2 py-0.5 rounded border border-[var(--mes-accent-primary)]/30 font-bold">
+                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-[var(--mes-radius)] border border-cyan-500/30 font-bold">
                   MRB AUTHORITY
                 </span>
               </div>
 
               <div className="space-y-3 font-mono text-xs">
                 <div>
-                  <label className="text-[var(--mes-text-muted)]">DISPOSITION DECISION:</label>
+                  <label className="text-slate-400 text-[10px] uppercase">DISPOSITION DECISION:</label>
                   <div className="grid grid-cols-2 gap-2 mt-1">
                     {(['REWORK', 'SCRAP', 'ACCEPT_AS_IS', 'REINSPECT'] as const).map((disp) => (
                       <button
                         key={disp}
                         onClick={() => setDispositionType(disp)}
-                        className={`p-2 rounded-lg border text-center transition-all ${
+                        className={`py-1.5 px-2 rounded-[var(--mes-radius)] border text-center transition-colors font-semibold text-xs ${
                           dispositionType === disp
-                            ? 'bg-[var(--mes-accent-primary)]/20 border-[var(--mes-accent-primary)] text-[var(--mes-accent-primary)] font-bold'
-                            : 'bg-[var(--mes-bg-well)] border-[var(--mes-border)]/60 text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
+                            ? 'bg-cyan-950/40 border-cyan-500 text-cyan-400 font-bold'
+                            : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
                         }`}
                       >
                         {disp}
@@ -1038,20 +1041,20 @@ export const ReworkStation: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[var(--mes-text-muted)]">ENGINEERING JUSTIFICATION & REFERENCE:</label>
+                  <label className="text-slate-400 text-[10px] uppercase">ENGINEERING JUSTIFICATION &amp; REFERENCE:</label>
                   <textarea
                     rows={3}
                     value={dispositionReason}
                     onChange={(e) => setDispositionReason(e.target.value)}
-                    className="w-full bg-[var(--mes-bg-well)] border border-[var(--mes-border)] rounded-xl p-2.5 text-xs text-[var(--mes-text-primary)] outline-none focus:border-[var(--mes-accent-primary)]"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] p-2 text-xs text-slate-100 outline-none focus:border-cyan-500 resize-none"
                   />
                 </div>
 
                 <button
                   onClick={handleRecordDisposition}
-                  className="w-full py-3 bg-[var(--mes-accent-primary)] hover:opacity-90 text-[var(--mes-bg-base)] font-mono font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all shadow-[var(--mes-accent-primary)]/20"
+                  className="w-full py-2 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-mono font-bold rounded-[var(--mes-radius)] flex items-center justify-center gap-2 transition-colors border border-cyan-400"
                 >
-                  <CheckSquare className="w-5 h-5" />
+                  <CheckSquare className="w-4 h-4" />
                   <span>COMMIT ENGINEERING DISPOSITION</span>
                 </button>
               </div>
@@ -1060,53 +1063,53 @@ export const ReworkStation: React.FC = () => {
 
           {/* Root-Cause Correlation Card */}
           {correlation && (
-            <div className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-2xl p-5 shadow-2xl space-y-3 font-mono text-xs">
-              <h4 className="text-sm font-bold text-[var(--mes-text-primary)] flex items-center gap-2">
-                <Activity className="w-4 h-4 text-[var(--mes-status-pass)]" />
+            <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 space-y-3 font-mono text-xs">
+              <h4 className="text-xs font-bold text-slate-100 flex items-center gap-2 uppercase tracking-wider pb-2 border-b border-slate-800/80">
+                <Activity className="w-4 h-4 text-emerald-400" />
                 UPSTREAM ROOT-CAUSE CORRELATION
               </h4>
 
-              <div className="space-y-2 text-[var(--mes-text-secondary)]">
-                <div className="flex items-center justify-between border-b border-[var(--mes-border)]/40 pb-1">
-                  <span className="text-[var(--mes-text-muted)]">Placement Feeder Slot:</span>
-                  <strong className="text-[var(--mes-text-primary)]">
+              <div className="space-y-1.5 text-slate-300">
+                <div className="flex items-center justify-between border-b border-slate-800/60 pb-1">
+                  <span className="text-slate-400">Placement Feeder Slot:</span>
+                  <strong className="text-slate-100">
                     Mod {correlation.feederSlot?.moduleNo || 1} • Slot {correlation.feederSlot?.slotNo || 1} ({correlation.feederSlot?.feederId || 'FID-W08F-01'})
                   </strong>
                 </div>
 
-                <div className="flex items-center justify-between border-b border-[var(--mes-border)]/40 pb-1">
-                  <span className="text-[var(--mes-text-muted)]">SMT Reel Lot:</span>
-                  <strong className="text-[var(--mes-status-pass)]">
+                <div className="flex items-center justify-between border-b border-slate-800/60 pb-1">
+                  <span className="text-slate-400">SMT Reel Lot:</span>
+                  <strong className="text-emerald-400">
                     {correlation.componentReel?.lotNumber || 'LOT-MUR-2601'} ({correlation.componentReel?.mslClass || 'MSL_1'})
                   </strong>
                 </div>
 
-                <div className="flex items-center justify-between border-b border-[var(--mes-border)]/40 pb-1">
-                  <span className="text-[var(--mes-text-muted)]">Fuji Pick Nozzle:</span>
-                  <strong className="text-[var(--mes-text-primary)]">
+                <div className="flex items-center justify-between border-b border-slate-800/60 pb-1">
+                  <span className="text-slate-400">Fuji Pick Nozzle:</span>
+                  <strong className="text-slate-100">
                     {correlation.nozzleTelemetry?.nozzleId || 'NOZ-0402-A'} ({correlation.nozzleTelemetry?.recentErrorCount || 0} pickup errs)
                   </strong>
                 </div>
 
-                <div className="flex items-center justify-between border-b border-[var(--mes-border)]/40 pb-1">
-                  <span className="text-[var(--mes-text-muted)]">Solder Paste Jar:</span>
-                  <strong className="text-[var(--mes-status-warn)]">
+                <div className="flex items-center justify-between border-b border-slate-800/60 pb-1">
+                  <span className="text-slate-400">Solder Paste Jar:</span>
+                  <strong className="text-amber-400">
                     {correlation.solderPaste?.jarId || 'JAR-ALPHA-2601-C'} ({correlation.solderPaste?.alloyType || 'SAC305'})
                   </strong>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-[var(--mes-text-muted)]">Active Stencil:</span>
-                  <strong className="text-[var(--mes-text-primary)]">
+                  <span className="text-slate-400">Active Stencil:</span>
+                  <strong className="text-slate-100">
                     {correlation.stencil?.serialNumber || 'STN-2026-0042'} (Rev {correlation.stencil?.revision || 'A'})
                   </strong>
                 </div>
               </div>
 
               {/* Root Cause Hypothesis Box */}
-              <div className="p-3 bg-[var(--mes-bg-well)] rounded-xl border border-[var(--mes-border)] text-[var(--mes-text-primary)]">
-                <div className="text-[10px] text-[var(--mes-status-warn)] font-bold mb-1">DIAGNOSTIC HYPOTHESIS:</div>
-                <p className="text-xs leading-relaxed text-[var(--mes-text-muted)]">
+              <div className="p-2.5 bg-slate-900 rounded-[var(--mes-radius)] border border-slate-800 text-slate-100">
+                <div className="text-[10px] text-amber-400 font-bold mb-0.5 uppercase tracking-wider">DIAGNOSTIC HYPOTHESIS:</div>
+                <p className="text-xs leading-relaxed text-slate-300">
                   {correlation.rootCauseHypothesis}
                 </p>
               </div>

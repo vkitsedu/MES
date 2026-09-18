@@ -242,59 +242,59 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Fixed Enterprise System Header (Height 38px) */}
-      <header className="h-[38px] bg-[var(--mes-bg-header)] border-b border-[var(--mes-border-subtle)] px-3 flex items-center justify-between gap-3 shrink-0 z-30 font-mono text-xs">
+      <header className="h-[38px] bg-slate-950 border-b border-slate-800 px-3 flex items-center justify-between gap-3 shrink-0 z-30 font-mono text-xs">
         {/* Left: Branding, Cluster, Line Selector & Protocol Link */}
         <div className="flex items-center gap-2.5">
           {/* System Badge */}
-          <div className="px-2 py-0.5 bg-[var(--mes-accent-muted)] border border-[var(--mes-accent-ring)] text-[var(--mes-accent-primary)] font-bold text-[10.5px] tracking-wider flex items-center gap-1.5 rounded-[var(--mes-radius)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--mes-accent-primary)] animate-pulse" />
+          <div className="px-2 py-0.5 bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 font-bold text-[10.5px] tracking-wider flex items-center gap-1.5 rounded-[var(--mes-radius)] shadow-[0_0_8px_rgba(6,182,212,0.2)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
             <span>i-MES 2.0</span>
           </div>
 
           <div className="flex items-baseline gap-1.5">
-            <span className="font-bold text-[var(--mes-text-primary)] tracking-tight">
+            <span className="font-bold text-slate-100 tracking-tight">
               i-MES 2.0 · SMT MANUFACTURING EXECUTION SYSTEM
             </span>
-            <span className="text-[10px] text-[var(--mes-text-muted)] hidden xl:inline">
+            <span className="text-[10px] text-slate-500 hidden xl:inline">
               · CLEANROOM OPERATIONS
             </span>
           </div>
 
-          <div className="h-3 w-px bg-[var(--mes-border-subtle)] hidden sm:block" />
+          <div className="h-3 w-px bg-slate-800 hidden sm:block" />
 
           {/* Line Selector Dropdown */}
           <div className="relative">
             <button
               onClick={() => setIsLineMenuOpen(!isLineMenuOpen)}
-              className="text-[11px] font-bold text-[var(--mes-text-primary)] tracking-tight flex items-center gap-1 bg-[var(--mes-bg-well)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] hover:border-[var(--mes-border-strong)] transition-colors"
+              className="text-[11px] font-bold text-slate-100 tracking-tight flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-[var(--mes-radius)] border border-slate-800 hover:border-slate-700 transition-colors"
               aria-haspopup="true"
               aria-expanded={isLineMenuOpen}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--mes-status-pass)]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span>
                 {selectedLine === 'LINE_01' 
                   ? 'SMD_01: Fuji NXT III M6' 
                   : 'SMD_02: Fuji AIMEX IIIc'}
               </span>
-              <ChevronDown className="w-3 h-3 text-[var(--mes-text-muted)] ml-0.5" />
+              <ChevronDown className="w-3 h-3 text-slate-400 ml-0.5" />
             </button>
 
             {isLineMenuOpen && (
-              <div className="absolute top-full left-0 mt-1 bg-[var(--mes-bg-modal)] border border-[var(--mes-border-strong)] rounded-[var(--mes-radius)] shadow-2xl py-1 z-50 w-64 text-xs font-mono">
+              <div className="absolute top-full left-0 mt-1 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] shadow-2xl py-1 z-50 w-64 text-xs font-mono">
                 <button
                   onClick={() => {
                     setSelectedLine('LINE_01');
                     setIsLineMenuOpen(false);
                   }}
-                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-[var(--mes-bg-well)] ${
-                    selectedLine === 'LINE_01' ? 'text-[var(--mes-text-primary)] font-bold bg-[var(--mes-accent-muted)]' : 'text-[var(--mes-text-secondary)]'
+                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-slate-900 ${
+                    selectedLine === 'LINE_01' ? 'text-slate-100 font-bold bg-cyan-950/40' : 'text-slate-400'
                   }`}
                 >
                   <div>
-                    <div className="font-bold text-[11px] text-[var(--mes-text-primary)]">SMD_01: Fuji NXT III M6</div>
-                    <div className="text-[9.5px] text-[var(--mes-text-muted)]">High-Speed Smart Meter SMT</div>
+                    <div className="font-bold text-[11px] text-slate-100">SMD_01: Fuji NXT III M6</div>
+                    <div className="text-[9.5px] text-slate-500">High-Speed Smart Meter SMT</div>
                   </div>
-                  {selectedLine === 'LINE_01' && <Check className="w-3 h-3 text-[var(--mes-status-pass)]" />}
+                  {selectedLine === 'LINE_01' && <Check className="w-3 h-3 text-emerald-400" />}
                 </button>
 
                 <button
@@ -302,15 +302,15 @@ const AppContent: React.FC = () => {
                     setSelectedLine('LINE_02');
                     setIsLineMenuOpen(false);
                   }}
-                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-[var(--mes-bg-well)] ${
-                    selectedLine === 'LINE_02' ? 'text-[var(--mes-text-primary)] font-bold bg-[var(--mes-accent-muted)]' : 'text-[var(--mes-text-secondary)]'
+                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-slate-900 ${
+                    selectedLine === 'LINE_02' ? 'text-slate-100 font-bold bg-cyan-950/40' : 'text-slate-400'
                   }`}
                 >
                   <div>
-                    <div className="font-bold text-[11px] text-[var(--mes-text-primary)]">SMD_02: Fuji AIMEX IIIc</div>
-                    <div className="text-[9.5px] text-[var(--mes-text-muted)]">Dual-Lane Flexible Placement</div>
+                    <div className="font-bold text-[11px] text-slate-100">SMD_02: Fuji AIMEX IIIc</div>
+                    <div className="text-[9.5px] text-slate-500">Dual-Lane Flexible Placement</div>
                   </div>
-                  {selectedLine === 'LINE_02' && <Check className="w-3 h-3 text-[var(--mes-status-pass)]" />}
+                  {selectedLine === 'LINE_02' && <Check className="w-3 h-3 text-emerald-400" />}
                 </button>
               </div>
             )}
@@ -320,10 +320,10 @@ const AppContent: React.FC = () => {
           <div className="hidden lg:flex items-center gap-1.5">
             <button
               onClick={() => setIsFujiLinkModalOpen(true)}
-              className="flex items-center gap-1.5 text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)] bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] hover:border-[var(--mes-accent-primary)] transition-all cursor-pointer group"
+              className="flex items-center gap-1.5 text-slate-300 hover:text-slate-100 bg-slate-900 hover:bg-slate-850 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 hover:border-cyan-500/50 transition-all cursor-pointer group"
               title="Click to configure Fuji Machine Link & OT Network IP/Port"
             >
-              <Radio className={`w-3.5 h-3.5 ${fujiStatus?.isListening || fujiStatus?.isClientConnected ? 'text-[var(--mes-accent-primary)] animate-pulse' : 'text-[var(--mes-text-muted)]'}`} />
+              <Radio className={`w-3.5 h-3.5 ${fujiStatus?.isListening || fujiStatus?.isClientConnected ? 'text-cyan-400 animate-pulse' : 'text-slate-500'}`} />
               <span className="font-mono text-[10.5px]">TCP {fujiStatus?.port || 30040}:</span>
               <span className={`font-mono font-bold text-[9.5px] px-1 py-0.2 rounded-[1px] border ${
                 fujiStatus?.activeConnections > 0
@@ -339,9 +339,9 @@ const AppContent: React.FC = () => {
                     : 'OFFLINE'}
               </span>
             </button>
-            <div className="flex items-center gap-1 text-[var(--mes-text-muted)] bg-[var(--mes-bg-well)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)]">
+            <div className="flex items-center gap-1 text-slate-400 bg-slate-900 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800">
               <span>DB:</span>
-              <span className="text-[var(--mes-text-primary)] font-bold">{stationModes.dbMode}</span>
+              <span className="text-slate-200 font-bold">{stationModes.dbMode}</span>
             </div>
           </div>
         </div>
@@ -349,7 +349,7 @@ const AppContent: React.FC = () => {
         {/* Right: Persona Switcher, Kiosk, Theme Studio, Command Jump, Operator Profile, Clock */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Persona View Switcher */}
-          <div className="flex items-center bg-[var(--mes-bg-well)] p-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] text-[10px] font-mono">
+          <div className="flex items-center bg-slate-950 p-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[10px] font-mono">
             <button
               onClick={() => {
                 setActivePersona('OPERATOR');
@@ -357,8 +357,8 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'OPERATOR'
-                  ? 'bg-[var(--mes-accent-primary)] text-white font-bold shadow-xs'
-                  : 'text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)]'
+                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Operator Persona (Shop floor / touchscreen tablet / high glanceability)"
             >
@@ -372,8 +372,8 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'SUPERVISOR'
-                  ? 'bg-[var(--mes-accent-primary)] text-white font-bold shadow-xs'
-                  : 'text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)]'
+                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Supervisor Persona (Line flow, stations, multi-machine comparative view)"
             >
@@ -387,8 +387,8 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'ENGINEER'
-                  ? 'bg-[var(--mes-accent-primary)] text-white font-bold shadow-xs'
-                  : 'text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)]'
+                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Engineer Persona (Deep diagnostics, vacuum misfires, reflow drift)"
             >
@@ -402,8 +402,8 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'EXECUTIVE'
-                  ? 'bg-[var(--mes-accent-primary)] text-white font-bold shadow-xs'
-                  : 'text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)]'
+                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Plant Manager / Executive Persona (High-level OEE, FPY, scrap financial cost)"
             >
@@ -415,21 +415,21 @@ const AppContent: React.FC = () => {
           {/* Wall / Overhead Andon Kiosk Button */}
           <button
             onClick={() => setIsKioskMode(true)}
-            className="flex items-center gap-1 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] text-[11px] font-mono transition-colors"
+            className="flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono transition-colors"
             title="Switch to Control-Room Wall Kiosk Mode"
           >
-            <Tv className="w-3 h-3 text-[var(--mes-status-pass)]" />
+            <Tv className="w-3 h-3 text-emerald-400" />
             <span className="hidden xl:inline">Kiosk</span>
           </button>
 
           {/* Theme & Palette Studio Button */}
           <button
             onClick={() => setIsThemeModalOpen(true)}
-            className="flex items-center gap-1.5 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] hover:border-[var(--mes-accent-primary)] text-[11px] font-bold transition-all"
+            className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 hover:border-cyan-500/50 text-[11px] font-bold transition-all"
             title="Open Theme & Palette Studio"
           >
-            <Palette className="w-3 h-3 text-[var(--mes-accent-primary)]" />
-            <span className="hidden md:inline uppercase text-[9.5px] tracking-wider text-[var(--mes-accent-primary)]">
+            <Palette className="w-3 h-3 text-cyan-400" />
+            <span className="hidden md:inline uppercase text-[9.5px] tracking-wider text-cyan-400">
               {theme.name}
             </span>
           </button>
@@ -437,12 +437,12 @@ const AppContent: React.FC = () => {
           {/* Jump to Station Search Button (Cmd+K) */}
           <button
             onClick={() => setIsCommandPaletteOpen(true)}
-            className="flex items-center gap-1.5 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] text-[11px] transition-colors"
+            className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] transition-colors"
             title="Jump to any station or command (⌘K)"
           >
-            <Search className="w-3 h-3 text-[var(--mes-text-muted)]" />
+            <Search className="w-3 h-3 text-slate-400" />
             <span className="hidden xl:inline">Jump</span>
-            <kbd className="text-[9.5px] font-mono bg-[var(--mes-bg-canvas)] border border-[var(--mes-border-subtle)] px-1 rounded-[1px] text-[var(--mes-text-muted)]">
+            <kbd className="text-[9.5px] font-mono bg-slate-950 border border-slate-800 px-1 rounded-[1px] text-slate-400">
               ⌘K
             </kbd>
           </button>
@@ -450,60 +450,52 @@ const AppContent: React.FC = () => {
           {/* Shift Briefing Button */}
           <button
             onClick={handleExportBriefing}
-            className="hidden sm:flex items-center gap-1 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] text-[11px] transition-colors"
-            title="Generate and copy shift briefing"
+            className="hidden md:flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono transition-colors"
+            title="SMT Shift Handover Briefing & Markdown Report"
           >
-            <FileText className="w-3 h-3 text-[var(--mes-accent-primary)]" />
-            <span className="hidden lg:inline">Briefing</span>
+            <FileText className="w-3 h-3 text-cyan-400" />
+            <span className="hidden xl:inline">Briefing</span>
           </button>
 
-          {/* Mode Settings Button */}
+          {/* Station Protocol Adapter Status Mode Switcher Button */}
           <button
             onClick={() => setIsStationModeModalOpen(true)}
-            className="flex items-center gap-1 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-text-secondary)] hover:text-[var(--mes-text-primary)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] text-[11px] transition-colors"
-            title="Configure integration modes"
+            className="hidden xl:flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono transition-colors"
+            title="Station Machine Driver & Protocol Mode Adapters"
           >
-            <Settings className="w-3 h-3 text-[var(--mes-text-muted)]" />
-            <span className="hidden md:inline">Mode</span>
+            <Settings className="w-3 h-3 text-amber-400" />
+            <span>Adapters</span>
           </button>
 
-          {/* Operator Profile or Sign In */}
-          {operator ? (
-            <div className="flex items-center gap-1.5 bg-[var(--mes-bg-well)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] text-[11px]">
-              <UserCheck className="w-3 h-3 text-[var(--mes-status-pass)]" />
-              <span className="text-[var(--mes-text-primary)] font-bold">{operator.code}</span>
-              <span className={`text-[9.5px] px-1 rounded-[1px] border font-bold ${ROLE_BADGE_STYLES[operator.role]?.bg || 'bg-white/5'} ${ROLE_BADGE_STYLES[operator.role]?.text || 'text-white'} ${ROLE_BADGE_STYLES[operator.role]?.border || 'border-white/10'}`}>
-                {operator.role}
-              </span>
-              <button
-                onClick={() => authService.logout()}
-                className="text-[var(--mes-text-muted)] hover:text-rose-400 p-0.5 rounded-[1px] hover:bg-white/5 transition-colors ml-0.5"
-                title="Sign out operator"
-              >
-                <LogOut className="w-3 h-3" />
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setIsLoginModalOpen(true)}
-              className="flex items-center gap-1 bg-[var(--mes-accent-muted)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-accent-primary)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-accent-ring)] text-[11px] font-bold transition-colors"
-            >
-              <Key className="w-3 h-3" />
-              <span>Sign In</span>
-            </button>
-          )}
+          {/* Operator Authentication Trigger & Profile Badge */}
+          <button
+            onClick={() => setIsLoginModalOpen(true)}
+            className={`flex items-center gap-1.5 px-2 py-0.5 rounded-[var(--mes-radius)] border font-mono text-[10.5px] transition-all ${
+              operator 
+                ? 'bg-slate-900 border-slate-800 text-slate-200 hover:border-slate-700' 
+                : 'bg-emerald-950/50 border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/70'
+            }`}
+            title={operator ? `Logged in as ${operator.name} (${operator.role})` : 'Click to Sign In / Authenticate'}
+          >
+            <Shield className="w-3 h-3 text-emerald-400" />
+            {operator ? (
+              <span className="truncate max-w-[90px]">{operator.name.split(' ')[0]}</span>
+            ) : (
+              <span className="font-bold">Sign In</span>
+            )}
+          </button>
 
-          {/* Live Digital Clock */}
-          <div className="hidden sm:flex items-center gap-1 text-[11px] font-mono text-[var(--mes-text-muted)] bg-[var(--mes-bg-well)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)]">
-            <Clock className="w-3 h-3 text-[var(--mes-text-dim)]" />
-            <span className="text-[var(--mes-text-primary)] tabular-nums">{currentTime}</span>
+          {/* High-Precision Cleanroom Realtime Clock */}
+          <div className="hidden lg:flex items-center gap-1.5 bg-slate-950 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono font-bold text-slate-200">
+            <Clock className="w-3 h-3 text-cyan-400" />
+            <span className="tabular-nums">{currentTime}</span>
           </div>
         </div>
       </header>
 
       {/* Docked Multi-Document Interface (MDI) Tab Bar (Height 32px) */}
       <nav 
-        className="bg-[var(--mes-bg-header)] border-b border-[var(--mes-border-subtle)] flex items-stretch overflow-x-auto shrink-0 select-none scrollbar-none z-20 font-mono text-xs"
+        className="bg-slate-950 border-b border-slate-800 flex items-stretch overflow-x-auto shrink-0 select-none scrollbar-none z-20 font-mono text-xs"
         aria-label="SMT Cleanroom Instrument Stations"
       >
         {MDI_TABS.map((tab) => {
@@ -514,16 +506,16 @@ const AppContent: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => handleSelectTab(tab.id)}
-              className={`h-8 px-3 flex items-center gap-2 shrink-0 border-r border-[var(--mes-border-subtle)] transition-colors ${
+              className={`h-8 px-3 flex items-center gap-2 shrink-0 border-r border-slate-800 transition-colors ${
                 isActive 
-                  ? 'bg-[var(--mes-bg-tab-active)] text-[var(--mes-text-primary)] border-t-2 border-t-[var(--mes-accent-primary)] font-bold shadow-inner' 
-                  : 'bg-[var(--mes-bg-tab-inactive)] text-[var(--mes-text-secondary)] border-t-2 border-t-transparent hover:bg-[var(--mes-bg-surface)] hover:text-[var(--mes-text-primary)]'
+                  ? 'bg-slate-900 text-cyan-300 border-t-2 border-t-cyan-400 font-bold shadow-inner' 
+                  : 'bg-slate-950 text-slate-400 border-t-2 border-t-transparent hover:bg-slate-900/60 hover:text-slate-200'
               }`}
               title={`${tab.label} (Press ${tab.hotkey})`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[var(--mes-accent-primary)]' : 'text-[var(--mes-text-muted)]'}`} />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-cyan-400' : 'text-slate-500'}`} />
               <span className="text-[11px] tracking-tight whitespace-nowrap">{tab.label}</span>
-              <span className="text-[9px] text-[var(--mes-text-dim)] bg-[var(--mes-bg-well)] px-1 rounded-[1px] border border-[var(--mes-border-hairline)] hidden 2xl:inline">
+              <span className="text-[9px] text-slate-500 bg-slate-950 px-1 rounded-[1px] border border-slate-800 hidden 2xl:inline">
                 {tab.code}
               </span>
             </button>
@@ -532,48 +524,48 @@ const AppContent: React.FC = () => {
       </nav>
 
       {/* Compact Realtime Telemetry Ribbon & Status Ticker (Height 26px) */}
-      <div className="h-[26px] bg-[var(--mes-bg-well)] border-b border-[var(--mes-border-subtle)] px-3 flex items-center justify-between text-[10.5px] font-mono shrink-0 z-10 overflow-x-auto scrollbar-none">
+      <div className="h-[26px] bg-slate-900/90 border-b border-slate-800 px-3 flex items-center justify-between text-[10.5px] font-mono shrink-0 z-10 overflow-x-auto scrollbar-none text-slate-300">
         <div className="flex items-center gap-3 shrink-0">
-          <span className="text-[var(--mes-text-muted)]">
-            RECIPE: <strong className="text-[var(--mes-text-primary)]">PROG-SM-METER-TOP-REV4</strong>
+          <span className="text-slate-400">
+            RECIPE: <strong className="text-slate-100">PROG-SM-METER-TOP-REV4</strong>
           </span>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-muted)]">
-            PLAN: <strong className="text-[var(--mes-text-primary)]">1,200</strong>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-400">
+            PLAN: <strong className="text-slate-100">1,200</strong>
           </span>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-muted)]">
-            ACTUAL: <strong className="text-[var(--mes-status-pass)]">892 (74.3%)</strong>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-400">
+            ACTUAL: <strong className="text-emerald-400">892 (74.3%)</strong>
           </span>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-muted)]">
-            TACT: <strong className="text-[var(--mes-text-primary)]">18.2s</strong>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-400">
+            TACT: <strong className="text-slate-100">18.2s</strong>
           </span>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-muted)]">
-            SPEED: <strong className="text-[var(--mes-status-pass)]">44,820 CPH (99.6%)</strong>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-400">
+            SPEED: <strong className="text-emerald-400">44,820 CPH (99.6%)</strong>
           </span>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-muted)]">
-            FPY: <strong className="text-[var(--mes-status-pass)]">98.4%</strong>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-400">
+            FPY: <strong className="text-emerald-400">98.4%</strong>
           </span>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-muted)]">
-            DROP: <strong className="text-[var(--mes-status-pass)]">12 PPM (PASS)</strong>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-400">
+            DROP: <strong className="text-emerald-400">12 PPM (PASS)</strong>
           </span>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-muted)]">
-            OEE: <strong className="text-[var(--mes-accent-primary)]">88.4% (SEMI E10)</strong>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-400">
+            OEE: <strong className="text-cyan-400 font-bold">88.4% (SEMI E10)</strong>
           </span>
         </div>
 
         <div className="hidden lg:flex items-center gap-3 shrink-0">
-          <div className="flex items-center gap-1.5 text-[var(--mes-status-pass)] font-bold">
-            <span className="w-2 h-2 rounded-[1px] bg-[var(--mes-status-pass)]" />
+          <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+            <span className="w-2 h-2 rounded-[1px] bg-emerald-400 shadow-[0_0_6px_#10B981]" />
             <span>ANDON: NORMAL (RUNNING)</span>
           </div>
-          <span className="text-[var(--mes-border-strong)]">|</span>
-          <span className="text-[var(--mes-text-dim)] text-[10px]">POLL: 4s</span>
+          <span className="text-slate-700">|</span>
+          <span className="text-slate-500 text-[10px]">POLL: 4s</span>
         </div>
       </div>
 
@@ -586,7 +578,7 @@ const AppContent: React.FC = () => {
           onToggleCollapsed={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
 
-        <main className="flex-1 overflow-auto p-2 bg-[var(--mes-bg-canvas)]">
+        <main className="flex-1 overflow-auto p-2.5 bg-[#06090e] mes-wafer-grid">
           {activePersona === 'OPERATOR' && <OperatorKioskView />}
           {activePersona === 'ENGINEER' && <EngineerDeepDiveView />}
           {activePersona === 'EXECUTIVE' && <ManagerExecutiveView />}

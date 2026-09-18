@@ -339,144 +339,143 @@ export const ReflowThermalStation: React.FC = () => {
   const processMargin = (100.0 - overallPwi).toFixed(1);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 font-sans">
       {/* 1. Header & Process Applicability Scope */}
-      <div className="bg-[#121820] border border-white/10 rounded-xl p-5 shadow-2xl backdrop-blur-md">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400">
-              <Flame className="w-6 h-6" />
+            <div className="w-10 h-10 rounded-[var(--mes-radius)] bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400">
+              <Flame className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-orange-400 uppercase tracking-wider">
+                <span className="text-[10.5px] font-mono font-bold text-orange-400 uppercase tracking-wider">
                   IPC-7530B • J-STD-001H CLASS 3
                 </span>
-                <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono">
+                <span className="text-[10px] px-2 py-0.5 rounded-[var(--mes-radius)] bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono font-semibold">
                   SAC305 ALLOY
                 </span>
               </div>
-              <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                Closed-Loop Reflow Oven Telemetry & Thermal Profiling Engine
+              <h2 className="text-base sm:text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2 font-sans mt-0.5">
+                Closed-Loop Reflow Oven Telemetry &amp; Thermal Profiling Engine
               </h2>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 font-mono text-xs">
             <button
               onClick={() => setIsUploadModalOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[var(--mes-bg-card)] border border-[var(--mes-border)] text-[var(--mes-text-primary)] hover:bg-[var(--mes-bg-well)] text-xs font-semibold transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] bg-slate-900 border border-slate-700 text-slate-200 hover:bg-slate-800 text-xs font-semibold transition-all shadow-xs"
             >
-              <Upload className="w-4 h-4 text-orange-400" />
+              <Upload className="w-3.5 h-3.5 text-orange-400" />
               <span>Import Profiler Run</span>
             </button>
 
             <button
               onClick={loadActiveProfile}
-              disabled={loading}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold transition-all shadow-md disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] bg-slate-900 border border-slate-700 text-slate-200 hover:bg-slate-800 text-xs font-semibold transition-all shadow-xs"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''} text-cyan-400`} />
               <span>Refresh Station</span>
             </button>
           </div>
         </div>
 
         {/* Applicability Filter Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-3 pt-3 border-t border-slate-800 text-xs font-mono">
           <div>
-            <span className="text-[#7A8A9E] block text-[10px] font-mono uppercase">Line</span>
-            <span className="font-mono font-bold text-white">{lineId}</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-sans font-bold">Line</span>
+            <span className="font-bold text-slate-100">{lineId}</span>
           </div>
           <div>
-            <span className="text-[#7A8A9E] block text-[10px] font-mono uppercase">Equipment</span>
-            <span className="font-mono font-bold text-white">Heller 1913 MK5 ({equipmentId})</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-sans font-bold">Equipment</span>
+            <span className="font-bold text-slate-100">Heller 1913 MK5 ({equipmentId})</span>
           </div>
           <div>
-            <span className="text-[#7A8A9E] block text-[10px] font-mono uppercase">Recipe</span>
-            <span className="font-mono font-bold text-orange-400">{recipeId}</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-sans font-bold">Recipe</span>
+            <span className="font-bold text-orange-400">{recipeId}</span>
           </div>
           <div>
-            <span className="text-[#7A8A9E] block text-[10px] font-mono uppercase">Board Part No</span>
-            <span className="font-mono font-bold text-white">{boardPartNumber}</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-sans font-bold">Board Part No</span>
+            <span className="font-bold text-slate-100">{boardPartNumber}</span>
           </div>
           <div>
-            <span className="text-[#7A8A9E] block text-[10px] font-mono uppercase">Revision</span>
-            <span className="font-mono font-bold text-emerald-400">{boardRevision}</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-sans font-bold">Revision</span>
+            <span className="font-bold text-emerald-400">{boardRevision}</span>
           </div>
         </div>
       </div>
 
       {statusMessage && (
-        <div className="p-4 rounded-xl bg-[#141C24] border border-orange-500/40 text-orange-200 text-xs flex items-center justify-between">
+        <div className="p-3 rounded-[var(--mes-radius)] bg-slate-900 border border-orange-500/40 text-orange-200 text-xs flex items-center justify-between font-mono">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-orange-400 flex-shrink-0" />
             <span>{statusMessage}</span>
           </div>
-          <button onClick={() => setStatusMessage(null)} className="text-white/60 hover:text-white">
+          <button onClick={() => setStatusMessage(null)} className="text-slate-400 hover:text-slate-100">
             <XCircle className="w-4 h-4" />
           </button>
         </div>
       )}
 
       {/* 2. Key Instrumentation KPI Strip */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 font-mono">
         {/* PWI Dial Card */}
-        <div className="bg-[#121820] border border-white/10 rounded-xl p-4 shadow-xl relative overflow-hidden">
+        <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-3.5 relative overflow-hidden">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-[#7A8A9E] uppercase tracking-wider">Overall Process Window Index</span>
+            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Overall Process Window Index</span>
             <span
-              className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+              className={`text-[10px] font-bold px-2 py-0.5 rounded-[var(--mes-radius)] ${
                 pwiResult === 'PASS'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
                   : pwiResult === 'WARNING'
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                  : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                  ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
+                  : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
               }`}
             >
               {pwiResult}
             </span>
           </div>
           <div className="mt-3 flex items-baseline gap-3">
-            <span className="text-3xl font-black font-mono text-white tracking-tight">
+            <span className="text-3xl font-bold font-mono text-slate-100 tracking-tight tabular-nums">
               {overallPwi.toFixed(1)}%
             </span>
-            <span className="text-xs text-[#7A8A9E] font-mono">PWI Limit: 100%</span>
+            <span className="text-xs text-slate-400 font-mono">PWI Limit: 100%</span>
           </div>
-          <div className="w-full bg-[#1C2533] h-2 rounded-full mt-3 overflow-hidden">
+          <div className="w-full bg-slate-900 border border-slate-800 h-1.5 rounded-[var(--mes-radius)] mt-3 overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
+              className={`h-full rounded-[var(--mes-radius)] transition-all duration-500 ${
                 overallPwi < 80 ? 'bg-emerald-400' : overallPwi <= 100 ? 'bg-amber-400' : 'bg-rose-500'
               }`}
               style={{ width: `${Math.min(100, overallPwi)}%` }}
             />
           </div>
-          <div className="flex justify-between text-[10px] font-mono text-[#7A8A9E] mt-2">
+          <div className="flex justify-between text-[10px] font-mono text-slate-400 mt-2">
             <span>0% (Center)</span>
-            <span className="text-emerald-400 font-bold">Margin: +{processMargin}%</span>
+            <span className="text-emerald-400 font-semibold tabular-nums">Margin: +{processMargin}%</span>
             <span>100% (USL)</span>
           </div>
         </div>
 
         {/* Active Baseline Status */}
-        <div className="bg-[#121820] border border-white/10 rounded-xl p-4 shadow-xl">
+        <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-[#7A8A9E] uppercase tracking-wider">Thermal Baseline Run</span>
+            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Thermal Baseline Run</span>
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           </div>
           <div className="mt-3">
-            <span className="text-sm font-mono font-bold text-white">
+            <span className="text-sm font-mono font-bold text-slate-100">
               {activeProfile?.id ? activeProfile.id.slice(0, 16) : 'RUN-P6-SAC305-BASE'}
             </span>
-            <span className="block text-[11px] text-[#7A8A9E] mt-1 font-mono">
+            <span className="block text-[11px] text-slate-400 mt-1 font-mono">
               Status: <span className="text-emerald-400 font-bold">{activeProfile?.status || 'ACTIVE'}</span>
             </span>
           </div>
-          <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between">
-            <span className="text-[10px] text-[#7A8A9E] font-mono">21 CFR 11 Signed</span>
+          <div className="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[10px] text-slate-400 font-mono">21 CFR 11 Signed</span>
             <button
               onClick={() => setIsSignOffModalOpen(true)}
-              className="text-[10px] font-mono text-orange-400 hover:text-orange-300 underline font-bold"
+              className="text-[10px] font-mono text-cyan-400 hover:text-cyan-300 underline font-semibold"
             >
               Sign-Off / Revalidate
             </button>
@@ -484,85 +483,85 @@ export const ReflowThermalStation: React.FC = () => {
         </div>
 
         {/* Oven Process State & Drift Sentinel */}
-        <div className="bg-[#121820] border border-white/10 rounded-xl p-4 shadow-xl">
+        <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-[#7A8A9E] uppercase tracking-wider">Oven Drift Sentinel</span>
-            <Activity className="w-4 h-4 text-[#38BDF8]" />
+            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Oven Drift Sentinel</span>
+            <Activity className="w-4 h-4 text-cyan-400" />
           </div>
           <div className="mt-3 flex items-center gap-2">
             <span
-              className={`text-sm font-bold font-mono px-2.5 py-1 rounded-lg ${
+              className={`text-xs font-bold font-mono px-2 py-0.5 rounded-[var(--mes-radius)] ${
                 processState === 'COMPLIANT'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
                   : processState === 'DRIFT_SUSPECTED'
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-                  : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+                  ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
+                  : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
               }`}
             >
               {processState}
             </span>
           </div>
-          <div className="mt-2 text-[11px] font-mono text-[#7A8A9E] flex justify-between">
+          <div className="mt-2 text-[11px] font-mono text-slate-400 flex justify-between tabular-nums">
             <span>Persistence: 15s</span>
             <span>Hysteresis: 45s</span>
           </div>
-          <div className="mt-2 text-[10px] text-emerald-400 font-mono">
+          <div className="mt-2 text-[10px] text-emerald-400 font-mono tabular-nums">
             Worst Zone: Z7 (+1.8°C, Zμ=1.2)
           </div>
         </div>
 
         {/* Atmosphere & Conveyor */}
-        <div className="bg-[#121820] border border-white/10 rounded-xl p-4 shadow-xl">
+        <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono text-[#7A8A9E] uppercase tracking-wider">Atmosphere & Speed</span>
-            <Sliders className="w-4 h-4 text-[#7A8A9E]" />
+            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Atmosphere & Speed</span>
+            <Sliders className="w-4 h-4 text-slate-400" />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div>
-              <span className="text-[10px] text-[#7A8A9E] block">Conveyor</span>
-              <span className="text-base font-bold font-mono text-white">85.0</span>
-              <span className="text-[10px] text-[#7A8A9E]"> cm/min</span>
+              <span className="text-[10px] text-slate-400 block">Conveyor</span>
+              <span className="text-base font-bold font-mono text-slate-100 tabular-nums">85.0</span>
+              <span className="text-[10px] text-slate-400"> cm/min</span>
             </div>
             <div>
-              <span className="text-[10px] text-[#7A8A9E] block">N2 O2 Level</span>
-              <span className="text-base font-bold font-mono text-emerald-400">420</span>
-              <span className="text-[10px] text-[#7A8A9E]"> ppm</span>
+              <span className="text-[10px] text-slate-400 block">N2 O2 Level</span>
+              <span className="text-base font-bold font-mono text-emerald-400 tabular-nums">420</span>
+              <span className="text-[10px] text-slate-400"> ppm</span>
             </div>
           </div>
-          <div className="mt-2 text-[10px] font-mono text-[#7A8A9E]">
+          <div className="mt-2 text-[10px] font-mono text-slate-400 tabular-nums">
             Target: 85 ± 1.5 cm/min • O2 &lt; 500 ppm
           </div>
         </div>
       </div>
 
       {/* 3. Thermocouple Curves Visualizer (IPC-7530B Interactive SVG Chart) */}
-      <div className="bg-[#121820] border border-white/10 rounded-xl p-5 shadow-2xl">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-3 pb-3 border-b border-slate-800/80">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Thermometer className="w-4 h-4 text-orange-400" />
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-100 flex items-center gap-2">
+              <Thermometer className="w-4 h-4 text-cyan-400" />
               <span>Multi-Channel Thermocouple Curves T(t) vs Process Window</span>
             </h3>
-            <p className="text-xs text-[#7A8A9E]">
+            <p className="text-xs text-slate-400 font-mono mt-0.5">
               IPC-7530B Profile curves with Liquidus (217°C), Soak (150–200°C), and Peak (235–248°C) bounds
             </p>
           </div>
 
           {/* Probe Visibility Selector */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
             {probes.map((p) => (
               <button
                 key={p.probeIndex}
                 onClick={() =>
                   setVisibleProbes((prev) => ({ ...prev, [p.probeIndex]: !prev[p.probeIndex] }))
                 }
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono transition-all border ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-[var(--mes-radius)] text-[11px] font-mono transition-all border ${
                   visibleProbes[p.probeIndex]
-                    ? 'bg-[var(--mes-bg-card)] text-[var(--mes-text-primary)] border-[var(--mes-border)]'
-                    : 'bg-[var(--mes-bg-well)] text-[var(--mes-text-muted)] border-[var(--mes-border)] line-through opacity-50'
+                    ? 'bg-slate-900 text-slate-100 border-slate-700'
+                    : 'bg-slate-950 text-slate-500 border-slate-800 line-through opacity-40'
                 }`}
               >
-                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }} />
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
                 <span>TC{p.probeIndex}</span>
               </button>
             ))}
@@ -570,7 +569,7 @@ export const ReflowThermalStation: React.FC = () => {
         </div>
 
         {/* SVG Profile Chart */}
-        <div className="relative overflow-x-auto bg-[#0A0E14] border border-white/5 rounded-lg p-2">
+        <div className="relative overflow-x-auto bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-2">
           <svg
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             className="w-full h-auto select-none"
@@ -594,14 +593,14 @@ export const ReflowThermalStation: React.FC = () => {
                   y1={padTop}
                   x2={timeToX(t)}
                   y2={svgHeight - padBottom}
-                  stroke="#ffffff"
-                  strokeOpacity="0.05"
-                  strokeDasharray="3 3"
+                  stroke="#334155"
+                  strokeOpacity="0.4"
+                  strokeDasharray="2 2"
                 />
                 <text
                   x={timeToX(t)}
                   y={svgHeight - padBottom + 15}
-                  fill="#7A8A9E"
+                  fill="#64748B"
                   fontSize="10"
                   textAnchor="middle"
                   fontFamily="monospace"
@@ -618,15 +617,15 @@ export const ReflowThermalStation: React.FC = () => {
                   y1={tempToY(temp)}
                   x2={svgWidth - padRight}
                   y2={tempToY(temp)}
-                  stroke={temp === 217 ? '#EC4899' : '#ffffff'}
-                  strokeOpacity={temp === 217 ? 0.6 : 0.05}
-                  strokeDasharray={temp === 217 ? '4 2' : '3 3'}
+                  stroke={temp === 217 ? '#F43F5E' : '#334155'}
+                  strokeOpacity={temp === 217 ? 0.7 : 0.4}
+                  strokeDasharray={temp === 217 ? '4 2' : '2 2'}
                   strokeWidth={temp === 217 ? 1.5 : 1}
                 />
                 <text
                   x={padLeft - 8}
                   y={tempToY(temp) + 3}
-                  fill={temp === 217 ? '#EC4899' : '#7A8A9E'}
+                  fill={temp === 217 ? '#F43F5E' : '#64748B'}
                   fontSize={temp === 217 ? '10' : '9'}
                   textAnchor="end"
                   fontFamily="monospace"
@@ -641,7 +640,7 @@ export const ReflowThermalStation: React.FC = () => {
             <text
               x={svgWidth - padRight - 5}
               y={tempToY(217) - 4}
-              fill="#EC4899"
+              fill="#F43F5E"
               fontSize="9"
               fontWeight="bold"
               textAnchor="end"
@@ -656,16 +655,16 @@ export const ReflowThermalStation: React.FC = () => {
               y={tempToY(248)}
               width={timeToX(220) - timeToX(170)}
               height={tempToY(235) - tempToY(248)}
-              fill="#F59E0B"
+              fill="#FBBF24"
               fillOpacity="0.08"
-              stroke="#F59E0B"
-              strokeOpacity="0.3"
+              stroke="#FBBF24"
+              strokeOpacity="0.4"
               strokeDasharray="2 2"
             />
             <text
               x={timeToX(195)}
               y={tempToY(248) - 4}
-              fill="#F59E0B"
+              fill="#FBBF24"
               fontSize="8"
               textAnchor="middle"
               fontFamily="monospace"
@@ -679,16 +678,16 @@ export const ReflowThermalStation: React.FC = () => {
               y={tempToY(200)}
               width={timeToX(160) - timeToX(70)}
               height={tempToY(150) - tempToY(200)}
-              fill="#38BDF8"
-              fillOpacity="0.05"
-              stroke="#38BDF8"
-              strokeOpacity="0.2"
+              fill="#22D3EE"
+              fillOpacity="0.06"
+              stroke="#22D3EE"
+              strokeOpacity="0.3"
               strokeDasharray="2 2"
             />
             <text
               x={timeToX(115)}
               y={tempToY(200) - 4}
-              fill="#38BDF8"
+              fill="#22D3EE"
               fontSize="8"
               textAnchor="middle"
               fontFamily="monospace"
@@ -724,19 +723,19 @@ export const ReflowThermalStation: React.FC = () => {
                   y1={padTop}
                   x2={timeToX(hoveredTime)}
                   y2={svgHeight - padBottom}
-                  stroke="#ffffff"
+                  stroke="#F8FAFC"
                   strokeWidth="1.5"
                   strokeDasharray="2 2"
                 />
-                <circle cx={timeToX(hoveredTime)} cy={svgHeight - padBottom} r="3" fill="#ffffff" />
+                <circle cx={timeToX(hoveredTime)} cy={svgHeight - padBottom} r="3" fill="#F8FAFC" />
               </g>
             )}
           </svg>
 
           {/* Scrubber Tooltip */}
           {hoveredTime !== null && (
-            <div className="absolute top-4 right-4 bg-[var(--mes-bg-card)]/90 border border-[var(--mes-border)] rounded-lg p-3 text-xs font-mono backdrop-blur-md shadow-2xl">
-              <span className="text-[var(--mes-text-muted)] block border-b border-[var(--mes-border)] pb-1 mb-1 font-bold">
+            <div className="absolute top-4 right-4 bg-slate-900/95 border border-slate-700 rounded-[var(--mes-radius)] p-3 text-xs font-mono backdrop-blur-md shadow-2xl">
+              <span className="text-slate-400 block border-b border-slate-800 pb-1 mb-1 font-bold">
                 TIME: {hoveredTime}s
               </span>
               <div className="space-y-1">
@@ -749,7 +748,7 @@ export const ReflowThermalStation: React.FC = () => {
                         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
                         <span>TC{p.probeIndex}</span>
                       </span>
-                      <span className="font-bold text-white">
+                      <span className="font-bold text-slate-100 tabular-nums">
                         {sample ? `${sample.temperatureC.toFixed(1)}°C` : '—'}
                       </span>
                     </div>
@@ -762,8 +761,8 @@ export const ReflowThermalStation: React.FC = () => {
       </div>
 
       {/* 4. PWI Characteristic Breakdown Table */}
-      <div className="bg-[#121820] border border-white/10 rounded-xl p-5 shadow-2xl">
-        <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-100 mb-3 pb-2 border-b border-slate-800/80 flex items-center gap-2">
           <Sliders className="w-4 h-4 text-emerald-400" />
           <span>IPC-7530B Thermal Process Window Index (PWI) Breakdown</span>
         </h3>
@@ -771,68 +770,68 @@ export const ReflowThermalStation: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-white/10 text-[#7A8A9E] uppercase text-[10px]">
-                <th className="pb-3 font-semibold">Thermocouple Channel</th>
-                <th className="pb-3 font-semibold">Thermal Role</th>
-                <th className="pb-3 font-semibold">Ramp (1–3°C/s)</th>
-                <th className="pb-3 font-semibold">Soak (60–120s)</th>
-                <th className="pb-3 font-semibold">TAL (45–90s)</th>
-                <th className="pb-3 font-semibold">Peak (235–248°C)</th>
-                <th className="pb-3 font-semibold">Cooling (1–4°C/s)</th>
-                <th className="pb-3 font-semibold text-right">Channel PWI</th>
+              <tr className="border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+                <th className="pb-2.5 font-semibold">Thermocouple Channel</th>
+                <th className="pb-2.5 font-semibold">Thermal Role</th>
+                <th className="pb-2.5 font-semibold">Ramp (1–3°C/s)</th>
+                <th className="pb-2.5 font-semibold">Soak (60–120s)</th>
+                <th className="pb-2.5 font-semibold">TAL (45–90s)</th>
+                <th className="pb-2.5 font-semibold">Peak (235–248°C)</th>
+                <th className="pb-2.5 font-semibold">Cooling (1–4°C/s)</th>
+                <th className="pb-2.5 font-semibold text-right">Channel PWI</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-800/60">
               {probes.map((p) => (
-                <tr key={p.probeIndex} className="hover:bg-white/[0.02]">
-                  <td className="py-2.5 text-white font-bold flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }} />
+                <tr key={p.probeIndex} className="hover:bg-slate-900/50 transition-colors">
+                  <td className="py-2.5 text-slate-100 font-bold flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
                     <span>{p.label}</span>
                   </td>
                   <td className="py-2.5">
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] ${
+                      className={`px-2 py-0.5 rounded-[var(--mes-radius)] text-[10px] font-mono ${
                         p.thermalRole === 'COLDSPOT'
-                          ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                          ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
                           : p.thermalRole === 'HOTSPOT'
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                          : 'bg-white/10 text-[#7A8A9E]'
+                          ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
+                          : 'bg-slate-900 text-slate-400 border border-slate-800'
                       }`}
                     >
                       {p.thermalRole}
                     </span>
                   </td>
-                  <td className="py-2.5 text-white">
-                    {p.metrics?.maxRampRateCPerSec.toFixed(2)} °C/s
-                    <span className="text-[10px] text-[#7A8A9E] block">({p.pwi?.ramp.toFixed(0)}%)</span>
+                  <td className="py-2.5 text-slate-200 tabular-nums">
+                    {p.metrics?.maxRampRateCPerSec != null ? `${Number(p.metrics.maxRampRateCPerSec).toFixed(2)} °C/s` : '—'}
+                    {p.pwi?.ramp != null && <span className="text-[10px] text-slate-400 block">({Number(p.pwi.ramp).toFixed(0)}%)</span>}
                   </td>
-                  <td className="py-2.5 text-white">
-                    {p.metrics?.soakDurationSeconds.toFixed(1)}s
-                    <span className="text-[10px] text-[#7A8A9E] block">({p.pwi?.soak.toFixed(0)}%)</span>
+                  <td className="py-2.5 text-slate-200 tabular-nums">
+                    {p.metrics?.soakDurationSeconds != null ? `${Number(p.metrics.soakDurationSeconds).toFixed(1)}s` : '—'}
+                    {p.pwi?.soak != null && <span className="text-[10px] text-slate-400 block">({Number(p.pwi.soak).toFixed(0)}%)</span>}
                   </td>
-                  <td className="py-2.5 text-white">
-                    {p.metrics?.timeAboveLiquidusSeconds.toFixed(1)}s
-                    <span className="text-[10px] text-[#7A8A9E] block">({p.pwi?.tal.toFixed(0)}%)</span>
+                  <td className="py-2.5 text-slate-200 tabular-nums">
+                    {p.metrics?.timeAboveLiquidusSeconds != null ? `${Number(p.metrics.timeAboveLiquidusSeconds).toFixed(1)}s` : '—'}
+                    {p.pwi?.tal != null && <span className="text-[10px] text-slate-400 block">({Number(p.pwi.tal).toFixed(0)}%)</span>}
                   </td>
-                  <td className="py-2.5 text-white font-bold">
-                    {p.metrics?.peakTemperatureC.toFixed(1)} °C
-                    <span className="text-[10px] text-[#7A8A9E] block">({p.pwi?.peak.toFixed(0)}%)</span>
+                  <td className="py-2.5 text-slate-100 font-bold tabular-nums">
+                    {p.metrics?.peakTemperatureC != null ? `${Number(p.metrics.peakTemperatureC).toFixed(1)} °C` : '—'}
+                    {p.pwi?.peak != null && <span className="text-[10px] text-slate-400 block font-normal">({Number(p.pwi.peak).toFixed(0)}%)</span>}
                   </td>
-                  <td className="py-2.5 text-white">
-                    {p.metrics?.maxCoolingRateCPerSec.toFixed(2)} °C/s
-                    <span className="text-[10px] text-[#7A8A9E] block">({p.pwi?.cooling.toFixed(0)}%)</span>
+                  <td className="py-2.5 text-slate-200 tabular-nums">
+                    {p.metrics?.maxCoolingRateCPerSec != null ? `${Number(p.metrics.maxCoolingRateCPerSec).toFixed(2)} °C/s` : '—'}
+                    {p.pwi?.cooling != null && <span className="text-[10px] text-slate-400 block">({Number(p.pwi.cooling).toFixed(0)}%)</span>}
                   </td>
-                  <td className="py-2.5 text-right font-black">
+                  <td className="py-2.5 text-right font-bold tabular-nums">
                     <span
-                      className={`px-2 py-1 rounded ${
+                      className={`px-2 py-0.5 rounded-[var(--mes-radius)] border ${
                         (p.pwi?.overall ?? 0) < 80
-                          ? 'bg-emerald-500/20 text-emerald-400'
+                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
                           : (p.pwi?.overall ?? 0) <= 100
-                          ? 'bg-amber-500/20 text-amber-400'
-                          : 'bg-rose-500/20 text-rose-400'
+                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                          : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
                       }`}
                     >
-                      {(p.pwi?.overall ?? 0).toFixed(1)}%
+                      {Number(p.pwi?.overall ?? 0).toFixed(1)}%
                     </span>
                   </td>
                 </tr>
@@ -843,24 +842,24 @@ export const ReflowThermalStation: React.FC = () => {
       </div>
 
       {/* 5. 10-Zone Oven Tunnel Schematic & Live Telemetry */}
-      <div className="bg-[#121820] border border-white/10 rounded-xl p-5 shadow-2xl">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4">
+        <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800/80">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-100 flex items-center gap-2">
               <Cpu className="w-4 h-4 text-cyan-400" />
               <span>Heller 1913 MK5: 10-Zone Heating Tunnel Telemetry & Drift Map</span>
             </h3>
-            <p className="text-xs text-[#7A8A9E]">
+            <p className="text-xs text-slate-400 font-mono mt-0.5">
               High-frequency (10Hz) CFX zone temperature telemetry with bivariate drift detection (Zμ &amp; Zσ)
             </p>
           </div>
-          <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
+          <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-[var(--mes-radius)] border border-emerald-500/20 font-semibold">
             PID CLOSED-LOOP STABLE
           </span>
         </div>
 
         {/* 10 Zones Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2">
           {zones.map((z) => {
             const isSpike = z.role === 'REFLOW_SPIKE';
             const isCooling = z.role === 'COOLING';
@@ -868,40 +867,40 @@ export const ReflowThermalStation: React.FC = () => {
             return (
               <div
                 key={z.zoneIndex}
-                className={`p-3 rounded-lg border font-mono transition-all ${
+                className={`p-2.5 rounded-[var(--mes-radius)] border font-mono transition-all ${
                   z.status === 'CONFIRMED_DRIFT'
                     ? 'bg-rose-950/40 border-rose-500/50 text-rose-300'
                     : isSpike
-                    ? 'bg-orange-950/20 border-orange-500/30 text-white'
+                    ? 'bg-amber-950/20 border-amber-500/30 text-slate-100'
                     : isCooling
-                    ? 'bg-cyan-950/20 border-cyan-500/30 text-[var(--mes-text-primary)]'
-                    : 'bg-[var(--mes-bg-well)] border-[var(--mes-border)] text-[var(--mes-text-primary)]'
+                    ? 'bg-cyan-950/20 border-cyan-500/30 text-slate-100'
+                    : 'bg-slate-900 border-slate-800 text-slate-200'
                 }`}
               >
-                <div className="flex items-center justify-between text-[10px] text-[var(--mes-text-muted)]">
+                <div className="flex items-center justify-between text-[10px] text-slate-400">
                   <span>Z{z.zoneIndex}</span>
-                  <span className="text-[8px] uppercase">{z.role.slice(0, 4)}</span>
+                  <span className="text-[9px] uppercase font-bold">{z.role.slice(0, 4)}</span>
                 </div>
 
-                <div className="mt-2 text-center">
-                  <span className="text-lg font-black tracking-tight">{z.actualC.toFixed(1)}°</span>
-                  <span className="block text-[10px] text-[#7A8A9E]">Set: {z.setpointC}°</span>
+                <div className="mt-1.5 text-center">
+                  <span className="text-base font-bold tracking-tight tabular-nums text-slate-100">{Number(z.actualC ?? 0).toFixed(1)}°</span>
+                  <span className="block text-[10px] text-slate-400 tabular-nums">Set: {z.setpointC ?? 0}°</span>
                 </div>
 
-                <div className="mt-2 pt-2 border-t border-white/10 text-[9px] space-y-0.5">
+                <div className="mt-1.5 pt-1.5 border-t border-slate-800/80 text-[9px] space-y-0.5 tabular-nums">
                   <div className="flex justify-between">
-                    <span className="text-[#7A8A9E]">ΔT:</span>
-                    <span className={z.meanDeviationC > 0 ? 'text-orange-400' : 'text-cyan-400'}>
-                      {z.meanDeviationC > 0 ? `+${z.meanDeviationC.toFixed(1)}` : z.meanDeviationC.toFixed(1)}°
+                    <span className="text-slate-400">ΔT:</span>
+                    <span className={(z.meanDeviationC ?? 0) > 0 ? 'text-amber-400' : 'text-cyan-400'}>
+                      {(z.meanDeviationC ?? 0) > 0 ? `+${Number(z.meanDeviationC).toFixed(1)}` : Number(z.meanDeviationC ?? 0).toFixed(1)}°
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#7A8A9E]">Zμ:</span>
-                    <span>{z.meanZScore.toFixed(1)}</span>
+                    <span className="text-slate-400">Zμ:</span>
+                    <span className="text-slate-200">{Number(z.meanZScore ?? 0).toFixed(1)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#7A8A9E]">Zσ:</span>
-                    <span>{z.variabilityZScore.toFixed(1)}</span>
+                    <span className="text-slate-400">Zσ:</span>
+                    <span className="text-slate-200">{Number(z.variabilityZScore ?? 0).toFixed(1)}</span>
                   </div>
                 </div>
               </div>
@@ -913,89 +912,89 @@ export const ReflowThermalStation: React.FC = () => {
       {/* 6. Sign-off & Activation Modal (21 CFR Part 11) */}
       {isSignOffModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141C24] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl font-mono text-xs">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] max-w-lg w-full p-5 shadow-2xl font-mono text-xs">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Lock className="w-5 h-5 text-orange-400" />
-                <h4 className="text-sm font-bold text-white">21 CFR Part 11 Electronic Signature Sign-Off</h4>
+                <Lock className="w-4 h-4 text-cyan-400" />
+                <h4 className="text-sm font-bold uppercase tracking-wider text-slate-100">21 CFR Part 11 Electronic Signature Sign-Off</h4>
               </div>
-              <button onClick={() => setIsSignOffModalOpen(false)} className="text-white/60 hover:text-white">
-                <XCircle className="w-5 h-5" />
+              <button onClick={() => setIsSignOffModalOpen(false)} className="text-slate-400 hover:text-slate-100">
+                <XCircle className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="mt-4 space-y-4">
+            <div className="mt-4 space-y-3">
               <div>
-                <label className="text-[#7A8A9E] block mb-1">Target Profile Run ID</label>
+                <label className="text-slate-400 block mb-1">Target Profile Run ID</label>
                 <input
                   type="text"
                   disabled
                   value={activeProfile?.id || 'RUN-P6-SAC305-BASE'}
-                  className="w-full bg-[#0E131A] border border-white/10 rounded-lg px-3 py-2 text-white/70"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] px-3 py-1.5 text-slate-300"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[#7A8A9E] block mb-1">Reviewer Name / ID</label>
+                  <label className="text-slate-400 block mb-1">Reviewer Name / ID</label>
                   <input
                     type="text"
                     value={signerName}
                     onChange={(e) => setSignerName(e.target.value)}
-                    className="w-full bg-[#0E131A] border border-white/20 rounded-lg px-3 py-2 text-white"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] px-3 py-1.5 text-slate-100 focus:border-cyan-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="text-[#7A8A9E] block mb-1">Engineering Role</label>
+                  <label className="text-slate-400 block mb-1">Engineering Role</label>
                   <input
                     type="text"
                     value={signerRole}
                     onChange={(e) => setSignerRole(e.target.value)}
-                    className="w-full bg-[#0E131A] border border-white/20 rounded-lg px-3 py-2 text-white"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] px-3 py-1.5 text-slate-100 focus:border-cyan-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-[#7A8A9E] block mb-1">Certification Comments</label>
+                <label className="text-slate-400 block mb-1">Certification Comments</label>
                 <textarea
                   rows={3}
                   value={signOffComments}
                   onChange={(e) => setSignOffComments(e.target.value)}
-                  className="w-full bg-[#0E131A] border border-white/20 rounded-lg px-3 py-2 text-white resize-none"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] px-3 py-1.5 text-slate-100 resize-none focus:border-cyan-500 focus:outline-none"
                 />
               </div>
 
-              <div className="p-3 bg-[#1A2330] rounded-lg border border-orange-500/30 text-[11px] space-y-2">
-                <div className="flex items-center gap-2 text-orange-400 font-bold">
+              <div className="p-3 bg-slate-900 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] space-y-2">
+                <div className="flex items-center gap-2 text-cyan-400 font-bold">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Compliance Verification Audit</span>
                 </div>
-                <p className="text-[#7A8A9E]">
+                <p className="text-slate-400">
                   By confirming below, you attest under 21 CFR Part 11 that this physical reflow profile satisfies IPC-7530B thermal tolerances and authorize it as the authoritative baseline for line {lineId}.
                 </p>
-                <label className="flex items-center gap-2 text-white cursor-pointer mt-2 pt-2 border-t border-white/10">
+                <label className="flex items-center gap-2 text-slate-200 cursor-pointer mt-2 pt-2 border-t border-slate-800">
                   <input
                     type="checkbox"
                     checked={signatureConfirmed}
                     onChange={(e) => setSignatureConfirmed(e.target.checked)}
-                    className="rounded border-white/30 text-orange-500 focus:ring-0"
+                    className="rounded border-slate-700 text-cyan-500 focus:ring-0"
                   />
                   <span>I legally execute this electronic signature.</span>
                 </label>
               </div>
 
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex justify-end gap-2 pt-2">
                 <button
                   onClick={() => setIsSignOffModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white"
+                  className="px-3.5 py-1.5 rounded-[var(--mes-radius)] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleApproveAndActivate}
                   disabled={!signatureConfirmed || loading || overallPwi > 100}
-                  className="px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500 text-white font-bold disabled:opacity-50 flex items-center gap-2"
+                  className="px-3.5 py-1.5 rounded-[var(--mes-radius)] bg-cyan-600 hover:bg-cyan-500 text-white font-bold disabled:opacity-50 flex items-center gap-2 border border-cyan-500"
                 >
                   <Check className="w-4 h-4" />
                   <span>Approve &amp; Activate Baseline</span>
@@ -1009,37 +1008,37 @@ export const ReflowThermalStation: React.FC = () => {
       {/* 7. Profiler File Ingress Modal */}
       {isUploadModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#141C24] border border-white/20 rounded-2xl max-w-xl w-full p-6 shadow-2xl font-mono text-xs">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] max-w-xl w-full p-5 shadow-2xl font-mono text-xs">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Upload className="w-5 h-5 text-orange-400" />
-                <h4 className="text-sm font-bold text-white">Import Physical Profiler Data (KIC / Datapaq / M.O.L.E.)</h4>
+                <Upload className="w-4 h-4 text-cyan-400" />
+                <h4 className="text-sm font-bold uppercase tracking-wider text-slate-100">Import Physical Profiler Data (KIC / Datapaq / M.O.L.E.)</h4>
               </div>
-              <button onClick={() => setIsUploadModalOpen(false)} className="text-white/60 hover:text-white">
-                <XCircle className="w-5 h-5" />
+              <button onClick={() => setIsUploadModalOpen(false)} className="text-slate-400 hover:text-slate-100">
+                <XCircle className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="mt-4 space-y-4">
+            <div className="mt-4 space-y-3">
               <div>
-                <label className="text-[#7A8A9E] block mb-1">File Name</label>
+                <label className="text-slate-400 block mb-1">File Name</label>
                 <input
                   type="text"
                   value={selectedFileName}
                   onChange={(e) => setSelectedFileName(e.target.value)}
                   placeholder="e.g. meter-top-run184.kic"
-                  className="w-full bg-[#0E131A] border border-white/20 rounded-lg px-3 py-2 text-white"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] px-3 py-1.5 text-slate-100 focus:border-cyan-500 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-[#7A8A9E] block mb-1">Profiler Raw File Content</label>
+                <label className="text-slate-400 block mb-1">Profiler Raw File Content</label>
                 <textarea
                   rows={8}
                   value={fileContentText}
                   onChange={(e) => setFileContentText(e.target.value)}
                   placeholder="[KIC 2000 Profile]&#10;MODEL = SlimKIC 2000&#10;SAMPLEINTERVAL = 1.0&#10;[DATA]&#10;Time,TC1,TC2,TC3&#10;0.0,25.0,25.0,25.0&#10;1.0,27.0,26.8,26.5..."
-                  className="w-full bg-[#0E131A] border border-white/20 rounded-lg px-3 py-2 text-white font-mono resize-none text-[11px]"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] px-3 py-1.5 text-slate-100 font-mono resize-none text-[11px] focus:border-cyan-500 focus:outline-none"
                 />
               </div>
 
@@ -1050,7 +1049,7 @@ export const ReflowThermalStation: React.FC = () => {
                     setSelectedFileName('kic-golden-test.kic');
                     setFileContentText(`[KIC 2000 Profile]\nMODEL = SlimKIC 2000\nSERIAL = KIC-88412\nSAMPLEINTERVAL = 1.0\nTC1 = Leading\nTC2 = BGA U1\n[DATA]\nTime,TC1,TC2\n0.0,25.0,25.0\n10.0,43.0,42.5\n30.0,79.0,77.5\n50.0,115.0,112.5\n70.0,151.0,148.0\n100.0,175.0,172.0\n130.0,185.0,182.0\n160.0,200.0,198.0\n180.0,225.0,222.0\n195.0,241.5,238.0\n210.0,230.0,225.0\n230.0,180.0,175.0\n260.0,100.0,95.0\n`);
                   }}
-                  className="text-[10px] text-orange-400 underline font-bold"
+                  className="text-[10px] text-cyan-400 hover:text-cyan-300 underline font-semibold"
                 >
                   Load Sample KIC Fixture
                 </button>
@@ -1058,14 +1057,14 @@ export const ReflowThermalStation: React.FC = () => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setIsUploadModalOpen(false)}
-                    className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white"
+                    className="px-3.5 py-1.5 rounded-[var(--mes-radius)] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleFileUpload}
                     disabled={uploadLoading || !selectedFileName}
-                    className="px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500 text-white font-bold disabled:opacity-50 flex items-center gap-2"
+                    className="px-3.5 py-1.5 rounded-[var(--mes-radius)] bg-cyan-600 hover:bg-cyan-500 text-white font-bold disabled:opacity-50 flex items-center gap-2 border border-cyan-500"
                   >
                     {uploadLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                     <span>Import &amp; Ingress</span>

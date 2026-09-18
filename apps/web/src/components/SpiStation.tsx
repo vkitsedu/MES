@@ -354,39 +354,33 @@ export const SpiStation: React.FC = () => {
     setActionFeedback(`[Simulated] Pressure Tuned to ${proposed} kgf via IPC-CFX`);
   };
 
-  // Helper for heatmap pad colors
+  // Helper for heatmap pad colors (Tier-1 Phosphor Palette)
   const getPadColor = (volPct: number, hasDefect?: string) => {
-    if (hasDefect || volPct < 70) return '#ef4444'; // Red (Collapse / Smear / Defect)
-    if (volPct < 85) return '#f59e0b'; // Amber (Low Warning)
-    if (volPct > 135) return '#3b82f6'; // Blue (Excess Paste)
-    if (volPct > 120) return '#60a5fa'; // Light Blue (High Warning)
-    return 'var(--mes-status-pass)'; // Emerald Green (Nominal)
+    if (hasDefect || volPct < 70) return '#F43F5E'; // Rose (Collapse / Smear / Defect)
+    if (volPct < 85) return '#FBBF24'; // Amber (Low Warning)
+    if (volPct > 135) return '#38BDF8'; // Sky Blue (Excess Paste)
+    if (volPct > 120) return '#22D3EE'; // Cyan (High Warning)
+    return '#34D399'; // Phosphor Emerald (Nominal)
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Top Header Bar: Station Status & Panel Search */}
-      <div
-        className="border rounded-2xl p-4 sm:p-6 shadow-xl flex flex-wrap items-center justify-between gap-4"
-        style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-      >
-        <div className="flex items-center gap-4">
-          <div
-            className="w-12 h-12 rounded-xl border flex items-center justify-center shadow-inner"
-            style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)', color: 'var(--mes-accent-primary)' }}
-          >
-            <Layers className="w-6 h-6" />
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-[var(--mes-radius)] border border-slate-800 bg-slate-900 flex items-center justify-center text-cyan-400">
+            <Layers className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: 'var(--mes-text-muted)' }}>
-                STATION 00 • PRE-REFLOW 3D SPI & SCREEN PRINTER IPC-CFX
+              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">
+                STATION 00 • PRE-REFLOW 3D SPI &amp; SCREEN PRINTER IPC-CFX
               </span>
-              <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--mes-accent-primary)' }} />
-              <span className="text-[11px] font-mono font-bold" style={{ color: 'var(--mes-accent-primary)' }}>IPC-CFX v1.7 CONNECTED</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-[10px] font-mono font-bold text-cyan-400">IPC-CFX v1.7 CONNECTED</span>
             </div>
-            <h2 className="text-xl font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--mes-text-primary)' }}>
-              Koh Young Aspire3 3D SPI <span className="text-sm font-normal opacity-50">⇄ Fuji GPX-C Closed-Loop</span>
+            <h2 className="text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2 mt-0.5">
+              Koh Young Aspire3 3D SPI <span className="text-xs font-normal text-slate-400">⇄ Fuji GPX-C Closed-Loop</span>
             </h2>
           </div>
         </div>
@@ -400,78 +394,59 @@ export const SpiStation: React.FC = () => {
           className="flex items-center gap-2"
         >
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--mes-text-muted)' }} />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Enter Panel Barcode..."
-              className="border text-xs font-mono rounded-lg pl-9 pr-3 py-2 w-64 focus:outline-none transition-all"
-              style={{
-                background: 'var(--mes-bg-well)',
-                borderColor: 'var(--mes-border)',
-                color: 'var(--mes-text-primary)'
-              }}
+              className="border border-slate-800 bg-slate-900 text-slate-100 placeholder-slate-500 text-xs font-mono rounded-[var(--mes-radius)] pl-8 pr-3 py-1.5 w-60 focus:outline-none focus:border-cyan-500 transition-colors"
             />
           </div>
           <button
             type="submit"
-            className="border px-3 py-2 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 font-bold"
-            style={{
-              background: 'var(--mes-bg-well)',
-              borderColor: 'var(--mes-border)',
-              color: 'var(--mes-text-primary)'
-            }}
+            className="border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-200 px-3 py-1.5 rounded-[var(--mes-radius)] text-xs font-mono transition-colors flex items-center gap-1.5 font-semibold"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} style={{ color: 'var(--mes-accent-primary)' }} />
+            <RefreshCw className={`w-3.5 h-3.5 text-cyan-400 ${isLoading ? 'animate-spin' : ''}`} />
             <span>LOAD</span>
           </button>
         </form>
       </div>
 
       {actionFeedback && (
-        <div
-          className="border rounded-xl px-4 py-3 text-xs font-mono flex items-center justify-between"
-          style={{
-            background: 'rgba(16, 185, 129, 0.12)',
-            borderColor: 'rgba(16, 185, 129, 0.35)',
-            color: 'var(--mes-status-pass)'
-          }}
-        >
+        <div className="bg-emerald-950/20 border border-emerald-500/30 text-emerald-400 rounded-[var(--mes-radius)] px-3.5 py-2 text-xs font-mono flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
             <span>{actionFeedback}</span>
           </div>
-          <button onClick={() => setActionFeedback(null)} className="opacity-60 hover:opacity-100">✕</button>
+          <button onClick={() => setActionFeedback(null)} className="text-slate-400 hover:text-slate-100">✕</button>
         </div>
       )}
 
       {/* Main Grid: Stencil Aperture Heatmap & Auto-Tuning Control Panel */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left Column: Interactive Vector Heatmap (7 Cols) */}
-        <div
-          className="lg:col-span-7 border rounded-2xl p-5 shadow-xl flex flex-col justify-between"
-          style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-        >
+        <div className="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800/80">
               <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4" style={{ color: 'var(--mes-accent-primary)' }} />
-                <h3 className="text-sm font-bold tracking-wide font-mono" style={{ color: 'var(--mes-text-primary)' }}>
+                <Sliders className="w-4 h-4 text-cyan-400" />
+                <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
                   STENCIL APERTURE VOLUME HEATMAP (3D SPI)
                 </h3>
               </div>
               <div className="flex items-center gap-2 text-[11px] font-mono">
-                <span style={{ color: 'var(--mes-text-muted)' }}>PANEL:</span>
-                <span className="font-bold" style={{ color: 'var(--mes-text-primary)' }}>{panelBarcode}</span>
+                <span className="text-slate-400">PANEL:</span>
+                <span className="font-bold text-slate-100">{panelBarcode}</span>
                 {inspection && (
                   <span
-                    className="px-2 py-0.5 rounded text-[10px] font-bold border"
-                    style={{
-                      background: inspection.result === 'PASS' ? 'rgba(16, 185, 129, 0.15)' : inspection.result === 'WARNING' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                      color: inspection.result === 'PASS' ? 'var(--mes-status-pass)' : inspection.result === 'WARNING' ? '#fbbf24' : 'var(--mes-status-fail)',
-                      borderColor: inspection.result === 'PASS' ? 'rgba(16, 185, 129, 0.3)' : inspection.result === 'WARNING' ? 'rgba(245, 158, 11, 0.3)' : 'rgba(239, 68, 68, 0.3)'
-                    }}
+                    className={`px-2 py-0.5 rounded-[var(--mes-radius)] text-[10px] font-bold border font-mono ${
+                      inspection.result === 'PASS'
+                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        : inspection.result === 'WARNING'
+                        ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                        : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                    }`}
                   >
                     {inspection.result}
                   </span>
@@ -480,17 +455,14 @@ export const SpiStation: React.FC = () => {
             </div>
 
             {/* SVG Visual Board Map */}
-            <div
-              className="relative border rounded-xl p-6 h-80 flex items-center justify-center overflow-hidden"
-              style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}
-            >
-              <svg viewBox="0 0 500 300" className="w-full h-full max-h-72">
+            <div className="relative border border-slate-800 rounded-[var(--mes-radius)] p-4 h-80 flex items-center justify-center overflow-hidden bg-slate-950">
+              <svg viewBox="0 0 500 300" className="w-full h-full max-h-72 select-none">
                 {/* PCB Outline */}
-                <rect x="10" y="10" width="480" height="280" rx="8" fill="var(--mes-bg-surface)" stroke="var(--mes-border)" strokeWidth="2" />
+                <rect x="10" y="10" width="480" height="280" rx="2" fill="#020617" stroke="#1E293B" strokeWidth="1.5" />
 
                 {/* Fiducials */}
-                <circle cx="25" cy="25" r="4" fill="var(--mes-accent-primary)" />
-                <circle cx="475" cy="275" r="4" fill="var(--mes-accent-primary)" />
+                <circle cx="25" cy="25" r="4" fill="#22D3EE" />
+                <circle cx="475" cy="275" r="4" fill="#22D3EE" />
 
                 {/* Aperture Pads Grid */}
                 {measurements.map((pad, idx) => {
@@ -505,26 +477,27 @@ export const SpiStation: React.FC = () => {
                     <g
                       key={pad.padId}
                       onClick={() => setSelectedPad(pad)}
-                      className="cursor-pointer transition-transform hover:scale-110"
+                      className="cursor-pointer transition-transform hover:scale-105"
                     >
                       <rect
                         x={x}
                         y={y}
                         width={pad.isCriticalPad ? 38 : 28}
                         height={pad.isCriticalPad ? 24 : 18}
-                        rx="3"
+                        rx="1.5"
                         fill={color}
-                        stroke={isSelected ? '#FFFFFF' : pad.isCriticalPad ? '#f59e0b' : 'rgba(255,255,255,0.2)'}
-                        strokeWidth={isSelected ? 2.5 : 1}
-                        opacity={0.9}
+                        stroke={isSelected ? '#F8FAFC' : pad.isCriticalPad ? '#FBBF24' : '#334155'}
+                        strokeWidth={isSelected ? 2 : 1}
+                        opacity={0.92}
                       />
                       <text
                         x={x + (pad.isCriticalPad ? 19 : 14)}
                         y={y + (pad.isCriticalPad ? 15 : 12)}
-                        fill="#000000"
+                        fill="#020617"
                         fontSize="9"
                         fontWeight="bold"
                         textAnchor="middle"
+                        fontFamily="monospace"
                       >
                         {pad.refDes}
                       </text>
@@ -534,25 +507,22 @@ export const SpiStation: React.FC = () => {
               </svg>
 
               {/* Heatmap Legend */}
-              <div
-                className="absolute bottom-3 left-3 backdrop-blur border px-3 py-1.5 rounded-lg flex items-center gap-3 text-[10px] font-mono"
-                style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-              >
+              <div className="absolute bottom-3 left-3 bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-[var(--mes-radius)] flex items-center gap-3 text-[10px] font-mono backdrop-blur">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-red-500" />
-                  <span style={{ color: 'var(--mes-text-muted)' }}>&lt;75% / Defect</span>
+                  <span className="w-2 h-2 rounded-xs bg-[#F43F5E]" />
+                  <span className="text-slate-400">&lt;75% / Defect</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-amber-500" />
-                  <span style={{ color: 'var(--mes-text-muted)' }}>75-85%</span>
+                  <span className="w-2 h-2 rounded-xs bg-[#FBBF24]" />
+                  <span className="text-slate-400">75-85%</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" />
-                  <span className="font-bold" style={{ color: 'var(--mes-text-primary)' }}>85-115% (Nominal)</span>
+                  <span className="w-2 h-2 rounded-xs bg-[#34D399]" />
+                  <span className="font-bold text-slate-200">85-115% (Nominal)</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-blue-500" />
-                  <span style={{ color: 'var(--mes-text-muted)' }}>&gt;135% (Excess)</span>
+                  <span className="w-2 h-2 rounded-xs bg-[#38BDF8]" />
+                  <span className="text-slate-400">&gt;135% (Excess)</span>
                 </div>
               </div>
             </div>
@@ -560,39 +530,35 @@ export const SpiStation: React.FC = () => {
 
           {/* Selected Aperture Detail Strip */}
           {selectedPad && (
-            <div
-              className="mt-4 border rounded-xl p-3.5 text-xs font-mono grid grid-cols-2 sm:grid-cols-4 gap-3"
-              style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}
-            >
+            <div className="mt-3 border border-slate-800 rounded-[var(--mes-radius)] p-3 text-xs font-mono grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900">
               <div>
-                <span className="block text-[10px]" style={{ color: 'var(--mes-text-muted)' }}>APERTURE / REF</span>
-                <strong style={{ color: 'var(--mes-text-primary)' }}>{selectedPad.refDes}</strong>
+                <span className="block text-[10px] text-slate-400">APERTURE / REF</span>
+                <strong className="text-slate-100">{selectedPad.refDes}</strong>
                 {selectedPad.isCriticalPad && (
-                  <span className="ml-1.5 text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30">
+                  <span className="ml-1.5 text-[9px] px-1 py-0.5 rounded-[var(--mes-radius)] bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30 font-mono">
                     CRITICAL
                   </span>
                 )}
               </div>
               <div>
-                <span className="block text-[10px]" style={{ color: 'var(--mes-text-muted)' }}>VOLUME RATIO</span>
+                <span className="block text-[10px] text-slate-400">VOLUME RATIO</span>
                 <span
-                  className="font-bold"
-                  style={{
-                    color: selectedPad.volumeRatioPct >= 85 && selectedPad.volumeRatioPct <= 115
-                      ? 'var(--mes-status-pass)'
-                      : '#fbbf24'
-                  }}
+                  className={`font-bold tabular-nums ${
+                    selectedPad.volumeRatioPct >= 85 && selectedPad.volumeRatioPct <= 115
+                      ? 'text-emerald-400'
+                      : 'text-amber-400'
+                  }`}
                 >
                   {selectedPad.volumeRatioPct}%
                 </span>
               </div>
               <div>
-                <span className="block text-[10px]" style={{ color: 'var(--mes-text-muted)' }}>HEIGHT / AREA</span>
-                <span style={{ color: 'var(--mes-text-primary)' }}>{selectedPad.heightUm} µm / {selectedPad.areaRatioPct}%</span>
+                <span className="block text-[10px] text-slate-400">HEIGHT / AREA</span>
+                <span className="text-slate-200 tabular-nums">{selectedPad.heightUm} µm / {selectedPad.areaRatioPct}%</span>
               </div>
               <div>
-                <span className="block text-[10px]" style={{ color: 'var(--mes-text-muted)' }}>OFFSET (X/Y)</span>
-                <span style={{ color: 'var(--mes-text-primary)' }}>
+                <span className="block text-[10px] text-slate-400">OFFSET (X/Y)</span>
+                <span className="text-slate-200 tabular-nums">
                   {selectedPad.offsetXUm > 0 ? `+${selectedPad.offsetXUm}` : selectedPad.offsetXUm} / {selectedPad.offsetYUm} µm
                 </span>
               </div>
@@ -601,53 +567,43 @@ export const SpiStation: React.FC = () => {
         </div>
 
         {/* Right Column: Screen Printer Closed-Loop & IPC-CFX Controls (5 Cols) */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-4">
           {/* Printer Real-Time Parameters Card */}
-          <div
-            className="border rounded-2xl p-5 shadow-xl"
-            style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-          >
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800/80">
               <div className="flex items-center gap-2">
-                <Gauge className="w-4 h-4" style={{ color: 'var(--mes-accent-primary)' }} />
-                <h3 className="text-sm font-bold tracking-wide font-mono" style={{ color: 'var(--mes-text-primary)' }}>
+                <Gauge className="w-4 h-4 text-cyan-400" />
+                <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
                   FUJI GPX-C PRINTER (IPC-CFX v1.7)
                 </h3>
               </div>
-              <span
-                className="text-[10px] font-mono px-2 py-0.5 rounded border font-semibold"
-                style={{
-                  background: 'var(--mes-bg-well)',
-                  color: 'var(--mes-accent-primary)',
-                  borderColor: 'var(--mes-border)'
-                }}
-              >
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 bg-slate-900 text-cyan-400 font-semibold">
                 AUTO-TUNING READY
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="border rounded-xl p-3" style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}>
-                <span className="text-[10px] font-mono block" style={{ color: 'var(--mes-text-muted)' }}>SQUEEGEE PRESSURE</span>
+            <div className="grid grid-cols-2 gap-2.5 mb-3">
+              <div className="border border-slate-800 rounded-[var(--mes-radius)] p-3 bg-slate-900">
+                <span className="text-[10px] font-mono block text-slate-400">SQUEEGEE PRESSURE</span>
                 <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-xl font-bold font-mono" style={{ color: 'var(--mes-text-primary)' }}>8.50</span>
-                  <span className="text-xs font-mono" style={{ color: 'var(--mes-text-muted)' }}>kgf</span>
+                  <span className="text-xl font-bold font-mono text-slate-100 tabular-nums">8.50</span>
+                  <span className="text-xs font-mono text-slate-400">kgf</span>
                 </div>
-                <div className="flex items-center justify-between text-[9px] font-mono mt-1.5 border-t pt-1" style={{ borderColor: 'var(--mes-border)', color: 'var(--mes-text-muted)' }}>
+                <div className="flex items-center justify-between text-[9px] font-mono mt-1.5 border-t border-slate-800/80 pt-1 text-slate-400 tabular-nums">
                   <span>WIN: [6.0 - 12.0]</span>
-                  <span style={{ color: 'var(--mes-status-pass)' }}>NOMINAL</span>
+                  <span className="text-emerald-400 font-semibold">NOMINAL</span>
                 </div>
               </div>
 
-              <div className="border rounded-xl p-3" style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}>
-                <span className="text-[10px] font-mono block" style={{ color: 'var(--mes-text-muted)' }}>SEPARATION SPEED</span>
+              <div className="border border-slate-800 rounded-[var(--mes-radius)] p-3 bg-slate-900">
+                <span className="text-[10px] font-mono block text-slate-400">SEPARATION SPEED</span>
                 <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-xl font-bold font-mono" style={{ color: 'var(--mes-text-primary)' }}>1.20</span>
-                  <span className="text-xs font-mono" style={{ color: 'var(--mes-text-muted)' }}>mm/s</span>
+                  <span className="text-xl font-bold font-mono text-slate-100 tabular-nums">1.20</span>
+                  <span className="text-xs font-mono text-slate-400">mm/s</span>
                 </div>
-                <div className="flex items-center justify-between text-[9px] font-mono mt-1.5 border-t pt-1" style={{ borderColor: 'var(--mes-border)', color: 'var(--mes-text-muted)' }}>
+                <div className="flex items-center justify-between text-[9px] font-mono mt-1.5 border-t border-slate-800/80 pt-1 text-slate-400 tabular-nums">
                   <span>WIN: [0.5 - 3.0]</span>
-                  <span style={{ color: 'var(--mes-status-pass)' }}>NOMINAL</span>
+                  <span className="text-emerald-400 font-semibold">NOMINAL</span>
                 </div>
               </div>
             </div>
@@ -657,37 +613,22 @@ export const SpiStation: React.FC = () => {
               <button
                 onClick={handleManualWipe}
                 disabled={isWiping}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 border"
-                style={{
-                  background: 'var(--mes-bg-well)',
-                  borderColor: 'var(--mes-accent-primary)',
-                  color: 'var(--mes-accent-primary)'
-                }}
+                className="w-full py-2 px-3 rounded-[var(--mes-radius)] text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-2 disabled:opacity-50 border border-cyan-500/40 bg-slate-900 hover:bg-slate-850 text-cyan-400"
               >
-                <Droplet className={`w-4 h-4 ${isWiping ? 'animate-bounce' : ''}`} />
+                <Droplet className={`w-3.5 h-3.5 ${isWiping ? 'animate-bounce' : ''}`} />
                 <span>{isWiping ? 'EXECUTING WIPE...' : 'COMMAND CFX UNDERSIDE WIPE (VACUUM+SOLVENT)'}</span>
               </button>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleMicroTunePressure(-0.2)}
-                  className="flex-1 py-2 rounded-lg text-xs font-mono transition-all border font-semibold"
-                  style={{
-                    background: 'var(--mes-bg-well)',
-                    borderColor: 'var(--mes-border)',
-                    color: 'var(--mes-text-primary)'
-                  }}
+                  className="flex-1 py-1.5 rounded-[var(--mes-radius)] text-xs font-mono transition-colors border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold tabular-nums"
                 >
                   PRESSURE -0.2 kgf
                 </button>
                 <button
                   onClick={() => handleMicroTunePressure(0.2)}
-                  className="flex-1 py-2 rounded-lg text-xs font-mono transition-all border font-semibold"
-                  style={{
-                    background: 'var(--mes-bg-well)',
-                    borderColor: 'var(--mes-border)',
-                    color: 'var(--mes-text-primary)'
-                  }}
+                  className="flex-1 py-1.5 rounded-[var(--mes-radius)] text-xs font-mono transition-colors border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold tabular-nums"
                 >
                   PRESSURE +0.2 kgf
                 </button>
@@ -696,69 +637,49 @@ export const SpiStation: React.FC = () => {
           </div>
 
           {/* Statistically Defensible SPC Card */}
-          <div
-            className="border rounded-2xl p-5 shadow-xl"
-            style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-          >
-            <div className="flex items-center justify-between mb-3">
+          <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800/80">
               <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4" style={{ color: 'var(--mes-accent-primary)' }} />
-                <h3 className="text-sm font-bold tracking-wide font-mono" style={{ color: 'var(--mes-text-primary)' }}>
+                <Activity className="w-4 h-4 text-cyan-400" />
+                <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
                   STATISTICALLY DEFENSIBLE SPC
                 </h3>
               </div>
               {spc?.isStatisticallyValid ? (
-                <span
-                  className="text-[10px] font-mono px-2 py-0.5 rounded border font-bold"
-                  style={{
-                    background: 'rgba(16, 185, 129, 0.15)',
-                    color: 'var(--mes-status-pass)',
-                    borderColor: 'rgba(16, 185, 129, 0.3)'
-                  }}
-                >
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-[var(--mes-radius)] border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-bold">
                   VALID (N ≥ 30)
                 </span>
               ) : (
-                <span
-                  className="text-[10px] font-mono px-2 py-0.5 rounded border"
-                  style={{
-                    background: 'rgba(245, 158, 11, 0.15)',
-                    color: '#fbbf24',
-                    borderColor: 'rgba(245, 158, 11, 0.3)'
-                  }}
-                >
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-[var(--mes-radius)] border border-amber-500/30 bg-amber-500/10 text-amber-400 font-semibold">
                   PRELIMINARY (N &lt; 30)
                 </span>
               )}
             </div>
 
-            <div
-              className="border rounded-xl p-3.5 space-y-2 text-xs font-mono"
-              style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}
-            >
+            <div className="border border-slate-800 rounded-[var(--mes-radius)] p-3 space-y-2 text-xs font-mono bg-slate-900">
               <div className="flex justify-between items-center">
-                <span style={{ color: 'var(--mes-text-muted)' }}>SAMPLE COUNT (N):</span>
-                <strong style={{ color: 'var(--mes-text-primary)' }}>{spc?.sampleCount || 0} PANELS</strong>
+                <span className="text-slate-400">SAMPLE COUNT (N):</span>
+                <strong className="text-slate-100 tabular-nums">{spc?.sampleCount || 0} PANELS</strong>
               </div>
               <div className="flex justify-between items-center">
-                <span style={{ color: 'var(--mes-text-muted)' }}>MEAN VOLUME (µ):</span>
-                <span className="font-bold" style={{ color: 'var(--mes-text-primary)' }}>{spc?.meanVolumePct || 100.0}%</span>
+                <span className="text-slate-400">MEAN VOLUME (µ):</span>
+                <span className="font-bold text-slate-100 tabular-nums">{spc?.meanVolumePct || 100.0}%</span>
               </div>
               <div className="flex justify-between items-center">
-                <span style={{ color: 'var(--mes-text-muted)' }}>SIGMA (σ):</span>
-                <span style={{ color: 'var(--mes-text-primary)' }}>{spc?.sigmaVolumePct || 0.0}%</span>
+                <span className="text-slate-400">SIGMA (σ):</span>
+                <span className="text-slate-200 tabular-nums">{spc?.sigmaVolumePct || 0.0}%</span>
               </div>
-              <div className="flex justify-between items-center border-t pt-2" style={{ borderColor: 'var(--mes-border)' }}>
-                <span style={{ color: 'var(--mes-text-muted)' }}>PROCESS CAPABILITY (Cpk):</span>
+              <div className="flex justify-between items-center border-t border-slate-800 pt-2">
+                <span className="text-slate-400">PROCESS CAPABILITY (Cpk):</span>
                 {spc?.isStatisticallyValid && spc.cpk !== undefined ? (
-                  <strong className="text-sm" style={{ color: 'var(--mes-accent-primary)' }}>{spc.cpk}</strong>
+                  <strong className="text-sm text-cyan-400 tabular-nums">{spc.cpk}</strong>
                 ) : (
-                  <span className="italic text-[11px]" style={{ color: 'var(--mes-text-muted)' }}>REQUIRES N ≥ 30</span>
+                  <span className="italic text-[11px] text-slate-400">REQUIRES N ≥ 30</span>
                 )}
               </div>
               <div className="flex justify-between items-center">
-                <span style={{ color: 'var(--mes-text-muted)' }}>PROCESS TREND:</span>
-                <span className="font-bold" style={{ color: 'var(--mes-text-primary)' }}>{spc?.trend || 'STABLE'}</span>
+                <span className="text-slate-400">PROCESS TREND:</span>
+                <span className="font-bold text-slate-100">{spc?.trend || 'STABLE'}</span>
               </div>
             </div>
           </div>
@@ -766,18 +687,15 @@ export const SpiStation: React.FC = () => {
       </div>
 
       {/* Bottom Row: Closed-Loop Tuning History Audit Trail */}
-      <div
-        className="border rounded-2xl p-5 shadow-xl"
-        style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-      >
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4">
+        <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800/80">
           <div className="flex items-center gap-2">
-            <Database className="w-4 h-4" style={{ color: 'var(--mes-accent-primary)' }} />
-            <h3 className="text-sm font-bold tracking-wide font-mono" style={{ color: 'var(--mes-text-primary)' }}>
-              CLOSED-LOOP TUNING AUDIT LOG & MANDATORY VERIFICATION TRAIL
+            <Database className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-100">
+              CLOSED-LOOP TUNING AUDIT LOG &amp; MANDATORY VERIFICATION TRAIL
             </h3>
           </div>
-          <span className="text-xs font-mono" style={{ color: 'var(--mes-text-muted)' }}>
+          <span className="text-[11px] font-mono text-slate-400">
             UNBROKEN TRACEABILITY (STENCIL → PRINTER → SPI → VERIFY)
           </span>
         </div>
@@ -785,50 +703,49 @@ export const SpiStation: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b text-[10px] uppercase" style={{ borderColor: 'var(--mes-border)', color: 'var(--mes-text-muted)' }}>
-                <th className="py-2.5 px-3">CORRECTION ID</th>
-                <th className="py-2.5 px-3">ACTION</th>
-                <th className="py-2.5 px-3">DELTA / MODE</th>
-                <th className="py-2.5 px-3">TRIGGER REASON</th>
-                <th className="py-2.5 px-3">STATUS</th>
-                <th className="py-2.5 px-3">COMMANDED AT</th>
-                <th className="py-2.5 px-3">VERIFIED BY PANEL</th>
+              <tr className="border-b border-slate-800 text-[10px] uppercase text-slate-400 tracking-wider">
+                <th className="py-2.5 px-3 font-semibold">CORRECTION ID</th>
+                <th className="py-2.5 px-3 font-semibold">ACTION</th>
+                <th className="py-2.5 px-3 font-semibold">DELTA / MODE</th>
+                <th className="py-2.5 px-3 font-semibold">TRIGGER REASON</th>
+                <th className="py-2.5 px-3 font-semibold">STATUS</th>
+                <th className="py-2.5 px-3 font-semibold">COMMANDED AT</th>
+                <th className="py-2.5 px-3 font-semibold">VERIFIED BY PANEL</th>
               </tr>
             </thead>
-            <tbody className="divide-y" style={{ borderColor: 'var(--mes-border)', color: 'var(--mes-text-primary)' }}>
+            <tbody className="divide-y divide-slate-800/60 text-slate-200">
               {tuningHistory.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-6" style={{ color: 'var(--mes-text-muted)' }}>
+                  <td colSpan={7} className="text-center py-6 text-slate-400">
                     No closed loop parameter tuning events recorded yet.
                   </td>
                 </tr>
               ) : (
                 tuningHistory.map((rec) => (
-                  <tr key={rec.id} className="hover:opacity-80 transition-opacity">
-                    <td className="py-3 px-3 font-bold" style={{ color: 'var(--mes-accent-primary)' }}>{rec.correctionId}</td>
-                    <td className="py-3 px-3">{rec.actionType}</td>
-                    <td className="py-3 px-3">
+                  <tr key={rec.id} className="hover:bg-slate-900/50 transition-colors">
+                    <td className="py-2.5 px-3 font-bold text-cyan-400">{rec.correctionId}</td>
+                    <td className="py-2.5 px-3">{rec.actionType}</td>
+                    <td className="py-2.5 px-3 tabular-nums">
                       {rec.actionType === 'STENCIL_CLEAN'
                         ? rec.cleaningMode || 'VACUUM_SOLVENT'
                         : `${rec.delta && rec.delta > 0 ? '+' : ''}${rec.delta} ${rec.unit || 'kgf'}`}
                     </td>
-                    <td className="py-3 px-3 max-w-xs truncate" style={{ color: 'var(--mes-text-muted)' }} title={rec.triggerCondition}>
+                    <td className="py-2.5 px-3 max-w-xs truncate text-slate-400" title={rec.triggerCondition}>
                       {rec.triggerCondition}
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-2.5 px-3">
                       <span
-                        className="px-2 py-0.5 rounded text-[10px] font-bold border"
-                        style={{
-                          background: rec.status === 'VERIFIED_RECOVERED' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(59, 130, 246, 0.15)',
-                          color: rec.status === 'VERIFIED_RECOVERED' ? 'var(--mes-status-pass)' : '#60a5fa',
-                          borderColor: rec.status === 'VERIFIED_RECOVERED' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'
-                        }}
+                        className={`px-2 py-0.5 rounded-[var(--mes-radius)] text-[10px] font-bold border font-mono ${
+                          rec.status === 'VERIFIED_RECOVERED'
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                            : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+                        }`}
                       >
                         {rec.status}
                       </span>
                     </td>
-                    <td className="py-3 px-3" style={{ color: 'var(--mes-text-muted)' }}>{new Date(rec.commandedAt).toLocaleTimeString()}</td>
-                    <td className="py-3 px-3 font-bold">{rec.verifiedByPanelBarcode || '—'}</td>
+                    <td className="py-2.5 px-3 text-slate-400 tabular-nums">{new Date(rec.commandedAt).toLocaleTimeString()}</td>
+                    <td className="py-2.5 px-3 font-bold text-slate-100">{rec.verifiedByPanelBarcode || '—'}</td>
                   </tr>
                 ))
               )}

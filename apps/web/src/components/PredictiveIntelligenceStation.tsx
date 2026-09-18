@@ -166,14 +166,16 @@ export const PredictiveIntelligenceStation: React.FC = () => {
       ]);
 
       if (anomRes && anomRes.ok) {
-        const data = await anomRes.json();
+        const json = await anomRes.json();
+        const data = Array.isArray(json) ? json : json?.data;
         setAnomalies(Array.isArray(data) && data.length > 0 ? data : FALLBACK_ANOMALIES);
       } else {
         setAnomalies(FALLBACK_ANOMALIES);
       }
 
       if (actRes && actRes.ok) {
-        const data = await actRes.json();
+        const json = await actRes.json();
+        const data = Array.isArray(json) ? json : json?.data;
         setPendingActions(Array.isArray(data) && data.length > 0 ? data : FALLBACK_ACTIONS);
       } else {
         setPendingActions(FALLBACK_ACTIONS);
@@ -190,7 +192,8 @@ export const PredictiveIntelligenceStation: React.FC = () => {
           })
         });
         if (aperRes && aperRes.ok) {
-          const data = await aperRes.json();
+          const json = await aperRes.json();
+          const data = json?.data ?? json;
           setApertureTrend(data?.apertureId ? data : FALLBACK_APERTURE_TREND);
         } else {
           setApertureTrend(FALLBACK_APERTURE_TREND);
@@ -215,7 +218,8 @@ export const PredictiveIntelligenceStation: React.FC = () => {
           })
         });
         if (nozRes && nozRes.ok) {
-          const data = await nozRes.json();
+          const json = await nozRes.json();
+          const data = json?.data ?? json;
           setNozzleHealth(data?.assetId ? data : (selectedNozzle.includes('head-1') ? FALLBACK_NOZZLE_HEALTH : {
             assetId: 'nozzle-head-2-nz-01',
             headId: 'head-02',
@@ -445,7 +449,7 @@ export const PredictiveIntelligenceStation: React.FC = () => {
                     ? 'bg-red-500/20 text-red-400 border border-red-500/40'
                     : 'bg-[var(--mes-status-pass)]/10 text-[var(--mes-status-pass)] border border-[var(--mes-status-pass)]/40'
                 }`}>
-                  {apertureTrend.status.replace(/_/g, ' ')}
+                  {String(apertureTrend.status || 'NORMAL').replace(/_/g, ' ')}
                 </span>
               </div>
 
@@ -580,7 +584,7 @@ export const PredictiveIntelligenceStation: React.FC = () => {
                         {action.id.slice(0, 8)}...
                       </td>
                       <td className="p-3 text-[var(--mes-status-warn)] font-bold">
-                        {action.actionType.replace(/_/g, ' ')}
+                        {String(action.actionType || 'ACTION').replace(/_/g, ' ')}
                       </td>
                       <td className="p-3 text-[var(--mes-text-primary)]">
                         {action.targetEquipmentId}

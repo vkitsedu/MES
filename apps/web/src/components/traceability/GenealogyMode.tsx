@@ -32,14 +32,14 @@ export const GenealogyMode: React.FC<GenealogyModeProps> = ({ panelData }) => {
 
   if (!currentUnit) {
     return (
-      <div className="milled-panel rounded-xl p-8 text-center text-xs font-mono text-[#7A8A9E]">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-8 text-center text-xs font-mono text-slate-400">
         Zero multi-up circuit units recorded for panel {panelData.panelBarcode}.
       </div>
     );
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       {/* 1. Multi-Up PCB Panel Discretization Matrix & Unit Selector */}
       <PanelUnitMatrix
         panelBarcode={panelData.panelBarcode}
@@ -56,7 +56,7 @@ export const GenealogyMode: React.FC<GenealogyModeProps> = ({ panelData }) => {
       <PlacementChainTable placementChain={currentUnit.placementChain || []} />
 
       {/* 4. Inspection & Manufacturing Process Domain Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SolderPasteCard
           solderPaste={currentUnit.solderPaste || []}
           stencil={currentUnit.stencil}
@@ -64,12 +64,12 @@ export const GenealogyMode: React.FC<GenealogyModeProps> = ({ panelData }) => {
         <SpiInspectionCard spiInspection={currentUnit.spiInspection} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <ReflowProfileCard reflowProfile={currentUnit.reflowProfile} />
         <AoiInspectionCard aoiInspections={currentUnit.aoiInspections || []} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <ReworkLedger reworkHistory={currentUnit.reworkHistory || []} />
         <DhrLedgerCard
           dhr={currentUnit.dhr}

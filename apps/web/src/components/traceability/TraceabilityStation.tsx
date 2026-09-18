@@ -161,7 +161,7 @@ export const TraceabilityStation: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
+    <div className="space-y-4">
       {/* 1. Status Bar (Source State & Regulatory Tags) */}
       <TraceabilityStatusBar
         source={dataSource}
@@ -189,7 +189,7 @@ export const TraceabilityStation: React.FC = () => {
           {panelData ? (
             <GenealogyMode panelData={panelData} />
           ) : (
-            <div className="milled-panel rounded-xl p-8 text-center text-xs font-mono text-[#7A8A9E]">
+            <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-8 text-center text-xs font-mono text-slate-400">
               {errorMessage || 'Scan or search for a panel barcode above to view as-built genealogy.'}
             </div>
           )}

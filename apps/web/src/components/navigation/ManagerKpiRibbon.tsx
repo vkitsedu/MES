@@ -93,11 +93,11 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
                 OEE
               </span>
               <span className="text-sm font-semibold text-white tabular-nums tracking-tight">
-                {oee !== null ? `${oee.oee.toFixed(1)}%` : '—'}
+                {oee?.oee != null ? `${Number(oee.oee).toFixed(1)}%` : '—'}
               </span>
-              {oee !== null && (
+              {oee?.availability != null && oee?.performance != null && oee?.quality != null && (
                 <span className="hidden xl:inline text-[10px] text-[#6B7280] font-sans">
-                  (A {oee.availability.toFixed(0)} · P {oee.performance.toFixed(0)} · Q {oee.quality.toFixed(0)})
+                  (A {Number(oee.availability).toFixed(0)} · P {Number(oee.performance).toFixed(0)} · Q {Number(oee.quality).toFixed(0)})
                 </span>
               )}
             </div>
@@ -110,9 +110,9 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
                 Throughput
               </span>
               <span className="text-sm font-semibold text-white tabular-nums tracking-tight">
-                {speed !== null && speed.actualCph > 0 ? `${speed.actualCph.toLocaleString()} CPH` : '—'}
+                {speed?.actualCph != null && speed.actualCph > 0 ? `${Number(speed.actualCph).toLocaleString()} CPH` : '—'}
               </span>
-              {speed !== null && speed.cycleTimeSeconds > 0 && (
+              {speed?.cycleTimeSeconds != null && speed.cycleTimeSeconds > 0 && (
                 <span className="hidden xl:inline text-[10px] text-[#6B7280] font-sans">
                   ({speed.cycleTimeSeconds}s cycle)
                 </span>
@@ -127,7 +127,7 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
                 Yield (FPY)
               </span>
               <span className="text-sm font-semibold text-white tabular-nums tracking-tight">
-                {fpy !== null ? `${fpy.fpyPct.toFixed(1)}%` : '—'}
+                {fpy?.fpyPct != null ? `${Number(fpy.fpyPct).toFixed(1)}%` : '—'}
               </span>
             </div>
 
@@ -155,7 +155,7 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
               <span className={`text-sm font-semibold tracking-tight ${
                 takt?.status === 'BEHIND_TAKT' ? 'text-amber-400' : 'text-white'
               }`}>
-                {takt !== null ? (takt.status === 'ON_PACE' ? 'On Pace' : takt.status.replace('_', ' ')) : '—'}
+                {takt?.status ? (takt.status === 'ON_PACE' ? 'On Pace' : String(takt.status).replace(/_/g, ' ')) : '—'}
               </span>
             </div>
           </div>
@@ -193,10 +193,10 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
                 Availability
               </div>
               <div className="text-sm font-semibold text-white font-mono tabular-nums mt-0.5">
-                {oee !== null ? `${oee.availability.toFixed(1)}%` : '—'}
+                {oee?.availability != null ? `${Number(oee.availability).toFixed(1)}%` : '—'}
               </div>
               <div className="text-[10px] text-[#6B7280] font-mono mt-0.5">
-                {oee !== null ? `${oee.runningCount}/${oee.lineCount} Lines Online` : 'No telemetry'}
+                {oee?.lineCount != null ? `${oee.runningCount ?? 0}/${oee.lineCount} Lines Online` : 'No telemetry'}
               </div>
             </div>
 
@@ -206,7 +206,7 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
                 Performance
               </div>
               <div className="text-sm font-semibold text-white font-mono tabular-nums mt-0.5">
-                {oee !== null ? `${oee.performance.toFixed(1)}%` : '—'}
+                {oee?.performance != null ? `${Number(oee.performance).toFixed(1)}%` : '—'}
               </div>
               <div className="text-[10px] text-[#6B7280] font-mono mt-0.5">
                 Target: 45,000 CPH
@@ -219,10 +219,10 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
                 Quality Rate
               </div>
               <div className="text-sm font-semibold text-white font-mono tabular-nums mt-0.5">
-                {oee !== null ? `${oee.quality.toFixed(1)}%` : '—'}
+                {oee?.quality != null ? `${Number(oee.quality).toFixed(1)}%` : '—'}
               </div>
               <div className="text-[10px] text-[#6B7280] font-mono mt-0.5">
-                {fpy !== null ? `${fpy.goodPanels} Pass / ${fpy.rejectedPanels} Skip` : 'No records'}
+                {fpy != null ? `${fpy.goodPanels ?? 0} Pass / ${fpy.rejectedPanels ?? 0} Skip` : 'No records'}
               </div>
             </div>
 

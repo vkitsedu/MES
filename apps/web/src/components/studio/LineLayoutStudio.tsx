@@ -169,7 +169,7 @@ export const LineLayoutStudio: React.FC = () => {
 
     const newStation: LineStationConfig = {
       id: `new-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      code: `${template.manufacturer.toUpperCase().slice(0, 3)}-${template.modelName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6)}`,
+      code: `${String(template.manufacturer || 'EQ').toUpperCase().slice(0, 3)}-${String(template.modelName || '').replace(/[^a-zA-Z0-9]/g, '').slice(0, 6)}`,
       name: `${template.manufacturer} ${template.modelName}`,
       customerCode: `${template.category.slice(0, 3)}-0${(activeLine.stations?.length || 0) + 1}`,
       type: template.category,

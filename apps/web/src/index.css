@@ -54,13 +54,35 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   code, pre, .font-mono {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
     font-feature-settings: "tnum" 1;
   }
+}
+
+/* Tier-1 Tactical Wafer Grid & Machined Chassis Lighting */
+.mes-wafer-grid {
+  background-color: var(--mes-bg-canvas);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.mes-machined-card {
+  background: linear-gradient(180deg, #0b111d 0%, #030712 100%);
+  border: 1px solid #1e293b;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 4px 20px -2px rgba(0, 0, 0, 0.7);
+  border-radius: var(--mes-radius, 2px);
+}
+
+.mes-machined-card-glow {
+  background: linear-gradient(180deg, #0b111d 0%, #030712 100%);
+  border: 1px solid #1e293b;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 0 24px -4px rgba(6, 182, 212, 0.12);
+  border-radius: var(--mes-radius, 2px);
 }
 
 /* Authentic Themed Industrial Cleanroom Panels */

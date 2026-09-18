@@ -174,27 +174,24 @@ export const AuditTrailViewer: React.FC = () => {
   return (
     <div className="space-y-6 font-mono text-xs">
       {/* Cockpit Bar */}
-      <div
-        className="rounded-xl p-5 flex flex-wrap justify-between items-center gap-4 border shadow-xl"
-        style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-      >
+      <div className="rounded-[var(--mes-radius)] p-4 flex flex-wrap justify-between items-center gap-4 border border-slate-800 bg-slate-950 shadow-lg">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--mes-text-muted)' }}>
+            <span className="text-[10px] uppercase tracking-wider text-slate-400">
               {viewMode === 'RAW_TCP' ? 'TIER 1 INGRESS LAYER' : 'TIER 2 CANONICAL LOG'}
             </span>
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--mes-accent-primary)' }} />
-            <span className="text-[10px] font-bold" style={{ color: 'var(--mes-accent-primary)' }}>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-cyan-400" />
+            <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
               {viewMode === 'RAW_TCP' ? 'TCP SOCKET PORT 30040 (LIVE BUFFER)' : 'APPEND-ONLY SINGLE SOURCE OF TRUTH'}
             </span>
           </div>
-          <h2 className="text-lg font-bold font-sans mt-0.5 flex items-center gap-2" style={{ color: 'var(--mes-text-primary)' }}>
-            <Terminal className="w-5 h-5" style={{ color: 'var(--mes-accent-primary)' }} />
+          <h2 className="text-base font-bold tracking-tight text-slate-100 mt-1 flex items-center gap-2">
+            <Terminal className="w-4 h-4 text-cyan-400" />
             {viewMode === 'RAW_TCP' 
               ? 'Raw Fuji Nexim TCP Socket Frame Buffer' 
               : 'Cryptographic Production Event Stream'}
           </h2>
-          <p className="text-xs" style={{ color: 'var(--mes-text-muted)' }}>
+          <p className="text-xs text-slate-400">
             {viewMode === 'RAW_TCP'
               ? 'Exact unaltered Big-Endian STX/ETX frames captured directly from Fuji NXT III / AIMEX pick-and-place lines.'
               : 'Strongly-typed canonical envelopes parsed and validated for CQRS state projections.'}
@@ -203,30 +200,25 @@ export const AuditTrailViewer: React.FC = () => {
 
         {/* View Switcher & Controls */}
         <div className="flex items-center gap-3">
-          <div
-            className="flex items-center p-1 rounded-lg border text-xs font-bold"
-            style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}
-          >
+          <div className="flex items-center p-1 rounded-[var(--mes-radius)] border border-slate-800 bg-slate-900 text-xs font-bold">
             <button
               onClick={() => setViewMode('RAW_TCP')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all font-semibold"
-              style={{
-                background: viewMode === 'RAW_TCP' ? 'var(--mes-bg-surface)' : 'transparent',
-                color: viewMode === 'RAW_TCP' ? 'var(--mes-accent-primary)' : 'var(--mes-text-muted)',
-                border: viewMode === 'RAW_TCP' ? '1px solid var(--mes-accent-primary)' : '1px solid transparent'
-              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-all font-semibold tracking-wider text-xs ${
+                viewMode === 'RAW_TCP'
+                  ? 'bg-slate-950 text-cyan-400 border border-cyan-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+              }`}
             >
               <Radio className="w-3.5 h-3.5" />
               <span>RAW TCP FRAMES</span>
             </button>
             <button
               onClick={() => setViewMode('CANONICAL')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all font-semibold"
-              style={{
-                background: viewMode === 'CANONICAL' ? 'var(--mes-bg-surface)' : 'transparent',
-                color: viewMode === 'CANONICAL' ? 'var(--mes-accent-primary)' : 'var(--mes-text-muted)',
-                border: viewMode === 'CANONICAL' ? '1px solid var(--mes-accent-primary)' : '1px solid transparent'
-              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-all font-semibold tracking-wider text-xs ${
+                viewMode === 'CANONICAL'
+                  ? 'bg-slate-950 text-cyan-400 border border-cyan-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+              }`}
             >
               <Server className="w-3.5 h-3.5" />
               <span>CANONICAL EVENTS</span>
@@ -234,33 +226,28 @@ export const AuditTrailViewer: React.FC = () => {
           </div>
 
           {viewMode === 'CANONICAL' && (
-            <div
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-bold"
-              style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}
-            >
-              <Filter className="w-3.5 h-3.5" style={{ color: 'var(--mes-text-muted)' }} />
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] border border-slate-800 bg-slate-900 text-xs">
+              <Filter className="w-3.5 h-3.5 text-slate-400" />
               <select
                 value={eventTypeFilter}
                 onChange={(e) => setEventTypeFilter(e.target.value)}
-                className="bg-transparent font-bold focus:outline-none"
-                style={{ color: 'var(--mes-text-primary)' }}
+                className="bg-transparent font-semibold focus:outline-none text-slate-200 text-xs"
               >
-                <option value="" style={{ background: 'var(--mes-bg-surface)' }}>ALL EVENT TYPES</option>
-                <option value="PANEL_ROUTING_CHECKOUT" style={{ background: 'var(--mes-bg-surface)' }}>PANEL_ROUTING_CHECKOUT</option>
-                <option value="COMPONENT_SPLICED_EVENT" style={{ background: 'var(--mes-bg-surface)' }}>COMPONENT_SPLICED_EVENT</option>
-                <option value="OPTICAL_DEFECT_DETECTED" style={{ background: 'var(--mes-bg-surface)' }}>OPTICAL_DEFECT_DETECTED</option>
-                <option value="WORK_CENTER_STATE_CHANGED" style={{ background: 'var(--mes-bg-surface)' }}>WORK_CENTER_STATE_CHANGED</option>
-                <option value="QUALITY_INTERLOCK_TRIPPED" style={{ background: 'var(--mes-bg-surface)' }}>QUALITY_INTERLOCK_TRIPPED</option>
+                <option value="" className="bg-slate-950 text-slate-100">ALL EVENT TYPES</option>
+                <option value="PANEL_ROUTING_CHECKOUT" className="bg-slate-950 text-slate-100">PANEL_ROUTING_CHECKOUT</option>
+                <option value="COMPONENT_SPLICED_EVENT" className="bg-slate-950 text-slate-100">COMPONENT_SPLICED_EVENT</option>
+                <option value="OPTICAL_DEFECT_DETECTED" className="bg-slate-950 text-slate-100">OPTICAL_DEFECT_DETECTED</option>
+                <option value="WORK_CENTER_STATE_CHANGED" className="bg-slate-950 text-slate-100">WORK_CENTER_STATE_CHANGED</option>
+                <option value="QUALITY_INTERLOCK_TRIPPED" className="bg-slate-950 text-slate-100">QUALITY_INTERLOCK_TRIPPED</option>
               </select>
             </div>
           )}
 
           <button
             onClick={fetchEvents}
-            className="flex items-center gap-1.5 px-3 py-2 font-bold rounded-lg border text-xs transition-all"
-            style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)', color: 'var(--mes-text-primary)' }}
+            className="flex items-center gap-1.5 px-3 py-1.5 font-bold rounded-[var(--mes-radius)] border border-slate-700 bg-slate-900 hover:bg-slate-850 text-slate-200 text-xs tracking-wider transition-colors"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} style={{ color: 'var(--mes-accent-primary)' }} />
+            <RefreshCw className={`w-3.5 h-3.5 text-cyan-400 ${loading ? 'animate-spin' : ''}`} />
             <span>SYNC</span>
           </button>
         </div>
@@ -268,16 +255,10 @@ export const AuditTrailViewer: React.FC = () => {
 
       {/* Mode 1: Raw Ingress TCP Frames Table */}
       {viewMode === 'RAW_TCP' && (
-        <div
-          className="rounded-xl overflow-hidden shadow-xl border"
-          style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-        >
+        <div className="rounded-[var(--mes-radius)] overflow-hidden shadow-sm border border-slate-800 bg-slate-950">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead
-                className="uppercase tracking-widest text-[10px] border-b"
-                style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)', color: 'var(--mes-text-muted)' }}
-              >
+            <table className="w-full text-left text-xs font-mono">
+              <thead className="uppercase tracking-wider text-[10px] border-b border-slate-800 bg-slate-900 text-slate-400">
                 <tr>
                   <th className="p-3 w-8"></th>
                   <th className="p-3">Source Adapter</th>
@@ -288,64 +269,55 @@ export const AuditTrailViewer: React.FC = () => {
                   <th className="p-3">Ingress Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y" style={{ borderColor: 'var(--mes-border)', color: 'var(--mes-text-primary)' }}>
+              <tbody className="divide-y divide-slate-800/60 text-slate-300">
                 {ingressEvents.length > 0 ? (
                   ingressEvents.map((frame) => {
                     const isExpanded = expandedRow === frame.id;
-                    const tokens = frame.raw_payload.replace(/[\x02\x03]/g, '').split('\t');
+                    const payloadStr = String(frame.raw_payload || '');
+                    const tokens = payloadStr.replace(/[\x02\x03]/g, '').split('\t');
                     const command = tokens[0] || 'UNKNOWN';
 
                     return (
                       <React.Fragment key={frame.id}>
                         <tr
                           onClick={() => setExpandedRow(isExpanded ? null : frame.id)}
-                          className="hover:opacity-80 cursor-pointer transition-opacity"
+                          className="hover:bg-slate-900/60 cursor-pointer transition-colors"
                         >
-                          <td className="p-3" style={{ color: 'var(--mes-text-muted)' }}>
+                          <td className="p-3 text-slate-500">
                             {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                           </td>
-                          <td className="p-3 font-bold" style={{ color: '#00C2FF' }}>{frame.source_adapter}</td>
-                          <td className="p-3" style={{ color: 'var(--mes-text-muted)' }}>{frame.source_address}</td>
+                          <td className="p-3 font-bold text-cyan-400">{frame.source_adapter}</td>
+                          <td className="p-3 text-slate-400 tabular-nums">{frame.source_address}</td>
                           <td className="p-3">
-                            <span
-                              className="px-2 py-0.5 rounded text-[10px] font-bold border"
-                              style={{ background: 'var(--mes-bg-well)', color: 'var(--mes-text-muted)', borderColor: 'var(--mes-border)' }}
-                            >
+                            <span className="px-2 py-0.5 rounded-[var(--mes-radius)] text-[10px] font-semibold border border-slate-700 bg-slate-900 text-slate-400">
                               {frame.protocol}
                             </span>
                           </td>
-                          <td className="p-3 font-mono max-w-md truncate" style={{ color: 'var(--mes-accent-primary)' }}>
-                            <span className="font-bold mr-2" style={{ color: 'var(--mes-text-primary)' }}>[{command}]</span>
-                            {frame.raw_payload.replace(/[\x02\x03]/g, ' ')}
+                          <td className="p-3 font-mono max-w-md truncate text-emerald-400">
+                            <span className="font-bold mr-2 text-slate-100">[{command}]</span>
+                            {payloadStr.replace(/[\x02\x03]/g, ' ')}
                           </td>
-                          <td className="p-3" style={{ color: 'var(--mes-text-muted)' }}>{new Date(frame.received_at).toLocaleTimeString()}</td>
-                          <td className="p-3 flex items-center gap-1 font-bold" style={{ color: 'var(--mes-status-pass)' }}>
+                          <td className="p-3 text-slate-400 tabular-nums">{new Date(frame.received_at).toLocaleTimeString()}</td>
+                          <td className="p-3 flex items-center gap-1 font-bold text-emerald-400">
                             <CheckCircle2 className="w-3 h-3" />
                             <span>{frame.processed_status}</span>
                           </td>
                         </tr>
 
                         {isExpanded && (
-                          <tr className="border-b" style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}>
+                          <tr className="border-b border-slate-800/80 bg-slate-900/50">
                             <td colSpan={7} className="p-4 space-y-3">
-                              <div className="flex justify-between text-[11px]" style={{ color: 'var(--mes-text-muted)' }}>
-                                <span>Ingress ID: <strong style={{ color: 'var(--mes-text-primary)' }}>{frame.id}</strong></span>
-                                <span>Source: <strong style={{ color: 'var(--mes-text-primary)' }}>{frame.source_address}</strong></span>
-                                <span>Time (UTC): <strong style={{ color: 'var(--mes-text-primary)' }}>{new Date(frame.received_at).toISOString()}</strong></span>
+                              <div className="flex justify-between text-[11px] text-slate-400">
+                                <span>Ingress ID: <strong className="text-slate-100">{frame.id}</strong></span>
+                                <span>Source: <strong className="text-slate-100 tabular-nums">{frame.source_address}</strong></span>
+                                <span>Time (UTC): <strong className="text-slate-100 tabular-nums">{new Date(frame.received_at).toISOString()}</strong></span>
                               </div>
                               <div>
-                                <span className="text-[10px] uppercase tracking-widest block mb-1" style={{ color: 'var(--mes-text-muted)' }}>
+                                <span className="text-[10px] uppercase tracking-wider block mb-1 text-slate-400 font-semibold">
                                   Unaltered STX/ETX Socket Payload:
                                 </span>
-                                <pre
-                                  className="p-3 rounded border text-[11px] overflow-x-auto whitespace-pre-wrap font-mono"
-                                  style={{
-                                    background: 'var(--mes-bg-surface)',
-                                    borderColor: 'var(--mes-border)',
-                                    color: 'var(--mes-accent-primary)'
-                                  }}
-                                >
-                                  {frame.raw_payload.replace(/\x02/g, '<STX>\n').replace(/\x03/g, '\n<ETX>').replace(/\t/g, '  |  ')}
+                                <pre className="p-3 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] overflow-x-auto whitespace-pre-wrap font-mono bg-slate-950 text-emerald-400">
+                                  {payloadStr.replace(/\x02/g, '<STX>\n').replace(/\x03/g, '\n<ETX>').replace(/\t/g, '  |  ')}
                                 </pre>
                               </div>
                             </td>
@@ -356,7 +328,7 @@ export const AuditTrailViewer: React.FC = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={7} className="p-8 text-center" style={{ color: 'var(--mes-text-muted)' }}>
+                    <td colSpan={7} className="p-8 text-center text-slate-500">
                       {loading ? 'READING TCP INGRESS BUFFER...' : 'ZERO SOCKET FRAMES RECEIVED YET'}
                     </td>
                   </tr>
@@ -369,16 +341,10 @@ export const AuditTrailViewer: React.FC = () => {
 
       {/* Mode 2: Canonical Event Log Table */}
       {viewMode === 'CANONICAL' && (
-        <div
-          className="rounded-xl overflow-hidden shadow-xl border"
-          style={{ background: 'var(--mes-bg-surface)', borderColor: 'var(--mes-border)' }}
-        >
+        <div className="rounded-[var(--mes-radius)] overflow-hidden shadow-sm border border-slate-800 bg-slate-950">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead
-                className="uppercase tracking-widest text-[10px] border-b"
-                style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)', color: 'var(--mes-text-muted)' }}
-              >
+            <table className="w-full text-left text-xs font-mono">
+              <thead className="uppercase tracking-wider text-[10px] border-b border-slate-800 bg-slate-900 text-slate-400">
                 <tr>
                   <th className="p-3 w-8"></th>
                   <th className="p-3">Event Type</th>
@@ -389,7 +355,7 @@ export const AuditTrailViewer: React.FC = () => {
                   <th className="p-3">Disposition</th>
                 </tr>
               </thead>
-              <tbody className="divide-y" style={{ borderColor: 'var(--mes-border)', color: 'var(--mes-text-primary)' }}>
+              <tbody className="divide-y divide-slate-800/60 text-slate-300">
                 {events.length > 0 ? (
                   events.map((ev) => {
                     const isExpanded = expandedRow === ev.id;
@@ -399,49 +365,39 @@ export const AuditTrailViewer: React.FC = () => {
                       <React.Fragment key={ev.id}>
                         <tr 
                           onClick={() => setExpandedRow(isExpanded ? null : ev.id)}
-                          className="hover:opacity-80 cursor-pointer transition-opacity"
+                          className="hover:bg-slate-900/60 cursor-pointer transition-colors"
                         >
-                          <td className="p-3" style={{ color: 'var(--mes-text-muted)' }}>
+                          <td className="p-3 text-slate-500">
                             {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                           </td>
-                          <td className="p-3 font-bold" style={{ color: '#00C2FF' }}>{ev.event_type}</td>
-                          <td className="p-3" style={{ color: 'var(--mes-text-muted)' }}>{new Date(ev.event_time).toISOString()}</td>
+                          <td className="p-3 font-bold text-cyan-400">{ev.event_type}</td>
+                          <td className="p-3 text-slate-400 tabular-nums">{new Date(ev.event_time).toISOString()}</td>
                           <td className="p-3">
-                            <span
-                              className="px-2 py-0.5 rounded text-[10px] font-bold border"
-                              style={{
-                                background: isManual ? 'var(--mes-bg-well)' : 'rgba(16, 185, 129, 0.15)',
-                                color: isManual ? 'var(--mes-text-muted)' : 'var(--mes-status-pass)',
-                                borderColor: isManual ? 'var(--mes-border)' : 'rgba(16, 185, 129, 0.3)'
-                              }}
-                            >
+                            <span className={`px-2 py-0.5 rounded-[var(--mes-radius)] text-[10px] font-semibold border ${
+                              isManual 
+                                ? 'bg-slate-900 border-slate-700 text-slate-400' 
+                                : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
+                            }`}>
                               {ev.source_type}
                             </span>
                           </td>
-                          <td className="p-3 font-bold" style={{ color: 'var(--mes-text-primary)' }}>{ev.work_center_id}</td>
-                          <td className="p-3" style={{ color: 'var(--mes-text-muted)' }}>{ev.batch_id || '-'}</td>
-                          <td className="p-3 flex items-center gap-1 font-bold" style={{ color: 'var(--mes-status-pass)' }}>
+                          <td className="p-3 font-bold text-slate-100">{ev.work_center_id}</td>
+                          <td className="p-3 text-slate-400">{ev.batch_id || '-'}</td>
+                          <td className="p-3 flex items-center gap-1 font-bold text-emerald-400">
                             <CheckCircle2 className="w-3 h-3" />
                             <span>Committed</span>
                           </td>
                         </tr>
 
                         {isExpanded && (
-                          <tr className="border-b" style={{ background: 'var(--mes-bg-well)', borderColor: 'var(--mes-border)' }}>
+                          <tr className="border-b border-slate-800/80 bg-slate-900/50">
                             <td colSpan={7} className="p-4 space-y-2">
-                              <div className="flex justify-between text-[11px]" style={{ color: 'var(--mes-text-muted)' }}>
-                                <span>UUID: <strong style={{ color: 'var(--mes-text-primary)' }}>{ev.event_id}</strong></span>
-                                <span>Source: <strong style={{ color: 'var(--mes-text-primary)' }}>{ev.source_id}</strong></span>
-                                <span>Operator: <strong style={{ color: 'var(--mes-text-primary)' }}>{ev.operator_id || 'FUJI_NEXIM_SOCKET'}</strong></span>
+                              <div className="flex justify-between text-[11px] text-slate-400">
+                                <span>UUID: <strong className="text-slate-100">{ev.event_id}</strong></span>
+                                <span>Source: <strong className="text-slate-100">{ev.source_id}</strong></span>
+                                <span>Operator: <strong className="text-slate-100">{ev.operator_id || 'FUJI_NEXIM_SOCKET'}</strong></span>
                               </div>
-                              <pre
-                                className="p-3 rounded border text-[11px] overflow-x-auto"
-                                style={{
-                                  background: 'var(--mes-bg-surface)',
-                                  borderColor: 'var(--mes-border)',
-                                  color: 'var(--mes-accent-primary)'
-                                }}
-                              >
+                              <pre className="p-3 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] overflow-x-auto bg-slate-950 text-emerald-400 font-mono">
                                 {JSON.stringify(typeof ev.payload === 'string' ? JSON.parse(ev.payload) : ev.payload, null, 2)}
                               </pre>
                             </td>
@@ -452,7 +408,7 @@ export const AuditTrailViewer: React.FC = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={7} className="p-8 text-center" style={{ color: 'var(--mes-text-muted)' }}>
+                    <td colSpan={7} className="p-8 text-center text-slate-500">
                       {loading ? 'READING CANONICAL LOG...' : 'ZERO EVENTS MATCHING CURRENT FILTER'}
                     </td>
                   </tr>

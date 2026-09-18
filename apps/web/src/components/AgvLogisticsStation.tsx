@@ -109,19 +109,25 @@ export const AgvLogisticsStation: React.FC = () => {
 
       if (agvRes?.ok) {
         const json = await agvRes.json();
-        if (Array.isArray(json) && json.length > 0) setAgvs(json);
+        const items = Array.isArray(json) ? json : json?.data;
+        if (Array.isArray(items) && items.length > 0) setAgvs(items);
       }
       if (missionRes?.ok) {
         const json = await missionRes.json();
-        if (Array.isArray(json) && json.length > 0) setMissions(json);
+        const items = Array.isArray(json) ? json : json?.data;
+        if (Array.isArray(items) && items.length > 0) setMissions(items);
       }
       if (resRes?.ok) {
         const json = await resRes.json();
-        if (Array.isArray(json) && json.length > 0) setReservations(json);
+        const items = Array.isArray(json) ? json : json?.data;
+        if (Array.isArray(items) && items.length > 0) setReservations(items);
       }
       if (depRes?.ok) {
         const json = await depRes.json();
-        if (json) setDepletion(json);
+        const depData = json?.data ?? json;
+        if (depData && typeof depData === 'object' && ('slotNo' in depData || 'confidence' in depData)) {
+          setDepletion(depData);
+        }
       }
     } catch (err: any) {
       console.warn('Failed to load logistics telemetry, using fallbacks', err);
@@ -183,22 +189,22 @@ export const AgvLogisticsStation: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Station Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-[var(--mes-bg-surface)] p-4 rounded-xl border border-[var(--mes-border)] shadow-lg">
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-950 p-4 rounded-[var(--mes-radius)] border border-slate-800 shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[var(--mes-bg-well)] border border-[var(--mes-border)] flex items-center justify-center text-[var(--mes-status-pass)]">
+          <div className="w-10 h-10 rounded-[var(--mes-radius)] bg-slate-900 border border-slate-800 flex items-center justify-center text-emerald-400">
             <Truck className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--mes-text-muted)]">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
                 SMT AUTOMATED MATERIAL LOGISTICS (AML)
               </span>
-              <span className="w-2 h-2 rounded-full bg-[var(--mes-status-pass)] animate-pulse" />
-              <span className="text-[10px] font-mono text-[var(--mes-status-pass)] font-bold uppercase">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] font-mono text-emerald-400 font-semibold uppercase tracking-wider">
                 AGV FLEET DISPATCH ACTIVE
               </span>
             </div>
-            <h2 className="text-lg font-bold text-[var(--mes-text-primary)] tracking-tight">
+            <h2 className="text-base font-bold text-slate-100 tracking-tight">
               AGV Material Transport & Dock Delivery Safety Gate
             </h2>
           </div>
@@ -208,85 +214,84 @@ export const AgvLogisticsStation: React.FC = () => {
           <button
             onClick={loadData}
             disabled={refreshing}
-            className="flex items-center gap-1.5 px-3 py-2 bg-[var(--mes-bg-card)] hover:bg-[var(--mes-bg-well)] text-[var(--mes-text-primary)] rounded-lg border border-[var(--mes-border)] text-xs font-mono transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-850 text-slate-200 hover:text-white rounded-[var(--mes-radius)] border border-slate-800 hover:border-slate-700 text-xs font-mono tracking-wider transition-colors"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-[var(--mes-status-pass)]' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-emerald-400' : ''}`} />
             <span>POLL FLEET</span>
           </button>
         </div>
       </div>
 
       {actionNotice && (
-        <div className={`p-4 rounded-xl border text-xs font-mono flex items-center gap-3 ${
+        <div className={`p-3.5 rounded-[var(--mes-radius)] border text-xs font-mono flex items-center gap-3 ${
           actionNotice.type === 'success' 
-            ? 'bg-[var(--mes-status-pass)]/10 border-[var(--mes-status-pass)]/40 text-[var(--mes-status-pass)]' 
-            : 'bg-red-950/40 border-red-500/50 text-red-300'
+            ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' 
+            : 'bg-rose-950/40 border-rose-500/50 text-rose-300'
         }`}>
-          {actionNotice.type === 'success' ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertTriangle className="w-5 h-5 shrink-0" />}
-          <span>{actionNotice.message}</span>
+          {actionNotice.type === 'success' ? <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" /> : <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />}
+          <span className="tracking-wide">{actionNotice.message}</span>
         </div>
       )}
 
       {/* Autonomous AGV Units Grid */}
       <div>
-        <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--mes-text-muted)] mb-3 flex items-center gap-2">
-          <Truck className="w-4 h-4 text-[var(--mes-accent-primary)]" />
+        <h3 className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+          <Truck className="w-3.5 h-3.5 text-cyan-400" />
           <span>Active Autonomous Mobile Robots (AMR / AGV)</span>
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {agvs.map((agv) => {
             const isDelivering = agv.status === 'DELIVERING';
             const isTransit = agv.status === 'IN_TRANSIT';
-            const isIdle = agv.status === 'IDLE';
 
             return (
               <div 
                 key={agv.id}
-                className="bg-[var(--mes-bg-surface)] p-4 rounded-xl border border-[var(--mes-border)] shadow-lg space-y-4"
+                className="bg-slate-950 p-4 rounded-[var(--mes-radius)] border border-slate-800 shadow-sm space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className={`w-3 h-3 rounded-full ${
-                      isDelivering ? 'bg-[var(--mes-status-warn)] animate-pulse' :
-                      isTransit ? 'bg-[var(--mes-accent-primary)] animate-pulse' :
-                      'bg-[var(--mes-status-pass)]'
+                    <div className={`w-2.5 h-2.5 rounded-full ${
+                      isDelivering ? 'bg-amber-400 animate-pulse' :
+                      isTransit ? 'bg-cyan-400 animate-pulse' :
+                      'bg-emerald-400'
                     }`} />
                     <div>
-                      <span className="text-sm font-bold text-[var(--mes-text-primary)] font-mono">{agv.code}</span>
-                      <span className="text-xs text-[var(--mes-text-muted)] block">{agv.name} ({agv.model})</span>
+                      <span className="text-sm font-bold text-slate-100 font-mono tracking-tight">{agv.code}</span>
+                      <span className="text-[11px] text-slate-400 block font-mono">{agv.name} ({agv.model})</span>
                     </div>
                   </div>
 
-                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
-                    isDelivering ? 'bg-[var(--mes-status-warn)]/10 text-[var(--mes-status-warn)] border-[var(--mes-status-warn)]/40' :
-                    isTransit ? 'bg-[var(--mes-accent-primary)]/10 text-[var(--mes-accent-primary)] border-[var(--mes-accent-primary)]/40' :
-                    'bg-[var(--mes-status-pass)]/10 text-[var(--mes-status-pass)] border-[var(--mes-status-pass)]/40'
+                  <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-[var(--mes-radius)] border ${
+                    isDelivering ? 'bg-amber-950/40 text-amber-300 border-amber-500/40' :
+                    isTransit ? 'bg-cyan-950/40 text-cyan-300 border-cyan-500/40' :
+                    'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
                   }`}>
                     {agv.status}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono">
-                  <div className="bg-[var(--mes-bg-well)] p-2.5 rounded border border-[var(--mes-border)]">
-                    <span className="text-[10px] text-[var(--mes-text-muted)] block">BATTERY</span>
-                    <span className={`text-sm font-bold mt-1 flex items-center justify-center gap-1 ${
-                      agv.batteryPercent > 40 ? 'text-[var(--mes-status-pass)]' : 'text-[var(--mes-status-warn)]'
+                  <div className="bg-slate-900 p-2.5 rounded-[var(--mes-radius)] border border-slate-800/80">
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block">BATTERY</span>
+                    <span className={`text-sm font-bold mt-1 flex items-center justify-center gap-1 tabular-nums font-mono ${
+                      agv.batteryPercent > 40 ? 'text-emerald-400' : 'text-amber-300'
                     }`}>
                       <Battery className="w-3.5 h-3.5" />
                       {agv.batteryPercent}%
                     </span>
                   </div>
 
-                  <div className="bg-[var(--mes-bg-well)] p-2.5 rounded border border-[var(--mes-border)]">
-                    <span className="text-[10px] text-[var(--mes-text-muted)] block">CURRENT BAY</span>
-                    <span className="text-xs font-bold text-[var(--mes-text-primary)] mt-1 block truncate">
+                  <div className="bg-slate-900 p-2.5 rounded-[var(--mes-radius)] border border-slate-800/80">
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block">CURRENT BAY</span>
+                    <span className="text-xs font-bold text-slate-200 mt-1 block truncate font-mono">
                       {agv.currentLocation}
                     </span>
                   </div>
 
-                  <div className="bg-[var(--mes-bg-well)] p-2.5 rounded border border-[var(--mes-border)]">
-                    <span className="text-[10px] text-[var(--mes-text-muted)] block">MISSION</span>
-                    <span className="text-xs font-bold text-[var(--mes-accent-primary)] mt-1 block truncate">
+                  <div className="bg-slate-900 p-2.5 rounded-[var(--mes-radius)] border border-slate-800/80">
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block">MISSION</span>
+                    <span className="text-xs font-bold text-cyan-400 mt-1 block truncate font-mono">
                       {agv.currentMissionId ? agv.currentMissionId.slice(0, 8) : 'NONE'}
                     </span>
                   </div>
@@ -298,32 +303,32 @@ export const AgvLogisticsStation: React.FC = () => {
       </div>
 
       {/* Active Transport Missions & Dock Delivery Safety Gate */}
-      <div className="bg-[var(--mes-bg-surface)] p-5 rounded-xl border border-[var(--mes-border)] shadow-xl space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-[var(--mes-border)]">
+      <div className="bg-slate-950 p-4 rounded-[var(--mes-radius)] border border-slate-800 shadow-sm space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
           <div className="flex items-center gap-3">
-            <Package className="w-5 h-5 text-[var(--mes-status-pass)]" />
+            <Package className="w-5 h-5 text-emerald-400" />
             <div>
-              <h3 className="text-sm font-bold text-[var(--mes-text-primary)] tracking-tight">
+              <h3 className="text-sm font-bold text-slate-100 tracking-tight font-mono uppercase tracking-wider">
                 Active AGV Material Transport Orders
               </h3>
-              <p className="text-xs text-[var(--mes-text-muted)] font-mono">
+              <p className="text-xs text-slate-400 font-mono">
                 Decoupled Replenishment Requests with Line Dock Interlock
               </p>
             </div>
           </div>
-          <span className="text-xs font-mono text-[var(--mes-text-muted)]">
+          <span className="text-xs font-mono text-slate-400 tabular-nums">
             {missions.length} Orders In System
           </span>
         </div>
 
         {missions.length === 0 ? (
-          <div className="p-8 text-center text-[var(--mes-text-muted)] font-mono text-xs">
+          <div className="p-8 text-center text-slate-400 font-mono text-xs">
             No active AGV transport missions. Feeder banks fully replenished.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="text-[10px] uppercase tracking-wider text-[var(--mes-text-muted)] border-b border-[var(--mes-border)] bg-[var(--mes-bg-well)]">
+              <thead className="text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-800 bg-slate-900">
                 <tr>
                   <th className="p-3">Mission ID</th>
                   <th className="p-3">Material Reel</th>
@@ -333,43 +338,43 @@ export const AgvLogisticsStation: React.FC = () => {
                   <th className="p-3 text-right">Dock Authorization</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--mes-border)]">
+              <tbody className="divide-y divide-slate-800/60">
                 {missions.map((m) => {
                   const isDelivering = m.status === 'DELIVERING';
                   const isAuthorized = !!m.deliveryAuthorizedBy;
 
                   return (
-                    <tr key={m.id} className="hover:bg-[var(--mes-bg-well)]/40 transition-colors">
-                      <td className="p-3 font-bold text-[var(--mes-text-primary)]">
+                    <tr key={m.id} className="hover:bg-slate-900/60 transition-colors">
+                      <td className="p-3 font-bold text-slate-100 tabular-nums">
                         {m.id.slice(0, 8)}...
                       </td>
-                      <td className="p-3 text-[var(--mes-accent-primary)]">
+                      <td className="p-3 text-cyan-400 font-semibold">
                         {m.materialId}
                       </td>
-                      <td className="p-3 text-[var(--mes-text-secondary)]">
-                        {m.sourceLocation} → <span className="text-[var(--mes-text-primary)] font-bold">{m.targetLineId}</span>
+                      <td className="p-3 text-slate-300">
+                        {m.sourceLocation} → <span className="text-slate-100 font-semibold">{m.targetLineId}</span>
                       </td>
                       <td className="p-3">
                         {m.agvId ? (
-                          <span className="px-2 py-0.5 rounded bg-[var(--mes-bg-card)] text-[var(--mes-text-primary)] font-bold border border-[var(--mes-border)]">
+                          <span className="px-2 py-0.5 rounded-[var(--mes-radius)] bg-slate-900 text-slate-100 font-semibold border border-slate-700">
                             {m.agvId}
                           </span>
                         ) : (
-                          <span className="text-[var(--mes-text-muted)]">PENDING</span>
+                          <span className="text-slate-500">PENDING</span>
                         )}
                       </td>
                       <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          m.status === 'COMPLETED' ? 'bg-[var(--mes-status-pass)]/10 text-[var(--mes-status-pass)]' :
-                          isDelivering ? 'bg-[var(--mes-status-warn)]/10 text-[var(--mes-status-warn)]' :
-                          'bg-[var(--mes-accent-primary)]/10 text-[var(--mes-accent-primary)]'
+                        <span className={`px-2 py-0.5 rounded-[var(--mes-radius)] text-[10px] font-semibold border ${
+                          m.status === 'COMPLETED' ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40' :
+                          isDelivering ? 'bg-amber-950/40 text-amber-300 border-amber-500/40' :
+                          'bg-cyan-950/40 text-cyan-300 border-cyan-500/40'
                         }`}>
                           {m.status}
                         </span>
                       </td>
                       <td className="p-3 text-right">
                         {isAuthorized ? (
-                          <span className="inline-flex items-center gap-1 text-[var(--mes-status-pass)] font-bold">
+                          <span className="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
                             <ShieldCheck className="w-3.5 h-3.5" />
                             AUTHORIZED ({m.deliveryAuthorizedBy})
                           </span>
@@ -377,13 +382,13 @@ export const AgvLogisticsStation: React.FC = () => {
                           <button
                             onClick={() => authorizeDockDelivery(m.id)}
                             disabled={authorizingMissionId === m.id}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[var(--mes-status-pass)] hover:opacity-90 text-black font-bold rounded shadow transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs rounded-[var(--mes-radius)] tracking-wider transition-colors disabled:opacity-50"
                           >
                             <Unlock className="w-3 h-3" />
                             <span>{authorizingMissionId === m.id ? 'VERIFYING...' : 'AUTHORIZE DOCK'}</span>
                           </button>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[var(--mes-text-muted)]">
+                          <span className="inline-flex items-center gap-1 text-slate-500">
                             <Lock className="w-3 h-3" />
                             LOCKED (EN ROUTE)
                           </span>
@@ -401,22 +406,22 @@ export const AgvLogisticsStation: React.FC = () => {
       {/* Dual Section: Active Material Reservations & Feeder Depletion Ledger */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Active Material Reservations Ledger (Cross-Line Concurrency Lock) */}
-        <div className="bg-[var(--mes-bg-surface)] p-5 rounded-xl border border-[var(--mes-border)] shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--mes-border)]">
+        <div className="bg-slate-950 p-4 rounded-[var(--mes-radius)] border border-slate-800 shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div className="flex items-center gap-2.5">
-              <Lock className="w-4 h-4 text-[var(--mes-accent-primary)]" />
-              <h3 className="text-sm font-bold text-[var(--mes-text-primary)] tracking-tight">
+              <Lock className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-sm font-bold text-slate-100 tracking-tight font-mono uppercase tracking-wider">
                 Cross-Line Material Mutual Exclusion Ledger
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-[var(--mes-status-pass)] bg-[var(--mes-status-pass)]/10 px-2 py-0.5 rounded border border-[var(--mes-status-pass)]/30">
+            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded-[var(--mes-radius)] border border-emerald-500/30 uppercase tracking-wider font-semibold">
               UNIQUE INDEX LOCKED
             </span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="text-[10px] uppercase tracking-wider text-[var(--mes-text-muted)] border-b border-[var(--mes-border)] bg-[var(--mes-bg-well)]">
+              <thead className="text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-800 bg-slate-900">
                 <tr>
                   <th className="p-2.5">Reel Barcode</th>
                   <th className="p-2.5">Owner Line</th>
@@ -424,14 +429,14 @@ export const AgvLogisticsStation: React.FC = () => {
                   <th className="p-2.5">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--mes-border)]">
+              <tbody className="divide-y divide-slate-800/60">
                 {reservations.slice(0, 5).map((r) => (
-                  <tr key={r.id}>
-                    <td className="p-2.5 font-bold text-[var(--mes-text-primary)]">{r.reelId}</td>
-                    <td className="p-2.5 text-[var(--mes-accent-primary)]">{r.lineId}</td>
-                    <td className="p-2.5 text-[var(--mes-text-secondary)]">{r.slotNo}</td>
+                  <tr key={r.id} className="hover:bg-slate-900/40 transition-colors">
+                    <td className="p-2.5 font-bold text-slate-100">{r.reelId}</td>
+                    <td className="p-2.5 text-cyan-400">{r.lineId}</td>
+                    <td className="p-2.5 text-slate-300 tabular-nums">{r.slotNo}</td>
                     <td className="p-2.5">
-                      <span className="px-1.5 py-0.5 rounded bg-[var(--mes-bg-card)] text-[10px] text-[var(--mes-status-pass)] font-bold border border-[var(--mes-border)]">
+                      <span className="px-1.5 py-0.5 rounded-[var(--mes-radius)] bg-slate-900 text-[10px] text-emerald-400 font-semibold border border-slate-700 font-mono">
                         {r.status}
                       </span>
                     </td>
@@ -439,7 +444,7 @@ export const AgvLogisticsStation: React.FC = () => {
                 ))}
                 {reservations.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="p-4 text-center text-[var(--mes-text-muted)]">
+                    <td colSpan={4} className="p-4 text-center text-slate-400">
                       No active cross-line material reservations.
                     </td>
                   </tr>
@@ -450,11 +455,11 @@ export const AgvLogisticsStation: React.FC = () => {
         </div>
 
         {/* Feeder Depletion & Placement Priority Calculator */}
-        <div className="bg-[var(--mes-bg-surface)] p-5 rounded-xl border border-[var(--mes-border)] shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--mes-border)]">
+        <div className="bg-slate-950 p-4 rounded-[var(--mes-radius)] border border-slate-800 shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div className="flex items-center gap-2.5">
-              <Clock className="w-4 h-4 text-[var(--mes-status-warn)]" />
-              <h3 className="text-sm font-bold text-[var(--mes-text-primary)] tracking-tight">
+              <Clock className="w-4 h-4 text-amber-300" />
+              <h3 className="text-sm font-bold text-slate-100 tracking-tight font-mono uppercase tracking-wider">
                 Placement-Based Depletion Radar
               </h3>
             </div>
@@ -463,7 +468,7 @@ export const AgvLogisticsStation: React.FC = () => {
               <select
                 value={depletionLine}
                 onChange={(e) => setDepletionLine(e.target.value)}
-                className="bg-[var(--mes-bg-well)] border border-[var(--mes-border)] rounded px-2 py-1 text-[var(--mes-text-primary)] text-[11px]"
+                className="bg-slate-900 border border-slate-700 rounded-[var(--mes-radius)] px-2.5 py-1 text-slate-200 text-xs font-mono focus:border-cyan-500 focus:outline-none"
               >
                 <option value="line-smt-01">Line 01</option>
                 <option value="line-smt-02">Line 02</option>
@@ -471,7 +476,7 @@ export const AgvLogisticsStation: React.FC = () => {
               <select
                 value={depletionSlot}
                 onChange={(e) => setDepletionSlot(Number(e.target.value))}
-                className="bg-[var(--mes-bg-well)] border border-[var(--mes-border)] rounded px-2 py-1 text-[var(--mes-text-primary)] text-[11px]"
+                className="bg-slate-900 border border-slate-700 rounded-[var(--mes-radius)] px-2.5 py-1 text-slate-200 text-xs font-mono focus:border-cyan-500 focus:outline-none"
               >
                 <option value={1}>Slot 01</option>
                 <option value={2}>Slot 02</option>
@@ -483,39 +488,39 @@ export const AgvLogisticsStation: React.FC = () => {
           {depletion ? (
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono">
-                <div className="bg-[var(--mes-bg-well)] p-2.5 rounded border border-[var(--mes-border)]">
-                  <span className="text-[10px] text-[var(--mes-text-muted)] block">REMAINING QTY</span>
-                  <span className="text-base font-bold text-[var(--mes-text-primary)] mt-1 block">
-                    {depletion.remainingQuantity} pcs
+                <div className="bg-slate-900 p-2.5 rounded-[var(--mes-radius)] border border-slate-800/80">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block">REMAINING QTY</span>
+                  <span className="text-sm font-bold text-slate-100 mt-1 block tabular-nums">
+                    {depletion.remainingQuantity != null ? Number(depletion.remainingQuantity).toLocaleString() : '—'} pcs
                   </span>
                 </div>
 
-                <div className="bg-[var(--mes-bg-well)] p-2.5 rounded border border-[var(--mes-border)]">
-                  <span className="text-[10px] text-[var(--mes-text-muted)] block">BURN RATE</span>
-                  <span className="text-base font-bold text-[var(--mes-status-pass)] mt-1 block">
-                    {depletion.consumptionRatePerMinute} /min
+                <div className="bg-slate-900 p-2.5 rounded-[var(--mes-radius)] border border-slate-800/80">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block">BURN RATE</span>
+                  <span className="text-sm font-bold text-emerald-400 mt-1 block tabular-nums">
+                    {depletion.consumptionRatePerMinute != null ? `${depletion.consumptionRatePerMinute} /min` : '0 /min'}
                   </span>
                 </div>
 
-                <div className="bg-[var(--mes-bg-well)] p-2.5 rounded border border-[var(--mes-border)]">
-                  <span className="text-[10px] text-[var(--mes-text-muted)] block">EST. RUNOUT</span>
-                  <span className={`text-base font-bold mt-1 block ${
-                    depletion.estimatedMinutesRemaining < 15 ? 'text-[var(--mes-status-warn)]' : 'text-[var(--mes-text-primary)]'
+                <div className="bg-slate-900 p-2.5 rounded-[var(--mes-radius)] border border-slate-800/80">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 block">EST. RUNOUT</span>
+                  <span className={`text-sm font-bold mt-1 block tabular-nums ${
+                    (depletion.estimatedMinutesRemaining ?? 0) < 15 ? 'text-amber-300' : 'text-slate-100'
                   }`}>
-                    {depletion.estimatedMinutesRemaining} mins
+                    {depletion.estimatedMinutesRemaining != null ? `${depletion.estimatedMinutesRemaining} mins` : '—'}
                   </span>
                 </div>
               </div>
 
-              <div className="bg-[var(--mes-bg-well)] p-3 rounded-lg border border-[var(--mes-border)] flex items-center justify-between text-xs font-mono">
-                <span className="text-[var(--mes-text-muted)]">Depletion Confidence Model:</span>
-                <span className="text-[var(--mes-status-pass)] font-bold">
-                  {depletion.confidence.replace(/_/g, ' ')}
+              <div className="bg-slate-900 p-2.5 rounded-[var(--mes-radius)] border border-slate-800/80 flex items-center justify-between text-xs font-mono">
+                <span className="text-slate-400">Depletion Confidence Model:</span>
+                <span className="text-emerald-400 font-semibold uppercase tracking-wider">
+                  {depletion.confidence ? String(depletion.confidence).replace(/_/g, ' ') : 'THEORETICAL MODEL'}
                 </span>
               </div>
             </div>
           ) : (
-            <div className="p-4 text-center text-[var(--mes-text-muted)] font-mono text-xs">
+            <div className="p-4 text-center text-slate-400 font-mono text-xs">
               Calibrating feeder depletion telemetry...
             </div>
           )}

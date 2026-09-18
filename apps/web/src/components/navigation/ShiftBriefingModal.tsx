@@ -37,29 +37,29 @@ export const ShiftBriefingModal: React.FC<ShiftBriefingModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm font-mono"
       role="dialog"
       aria-modal="true"
       aria-labelledby="briefing-modal-title"
     >
-      <div className="bg-[#12151C] border border-white/[0.12] rounded-xl max-w-2xl w-full p-5 shadow-2xl flex flex-col gap-3.5 text-white font-sans animate-in fade-in zoom-in-95 duration-100">
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+      <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] max-w-2xl w-full p-5 shadow-2xl flex flex-col gap-3.5 text-slate-100 font-mono animate-in fade-in duration-100">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-[#D1D5DB]">
+            <div className="w-7 h-7 rounded-[var(--mes-radius)] bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-400">
               <FileText className="w-4 h-4" />
             </div>
             <div>
-              <h3 id="briefing-modal-title" className="text-sm font-semibold tracking-tight">
+              <h3 id="briefing-modal-title" className="text-sm font-bold tracking-wider uppercase">
                 SMT Shift Handover Briefing
               </h3>
-              <p className="text-[11px] text-[#6B7280]">
+              <p className="text-[11px] text-slate-400 font-mono">
                 Cleanroom operational markdown summary
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-[#6B7280] hover:text-white rounded hover:bg-white/[0.04] transition-colors"
+            className="p-1 text-slate-400 hover:text-slate-100 rounded-[var(--mes-radius)] hover:bg-slate-800 transition-colors"
             aria-label="Close dialog"
           >
             <X className="w-4 h-4" />
@@ -67,14 +67,14 @@ export const ShiftBriefingModal: React.FC<ShiftBriefingModalProps> = ({
         </div>
 
         {copyError && (
-          <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2.5 text-xs text-amber-300/90 flex items-center gap-2 font-mono">
+          <div className="bg-amber-950/40 border border-amber-500/40 rounded-[var(--mes-radius)] p-2.5 text-xs text-amber-300 flex items-center gap-2 font-mono">
             <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
             <span>Automatic clipboard write restricted. Please copy the text below manually.</span>
           </div>
         )}
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="briefing-content" className="text-[10px] font-mono text-[#6B7280] uppercase tracking-wider">
+          <label htmlFor="briefing-content" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
             Markdown Telemetry Payload
           </label>
           <textarea
@@ -82,28 +82,28 @@ export const ShiftBriefingModal: React.FC<ShiftBriefingModalProps> = ({
             ref={textareaRef}
             readOnly
             value={briefingText}
-            className="w-full h-60 bg-[#0E1015] border border-white/[0.08] rounded-lg p-3 text-xs font-mono text-[#D1D5DB] focus:outline-none focus:border-white/20 select-all resize-none leading-relaxed"
+            className="w-full h-60 bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] p-3 text-xs font-mono text-emerald-400 focus:outline-none focus:border-cyan-500 select-all resize-none leading-relaxed"
           />
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-white/[0.08]">
-          <span className="text-[10px] font-mono text-[#6B7280]">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+          <span className="text-[10px] font-mono text-slate-400">
             Press Cmd+A / Ctrl+A to select all
           </span>
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.08] text-[#9CA3AF] hover:text-white rounded-md text-xs font-medium transition-colors"
+              className="px-3 py-1.5 bg-slate-900 hover:bg-slate-850 text-slate-300 hover:text-white rounded-[var(--mes-radius)] border border-slate-700 text-xs font-mono font-bold tracking-wider transition-colors"
             >
               Close
             </button>
             <button
               onClick={handleCopy}
-              className="px-3 py-1.5 bg-white text-[#0B0F14] hover:bg-[#E5E7EB] rounded-md text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
+              className="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-[var(--mes-radius)] text-xs font-mono font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 shadow-sm"
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <Check className="w-3.5 h-3.5 text-slate-950" />
                   <span>Copied</span>
                 </>
               ) : (

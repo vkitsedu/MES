@@ -209,7 +209,8 @@ export const OperatorStation: React.FC = () => {
     try {
       const res = await authService.authFetch('/api/v1/work-centers');
       if (res.ok) {
-        const data = await res.json();
+        const raw = await res.json();
+        const data = Array.isArray(raw) ? raw : (raw?.data ?? []);
         if (Array.isArray(data) && data.length > 0) {
           setWorkCenters(data);
         }
@@ -223,7 +224,8 @@ export const OperatorStation: React.FC = () => {
     try {
       const res = await authService.authFetch(`/api/v1/smt/feeders?workCenterId=${selectedWcId}`);
       if (res.ok) {
-        const data: FeederSlot[] = await res.json();
+        const raw = await res.json();
+        const data: FeederSlot[] = Array.isArray(raw) ? raw : (raw?.data ?? []);
         if (Array.isArray(data) && data.length > 0) {
           setFeeders(data);
           if (!data.find(s => s.slot_no === activeSlotNo)) {

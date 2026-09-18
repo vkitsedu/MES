@@ -389,7 +389,7 @@ export const FleetDashboard: React.FC = () => {
                           className="bg-[var(--mes-bg-well)] p-2 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] text-center flex flex-col justify-between"
                         >
                           <span className="text-[9.5px] font-mono text-[var(--mes-text-muted)] truncate block font-medium">
-                            {wc.type.replace('STATION_', '').replace('PRINTER_', 'PRINT_')}
+                            {String(wc.type || 'STATION').replace('STATION_', '').replace('PRINTER_', 'PRINT_')}
                           </span>
                           <span className="text-[11.5px] font-bold text-[var(--mes-text-primary)] font-mono my-0.5 truncate block">
                             {wc.code}
@@ -469,7 +469,7 @@ export const FleetDashboard: React.FC = () => {
                         isOnPace ? 'bg-[var(--mes-accent-muted)] text-[var(--mes-accent-primary)] border-[var(--mes-accent-ring)]' :
                         'bg-[var(--mes-status-warn-muted)] text-[var(--mes-status-warn)] border-[var(--mes-status-warn)]'
                       }`}>
-                        {tl.status.replace(/_/g, ' ')}
+                        {String(tl.status || 'ON_PACE').replace(/_/g, ' ')}
                       </span>
                     </div>
 

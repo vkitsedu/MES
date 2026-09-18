@@ -102,7 +102,7 @@ export const LifecycleRibbon: React.FC<LifecycleRibbonProps> = ({
     {
       id: 'DHR',
       name: '07. eDHR & AUDIT',
-      subtext: dhrStatus ? dhrStatus.replace('_', ' ') : 'UNISSUED',
+      subtext: dhrStatus ? String(dhrStatus).replace(/_/g, ' ') : 'UNISSUED',
       state: dhrStatus === 'RELEASED' ? 'PASS' : dhrStatus === 'PENDING_QA_REVIEW' ? 'HOLD' : 'NOT_AVAILABLE',
       icon: <ShieldCheck className="w-3.5 h-3.5" />
     }
@@ -112,28 +112,28 @@ export const LifecycleRibbon: React.FC<LifecycleRibbonProps> = ({
     switch (state) {
       case 'PASS':
       case 'COMPLETE':
-        return 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400';
+        return 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300';
       case 'FAIL':
-        return 'bg-red-500/15 border-red-500/40 text-red-400 font-bold';
+        return 'bg-rose-950/80 border-rose-500/50 text-rose-300 font-bold';
       case 'HOLD':
-        return 'bg-amber-500/15 border-amber-500/40 text-amber-300 animate-pulse';
+        return 'bg-amber-950/80 border-amber-500/50 text-amber-300 animate-pulse';
       case 'INFERRED':
-        return 'bg-amber-500/10 border-amber-500/30 text-amber-300';
+        return 'bg-amber-950/80 border-amber-500/50 text-amber-300';
       case 'AMBIGUOUS':
-        return 'bg-red-500/10 border-red-500/40 text-red-300 font-bold';
+        return 'bg-rose-950/80 border-rose-500/50 text-rose-300 font-bold';
       case 'NOT_REQUIRED':
-        return 'bg-white/5 border-white/10 text-white/40';
+        return 'bg-slate-900/60 border-slate-800 text-slate-500';
       case 'NOT_AVAILABLE':
       default:
-        return 'bg-[#0B0F15] border-white/10 text-[#7A8A9E]';
+        return 'bg-slate-900 border-slate-800 text-slate-500';
     }
   };
 
   return (
-    <div className="milled-panel rounded-xl p-4 space-y-2">
-      <div className="text-[11px] font-mono text-[#7A8A9E] uppercase tracking-wider flex items-center justify-between">
+    <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 space-y-3">
+      <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center justify-between">
         <span>7-Stage Chronological Manufacturing Lifecycle Journey</span>
-        <span className="text-[10px] text-white/40">Discrete Unit Progression</span>
+        <span className="text-[10px] text-slate-500 font-mono">Discrete Unit Progression</span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
@@ -145,12 +145,12 @@ export const LifecycleRibbon: React.FC<LifecycleRibbonProps> = ({
             <div
               key={st.id}
               onClick={() => onSelectStage && onSelectStage(st.id)}
-              className={`p-2.5 rounded-lg border text-xs font-mono transition-all flex flex-col justify-between gap-1.5 cursor-pointer hover:border-white/30 ${colorClasses} ${
-                isActive ? 'ring-1 ring-white/40 shadow-md' : ''
+              className={`p-2.5 rounded-[var(--mes-radius)] border text-xs font-mono transition-all flex flex-col justify-between gap-1.5 cursor-pointer hover:border-slate-700 ${colorClasses} ${
+                isActive ? 'ring-1 ring-emerald-500/50 shadow-sm' : ''
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-wider text-white/60 flex items-center gap-1">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 flex items-center gap-1">
                   {st.icon}
                   <span className="truncate">{st.name}</span>
                 </span>
@@ -159,7 +159,7 @@ export const LifecycleRibbon: React.FC<LifecycleRibbonProps> = ({
                 </span>
               </div>
 
-              <div className="text-[10px] font-bold text-white truncate" title={st.subtext}>
+              <div className="text-[10px] font-bold text-slate-200 truncate" title={st.subtext}>
                 {st.subtext}
               </div>
             </div>

@@ -60,30 +60,30 @@ export const TraceabilitySearch: React.FC<TraceabilitySearchProps> = ({
   };
 
   return (
-    <div className="milled-panel rounded-xl p-5 space-y-4 shadow-xl">
+    <div className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-4 space-y-4">
       {/* Station Title & Workflow Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#7A8A9E]">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
               HIGH-SPEED SMT TRACEABILITY
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00E699]" />
-            <span className="text-[10px] font-mono text-[#00E699] font-bold">AS-BUILT LINEAGE</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-[10px] font-mono text-emerald-400 font-bold">AS-BUILT LINEAGE</span>
           </div>
-          <h2 className="text-base sm:text-lg font-bold text-white font-sans mt-0.5 flex items-center gap-2">
+          <h2 className="text-sm sm:text-base font-bold text-slate-100 font-mono tracking-tight mt-0.5 flex items-center gap-2">
             As-Built Genealogy & Containment Recall Station
           </h2>
         </div>
 
         {/* Tactical 3-Mode Controller */}
-        <div className="flex bg-[#070A0E] p-1 rounded-xl border border-white/10 text-xs font-mono">
+        <div className="flex bg-slate-900 p-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-xs font-mono">
           <button
             onClick={() => onModeChange('GENEALOGY')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-all ${
               mode === 'GENEALOGY'
-                ? 'bg-[#1D2735] text-[#00E699] font-bold border border-[#00E699]/40 shadow-sm'
-                : 'text-[#7A8A9E] hover:text-white'
+                ? 'bg-slate-800 text-emerald-400 font-bold border border-emerald-500/30 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -92,10 +92,10 @@ export const TraceabilitySearch: React.FC<TraceabilitySearchProps> = ({
 
           <button
             onClick={() => onModeChange('RECALL')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-all ${
               mode === 'RECALL'
-                ? 'bg-[#1D2735] text-red-400 font-bold border border-red-500/40 shadow-sm'
-                : 'text-[#7A8A9E] hover:text-white'
+                ? 'bg-slate-800 text-rose-400 font-bold border border-rose-500/30 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <GitFork className="w-3.5 h-3.5" />
@@ -104,10 +104,10 @@ export const TraceabilitySearch: React.FC<TraceabilitySearchProps> = ({
 
           <button
             onClick={() => onModeChange('BATCH')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--mes-radius)] transition-all ${
               mode === 'BATCH'
-                ? 'bg-[#1D2735] text-[#38BDF8] font-bold border border-[#38BDF8]/40 shadow-sm'
-                : 'text-[#7A8A9E] hover:text-white'
+                ? 'bg-slate-800 text-sky-400 font-bold border border-sky-500/30 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Package className="w-3.5 h-3.5" />
@@ -118,22 +118,22 @@ export const TraceabilitySearch: React.FC<TraceabilitySearchProps> = ({
 
       {/* Cross-Namespace Ambiguity Alert (when backend returns collision) */}
       {ambiguousDetail && (
-        <div className="bg-amber-500/15 border border-amber-500/40 text-amber-300 p-3 rounded-lg text-xs font-mono flex items-start gap-3">
+        <div className="bg-slate-950 border border-amber-500/40 border-l-4 border-l-amber-400 text-slate-100 p-3.5 rounded-[var(--mes-radius)] text-xs font-mono flex items-start gap-3 shadow-sm">
           <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <span className="font-bold uppercase tracking-wider">AMBIGUOUS IDENTIFIER RESOLUTION</span>
-            <p className="text-amber-200/80">{ambiguousDetail}</p>
+            <span className="font-bold uppercase tracking-wider text-amber-300">AMBIGUOUS IDENTIFIER RESOLUTION</span>
+            <p className="text-slate-300">{ambiguousDetail}</p>
             {onSelectDisambiguation && (
               <div className="flex gap-2 pt-1">
                 <button
                   onClick={() => onSelectDisambiguation('COMPONENT_REEL')}
-                  className="px-2 py-1 bg-amber-500/20 hover:bg-amber-500/30 rounded border border-amber-500/40 text-[11px]"
+                  className="px-2.5 py-1 bg-amber-950/80 hover:bg-amber-900/80 text-amber-300 rounded-[var(--mes-radius)] border border-amber-500/50 text-[11px] font-bold transition-colors"
                 >
                   Query as Component Reel
                 </button>
                 <button
                   onClick={() => onSelectDisambiguation('PANEL_BARCODE')}
-                  className="px-2 py-1 bg-amber-500/20 hover:bg-amber-500/30 rounded border border-amber-500/40 text-[11px]"
+                  className="px-2.5 py-1 bg-amber-950/80 hover:bg-amber-900/80 text-amber-300 rounded-[var(--mes-radius)] border border-amber-500/50 text-[11px] font-bold transition-colors"
                 >
                   Query as Panel Barcode
                 </button>
@@ -152,30 +152,30 @@ export const TraceabilitySearch: React.FC<TraceabilitySearchProps> = ({
             onChange={(e) => onQueryChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={getPlaceholderText()}
-            className="w-full bg-[#070A0E] border border-white/15 rounded-lg pl-10 pr-4 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-[#00E699] transition-all"
+            className="w-full bg-slate-900 border border-slate-800 rounded-[var(--mes-radius)] pl-10 pr-4 py-2 text-xs text-slate-100 font-mono placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
           />
-          <Search className="w-4 h-4 text-[#7A8A9E] absolute left-3.5 top-3" />
+          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-2.5" />
         </div>
 
         <button
           onClick={() => onSearch()}
           disabled={loading}
-          className="bg-[#00E699] hover:bg-[#00E699]/90 active:bg-[#00E699]/80 text-[#0B0F14] font-bold font-mono text-xs px-6 py-2.5 rounded-lg shadow-lg active:scale-95 transition-all flex items-center gap-2 disabled:opacity-50"
+          className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs px-5 py-2 rounded-[var(--mes-radius)] active:scale-95 transition-all flex items-center gap-2 disabled:opacity-50"
         >
           {loading ? 'ANALYZING BUS...' : 'RUN TRACE'}
         </button>
       </div>
 
       {/* Quick Presets Strip */}
-      <div className="flex flex-wrap items-center gap-2 pt-1">
-        <span className="text-[10px] font-mono text-[#7A8A9E] uppercase tracking-wider">
+      <div className="flex flex-wrap items-center gap-2 pt-0.5">
+        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
           Quick Presets:
         </span>
         {presets.map((p, idx) => (
           <button
             key={idx}
             onClick={() => handlePresetClick(p.val, p.targetMode)}
-            className="text-[11px] font-mono px-2.5 py-1 rounded bg-[#0A0E13] border border-white/10 text-[#7A8A9E] hover:text-[#00E699] hover:border-[#00E699]/30 transition-all"
+            className="text-[11px] font-mono px-2.5 py-1 rounded-[var(--mes-radius)] bg-slate-900 border border-slate-800 text-slate-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all"
           >
             {p.label}
           </button>
