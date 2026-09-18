@@ -22,28 +22,68 @@ export const OperatorKioskView: React.FC = () => {
 
   return (
     <div className="space-y-3 font-sans max-w-7xl mx-auto p-1 sm:p-2">
-      {/* Giant Status Banner - 3-Second Glanceability */}
+      {/* Giant Status Banner - 3-Second Glanceability with Cleanroom High-Contrast */}
       <div 
-        className={`p-4 sm:p-5 rounded-[var(--mes-radius)] border flex flex-wrap items-center justify-between gap-4 transition-all ${
+        className={`p-4 sm:p-5 rounded-[var(--mes-radius)] border border-l-4 flex flex-wrap items-center justify-between gap-4 transition-all relative overflow-hidden ${
           lineState === 'RUNNING'
-            ? 'bg-[var(--mes-status-pass-muted)] border-[var(--mes-status-pass)] text-[var(--mes-status-pass)]'
+            ? 'bg-gradient-to-r from-[var(--mes-status-pass-muted)] via-[var(--mes-bg-surface)] to-[var(--mes-bg-surface)] border-[var(--mes-border-subtle)] border-l-[var(--mes-status-pass)]'
             : lineState === 'PAUSED'
-              ? 'bg-[var(--mes-status-warn-muted)] border-[var(--mes-status-warn)] text-[var(--mes-status-warn)]'
-              : 'bg-[var(--mes-status-halt-muted)] border-[var(--mes-status-halt)] text-[var(--mes-status-halt)]'
+              ? 'bg-gradient-to-r from-[var(--mes-status-warn-muted)] via-[var(--mes-bg-surface)] to-[var(--mes-bg-surface)] border-[var(--mes-border-subtle)] border-l-[var(--mes-status-warn)]'
+              : 'bg-gradient-to-r from-[var(--mes-status-halt-muted)] via-[var(--mes-bg-surface)] to-[var(--mes-bg-surface)] border-[var(--mes-border-subtle)] border-l-[var(--mes-status-halt)]'
         }`}
         style={{ boxShadow: 'var(--mes-shadow-elevated)' }}
       >
-        <div className="flex items-center gap-3.5">
-          <div className="relative flex items-center justify-center">
-            <span className="w-5 h-5 rounded-full animate-ping absolute opacity-75" style={{ backgroundColor: 'currentColor' }} />
-            <span className="w-4 h-4 rounded-full relative" style={{ backgroundColor: 'currentColor' }} />
+        <div className="flex items-center gap-4">
+          <div className="relative flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-[var(--mes-bg-well)] border border-[var(--mes-border-subtle)]">
+            <span 
+              className={`w-3.5 h-3.5 rounded-full animate-ping absolute opacity-75 ${
+                lineState === 'RUNNING' 
+                  ? 'bg-[var(--mes-status-pass)]' 
+                  : lineState === 'PAUSED' 
+                    ? 'bg-[var(--mes-status-warn)]' 
+                    : 'bg-[var(--mes-status-halt)]'
+              }`} 
+            />
+            <span 
+              className={`w-2.5 h-2.5 rounded-full relative shadow-[0_0_10px_currentColor] ${
+                lineState === 'RUNNING' 
+                  ? 'bg-[var(--mes-status-pass)] text-[var(--mes-status-pass)]' 
+                  : lineState === 'PAUSED' 
+                    ? 'bg-[var(--mes-status-warn)] text-[var(--mes-status-warn)]' 
+                    : 'bg-[var(--mes-status-halt)] text-[var(--mes-status-halt)]'
+              }`} 
+            />
           </div>
           <div>
-            <div className="text-[11px] font-mono tracking-widest uppercase opacity-80">
-              SMD_01 MACHINE STATE • FUJI NXT III M6
+            <div className="flex items-center gap-2 text-[11px] font-mono tracking-wider uppercase font-semibold">
+              <span className={
+                lineState === 'RUNNING' 
+                  ? 'text-[var(--mes-status-pass)]' 
+                  : lineState === 'PAUSED' 
+                    ? 'text-[var(--mes-status-warn)]' 
+                    : 'text-[var(--mes-status-halt)]'
+              }>
+                SMD_01 MACHINE STATE
+              </span>
+              <span className="text-[var(--mes-border-strong)]">•</span>
+              <span className="text-[var(--mes-text-secondary)]">FUJI NXT III M6</span>
+              <span className="text-[var(--mes-border-strong)]">•</span>
+              <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase border ${
+                lineState === 'RUNNING'
+                  ? 'bg-[var(--mes-status-pass-muted)] text-[var(--mes-status-pass)] border-[var(--mes-status-pass)]'
+                  : lineState === 'PAUSED'
+                    ? 'bg-[var(--mes-status-warn-muted)] text-[var(--mes-status-warn)] border-[var(--mes-status-warn)]'
+                    : 'bg-[var(--mes-status-halt-muted)] text-[var(--mes-status-halt)] border-[var(--mes-status-halt)]'
+              }`}>
+                {lineState === 'RUNNING' ? 'SEMI E10: PRD' : lineState === 'PAUSED' ? 'SEMI E10: SBY' : 'SEMI E10: UDT'}
+              </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-[var(--mes-text-primary)]">
-              {lineState === 'RUNNING' ? 'NORMAL OPERATION — PLACING AT RATED SPEED' : lineState === 'PAUSED' ? 'FEEDER REEL DEPLETION PAUSE' : 'MAINTENANCE INTERLOCK ACTIVE'}
+            <h1 className="text-xl sm:text-2xl font-black font-sans tracking-tight text-[var(--mes-text-primary)] mt-0.5">
+              {lineState === 'RUNNING' 
+                ? 'Normal Operation — Placing at Rated Speed' 
+                : lineState === 'PAUSED' 
+                  ? 'Feeder Reel Depletion Pause — Splicing Needed' 
+                  : 'Maintenance Interlock Active — Machine Halted'}
             </h1>
           </div>
         </div>
@@ -51,13 +91,13 @@ export const OperatorKioskView: React.FC = () => {
         <div className="flex items-center gap-2 font-mono">
           <button
             onClick={() => setLineState(lineState === 'RUNNING' ? 'PAUSED' : 'RUNNING')}
-            className={`px-4 py-2 rounded-[var(--mes-radius)] text-xs font-bold flex items-center gap-2 border transition-all ${
+            className={`px-4 py-2.5 rounded-[var(--mes-radius)] text-xs font-bold flex items-center gap-2 border transition-all active:scale-95 cursor-pointer ${
               lineState === 'RUNNING'
-                ? 'bg-[var(--mes-bg-surface)] hover:bg-[var(--mes-bg-well)] text-[var(--mes-text-primary)] border-[var(--mes-border-strong)]'
-                : 'bg-[var(--mes-status-pass)] text-white hover:opacity-90 border-transparent shadow-lg'
+                ? 'bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-text-primary)] hover:text-amber-400 border-[var(--mes-border-strong)] hover:border-amber-500/50 shadow-sm'
+                : 'bg-[var(--mes-status-pass)] text-white hover:opacity-90 border-transparent shadow-[0_0_15px_rgba(16,185,129,0.35)]'
             }`}
           >
-            {lineState === 'RUNNING' ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            {lineState === 'RUNNING' ? <Pause className="w-4 h-4 text-amber-400" /> : <Play className="w-4 h-4 fill-white text-white" />}
             <span>{lineState === 'RUNNING' ? 'PAUSE FEEDER' : 'RESUME RUN'}</span>
           </button>
         </div>

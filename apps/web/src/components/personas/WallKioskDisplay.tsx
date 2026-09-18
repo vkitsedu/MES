@@ -58,18 +58,26 @@ export const WallKioskDisplay: React.FC<WallKioskDisplayProps> = ({ onExitKiosk 
         </div>
       </div>
 
-      {/* Center Giant Status Banner */}
+      {/* Center Giant Status Banner - 10-Meter Glanceability with High Contrast */}
       <div 
-        className="my-6 p-6 rounded-[var(--mes-radius)] border bg-[var(--mes-status-pass-muted)] border-[var(--mes-status-pass)] text-[var(--mes-status-pass)] flex items-center justify-between shadow-2xl"
+        className="my-6 p-6 rounded-[var(--mes-radius)] border border-l-8 border-[var(--mes-border-subtle)] border-l-[var(--mes-status-pass)] bg-gradient-to-r from-[var(--mes-status-pass-muted)] via-[var(--mes-bg-surface)] to-[var(--mes-bg-surface)] flex items-center justify-between shadow-2xl relative overflow-hidden"
       >
         <div className="flex items-center gap-6">
-          <div className="w-6 h-6 rounded-full bg-[var(--mes-status-pass)] animate-pulse" />
+          <div className="relative flex items-center justify-center shrink-0 w-12 h-12 rounded-full bg-[var(--mes-bg-well)] border border-[var(--mes-border-subtle)]">
+            <span className="w-8 h-8 rounded-full bg-[var(--mes-status-pass)] animate-ping absolute opacity-75" />
+            <span className="w-5 h-5 rounded-full bg-[var(--mes-status-pass)] relative shadow-[0_0_15px_var(--mes-status-pass)]" />
+          </div>
           <div>
-            <span className="text-sm font-mono tracking-widest uppercase opacity-80">
-              ANDON BEACON STATUS: NORMAL (RUNNING)
-            </span>
-            <h2 className="text-2xl sm:text-5xl font-black font-mono tracking-tight text-[var(--mes-text-primary)] mt-1">
-              ALL 45 FEEDER CASSETTES IN SPEC • 0 DEFECT LOCKS
+            <div className="flex items-center gap-3">
+              <span className="text-xs sm:text-sm font-mono tracking-widest uppercase font-bold text-[var(--mes-status-pass)]">
+                ANDON BEACON STATUS: NORMAL (RUNNING)
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[var(--mes-status-pass-muted)] text-[var(--mes-status-pass)] border border-[var(--mes-status-pass)]">
+                SEMI E10: PRD
+              </span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black font-sans tracking-tight text-[var(--mes-text-primary)] mt-1">
+              All 45 Feeder Cassettes In Spec • 0 Defect Interlocks
             </h2>
           </div>
         </div>
