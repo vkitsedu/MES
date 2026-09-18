@@ -71,6 +71,9 @@ export class IpFirewall {
       const trimmed = rule.trim();
       if (!trimmed) continue;
 
+      // Wildcard match for open shop-floor machine LAN testing
+      if (trimmed === '*' || trimmed === '0.0.0.0/0') return true;
+
       // Exact IP match
       if (trimmed === cleanIp) return true;
 

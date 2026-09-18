@@ -61,38 +61,41 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
   };
 
   return (
-    <div className="bg-[#0E1422] border border-[#222F46] rounded-sm overflow-hidden shadow-sm">
+    <div 
+      className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] overflow-hidden"
+      style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+    >
       {/* Header Band */}
-      <div className="bg-[#141C2C] px-3 py-1.5 border-b border-[#222F46] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+      <div className="bg-[var(--mes-bg-well)] px-3 py-1.5 border-b border-[var(--mes-border-hairline)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span className="font-bold text-white uppercase tracking-wide">
+          <span className="w-2 h-2 rounded-full bg-[var(--mes-status-pass)]" />
+          <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wide">
             {lineName} · PHYSICAL EQUIPMENT FLOW & TOWER LAMPS
           </span>
-          <span className="text-[10px] text-slate-400 bg-[#0B0F18] px-1.5 py-0.5 border border-[#1C273A]">
+          <span className="text-[10px] text-[var(--mes-text-muted)] bg-[var(--mes-bg-surface)] px-1.5 py-0.5 border border-[var(--mes-border-hairline)] rounded-[var(--mes-radius)]">
             Takt Target: {targetCycleTimeSec.toFixed(1)}s
           </span>
         </div>
 
         {/* Live Machine State Tallies */}
         <div className="flex items-center gap-4 text-[10.5px]">
-          <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-            <span className="w-2 h-2 bg-emerald-400 rounded-sm" />
+          <span className="flex items-center gap-1.5 text-[var(--mes-status-pass)] font-bold">
+            <span className="w-2 h-2 bg-[var(--mes-status-pass)] rounded-[1px]" />
             RUN: {machines.filter(m => m.towerLamp === 'RUN').length}
           </span>
-          <span className="flex items-center gap-1.5 text-amber-400 font-bold">
-            <span className="w-2 h-2 bg-amber-400 rounded-sm" />
+          <span className="flex items-center gap-1.5 text-[var(--mes-status-warn)] font-bold">
+            <span className="w-2 h-2 bg-[var(--mes-status-warn)] rounded-[1px]" />
             WAIT: {machines.filter(m => m.towerLamp === 'WAIT').length}
           </span>
-          <span className="flex items-center gap-1.5 text-rose-400 font-bold">
-            <span className="w-2 h-2 bg-rose-500 rounded-sm" />
+          <span className="flex items-center gap-1.5 text-[var(--mes-status-halt)] font-bold">
+            <span className="w-2 h-2 bg-[var(--mes-status-halt)] rounded-[1px]" />
             STOP: {machines.filter(m => m.towerLamp === 'STOP').length}
           </span>
         </div>
       </div>
 
       {/* Horizontal Strip */}
-      <div className="p-2 flex items-center gap-1 overflow-x-auto bg-[#0A0E17] scrollbar-thin">
+      <div className="p-2 flex items-center gap-1 overflow-x-auto bg-[var(--mes-bg-canvas)] scrollbar-thin">
         {machines.map((machine, index) => {
           const colors = getLampColors(machine.towerLamp);
           const isSelected = selectedMachineId === machine.id;
@@ -104,20 +107,20 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
               <button
                 type="button"
                 onClick={() => onSelectMachine?.(machine.id)}
-                className={`flex flex-col text-left p-2 rounded-sm border transition-all duration-100 min-w-[126px] cursor-pointer relative ${
+                className={`flex flex-col text-left p-2 rounded-[var(--mes-radius)] border transition-all duration-100 min-w-[126px] cursor-pointer relative ${
                   isSelected
-                    ? 'bg-[#182338] border-blue-400 ring-1 ring-blue-400/60'
-                    : 'bg-[#0E1422] hover:bg-[#131B2C] border-[#222F46]'
+                    ? 'bg-[var(--mes-accent-muted)] border-[var(--mes-accent-primary)] ring-1 ring-[var(--mes-accent-primary)]'
+                    : 'bg-[var(--mes-bg-surface)] hover:bg-[var(--mes-bg-well)] border-[var(--mes-border-subtle)]'
                 }`}
               >
                 {/* Machine Name & Tower Lamp */}
                 <div className="flex items-center justify-between gap-1 w-full mb-1">
-                  <span className="font-mono text-[11px] font-bold text-slate-100 truncate">
+                  <span className="font-mono text-[11px] font-bold text-[var(--mes-text-primary)] truncate">
                     {machine.name}
                   </span>
 
                   {/* Discrete 3-Lamp Array */}
-                  <div className="flex items-center gap-0.5 bg-[#070A10] p-1 rounded-sm border border-[#1A2436]">
+                  <div className="flex items-center gap-0.5 bg-[var(--mes-bg-well)] p-1 rounded-[1px] border border-[var(--mes-border-hairline)]">
                     <span className={`w-1.5 h-1.5 rounded-full ${colors.lampRed}`} />
                     <span className={`w-1.5 h-1.5 rounded-full ${colors.lampAmber}`} />
                     <span className={`w-1.5 h-1.5 rounded-full ${colors.lampGreen}`} />
@@ -126,22 +129,22 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
 
                 {/* Subtitle & State Badge */}
                 <div className="flex items-center justify-between w-full mb-1.5 font-mono text-[9px]">
-                  <span className="text-slate-400 truncate">{machine.equipmentCode}</span>
-                  <span className={`px-1 py-0.2 font-bold uppercase rounded-sm border ${colors.bg} ${colors.text} ${colors.border}`}>
+                  <span className="text-[var(--mes-text-muted)] truncate">{machine.equipmentCode}</span>
+                  <span className={`px-1 py-0.2 font-bold uppercase rounded-[1px] border ${colors.bg} ${colors.text} ${colors.border}`}>
                     {machine.towerLamp}
                   </span>
                 </div>
 
                 {/* Telemetry Metrics */}
-                <div className="space-y-0.5 pt-1 border-t border-[#1C273A] font-mono text-[9.5px] w-full">
-                  <div className="flex items-center justify-between text-slate-300">
-                    <span className="text-slate-500">C/Time:</span>
-                    <span className={`font-bold tabular-nums ${machine.cycleTimeSec > targetCycleTimeSec ? 'text-amber-400' : 'text-slate-200'}`}>
+                <div className="space-y-0.5 pt-1 border-t border-[var(--mes-border-hairline)] font-mono text-[9.5px] w-full">
+                  <div className="flex items-center justify-between text-[var(--mes-text-secondary)]">
+                    <span className="text-[var(--mes-text-muted)]">C/Time:</span>
+                    <span className={`font-bold tabular-nums ${machine.cycleTimeSec > targetCycleTimeSec ? 'text-[var(--mes-status-warn)]' : 'text-[var(--mes-text-primary)]'}`}>
                       {machine.cycleTimeSec > 0 ? `${machine.cycleTimeSec.toFixed(1)}s` : '—'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-slate-400 text-[9px]">
-                    <span className="text-slate-500">Stops:</span>
+                  <div className="flex items-center justify-between text-[var(--mes-text-muted)] text-[9px]">
+                    <span>Stops:</span>
                     <span className="tabular-nums">{machine.stopCount}x ({machine.stopTimeMin.toFixed(1)}m)</span>
                   </div>
                 </div>
@@ -149,7 +152,7 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
                 {/* Bottleneck Marker */}
                 {isBottleneck && (
                   <div className="mt-1 w-full text-center">
-                    <span className="px-1 py-0.2 text-[8px] font-mono font-bold text-amber-300 bg-amber-950/60 border border-amber-500/50 rounded-sm uppercase tracking-wider block">
+                    <span className="px-1 py-0.2 text-[8px] font-mono font-bold text-[var(--mes-status-warn)] bg-[var(--mes-status-warn-muted)] border border-[var(--mes-status-warn)] rounded-[1px] uppercase tracking-wider block">
                       LOB BOTTLENECK
                     </span>
                   </div>
@@ -158,7 +161,7 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
 
               {/* Arrow Connector */}
               {index < machines.length - 1 && (
-                <div className="text-slate-600 px-0.5 shrink-0">
+                <div className="text-[var(--mes-text-muted)] px-0.5 shrink-0">
                   <ArrowRight className="w-3 h-3" />
                 </div>
               )}

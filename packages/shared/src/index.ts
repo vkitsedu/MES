@@ -3,4 +3,5 @@ export * from './events';
 export * from './domain';
 export * from './fuji-protocol';
 export * from './config/features';
+export * from './topology';
 

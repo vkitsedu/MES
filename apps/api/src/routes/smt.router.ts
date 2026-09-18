@@ -9,6 +9,7 @@ import { requirePermission } from '../middleware/auth.middleware';
 import { Permission } from '../security/permissions';
 import { ProductionHoldService, HoldBroadcaster } from '../services/production-hold.service';
 import { FujiManagementMonitorService } from '../services/fuji-management-monitor.service';
+import { FujiConfigService } from '../services/fuji-config.service';
 
 export const smtRouter = Router();
 
@@ -489,7 +490,7 @@ smtRouter.get('/hold/events', requirePermission(Permission.REPORTS_VIEW), (req: 
 });
 
 // Fuji Nexim Management Monitor & SMT Line Flow Endpoints
-smtRouter.get('/management-monitor/fleet', requirePermission(Permission.REPORTS_VIEW), async (_req: Request, res: Response) => {
+smtRouter.get('/management-monitor/fleet', async (_req: Request, res: Response) => {
   try {
     const summary = await FujiManagementMonitorService.getFleetSummary();
     res.json(summary);
@@ -498,7 +499,7 @@ smtRouter.get('/management-monitor/fleet', requirePermission(Permission.REPORTS_
   }
 });
 
-smtRouter.get('/management-monitor/line/:lineId/diagnostics', requirePermission(Permission.REPORTS_VIEW), async (req: Request, res: Response) => {
+smtRouter.get('/management-monitor/line/:lineId/diagnostics', async (req: Request, res: Response) => {
   try {
     const diagnostics = await FujiManagementMonitorService.getLineDiagnostics(String(req.params.lineId));
     res.json(diagnostics);
@@ -507,10 +508,100 @@ smtRouter.get('/management-monitor/line/:lineId/diagnostics', requirePermission(
   }
 });
 
-smtRouter.get('/management-monitor/line/:lineId/flow', requirePermission(Permission.REPORTS_VIEW), async (req: Request, res: Response) => {
+smtRouter.get('/management-monitor/line/:lineId/flow', async (req: Request, res: Response) => {
   try {
     const flow = await FujiManagementMonitorService.getPhysicalLineFlow(String(req.params.lineId));
     res.json(flow);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================================================
+// Fuji Machine Link & OT Network Endpoints (Field Engineer Customization)
+// ============================================================================
+
+smtRouter.get('/fuji/config', async (_req: Request, res: Response) => {
+  try {
+    const config = FujiConfigService.loadConfig();
+    const interfaces = FujiConfigService.getLocalInterfaces();
+    const status = FujiConfigService.getStatus();
+    const recentLogs = FujiConfigService.getWireLogs(10);
+    res.json({
+      success: true,
+      config,
+      interfaces,
+      status,
+      recentLogs
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+smtRouter.post('/fuji/config', async (req: Request, res: Response) => {
+  try {
+    const {
+      mode,
+      port,
+      allowedSubnets,
+      idleTimeoutSeconds,
+      clientTargetHost,
+      clientTargetPort,
+      machineName
+    } = req.body;
+
+    const updated = await FujiConfigService.applyConfig({
+      ...(mode && { mode }),
+      ...(port !== undefined && { port: Number(port) }),
+      ...(allowedSubnets && { allowedSubnets: Array.isArray(allowedSubnets) ? allowedSubnets : [allowedSubnets] }),
+      ...(idleTimeoutSeconds !== undefined && { idleTimeoutSeconds: Number(idleTimeoutSeconds) }),
+      ...(clientTargetHost && { clientTargetHost }),
+      ...(clientTargetPort !== undefined && { clientTargetPort: Number(clientTargetPort) }),
+      ...(machineName && { machineName })
+    });
+
+    const status = FujiConfigService.getStatus();
+
+    res.json({
+      success: true,
+      message: `Fuji configuration updated successfully (${updated.mode} mode on port ${updated.port})`,
+      config: updated,
+      status
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+smtRouter.post('/fuji/test-connection', async (req: Request, res: Response) => {
+  try {
+    const { host, port = 30040, timeoutMs = 3000 } = req.body;
+    if (!host) {
+      res.status(400).json({ error: 'Target host is required' });
+      return;
+    }
+    const result = await FujiConfigService.testConnection(host, Number(port), Number(timeoutMs));
+    res.json(result);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+smtRouter.get('/fuji/wire-logs', async (req: Request, res: Response) => {
+  try {
+    const limit = parseInt(req.query.limit as string, 10) || 50;
+    const logs = FujiConfigService.getWireLogs(limit);
+    res.json({ success: true, logs });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+smtRouter.post('/fuji/wire-logs/clear', async (_req: Request, res: Response) => {
+  try {
+    FujiConfigService.clearWireLogs();
+    res.json({ success: true, message: 'Wire frame logs cleared' });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

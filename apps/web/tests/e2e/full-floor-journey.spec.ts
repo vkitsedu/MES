@@ -10,8 +10,8 @@ test.describe('Cleanroom Manufacturing Floor Journey E2E Suite (Task Q-02 / Gate
     // --------------------------------------------------------------------------
     // Step 1: Initial Cockpit Perimeter & Operator Login Flow (Gate G-08)
     // --------------------------------------------------------------------------
-    await expect(page.locator('header')).toContainText('APEX ELECTRONICS');
-    await expect(page.locator('header')).toContainText('NOIDA CLUSTER P4');
+    await expect(page.locator('header')).toContainText('i-MES 2.0');
+    await expect(page.locator('header')).toContainText('CLEANROOM OPERATIONS');
     await expect(page.locator('header')).toContainText('Fuji NXT III M6');
 
     // Open operator login modal

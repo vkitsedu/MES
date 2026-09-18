@@ -15,13 +15,15 @@ interface StationModeModalProps {
   onClose: () => void;
   modes: StationModes;
   onUpdateModes: (newModes: StationModes) => void;
+  onOpenFujiLink?: () => void;
 }
 
 export const StationModeModal: React.FC<StationModeModalProps> = ({
   isOpen,
   onClose,
   modes,
-  onUpdateModes
+  onUpdateModes,
+  onOpenFujiLink
 }) => {
   if (!isOpen) return null;
 
@@ -132,20 +134,33 @@ export const StationModeModal: React.FC<StationModeModalProps> = ({
               <div>
                 <div className="text-xs font-medium text-white flex items-center gap-2">
                   <span>Fuji NXT III / AIMEX Pick & Place</span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.05] text-[#8E95A2]">TCP Port 30040</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.05] text-[#8E95A2]">TCP Host / Client</span>
                 </div>
                 <div className="text-[11px] text-[#6B7280]">STX/ETX Fuji Host Protocol V2.8.0</div>
               </div>
-              <button
-                onClick={toggleFujiMode}
-                className={`text-xs font-mono px-2.5 py-1 rounded border transition-colors ${
-                  modes.fujiMode === 'LIVE_TCP'
-                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                    : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                }`}
-              >
-                {modes.fujiMode === 'LIVE_TCP' ? '? LIVE TCP' : '? SIMULATED'}
-              </button>
+              <div className="flex items-center gap-2">
+                {onOpenFujiLink && (
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenFujiLink();
+                    }}
+                    className="text-xs font-mono px-2.5 py-1 rounded border border-sky-500/40 bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-colors"
+                  >
+                    Configure IP / Port
+                  </button>
+                )}
+                <button
+                  onClick={toggleFujiMode}
+                  className={`text-xs font-mono px-2.5 py-1 rounded border transition-colors ${
+                    modes.fujiMode === 'LIVE_TCP'
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                      : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                  }`}
+                >
+                  {modes.fujiMode === 'LIVE_TCP' ? '● LIVE TCP' : '○ SIMULATED'}
+                </button>
+              </div>
             </div>
 
             {/* 3D SPI */}

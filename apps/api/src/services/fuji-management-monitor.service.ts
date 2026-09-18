@@ -286,7 +286,43 @@ export class FujiManagementMonitorService {
   /**
    * Returns physical SMT machine flow sequence with live Tower Lamp and Cycle Times (Samsung G-MES Standard)
    */
-  public static async getPhysicalLineFlow(_lineId: string): Promise<SmtMachineFlowItem[]> {
+  public static async getPhysicalLineFlow(lineId: string): Promise<SmtMachineFlowItem[]> {
+    try {
+      const db = getDatabase();
+      const rows = await db.query<any>(`
+        SELECT id, name, code, customer_code, type, current_state, cycle_time_nominal_sec
+        FROM work_centers
+        WHERE line_id = ? OR line_id = 'LINE_01' OR line_id IS NULL
+        ORDER BY sequence_order ASC, code ASC
+      `, [lineId]);
+
+      if (rows && rows.length > 0) {
+        return rows.map((r: any) => {
+          let lamp: 'RUN' | 'WAIT' | 'STOP' | 'NONE' = 'RUN';
+          if (r.current_state === 'IDLE' || r.current_state === 'WAIT') lamp = 'WAIT';
+          else if (r.current_state === 'DOWN' || r.current_state === 'MAINTENANCE' || r.current_state === 'ERROR') lamp = 'STOP';
+          else if (r.current_state === 'RUNNING') lamp = 'RUN';
+
+          const validTypes = ['LASER', 'PRINTER', 'SPI', 'MOUNTER', 'REFLOW', 'AOI_PRE', 'AOI_POST', 'XRAY'];
+          const machType = validTypes.includes(r.type) ? r.type : 'MOUNTER';
+
+          return {
+            id: r.id,
+            name: r.name || r.code,
+            equipmentCode: r.customer_code || r.code,
+            type: machType as any,
+            towerLamp: lamp,
+            cycleTimeSec: Number(r.cycle_time_nominal_sec) || 18.0,
+            stopCount: 0,
+            stopTimeMin: 0.0,
+            nozzleBypass: false
+          };
+        });
+      }
+    } catch {
+      // Fall through to hardcoded baseline
+    }
+
     return [
       {
         id: 'mach-laser',

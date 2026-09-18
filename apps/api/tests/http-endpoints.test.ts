@@ -56,7 +56,7 @@ describe('End-to-End HTTP API Endpoints Test Suite', () => {
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.status).toBe('HEALTHY');
-    expect(data.system).toBe('Antigravity SMT MES Engine');
+    expect(data.system).toBe('i-MES 2.0 Engine');
   });
 
   it('GET /api/v1/work-centers returns SMT line work centers', async () => {

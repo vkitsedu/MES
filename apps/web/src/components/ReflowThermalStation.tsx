@@ -365,7 +365,7 @@ export const ReflowThermalStation: React.FC = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsUploadModalOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#18222F] border border-white/20 text-white hover:bg-white/10 text-xs font-semibold transition-all shadow-sm"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[var(--mes-bg-card)] border border-[var(--mes-border)] text-[var(--mes-text-primary)] hover:bg-[var(--mes-bg-well)] text-xs font-semibold transition-all shadow-sm"
             >
               <Upload className="w-4 h-4 text-orange-400" />
               <span>Import Profiler Run</span>
@@ -558,8 +558,8 @@ export const ReflowThermalStation: React.FC = () => {
                 }
                 className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono transition-all border ${
                   visibleProbes[p.probeIndex]
-                    ? 'bg-[#18222F] text-white border-white/20'
-                    : 'bg-[#0E131A] text-white/30 border-white/5 line-through'
+                    ? 'bg-[var(--mes-bg-card)] text-[var(--mes-text-primary)] border-[var(--mes-border)]'
+                    : 'bg-[var(--mes-bg-well)] text-[var(--mes-text-muted)] border-[var(--mes-border)] line-through opacity-50'
                 }`}
               >
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }} />
@@ -735,8 +735,8 @@ export const ReflowThermalStation: React.FC = () => {
 
           {/* Scrubber Tooltip */}
           {hoveredTime !== null && (
-            <div className="absolute top-4 right-4 bg-[#18222F]/90 border border-white/20 rounded-lg p-3 text-xs font-mono backdrop-blur-md shadow-2xl">
-              <span className="text-[#7A8A9E] block border-b border-white/10 pb-1 mb-1 font-bold">
+            <div className="absolute top-4 right-4 bg-[var(--mes-bg-card)]/90 border border-[var(--mes-border)] rounded-lg p-3 text-xs font-mono backdrop-blur-md shadow-2xl">
+              <span className="text-[var(--mes-text-muted)] block border-b border-[var(--mes-border)] pb-1 mb-1 font-bold">
                 TIME: {hoveredTime}s
               </span>
               <div className="space-y-1">
@@ -874,11 +874,11 @@ export const ReflowThermalStation: React.FC = () => {
                     : isSpike
                     ? 'bg-orange-950/20 border-orange-500/30 text-white'
                     : isCooling
-                    ? 'bg-cyan-950/20 border-cyan-500/30 text-white'
-                    : 'bg-[#18222F] border-white/10 text-white'
+                    ? 'bg-cyan-950/20 border-cyan-500/30 text-[var(--mes-text-primary)]'
+                    : 'bg-[var(--mes-bg-well)] border-[var(--mes-border)] text-[var(--mes-text-primary)]'
                 }`}
               >
-                <div className="flex items-center justify-between text-[10px] text-[#7A8A9E]">
+                <div className="flex items-center justify-between text-[10px] text-[var(--mes-text-muted)]">
                   <span>Z{z.zoneIndex}</span>
                   <span className="text-[8px] uppercase">{z.role.slice(0, 4)}</span>
                 </div>

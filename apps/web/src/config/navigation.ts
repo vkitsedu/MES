@@ -3,6 +3,7 @@ import { OperatorRole, OperatorProfile, authService } from '../services/auth.ser
 export type NavTab = 
   | 'FLEET' 
   | 'SUPERVISOR' 
+  | 'STUDIO'
   | 'OPERATOR' 
   | 'SPI' 
   | 'SOLDER_PASTE' 
@@ -79,7 +80,7 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     requiredRoles: ['LINE_LEAD', 'QUALITY_LEAD', 'SYSTEM_ADMIN'],
     description: 'Multi-line bay OEE, takt time pacing, and bottleneck balancing',
     shortcut: '1',
-    allowGuestReadOnly: true,
+    allowGuestReadOnly: false,
     iconName: 'Split'
   },
   SUPERVISOR: {
@@ -91,8 +92,20 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     requiredRoles: ['LINE_LEAD', 'QUALITY_LEAD', 'SYSTEM_ADMIN'],
     description: 'Machine flow strip, OEE arc dials, drop rate PPM, and downtime Pareto',
     shortcut: '2',
-    allowGuestReadOnly: true,
+    allowGuestReadOnly: false,
     iconName: 'Activity'
+  },
+  STUDIO: {
+    id: 'STUDIO',
+    domainId: 'EXECUTIVE',
+    label: 'Line & Floor Studio',
+    shortLabel: 'Line Studio',
+    code: 'STU-01',
+    requiredRoles: ['LINE_LEAD', 'QUALITY_LEAD', 'SYSTEM_ADMIN'],
+    description: 'Visual cleanroom conveyor layout, machine sequence ordering, and multi-vendor catalog',
+    shortcut: 's',
+    allowGuestReadOnly: false,
+    iconName: 'Sliders'
   },
 
   // SMT Line Operations Domain
@@ -167,7 +180,7 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     requiredRoles: ['QUALITY_LEAD', 'SYSTEM_ADMIN'],
     description: '21 CFR Part 11 lot release gate, electronic signatures, and audit trails',
     shortcut: '8',
-    allowGuestReadOnly: true,
+    allowGuestReadOnly: false,
     iconName: 'Shield'
   },
   GENEALOGY: {
@@ -217,7 +230,7 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     requiredRoles: ['QUALITY_LEAD', 'SYSTEM_ADMIN'],
     description: 'Fuji Nexim raw TCP frames and SHA-256 cryptographic audit ledger',
     shortcut: 'l',
-    allowGuestReadOnly: true,
+    allowGuestReadOnly: false,
     iconName: 'Terminal'
   }
 };
@@ -225,6 +238,7 @@ export const STATIONS: Record<NavTab, StationConfig> = {
 export const CANONICAL_STATION_ORDER: NavTab[] = [
   'FLEET',
   'SUPERVISOR',
+  'STUDIO',
   'OPERATOR',
   'SPI',
   'SOLDER_PASTE',

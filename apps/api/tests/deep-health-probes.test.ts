@@ -44,7 +44,7 @@ describe('Deep Health Check Probes & Authenticated Metrics Suite (Stage 5 / O-01
 
     const data = await res.json();
     expect(data.status).toBe('HEALTHY');
-    expect(data.system).toBe('Antigravity SMT MES Engine');
+    expect(data.system).toBe('i-MES 2.0 Engine');
     expect(data.checks).toBeDefined();
 
     // Database check

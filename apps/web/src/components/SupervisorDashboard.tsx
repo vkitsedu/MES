@@ -11,6 +11,9 @@ import { SmtLineFlowStrip } from './common/SmtLineFlowStrip';
 import { MounterDropAnalysisCard } from './common/MounterDropAnalysisCard';
 import { ShiftGanttTimeline } from './common/ShiftGanttTimeline';
 import { FujiManagementMonitor } from './FujiManagementMonitor';
+import { ManagerExecutiveView } from './personas/ManagerExecutiveView';
+import { KpiCard } from './common/KpiCard';
+import { DrillDownDrawer, DrillDownData } from './common/DrillDownDrawer';
 
 interface WorkCenter {
   id: string;
@@ -36,6 +39,8 @@ interface FeederErrorItem {
   total_errors: number;
 }
 
+export type SupervisorViewMode = 'COCKPIT' | 'EXECUTIVE' | 'MANAGEMENT_MONITOR';
+
 export const SupervisorDashboard: React.FC = () => {
   const [workCenters, setWorkCenters] = useState<WorkCenter[]>([]);
   const [report, setReport] = useState<ShiftSummaryReport | null>(null);
@@ -46,7 +51,8 @@ export const SupervisorDashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [copyStatus, setCopyStatus] = useState<string>('');
-  const [viewMode, setViewMode] = useState<'OVERVIEW' | 'MANAGEMENT_MONITOR'>('OVERVIEW');
+  const [viewMode, setViewMode] = useState<SupervisorViewMode>('COCKPIT');
+  const [drillDownData, setDrillDownData] = useState<DrillDownData | null>(null);
 
   const loadData = async () => {
     try {
@@ -85,7 +91,7 @@ export const SupervisorDashboard: React.FC = () => {
   const copyHandoverSummary = () => {
     if (!report) return;
 
-    const summaryText = `[APEX SMT LINE 01 - SHIFT HANDOVER BRIEFING]
+    const summaryText = `[i-MES 2.0 SMT LINE 01 - SHIFT HANDOVER BRIEFING]
 Shift: ${report.shiftCode} | Date: ${report.date}
 Fuji NXT III Placement Line (Program: PROG-SM-METER-TOP-REV4)
 --------------------------------------------------
@@ -105,7 +111,7 @@ ${feederErrors.slice(0, 3).map((e, i) => `${i + 1}. Slot 0${e.slot_no} (${e.part
 *Machine Fleet Status:*
 ${workCenters.map(w => `• ${w.code}: [${w.current_state}]`).join('\n')}
 --------------------------------------------------
-_Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
+_Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
 
     navigator.clipboard.writeText(summaryText);
     setCopyStatus('COPIED TO CLIPBOARD');
@@ -155,40 +161,98 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
     pickupDropRatePpm: 175
   };
 
+  const openDowntimeDrillDown = () => {
+    setDrillDownData({
+      kpiId: 'DOWNTIME_PARETO',
+      title: 'SMT Line 01 Stoppage Breakdown (Pareto)',
+      subtitle: `Aggregated line stoppage events for Shift ${report?.shiftCode || '1'}`,
+      currentValue: `${report?.downtimeMinutes || 44} min`,
+      targetValue: '<60 min allowable',
+      status: (report?.downtimeMinutes || 44) > 60 ? 'HALT' : 'PASS',
+      summaryDescription: 'Root-cause analysis ranks feeder splicing and optical nozzle inspection as primary contributors to unbooked idle time. Automatic recovery restored line balance.',
+      items: report && report.topDowntimeReasons.length > 0 
+        ? report.topDowntimeReasons.map((r: any, idx: number) => ({
+            id: `dt-${idx}`,
+            timestamp: `1${idx}:30`,
+            category: 'STOPPAGE',
+            title: r.reasonLabel,
+            description: `Automated stoppage logged by Fuji Nexim Line Controller. Duration: ${r.durationMinutes}m across ${r.occurrences} distinct trips.`,
+            severity: (r.durationMinutes > 15 ? 'CRITICAL' : 'WARNING') as 'CRITICAL' | 'WARNING' | 'INFO',
+            durationMinutes: r.durationMinutes,
+            occurrences: r.occurrences,
+            stationCode: 'MNT-01'
+          }))
+        : [
+            { id: 'dt-1', timestamp: '14:22', category: 'FEEDER', title: 'Component Reel Runout (Slot 12)', description: '0402 capacitor spliced in 2.8m.', severity: 'INFO', durationMinutes: 2.8, stationCode: 'MNT-01' }
+          ]
+    });
+  };
+
+  const openFeederErrorsDrillDown = () => {
+    setDrillDownData({
+      kpiId: 'FEEDER_PDERROR',
+      title: 'Fuji NXT III Mounter Feeder Pickup Health',
+      subtitle: 'Real-time wire frames parsed from Fuji PDERROR stream',
+      currentValue: `${defaultDropData.actualPpm} PPM`,
+      targetValue: '<310 PPM spec',
+      status: defaultDropData.actualPpm > 310 ? 'HALT' : 'PASS',
+      summaryDescription: 'Pickup errors are concentrated on Slot 04 and Slot 12. Vacuum pressure check confirms clean air filter and nozzle tip.',
+      items: feederErrors.map((err, idx) => ({
+        id: `fe-${idx}`,
+        timestamp: '14:15:20',
+        category: 'PICKUP',
+        title: `Slot 0${err.slot_no} — ${err.part_number}`,
+        description: `Error Type: ${err.error_type} on Feeder ${err.feeder_id}. Total misfires: ${err.total_errors}.`,
+        severity: (err.total_errors > 10 ? 'CRITICAL' : 'WARNING') as 'CRITICAL' | 'WARNING' | 'INFO',
+        occurrences: err.total_errors,
+        stationCode: `SLOT-${err.slot_no}`
+      }))
+    });
+  };
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 font-sans">
       {/* Cockpit Bar */}
-      <div className="bg-[#141C2C] px-3 py-2 border border-[#222F46] rounded-sm flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="bg-[var(--mes-bg-surface)] px-3 py-2 border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] flex flex-wrap items-center justify-between gap-3 text-xs" style={{ boxShadow: 'var(--mes-shadow-subtle)' }}>
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--mes-text-muted)]">
               SMT LINE 01 SUPERVISOR CONSOLE
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[10px] font-mono text-emerald-400 font-bold">LIVE TELEMETRY STREAM</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--mes-status-pass)] animate-pulse" />
+            <span className="text-[10px] font-mono text-[var(--mes-status-pass)] font-bold">LIVE TELEMETRY STREAM</span>
           </div>
-          <h2 className="text-sm font-bold text-white font-mono mt-0.5">
+          <h2 className="text-sm font-bold text-[var(--mes-text-primary)] font-mono mt-0.5">
             Fuji NXT III M6 Line • High-Speed Placement & Quality Governance
           </h2>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
           {/* View Mode Toggle */}
-          <div className="flex bg-[#0B0F18] p-0.5 rounded-sm border border-[#222F46] text-[10px]">
+          <div className="flex bg-[var(--mes-bg-well)] p-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] text-[10px]">
             <button
               type="button"
-              onClick={() => setViewMode('OVERVIEW')}
-              className={`px-2.5 py-1 rounded-sm transition-colors font-semibold ${
-                viewMode === 'OVERVIEW' ? 'bg-[#1E2E4A] text-white' : 'text-slate-400 hover:text-white'
+              onClick={() => setViewMode('COCKPIT')}
+              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
+                viewMode === 'COCKPIT' ? 'bg-[var(--mes-accent-muted)] text-[var(--mes-accent-primary)] font-bold' : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
               }`}
             >
               SUPERVISOR COCKPIT
             </button>
             <button
               type="button"
+              onClick={() => setViewMode('EXECUTIVE')}
+              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
+                viewMode === 'EXECUTIVE' ? 'bg-[var(--mes-accent-muted)] text-[var(--mes-accent-primary)] font-bold' : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
+              }`}
+            >
+              EXECUTIVE BRIEFING
+            </button>
+            <button
+              type="button"
               onClick={() => setViewMode('MANAGEMENT_MONITOR')}
-              className={`px-2.5 py-1 rounded-sm transition-colors font-semibold ${
-                viewMode === 'MANAGEMENT_MONITOR' ? 'bg-[#1E2E4A] text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
+                viewMode === 'MANAGEMENT_MONITOR' ? 'bg-[var(--mes-accent-muted)] text-[var(--mes-accent-primary)] font-bold' : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
               }`}
             >
               NEXIM MANAGEMENT MONITOR
@@ -198,16 +262,16 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
           <button
             type="button"
             onClick={loadData}
-            className="flex items-center gap-1 px-2.5 py-1 bg-[#111827] hover:bg-[#1A2538] text-white rounded-sm border border-[#222F46]"
+            className="flex items-center gap-1 px-2.5 py-1 bg-[var(--mes-bg-well)] hover:bg-[var(--mes-bg-surface)] text-[var(--mes-text-primary)] rounded-[var(--mes-radius)] border border-[var(--mes-border-subtle)] transition-colors"
           >
-            <RefreshCw className={`w-3 h-3 ${refreshing ? 'animate-spin text-emerald-400' : ''}`} />
+            <RefreshCw className={`w-3 h-3 ${refreshing ? 'animate-spin text-[var(--mes-status-pass)]' : ''}`} />
             <span>SYNC</span>
           </button>
 
           <button
             type="button"
             onClick={copyHandoverSummary}
-            className="flex items-center gap-1.5 px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-sm text-xs transition-all"
+            className="flex items-center gap-1.5 px-3 py-1 bg-[var(--mes-accent-primary)] hover:bg-[var(--mes-accent-hover)] text-white font-bold rounded-[var(--mes-radius)] text-xs transition-all shadow-sm"
           >
             <Copy className="w-3.5 h-3.5" />
             <span>{copyStatus || 'EXPORT HANDOVER'}</span>
@@ -215,11 +279,11 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
         </div>
       </div>
 
-      {viewMode === 'MANAGEMENT_MONITOR' ? (
-        <FujiManagementMonitor />
-      ) : (
+      {viewMode === 'MANAGEMENT_MONITOR' && <FujiManagementMonitor />}
+      {viewMode === 'EXECUTIVE' && <ManagerExecutiveView />}
+      {viewMode === 'COCKPIT' && (
         <div className="space-y-2">
-          {/* Top Row: Sleek Semi-Circular Arc Gauges (Harman ArchFX Standard) */}
+          {/* Top Row: Sleek Semi-Circular Arc Gauges */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-1.5">
             <ArcGaugeOee
               value={oeeVal > 0 ? oeeVal : 88.4}
@@ -258,7 +322,7 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
             />
           </div>
 
-          {/* Physical SMT Line Flow Strip (Samsung G-MES Standard) */}
+          {/* Physical SMT Line Flow Strip */}
           <SmtLineFlowStrip
             machines={fallbackMachines}
             lineName="SMT LINE 01 (FUJI NXT III M6)"
@@ -271,7 +335,7 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
             shiftCode={`SHIFT ${report?.shiftCode || '1 (DAY)'}`}
           />
 
-          {/* Mounter Component Drop Analysis in PPM (Samsung G-MES Standard) */}
+          {/* Mounter Component Drop Analysis in PPM */}
           <MounterDropAnalysisCard
             dropData={defaultDropData}
             shiftData={shiftMatrix}
@@ -281,16 +345,22 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
           {/* 2-Column Split: Downtime Pareto + Feeder Error Health */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 font-mono">
             {/* Left Column (6 cols): SMT Stoppage Pareto */}
-            <div className="lg:col-span-6 bg-[#0E1422] border border-[#222F46] rounded-sm p-3 space-y-2">
-              <div className="flex justify-between items-center border-b border-[#222F46] pb-2">
+            <div 
+              onClick={openDowntimeDrillDown}
+              className="lg:col-span-6 bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] hover:border-[var(--mes-accent-primary)] rounded-[var(--mes-radius)] p-3 space-y-2 cursor-pointer transition-all group"
+              style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+              title="Click to drill down into downtime event timeline"
+            >
+              <div className="flex justify-between items-center border-b border-[var(--mes-border-hairline)] pb-2">
                 <div>
-                  <h3 className="text-xs font-bold text-white flex items-center gap-1.5 uppercase tracking-wide">
-                    <BarChart3 className="w-3.5 h-3.5 text-rose-400" />
+                  <h3 className="text-xs font-bold text-[var(--mes-text-primary)] flex items-center gap-1.5 uppercase tracking-wide group-hover:text-[var(--mes-accent-primary)] transition-colors">
+                    <BarChart3 className="w-3.5 h-3.5 text-[var(--mes-status-halt)]" />
                     SMT Line Stoppage Pareto
+                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-[10px] text-slate-500">Ranked by minutes lost during Shift {report?.shiftCode || '1'}</p>
+                  <p className="text-[10px] text-[var(--mes-text-muted)]">Ranked by minutes lost during Shift {report?.shiftCode || '1'}</p>
                 </div>
-                <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-sm border border-rose-500/20">
+                <span className="text-[10px] font-bold text-[var(--mes-status-halt)] bg-[var(--mes-status-halt-muted)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-status-halt)]">
                   {report?.downtimeMinutes || 44}m Lost
                 </span>
               </div>
@@ -303,39 +373,45 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
 
                     return (
                       <div key={idx} className="space-y-1 text-xs">
-                        <div className="flex justify-between text-slate-300 text-[11px]">
+                        <div className="flex justify-between text-[var(--mes-text-secondary)] text-[11px]">
                           <span className="truncate max-w-[280px]">
                             0{idx + 1}. {reason.reasonLabel}
                           </span>
-                          <span className="text-rose-400 font-bold tabular-nums">
+                          <span className="text-[var(--mes-status-halt)] font-bold tabular-nums">
                             {reason.durationMinutes}m ({reason.occurrences}x)
                           </span>
                         </div>
-                        <div className="w-full bg-[#0B101C] h-1.5 border border-[#1C273A] rounded-none overflow-hidden">
-                          <div className="bg-rose-500 h-full rounded-none" style={{ width: `${Math.max(5, pct)}%` }} />
+                        <div className="w-full bg-[var(--mes-bg-well)] h-1.5 border border-[var(--mes-border-hairline)] rounded-[1px] overflow-hidden">
+                          <div className="bg-[var(--mes-status-halt)] h-full rounded-[1px]" style={{ width: `${Math.max(5, pct)}%` }} />
                         </div>
                       </div>
                     );
                   })
                 ) : (
-                  <div className="text-center py-6 text-xs text-slate-500">
+                  <div className="text-center py-6 text-xs text-[var(--mes-text-muted)]">
                     ZERO LINE STOPPAGES RECORDED
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Right Column (6 cols): Feeder Pickup Errors (From Fuji PDERROR) */}
-            <div className="lg:col-span-6 bg-[#0E1422] border border-[#222F46] rounded-sm p-3 space-y-2">
-              <div className="flex justify-between items-center border-b border-[#222F46] pb-2">
+            {/* Right Column (6 cols): Feeder Pickup Errors */}
+            <div 
+              onClick={openFeederErrorsDrillDown}
+              className="lg:col-span-6 bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] hover:border-[var(--mes-accent-primary)] rounded-[var(--mes-radius)] p-3 space-y-2 cursor-pointer transition-all group"
+              style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+              title="Click to drill down into feeder errors"
+            >
+              <div className="flex justify-between items-center border-b border-[var(--mes-border-hairline)] pb-2">
                 <div>
-                  <h3 className="text-xs font-bold text-white flex items-center gap-1.5 uppercase tracking-wide">
-                    <Cpu className="w-3.5 h-3.5 text-amber-400" />
+                  <h3 className="text-xs font-bold text-[var(--mes-text-primary)] flex items-center gap-1.5 uppercase tracking-wide group-hover:text-[var(--mes-accent-primary)] transition-colors">
+                    <Cpu className="w-3.5 h-3.5 text-[var(--mes-status-warn)]" />
                     Feeder Pickup Error Health
+                    <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
-                  <p className="text-[10px] text-slate-500">Real-time socket stream from Fuji PDERROR frames</p>
+                  <p className="text-[10px] text-[var(--mes-text-muted)]">Real-time socket stream from Fuji PDERROR frames</p>
                 </div>
-                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-sm border border-emerald-500/20 font-mono font-bold">
+                <span className="text-[10px] text-[var(--mes-status-pass)] bg-[var(--mes-status-pass-muted)] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[var(--mes-status-pass)] font-mono font-bold">
                   SOCKET AUTO-PARSE
                 </span>
               </div>
@@ -343,24 +419,24 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
               <div className="space-y-1.5 pt-1 text-xs">
                 {feederErrors.length > 0 ? (
                   feederErrors.slice(0, 4).map((err, i) => (
-                    <div key={i} className="bg-[#0B101C] p-2 rounded-sm border border-[#1C273A] flex justify-between items-center">
+                    <div key={i} className="bg-[var(--mes-bg-well)] p-2 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] flex justify-between items-center">
                       <div>
-                        <div className="font-bold text-white flex items-center gap-2 text-[11px]">
-                          <span className="text-emerald-400">Slot 0{err.slot_no}</span>
+                        <div className="font-bold text-[var(--mes-text-primary)] flex items-center gap-2 text-[11px]">
+                          <span className="text-[var(--mes-status-pass)]">Slot 0{err.slot_no}</span>
                           <span>•</span>
-                          <span className="text-slate-300">{err.part_number}</span>
+                          <span className="text-[var(--mes-text-secondary)]">{err.part_number}</span>
                         </div>
-                        <div className="text-[10px] text-slate-500 mt-0.5">
-                          Feeder: {err.feeder_id} • Type: <strong className="text-amber-400">{err.error_type}</strong>
+                        <div className="text-[10px] text-[var(--mes-text-muted)] mt-0.5">
+                          Feeder: {err.feeder_id} • Type: <strong className="text-[var(--mes-status-warn)]">{err.error_type}</strong>
                         </div>
                       </div>
-                      <span className="px-1.5 py-0.5 rounded-sm bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold text-[10.5px] tabular-nums">
+                      <span className="px-1.5 py-0.5 rounded-[var(--mes-radius)] bg-[var(--mes-status-halt-muted)] text-[var(--mes-status-halt)] border border-[var(--mes-status-halt)] font-bold text-[10.5px] tabular-nums">
                         {err.total_errors} Misfires
                       </span>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 text-xs text-slate-500">
+                  <div className="text-center py-6 text-xs text-[var(--mes-text-muted)]">
                     ALL FEEDER VACUUM SENSORS IN SPEC (&lt;0.05% REJECT RATE)
                   </div>
                 )}
@@ -369,6 +445,13 @@ _Automated by Apex SMT MES (Fuji Nexim 2.2 / iMES 4.0 Gateway)_`;
           </div>
         </div>
       )}
+
+      {/* Drill-Down Slide-Over Drawer */}
+      <DrillDownDrawer
+        isOpen={Boolean(drillDownData)}
+        onClose={() => setDrillDownData(null)}
+        data={drillDownData}
+      />
     </div>
   );
 };

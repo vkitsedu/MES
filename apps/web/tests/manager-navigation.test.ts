@@ -32,13 +32,13 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
   });
 
   describe('1. Navigation Configuration & Completeness', () => {
-    it('contains all 12 legacy cleanroom stations in canonical order exactly once', () => {
-      expect(CANONICAL_STATION_ORDER).toHaveLength(12);
+    it('contains all 13 cleanroom stations in canonical order exactly once', () => {
+      expect(CANONICAL_STATION_ORDER).toHaveLength(13);
       const uniqueTabs = new Set(CANONICAL_STATION_ORDER);
-      expect(uniqueTabs.size).toBe(12);
+      expect(uniqueTabs.size).toBe(13);
 
       const expectedTabs: NavTab[] = [
-        'FLEET', 'SUPERVISOR', 'OPERATOR', 'SPI', 'SOLDER_PASTE',
+        'FLEET', 'SUPERVISOR', 'STUDIO', 'OPERATOR', 'SPI', 'SOLDER_PASTE',
         'REFLOW', 'AGV_LOGISTICS', 'COMPLIANCE', 'GENEALOGY',
         'REWORK', 'PREDICTIVE', 'AUDIT_TRAIL'
       ];
@@ -58,7 +58,7 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
 
       // Verify domain groupings
       const execStations = getStationsForDomain('EXECUTIVE').map(s => s.id);
-      expect(execStations).toEqual(['FLEET', 'SUPERVISOR']);
+      expect(execStations).toEqual(['FLEET', 'SUPERVISOR', 'STUDIO']);
 
       const opsStations = getStationsForDomain('OPERATIONS').map(s => s.id);
       expect(opsStations).toEqual(['OPERATOR', 'SPI', 'SOLDER_PASTE', 'REFLOW', 'AGV_LOGISTICS']);
@@ -149,7 +149,7 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
       expect(resolved).toBe('FLEET');
     });
 
-    it('enforces SYSTEM_ADMIN superuser access across all 12 stations', () => {
+    it('enforces SYSTEM_ADMIN superuser access across all 13 stations', () => {
       const admin: OperatorProfile = {
         id: 'admin-01',
         code: 'SYS-ADMIN',
@@ -170,7 +170,7 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
     it('parses live backend data when API endpoints succeed', async () => {
       const mockFleetOverview = {
         bayName: 'SMT Bay Alpha',
-        facilityName: 'Apex Noida P4',
+        facilityName: 'i-MES 2.0 SMT Facility',
         totalLines: 2,
         runningLines: 2,
         averageOee: 86.4,
@@ -337,7 +337,7 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
 
       const markdown = generateShiftBriefingText(kpis);
 
-      expect(markdown).toContain('APEX ELECTRONICS • NOIDA CLUSTER P4');
+      expect(markdown).toContain('i-MES 2.0 • SMT FACILITY');
       expect(markdown).toContain('Shift: Shift A - Day');
       expect(markdown).toContain('85.2%');
       expect(markdown).toContain('44,200 CPH');

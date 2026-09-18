@@ -119,7 +119,7 @@ export class FleetOrchestrationService {
     `);
 
     const siteId = siteRows[0]?.siteId || 'site-noida-p4';
-    const siteName = siteRows[0]?.siteName || 'Noida Sector 63 SMT Facility';
+    const siteName = siteRows[0]?.siteName || 'i-MES 2.0 SMT Facility';
     const bayId = siteRows[0]?.areaId || 'area-smt-01';
     const bayName = siteRows[0]?.areaName || 'SMT Cleanroom Bay A';
 

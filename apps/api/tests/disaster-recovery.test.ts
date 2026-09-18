@@ -316,6 +316,10 @@ describe('Disaster Recovery Verification & Retention Suite (Task 8)', () => {
   });
 
   it('Test 5: executes backup.sh and restore.sh shell automation and validates SHA-256 package integrity', async () => {
+    if (process.platform === 'win32') {
+      // Shell scripts (.sh) require a POSIX bash environment
+      return;
+    }
     const { execSync } = await import('child_process');
     const repoRoot = path.resolve(__dirname, '../../..');
     const tempTestDir = path.resolve(repoRoot, 'scratch/test-automation-drill');

@@ -53,31 +53,34 @@ export const ShiftGanttTimeline: React.FC<ShiftGanttTimelineProps> = ({
   const stopPct = (stopMinutes / totalSegmentMinutes) * 100;
 
   return (
-    <div className="bg-[#0E1422] border border-[#222F46] rounded-sm p-2 shadow-sm font-mono text-xs">
+    <div 
+      className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] p-2 font-mono text-xs"
+      style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+    >
       {/* Header Band */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-1.5 mb-1.5 border-b border-[#1C273A] text-[10.5px]">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-1.5 mb-1.5 border-b border-[var(--mes-border-hairline)] text-[10.5px]">
         <div className="flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5 text-slate-400" />
-          <span className="font-bold text-white uppercase tracking-wider">
+          <Clock className="w-3.5 h-3.5 text-[var(--mes-text-muted)]" />
+          <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wider">
             {shiftCode} · SHIFT RUN/DOWNTIME TIMELINE
           </span>
-          <span className="text-slate-500 text-[10px]">
+          <span className="text-[var(--mes-text-muted)] text-[10px]">
             ({Math.floor(totalSegmentMinutes / 60)}h {totalSegmentMinutes % 60}m Elapsed)
           </span>
         </div>
 
         {/* Aggregate Breakdown Metrics */}
         <div className="flex items-center gap-3 text-[10px]">
-          <span className="text-emerald-400 font-bold flex items-center gap-1">
-            <span className="w-2 h-2 bg-emerald-400 rounded-none inline-block" />
+          <span className="text-[var(--mes-status-pass)] font-bold flex items-center gap-1">
+            <span className="w-2 h-2 bg-[var(--mes-status-pass)] rounded-none inline-block" />
             RUN: {Math.floor(runMinutes / 60)}h {runMinutes % 60}m ({runPct.toFixed(1)}%)
           </span>
-          <span className="text-amber-400 font-bold flex items-center gap-1">
-            <span className="w-2 h-2 bg-amber-400 rounded-none inline-block" />
+          <span className="text-[var(--mes-status-warn)] font-bold flex items-center gap-1">
+            <span className="w-2 h-2 bg-[var(--mes-status-warn)] rounded-none inline-block" />
             WAIT: {waitMinutes}m ({waitPct.toFixed(1)}%)
           </span>
-          <span className="text-rose-400 font-bold flex items-center gap-1">
-            <span className="w-2 h-2 bg-rose-500 rounded-none inline-block" />
+          <span className="text-[var(--mes-status-halt)] font-bold flex items-center gap-1">
+            <span className="w-2 h-2 bg-[var(--mes-status-halt)] rounded-none inline-block" />
             STOP: {stopMinutes}m ({stopPct.toFixed(1)}%)
           </span>
         </div>
@@ -85,7 +88,7 @@ export const ShiftGanttTimeline: React.FC<ShiftGanttTimelineProps> = ({
 
       {/* Segmented Timeline Bar */}
       <div className="relative pt-0.5 pb-1">
-        <div className="h-5 w-full bg-[#070A10] rounded-none overflow-hidden flex border border-[#222F46]">
+        <div className="h-5 w-full bg-[var(--mes-bg-well)] rounded-none overflow-hidden flex border border-[var(--mes-border-hairline)]">
           {activeSegments.map((segment, idx) => {
             const pct = (segment.durationMinutes / totalSegmentMinutes) * 100;
             const style = getSegmentStyle(segment.state);
@@ -93,10 +96,10 @@ export const ShiftGanttTimeline: React.FC<ShiftGanttTimelineProps> = ({
               <div
                 key={idx}
                 style={{ width: `${pct}%` }}
-                className={`h-full ${style.bg} border-r border-[#0A0E17]/40 relative group cursor-help`}
+                className={`h-full ${style.bg} border-r border-black/20 relative group cursor-help`}
                 title={`${segment.label}: ${segment.durationMinutes}m (${pct.toFixed(1)}%)`}
               >
-                <div className="hidden group-hover:block absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap bg-[#0F172A] border border-slate-600 text-slate-100 text-[9.5px] font-mono px-2 py-0.5 shadow-md pointer-events-none">
+                <div className="hidden group-hover:block absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap bg-[var(--mes-bg-modal)] border border-[var(--mes-border-strong)] text-[var(--mes-text-primary)] text-[9.5px] font-mono px-2 py-0.5 shadow-md pointer-events-none rounded-[1px]">
                   {segment.label}: {segment.durationMinutes}m ({pct.toFixed(1)}%)
                 </div>
               </div>
@@ -105,7 +108,7 @@ export const ShiftGanttTimeline: React.FC<ShiftGanttTimelineProps> = ({
         </div>
 
         {/* 2-Hour Time Markers */}
-        <div className="flex justify-between text-[9px] text-slate-500 px-0.5 mt-0.5">
+        <div className="flex justify-between text-[9px] text-[var(--mes-text-muted)] px-0.5 mt-0.5">
           <span>00:00 (Start)</span>
           <span>02:00</span>
           <span>04:00 (Mid-Shift)</span>

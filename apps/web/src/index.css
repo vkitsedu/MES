@@ -4,28 +4,53 @@
 
 @layer base {
   :root {
-    --color-bg-base: #0A0E17;
-    --color-surface-subtle: #0E1422;
-    --color-surface-elevated: #131B2C;
-    --color-surface-header: #182338;
-    --color-border-hairline: #222F46;
-    --color-border-steel: #2D3D58;
-    
-    --color-text-primary: #F1F5F9;
-    --color-text-secondary: #94A3B8;
-    --color-text-muted: #64748B;
-    
-    --color-signal-live: #10B981;
-    --color-signal-warn: #F59E0B;
-    --color-signal-alert: #EF4444;
-    --color-signal-info: #38BDF8;
+    /* Default Theme Tokens (Obsidian Foundry Baseline) */
+    --mes-bg-canvas: #06080C;
+    --mes-bg-surface: #0C1017;
+    --mes-bg-well: #080B10;
+    --mes-bg-header: #090D14;
+    --mes-bg-tab-active: #131A26;
+    --mes-bg-tab-inactive: #090D14;
+    --mes-bg-modal: #0E1420;
+
+    --mes-border-subtle: #182232;
+    --mes-border-strong: #25354D;
+    --mes-border-hairline: #131A26;
+    --mes-border-accent-glow: rgba(56, 189, 248, 0.25);
+
+    --mes-text-primary: #F1F5F9;
+    --mes-text-secondary: #94A3B8;
+    --mes-text-muted: #64748B;
+    --mes-text-dim: #475569;
+    --mes-text-inverse: #06080C;
+
+    --mes-accent-primary: #38BDF8;
+    --mes-accent-hover: #0EA5E9;
+    --mes-accent-muted: rgba(56, 189, 248, 0.12);
+    --mes-accent-ring: rgba(56, 189, 248, 0.35);
+
+    --mes-status-pass: #10B981;
+    --mes-status-pass-muted: rgba(16, 185, 129, 0.12);
+    --mes-status-warn: #F59E0B;
+    --mes-status-warn-muted: rgba(245, 158, 11, 0.12);
+    --mes-status-halt: #F43F5E;
+    --mes-status-halt-muted: rgba(244, 63, 94, 0.12);
+    --mes-status-idle: #64748B;
+    --mes-radius: 2px;
+
+    --mes-shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+    --mes-shadow-elevated: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 4px 10px -2px rgba(0, 0, 0, 0.4);
+    --mes-shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+
+    --mes-transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    --mes-transition-smooth: 220ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   body {
     margin: 0;
     padding: 0;
-    background-color: var(--color-bg-base);
-    color: var(--color-text-primary);
+    background-color: var(--mes-bg-canvas);
+    color: var(--mes-text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -38,93 +63,161 @@
   }
 }
 
-/* Authentic Industrial Cleanroom Structural Panels (Zero Bubbly AI Cards) */
+/* Authentic Themed Industrial Cleanroom Panels */
 .mes-panel,
-.milled-panel {
-  background-color: #0E1422;
-  border: 1px solid #222F46;
-  border-radius: 2px !important;
+.milled-panel,
+.mes-panel-themed {
+  background-color: var(--mes-bg-surface);
+  border: 1px solid var(--mes-border-subtle);
+  border-radius: var(--mes-radius) !important;
   box-shadow: none !important;
 }
 
-.milled-slot {
-  background-color: #0B101C;
-  border: 1px solid #1C273A;
-  border-radius: 2px !important;
+.milled-slot,
+.mes-well-themed {
+  background-color: var(--mes-bg-well);
+  border: 1px solid var(--mes-border-hairline);
+  border-radius: var(--mes-radius) !important;
   box-shadow: none !important;
 }
 
-.mes-header-band {
-  background: linear-gradient(180deg, #1A2438 0%, #131B2C 100%);
-  border-bottom: 1px solid #2A3B58;
+.mes-header-band,
+.mes-header-themed {
+  background-color: var(--mes-bg-header);
+  border-bottom: 1px solid var(--mes-border-subtle);
 }
 
 .mes-toolbar {
-  background-color: #111827;
-  border-bottom: 1px solid #222F46;
+  background-color: var(--mes-bg-surface);
+  border-bottom: 1px solid var(--mes-border-subtle);
 }
 
-/* Enterprise Data Tables (Samsung G-MES / SAP Standard) */
-.mes-table {
+/* Focus-on-Hover Spotlight Interaction System */
+.mes-spotlight-group {
+  transition: all var(--mes-transition-smooth);
+}
+
+.mes-spotlight-group:hover .mes-spotlight-card {
+  opacity: 0.82;
+  filter: saturate(0.92);
+  transform: scale(0.995);
+}
+
+.mes-spotlight-group .mes-spotlight-card:hover {
+  opacity: 1 !important;
+  filter: saturate(1) !important;
+  transform: translateY(-2px) scale(1.038) !important;
+  box-shadow: var(--mes-shadow-elevated) !important;
+  border-color: var(--mes-accent-primary) !important;
+  z-index: 10;
+}
+
+.mes-spotlight-card {
+  transition: transform var(--mes-transition-smooth), 
+              box-shadow var(--mes-transition-smooth), 
+              border-color var(--mes-transition-fast), 
+              opacity var(--mes-transition-smooth),
+              filter var(--mes-transition-smooth);
+  will-change: transform, box-shadow;
+}
+
+/* Slide-Over Drawer Utilities */
+.mes-drawer-backdrop {
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(2px);
+  transition: opacity var(--mes-transition-smooth);
+}
+
+.mes-drawer-panel {
+  background-color: var(--mes-bg-surface);
+  border-left: 1px solid var(--mes-border-strong);
+  box-shadow: var(--mes-shadow-modal);
+  transition: transform var(--mes-transition-smooth);
+}
+
+/* Precision Tabular Numerals & High-Density Tables */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.mes-table,
+.mes-table-themed {
   width: 100%;
   border-collapse: collapse;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
 }
 
-.mes-table th {
-  background-color: #162032;
-  color: #94A3B8;
+.mes-table th,
+.mes-table-themed th {
+  background-color: var(--mes-bg-surface);
+  color: var(--mes-text-secondary);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 9.5px;
   padding: 6px 8px;
-  border: 1px solid #222F46;
+  border: 1px solid var(--mes-border-subtle);
   white-space: nowrap;
 }
 
-.mes-table td {
+.mes-table td,
+.mes-table-themed td {
   padding: 5px 8px;
-  border: 1px solid #1C273A;
-  color: #E2E8F0;
+  border: 1px solid var(--mes-border-hairline);
+  color: var(--mes-text-primary);
   white-space: nowrap;
 }
 
-.mes-table tr:nth-child(even) {
-  background-color: #0B101C;
+.mes-table tr:nth-child(even),
+.mes-table-themed tr:nth-child(even) {
+  background-color: var(--mes-bg-well);
 }
 
-.mes-table tr:hover {
-  background-color: #172236;
+.mes-table tr:hover,
+.mes-table-themed tr:hover {
+  background-color: var(--mes-accent-muted);
 }
 
 /* SMT Feeder Cassette Rail */
 .feeder-rail {
   background: repeating-linear-gradient(
     90deg,
-    #0E1422,
-    #0E1422 12px,
-    #141C2C 12px,
-    #141C2C 24px
+    var(--mes-bg-surface),
+    var(--mes-bg-surface) 12px,
+    var(--mes-bg-well) 12px,
+    var(--mes-bg-well) 24px
   );
-  border-bottom: 2px solid #2A3B58;
+  border-bottom: 2px solid var(--mes-border-strong);
 }
 
-/* Non-Intrusive Thin Scrollbar */
+/* Optional CRT / Tactical Scanline Overlay */
+.mes-scanlines-active::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 9999;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Thin Ergonomic Industrial Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0E17;
+  background: var(--mes-bg-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: #222F46;
+  background: var(--mes-border-strong);
   border-radius: 1px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3B82F6;
+  background: var(--mes-accent-primary);
 }
 
 /* Global Reduced Motion Compliance */
@@ -134,5 +227,9 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .mes-spotlight-group:hover .mes-spotlight-card,
+  .mes-spotlight-group .mes-spotlight-card:hover {
+    transform: none !important;
   }
 }

@@ -61,22 +61,23 @@ export async function seedDatabase(): Promise<void> {
     DELETE FROM work_centers;
     DELETE FROM production_line_holds;
     DELETE FROM production_lines;
+    DELETE FROM equipment_catalog;
     DELETE FROM areas;
     DELETE FROM sites;
     DELETE FROM organizations;
   `);
 
-  console.log('[SEED] Inserting ISA-95 Asset Hierarchy for Apex Electronics SMT Facility...');
+  console.log('[SEED] Inserting ISA-95 Asset Hierarchy for i-MES 2.0 SMT Facility...');
   // 1. Organization
   await db.execute(`
     INSERT INTO organizations (id, code, name)
-    VALUES ('org-apex', 'ORG-APEX', 'Apex Electronics Ltd')
+    VALUES ('org-apex', 'ORG-IMES', 'i-MES 2.0 Operations')
   `);
 
   // 2. Site
   await db.execute(`
     INSERT INTO sites (id, organization_id, code, name, location, timezone)
-    VALUES ('site-noida-p4', 'org-apex', 'SITE-NOIDA-P4', 'Apex Electronics SMT Facility Line 01', 'Noida, Uttar Pradesh, India', 'Asia/Kolkata')
+    VALUES ('site-noida-p4', 'org-apex', 'SITE-01', 'i-MES 2.0 SMT Facility', 'SMT Cleanroom Bay 1', 'Asia/Kolkata')
   `);
 
   // 3. Area
@@ -89,25 +90,31 @@ export async function seedDatabase(): Promise<void> {
 
   // 4. Production Lines
   await db.execute(`
-    INSERT INTO production_lines (id, area_id, code, name, status)
+    INSERT INTO production_lines (id, area_id, code, name, status, takt_target_sec)
     VALUES
-      ('line-smt-01', 'area-smt-01', 'LINE-SMT-01', 'SMT Line 01 (Fuji NXT III High-Speed Line)', 'RUNNING'),
-      ('line-smt-02', 'area-smt-01', 'LINE-SMT-02', 'SMT Line 02 (Automotive ECU High-Reliability Line)', 'RUNNING')
+      ('line-smt-01', 'area-smt-01', 'LINE-SMT-01', 'SMT Line 01 (Fuji NXT III High-Speed Line)', 'RUNNING', 18.0),
+      ('line-smt-02', 'area-smt-01', 'LINE-SMT-02', 'SMT Line 02 (Automotive ECU High-Reliability Line)', 'RUNNING', 22.0)
   `);
 
-  // 5. SMT Work Centers
+  // 5. SMT Work Centers (with explicit sequence order and customer asset codes)
   await db.execute(`
-    INSERT INTO work_centers (id, line_id, code, name, area, type, asset_path, current_state, current_program_name, module_count, last_state_change_time)
+    INSERT INTO work_centers (
+      id, line_id, code, name, customer_code, area, type, asset_path, 
+      current_state, current_program_name, module_count, sequence_order, 
+      cycle_time_nominal_sec, manufacturer, model_name, last_state_change_time
+    )
     VALUES 
-      ('wc-spg-01', 'line-smt-01', 'WC-SPG-01', 'Fuji GPX-C Solder Paste Screen Printer', 'SMT Cleanroom Bay A', 'SCREEN_PRINTER', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-01.WC-SPG-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 1, ?),
-      ('wc-nxt-01', 'line-smt-01', 'WC-NXT-01', 'Fuji NXT III M6 Pick-and-Place (4 Modules)', 'SMT Cleanroom Bay A', 'PICK_AND_PLACE', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-01.WC-NXT-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 4, ?),
-      ('wc-rfl-01', 'line-smt-01', 'WC-RFL-01', 'Heller 1913 MK5 10-Zone Reflow Oven', 'SMT Cleanroom Bay A', 'REFLOW_OVEN', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-01.WC-RFL-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 1, ?),
-      ('wc-aoi-01', 'line-smt-01', 'WC-AOI-01', 'Koh Young 3D AOI Optical Inspector', 'Post-Reflow Optical Inspection Suite', 'AOI_INSPECTION', 'ORG-APEX.SITE-NOIDA-P4.AREA-AOI-01.LINE-SMT-01.WC-AOI-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 1, ?),
-      ('wc-spg-02', 'line-smt-02', 'WC-SPG-02', 'DEK NeoHorizon High-Precision Screen Printer', 'SMT Cleanroom Bay A', 'SCREEN_PRINTER', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-02.WC-SPG-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 1, ?),
-      ('wc-nxt-02', 'line-smt-02', 'WC-NXT-02', 'Fuji NXT III M6 Pick-and-Place (Module 2)', 'SMT Cleanroom Bay A', 'PICK_AND_PLACE', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-02.WC-NXT-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 4, ?),
-      ('wc-rfl-02', 'line-smt-02', 'WC-RFL-02', 'Rehm Nitro 12-Zone Nitrogen Reflow Oven', 'SMT Cleanroom Bay A', 'REFLOW_OVEN', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-02.WC-RFL-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 1, ?),
-      ('wc-aoi-02', 'line-smt-02', 'WC-AOI-02', 'Omron VT-S1080 3D AOI Dual-Lane Inspector', 'Post-Reflow Optical Inspection Suite', 'AOI_INSPECTION', 'ORG-APEX.SITE-NOIDA-P4.AREA-AOI-01.LINE-SMT-02.WC-AOI-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 1, ?)
+      ('wc-spg-01', 'line-smt-01', 'WC-SPG-01', 'Fuji GPX-C Solder Paste Screen Printer', 'PRN-01', 'SMT Cleanroom Bay A', 'SCREEN_PRINTER', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-01.WC-SPG-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 1, 1, 17.4, 'Fuji', 'GPX-C', ?),
+      ('wc-nxt-01', 'line-smt-01', 'WC-NXT-01', 'Fuji NXT III M6 Pick-and-Place (4 Modules)', 'MNT-01', 'SMT Cleanroom Bay A', 'PICK_AND_PLACE', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-01.WC-NXT-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 4, 2, 22.1, 'Fuji', 'NXT III M6', ?),
+      ('wc-rfl-01', 'line-smt-01', 'WC-RFL-01', 'Heller 1913 MK5 10-Zone Reflow Oven', 'RFW-01', 'SMT Cleanroom Bay A', 'REFLOW_OVEN', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-01.WC-RFL-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 1, 3, 18.0, 'Heller', '1913 MK5', ?),
+      ('wc-aoi-01', 'line-smt-01', 'WC-AOI-01', 'Koh Young 3D AOI Optical Inspector', 'AOI-01', 'Post-Reflow Optical Inspection Suite', 'AOI_INSPECTION', 'ORG-APEX.SITE-NOIDA-P4.AREA-AOI-01.LINE-SMT-01.WC-AOI-01', 'RUNNING', 'PROG-SM-METER-TOP-REV4', 1, 4, 15.1, 'Koh Young', 'Zenith Alpha', ?),
+      ('wc-spg-02', 'line-smt-02', 'WC-SPG-02', 'DEK NeoHorizon High-Precision Screen Printer', 'PRN-02', 'SMT Cleanroom Bay A', 'SCREEN_PRINTER', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-02.WC-SPG-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 1, 1, 14.0, 'DEK', 'NeoHorizon', ?),
+      ('wc-nxt-02', 'line-smt-02', 'WC-NXT-02', 'Fuji NXT III M6 Pick-and-Place (Module 2)', 'MNT-02', 'SMT Cleanroom Bay A', 'PICK_AND_PLACE', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-02.WC-NXT-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 4, 2, 21.8, 'Fuji', 'NXT III M6', ?),
+      ('wc-rfl-02', 'line-smt-02', 'WC-RFL-02', 'Rehm Nitro 12-Zone Nitrogen Reflow Oven', 'RFW-02', 'SMT Cleanroom Bay A', 'REFLOW_OVEN', 'ORG-APEX.SITE-NOIDA-P4.AREA-SMT-01.LINE-SMT-02.WC-RFL-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 1, 3, 18.0, 'Rehm', 'Nitro 12-Zone', ?),
+      ('wc-aoi-02', 'line-smt-02', 'WC-AOI-02', 'Omron VT-S1080 3D AOI Dual-Lane Inspector', 'AOI-02', 'Post-Reflow Optical Inspection Suite', 'AOI_INSPECTION', 'ORG-APEX.SITE-NOIDA-P4.AREA-AOI-01.LINE-SMT-02.WC-AOI-02', 'RUNNING', 'PROG-AUTO-ECU-TOP-REV1', 1, 4, 15.5, 'Omron', 'VT-S1080', ?)
   `, [now, now, now, now, now, now, now, now]);
+
+  await seedEquipmentCatalog();
 
   console.log('[SEED] Inserting SMT Operators & Shift Schedules...');
   await db.execute(`
@@ -228,6 +235,7 @@ export async function seedDatabase(): Promise<void> {
       ('reel-04', 'REEL-QCT-77821', 'MOD-QUECTEL-EC200U', 'Quectel EC200U-CN 4G LTE IoT Module', 'Quectel Wireless', 'LOT-QCT-5519', '202610', 500, 358, 'PCS', 3, 'MSL_3', 4320, ?, 'FACTORY_FLOOR', 'AMBIENT_EXPOSURE', 'FLOOR_EXPOSURE', 10080, 'MOUNTED'),
       ('reel-05', 'REEL-TI-66100', 'IC-TPS62130-QFN16', 'TI Synchronous Step-Down DC-DC Converter', 'Texas Instruments', 'LOT-TI-9901', '202620', 3000, 2716, 'PCS', 2, 'MSL_2', 520000, ?, 'FACTORY_FLOOR', 'AMBIENT_EXPOSURE', 'FLOOR_EXPOSURE', 525600, 'MOUNTED'),
       ('reel-06-sp', 'REEL-MUR-98125-SPLICE', 'C0402-100NF-16V', '100nF 16V 10% 0402 Ceramic Cap', 'Murata Electronics', 'LOT-MUR-2603', '202614', 10000, 10000, 'PCS', 1, 'MSL_1', 999999, NULL, 'WAREHOUSE', 'SEALED_MBB', 'SEALED', 999999, 'READY'),
+      ('reel-07-new', 'REEL-MUR-98125-NEW', 'C0402-100NF-16V', '100nF 16V 10% 0402 Ceramic Cap', 'Murata Electronics', 'LOT-MUR-2604', '202614', 10000, 10000, 'PCS', 1, 'MSL_1', 999999, NULL, 'WAREHOUSE', 'SEALED_MBB', 'SEALED', 999999, 'READY'),
       ('reel-exp-demo', 'REEL-EXPIRED-TEST-01', 'C0402-100NF-16V', '100nF Cap (MSL Expired Demo)', 'Murata Electronics', 'LOT-EXP-01', '202610', 5000, 5000, 'PCS', 3, 'MSL_3', 0, '2026-08-01T00:00:00Z', 'FACTORY_FLOOR', 'AMBIENT_EXPOSURE', 'BAKE_REQUIRED', 10080, 'EXPIRED_MSL'),
       ('reel-quar-demo', 'REEL-QUARANTINE-01', 'C0402-100NF-16V', '100nF Cap (Quarantined Demo)', 'Murata Electronics', 'LOT-QUAR-01', '202611', 5000, 5000, 'PCS', 1, 'MSL_1', 999999, NULL, 'FACTORY_FLOOR', 'AMBIENT_EXPOSURE', 'FLOOR_EXPOSURE', 999999, 'QUARANTINED')
   `, [now, now, now]);
@@ -255,12 +263,12 @@ export async function seedDatabase(): Promise<void> {
   console.log('[SEED] Inserting Active SMT Production Run...');
   await db.execute(`
     INSERT INTO work_orders (id, order_number, product_code, target_quantity, status, created_at)
-    VALUES ('wo-apex-01', 'WO-2026-APEX-01', 'PRD-SM-4G-V2', 500.0, 'IN_PROGRESS', ?)
+    VALUES ('wo-apex-01', 'WO-2026-IMES-01', 'PRD-SM-4G-V2', 500.0, 'IN_PROGRESS', ?)
   `, [now]);
 
   await db.execute(`
     INSERT INTO batches (id, batch_number, work_order_number, product_code, recipe_code, work_center_id, status, planned_quantity, actual_quantity, rejected_quantity, unit, started_at, operator_id)
-    VALUES ('job-01', 'JOB-SM-260901', 'WO-2026-APEX-01', 'PRD-SM-4G-V2', 'PROG-SM-METER-TOP-REV4', 'wc-nxt-01', 'RUNNING', 500.0, 142.0, 3.0, 'PANEL', ?, 'op-smt-01')
+    VALUES ('job-01', 'JOB-SM-260901', 'WO-2026-IMES-01', 'PRD-SM-4G-V2', 'PROG-SM-METER-TOP-REV4', 'wc-nxt-01', 'RUNNING', 500.0, 142.0, 3.0, 'PANEL', ?, 'op-smt-01')
   `, [now]);
 
   await db.execute(`
@@ -712,6 +720,66 @@ export async function seedDatabase(): Promise<void> {
   }
 
   console.log('[SEED] Apex SMT Multi-Line Facility (Line 01 & Line 02) successfully seeded with Phase 5 & Phase 6 fixtures.');
+}
+
+export async function seedEquipmentCatalog(): Promise<void> {
+  const db = getDatabase();
+  try {
+    const rows = await db.query<{ cnt: number | string }>('SELECT COUNT(*) as cnt FROM equipment_catalog');
+    if (rows.length > 0 && Number(rows[0].cnt) > 0) {
+      return;
+    }
+  } catch {
+    // Table may not exist yet if called before migration
+    return;
+  }
+
+  console.log('[SEED] Inserting Multi-Vendor Equipment Catalog (Indian & Global Plant Standards)...');
+  await db.execute(`
+    INSERT INTO equipment_catalog (
+      id, manufacturer, model_name, category, default_cycle_time_sec, rated_cph, supported_protocols, icon_key, is_built_in
+    ) VALUES
+      -- Screen Printers
+      ('cat-dek-neo', 'DEK', 'NeoHorizon 03iX', 'PRINTER', 14.0, 0, '["IPC_CFX", "SECS_GEM"]', 'printer', 1),
+      ('cat-fuji-gpx', 'Fuji', 'GPX-C High Speed', 'PRINTER', 12.0, 0, '["FUJI_NEXIM", "IPC_CFX"]', 'printer', 1),
+      ('cat-yamaha-ysp', 'Yamaha', 'YSP Premium Printer', 'PRINTER', 13.0, 0, '["IPC_CFX", "SECS_GEM"]', 'printer', 1),
+      ('cat-gkg-gtitan', 'GKG', 'G-Titan Precision Printer', 'PRINTER', 15.0, 0, '["IPC_CFX", "GENERIC_TCP"]', 'printer', 1),
+      
+      -- 3D SPI
+      ('cat-ky-8030', 'Koh Young', 'KY8030-3 3D SPI', 'SPI', 14.2, 0, '["KOH_YOUNG_XML", "IPC_CFX"]', 'search', 1),
+      ('cat-parmi-sigma', 'Parmi', 'SigmaX 3D SPI', 'SPI', 13.5, 0, '["IPC_CFX", "SECS_GEM"]', 'search', 1),
+      ('cat-saki-3di', 'Saki', '3Di-ZS2 3D SPI', 'SPI', 14.0, 0, '["IPC_CFX", "SECS_GEM"]', 'search', 1),
+      ('cat-cyber-se3k', 'CyberOptics', 'SE3000 Ultra-Fast SPI', 'SPI', 15.0, 0, '["IPC_CFX"]', 'search', 1),
+      
+      -- Pick & Place Mounters
+      ('cat-fuji-nxt3', 'Fuji', 'NXT III M6 Module', 'PICK_AND_PLACE', 22.0, 90000, '["FUJI_NEXIM", "IPC_CFX"]', 'cpu', 1),
+      ('cat-fuji-aimex', 'Fuji', 'AIMEX III Flexible Mounter', 'PICK_AND_PLACE', 24.0, 75000, '["FUJI_NEXIM", "IPC_CFX"]', 'cpu', 1),
+      ('cat-yamaha-ysm20r', 'Yamaha', 'YSM20R High-Speed Mounter', 'PICK_AND_PLACE', 21.0, 95000, '["IPC_CFX", "SECS_GEM"]', 'cpu', 1),
+      ('cat-yamaha-yrm20', 'Yamaha', 'YRM20 Next-Gen Mounter', 'PICK_AND_PLACE', 19.5, 115000, '["IPC_CFX", "SECS_GEM"]', 'cpu', 1),
+      ('cat-panasonic-npm', 'Panasonic', 'NPM-D3 Dual-Lane Mounter', 'PICK_AND_PLACE', 20.0, 84000, '["IPC_CFX", "SECS_GEM"]', 'cpu', 1),
+      ('cat-panasonic-am100', 'Panasonic', 'AM100 Modular Placer', 'PICK_AND_PLACE', 23.0, 35800, '["IPC_CFX"]', 'cpu', 1),
+      ('cat-juki-rs1r', 'Juki', 'RS-1R Smart Placer', 'PICK_AND_PLACE', 25.0, 47000, '["IPC_CFX", "SECS_GEM"]', 'cpu', 1),
+      ('cat-asm-siplace', 'ASM', 'Siplace TX High-Precision', 'PICK_AND_PLACE', 19.0, 96000, '["IPC_CFX", "SECS_GEM"]', 'cpu', 1),
+      ('cat-hanwha-decan', 'Hanwha', 'Decan S1 High-Speed', 'PICK_AND_PLACE', 22.5, 92000, '["IPC_CFX"]', 'cpu', 1),
+      
+      -- Reflow Ovens
+      ('cat-heller-1913', 'Heller', '1913 MK5 10-Zone Reflow', 'REFLOW', 18.0, 0, '["KIC_PROFILING", "IPC_CFX"]', 'flame', 1),
+      ('cat-rehm-nitro', 'Rehm', 'Nitro 12-Zone Nitrogen Reflow', 'REFLOW', 18.0, 0, '["IPC_CFX", "SECS_GEM"]', 'flame', 1),
+      ('cat-btu-pyramax', 'BTU', 'Pyramax 100N Convection Oven', 'REFLOW', 18.0, 0, '["IPC_CFX", "SECS_GEM"]', 'flame', 1),
+      ('cat-ersa-hotflow', 'ERSA', 'HOTFLOW 3/20 Reflow Oven', 'REFLOW', 18.0, 0, '["IPC_CFX"]', 'flame', 1),
+      
+      -- 3D AOI & X-Ray
+      ('cat-ky-zenith', 'Koh Young', 'Zenith Alpha 3D AOI', 'AOI', 15.1, 0, '["KOH_YOUNG_XML", "IPC_CFX"]', 'eye', 1),
+      ('cat-omron-s1080', 'Omron', 'VT-S1080 3D AOI Post-Reflow', 'AOI', 15.5, 0, '["IPC_CFX", "SECS_GEM"]', 'eye', 1),
+      ('cat-mirtec-mv6', 'Mirtec', 'MV-6 OMNI 3D AOI', 'AOI', 16.0, 0, '["IPC_CFX"]', 'eye', 1),
+      ('cat-nordson-quadra', 'Nordson', 'Quadra 5 High-Resolution AXI', 'XRAY', 16.5, 0, '["GENERIC_TCP", "IPC_CFX"]', 'activity', 1),
+      
+      -- Laser Markers & Buffers
+      ('cat-keyence-mdx', 'Keyence', 'MD-X Fiber Laser Marker', 'LASER', 12.4, 0, '["GENERIC_TCP", "IPC_CFX"]', 'zap', 1),
+      ('cat-asys-insignum', 'ASYS', 'INSIGNUM 2000 Laser Marker', 'LASER', 12.0, 0, '["IPC_CFX"]', 'zap', 1),
+      ('cat-smema-buffer', 'Generic', 'SMEMA FIFO Buffer 20-Slot', 'BUFFER', 2.0, 0, '["HERMES", "SMEMA"]', 'layers', 1),
+      ('cat-board-inverter', 'Generic', 'Automatic Board Inverter Module', 'BUFFER', 4.0, 0, '["HERMES", "SMEMA"]', 'refresh-cw', 1)
+  `);
 }
 
 if (require.main === module && process.argv[1] && (process.argv[1].endsWith('seed.ts') || process.argv[1].endsWith('seed.js') || process.argv[1].includes('seed'))) {

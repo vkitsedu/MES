@@ -2,7 +2,7 @@
  * build-portable-win.mjs
  *
  * Builds a TRULY self-contained Windows portable package for the MES Simulator.
- * No installation, no Node.js dependency, no version mismatch — ever.
+ * No installation, no Node.js dependency, no version mismatch ï¿½ ever.
  *
  * Strategy:
  *   - Copies the EXACT node.exe running this script (guaranteed version match)
@@ -31,7 +31,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 console.log('\n================================================================================');
-console.log('   ?? BUILDING MES SIMULATOR — TRULY SELF-CONTAINED PORTABLE PACKAGE');
+console.log('   ?? BUILDING MES SIMULATOR ï¿½ TRULY SELF-CONTAINED PORTABLE PACKAGE');
 console.log('================================================================================\n');
 
 // --- Step 1: Verify build environment ----------------------------------------
@@ -71,9 +71,9 @@ const distDir = path.join(rootDir, 'dist-portable');
 fs.rmSync(distDir, { recursive: true, force: true });
 fs.mkdirSync(distDir, { recursive: true });
 
-// node:sqlite  — Node 22 built-in, no file needed (already inside node.exe)
-// argon2       — native addon, must be on disk beside the bundle
-// pg-native    — optional PostgreSQL C driver, not needed for SQLite mode
+// node:sqlite  ï¿½ Node 22 built-in, no file needed (already inside node.exe)
+// argon2       ï¿½ native addon, must be on disk beside the bundle
+// pg-native    ï¿½ optional PostgreSQL C driver, not needed for SQLite mode
 const esbuildCmd = [
   'npx esbuild apps/api/src/server.ts',
   '--bundle',
@@ -101,7 +101,7 @@ const portableDir = path.join(releaseDir, 'MES-Simulator-Portable-Win64');
 try { fs.rmSync(portableDir, { recursive: true, force: true }); } catch (e) { /* ignore locked folder root and overwrite contents */ }
 fs.mkdirSync(portableDir, { recursive: true });
 
-// 5a. Copy node.exe — THE KEY: exact version used to build = zero mismatch
+// 5a. Copy node.exe ï¿½ THE KEY: exact version used to build = zero mismatch
 const destNodeExe = path.join(portableDir, 'node.exe');
 fs.copyFileSync(nodeExePath, destNodeExe);
 const nodeSizeMb = (fs.statSync(destNodeExe).size / 1024 / 1024).toFixed(1);
@@ -146,15 +146,15 @@ console.log('  ? argon2 native addon copied (win32-x64 prebuilt).');
 
 console.log('\n[6/8] Writing launcher scripts...');
 
-// Main launcher — double-click to start
+// Main launcher ï¿½ double-click to start
 fs.writeFileSync(path.join(portableDir, 'Start-MES.bat'), `\
 @echo off
-title SMT MES Simulator
+title i-MES 2.0 Simulator
 cd /d "%~dp0"
 
 echo.
 echo  ============================================================================
-echo     SMT MANUFACTURING EXECUTION SYSTEM (MES)  —  PORTABLE SIMULATOR
+echo     i-MES 2.0 - SMT MANUFACTURING EXECUTION SYSTEM  --  PORTABLE SIMULATOR
 echo  ============================================================================
 echo.
 echo  Starting MES engine... (first run may take 5-10 seconds to seed database)
@@ -205,7 +205,7 @@ console.log('  ? Start-MES.bat, Start-MES-Background.bat, Stop-MES.bat created.'
 
 fs.writeFileSync(path.join(portableDir, 'README.txt'), `\
 ================================================================================
-   SMT MANUFACTURING EXECUTION SYSTEM (MES) — PORTABLE SIMULATOR
+   i-MES 2.0 - SMT MANUFACTURING EXECUTION SYSTEM -- PORTABLE SIMULATOR
    Self-Contained | No Installation | No Node.js Needed
    Runtime: ${nodeVersion} (${process.arch}, embedded)
 ================================================================================
@@ -291,20 +291,20 @@ console.log('\n[8/8] Creating ZIP archive (PowerShell Compress-Archive)...');
 const zipPath = path.join(releaseDir, 'MES-Simulator-Portable-Win64.zip');
 
 try {
-  // PowerShell Compress-Archive is available on all Windows 10/11 — no 7zip needed
+  // PowerShell Compress-Archive is available on all Windows 10/11 ï¿½ no 7zip needed
   execSync(
     `powershell -NoProfile -Command "Compress-Archive -Path '${portableDir}' -DestinationPath '${zipPath}' -Force"`,
     { stdio: 'inherit' }
   );
   console.log(`  ? ZIP created: ${(fs.statSync(zipPath).size / 1024 / 1024).toFixed(1)} MB`);
 } catch (err) {
-  console.warn(`  ??  ZIP creation failed (${err.message}) — folder is ready, zip manually.`);
+  console.warn(`  ??  ZIP creation failed (${err.message}) ï¿½ folder is ready, zip manually.`);
 }
 
 // --- Done ----------------------------------------------------------------------
 
 console.log('\n================================================================================');
-console.log('   ?  BUILD COMPLETE — SEND TO YOUR ENGINEERS');
+console.log('   ?  BUILD COMPLETE ï¿½ SEND TO YOUR ENGINEERS');
 console.log('================================================================================');
 console.log(`\n  ?? Folder : release\\MES-Simulator-Portable-Win64\\`);
 console.log(`  ?? ZIP    : release\\MES-Simulator-Portable-Win64.zip`);

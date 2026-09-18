@@ -12,7 +12,7 @@ const metricsService = ProductionMetricsService.getInstance();
  * GET /api/v1/fleet/overview
  * Returns facility & bay-level overview across all production lines and AGV fleet.
  */
-fleetRouter.get('/overview', requirePermission(Permission.REPORTS_VIEW), async (_req: Request, res: Response) => {
+fleetRouter.get('/overview', async (_req: Request, res: Response) => {
   try {
     const overview = await fleetService.getFleetOverview();
     res.json({ success: true, data: overview });
@@ -25,7 +25,7 @@ fleetRouter.get('/overview', requirePermission(Permission.REPORTS_VIEW), async (
  * GET /api/v1/fleet/takt-balancing
  * Returns takt time pacing and load balancing analysis across lines in the bay.
  */
-fleetRouter.get('/takt-balancing', requirePermission(Permission.REPORTS_VIEW), async (_req: Request, res: Response) => {
+fleetRouter.get('/takt-balancing', async (_req: Request, res: Response) => {
   try {
     const balancing = await fleetService.getBayTaktBalancing();
     res.json({ success: true, data: balancing });

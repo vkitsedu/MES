@@ -73,28 +73,28 @@ export const PanelUnitMatrix: React.FC<PanelUnitMatrixProps> = ({
   };
 
   return (
-    <div className="milled-panel rounded-xl p-5 space-y-4">
+    <div className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border)] rounded-xl p-5 space-y-4">
       {/* Panel Hardware Metadata Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--mes-border)] pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#18222F] border border-white/15 flex items-center justify-center text-[#00E699]">
+          <div className="w-8 h-8 rounded-lg bg-[var(--mes-bg-well)] border border-[var(--mes-border)] flex items-center justify-center text-[var(--mes-status-pass)]">
             <Layers className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono text-[#7A8A9E] uppercase tracking-wider">
+              <span className="text-[10px] font-mono text-[var(--mes-text-muted)] uppercase tracking-wider">
                 PANEL BARCODE:
               </span>
-              <span className="text-xs font-mono font-bold text-white bg-white/5 px-2 py-0.5 rounded border border-white/10">
+              <span className="text-xs font-mono font-bold text-[var(--mes-text-primary)] bg-[var(--mes-bg-well)] px-2 py-0.5 rounded border border-[var(--mes-border)]">
                 {panelBarcode}
               </span>
             </div>
-            <div className="text-xs text-[#7A8A9E] font-mono mt-0.5 flex flex-wrap items-center gap-2">
-              <span>Work Center: <strong className="text-white">{checkout.workCenterId}</strong></span>
+            <div className="text-xs text-[var(--mes-text-muted)] font-mono mt-0.5 flex flex-wrap items-center gap-2">
+              <span>Work Center: <strong className="text-[var(--mes-text-primary)]">{checkout.workCenterId}</strong></span>
               <span>•</span>
-              <span>Program: <strong className="text-white">{checkout.programName}</strong></span>
+              <span>Program: <strong className="text-[var(--mes-text-primary)]">{checkout.programName}</strong></span>
               <span>•</span>
-              <span>Cycle: <strong className="text-white">{checkout.cycleTimeSeconds}s</strong></span>
+              <span>Cycle: <strong className="text-[var(--mes-text-primary)]">{checkout.cycleTimeSeconds}s</strong></span>
               {checkout.profileRunId && (
                 <>
                   <span>•</span>
@@ -106,10 +106,10 @@ export const PanelUnitMatrix: React.FC<PanelUnitMatrixProps> = ({
         </div>
 
         <div className="text-right">
-          <span className="text-[10px] font-mono text-[#7A8A9E] uppercase tracking-wider block">
+          <span className="text-[10px] font-mono text-[var(--mes-text-muted)] uppercase tracking-wider block">
             Multi-Circuit Array
           </span>
-          <span className="text-xs font-mono font-bold text-[#00E699]">
+          <span className="text-xs font-mono font-bold text-[var(--mes-status-pass)]">
             {units.length} Discrete Units
           </span>
         </div>
@@ -117,9 +117,9 @@ export const PanelUnitMatrix: React.FC<PanelUnitMatrixProps> = ({
 
       {/* Multi-Up Discrete Circuit Matrix */}
       <div>
-        <div className="text-[11px] font-mono text-[#7A8A9E] uppercase tracking-wider mb-2 flex items-center justify-between">
+        <div className="text-[11px] font-mono text-[var(--mes-text-muted)] uppercase tracking-wider mb-2 flex items-center justify-between">
           <span>Multi-Up PCB Discretization Array (Click to Inspect Unit)</span>
-          <span className="text-[10px] text-white/40">O(1) in-memory selection • Zero network roundtrips</span>
+          <span className="text-[10px] text-[var(--mes-text-muted)]">O(1) in-memory selection • Zero network roundtrips</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -134,23 +134,23 @@ export const PanelUnitMatrix: React.FC<PanelUnitMatrixProps> = ({
                 onClick={() => onSelectUnit(u.unitPosition)}
                 className={`text-left p-3 rounded-xl border transition-all duration-150 flex flex-col justify-between gap-2.5 active:scale-[0.98] ${
                   isSelected
-                    ? 'bg-[#182332] border-[#00E699] shadow-lg shadow-[#00E699]/10'
-                    : 'bg-[#0B0F15] border-white/10 hover:border-white/20 hover:bg-[#101620]'
+                    ? 'bg-[var(--mes-bg-card)] border-[var(--mes-status-pass)] shadow-lg'
+                    : 'bg-[var(--mes-bg-well)] border-[var(--mes-border)] hover:border-[var(--mes-text-muted)] hover:bg-[var(--mes-bg-card)]'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className={`text-xs font-mono font-bold ${isSelected ? 'text-[#00E699]' : 'text-white'}`}>
+                  <span className={`text-xs font-mono font-bold ${isSelected ? 'text-[var(--mes-status-pass)]' : 'text-[var(--mes-text-primary)]'}`}>
                     UNIT #{u.unitPosition}
                   </span>
                   {isSelected && (
-                    <span className="text-[9px] font-mono font-bold bg-[#00E699] text-[#0B0F14] px-1.5 py-0.2 rounded">
+                    <span className="text-[9px] font-mono font-bold bg-[var(--mes-status-pass)] text-black px-1.5 py-0.2 rounded">
                       ACTIVE
                     </span>
                   )}
                 </div>
 
                 <div className="space-y-1">
-                  <div className="text-[10px] font-mono text-[#7A8A9E] truncate" title={u.unitSerialNumber || 'UNSERIALIZED'}>
+                  <div className="text-[10px] font-mono text-[var(--mes-text-muted)] truncate" title={u.unitSerialNumber || 'UNSERIALIZED'}>
                     {u.unitSerialNumber || 'SN: N/A'}
                   </div>
                   <div>
@@ -158,7 +158,7 @@ export const PanelUnitMatrix: React.FC<PanelUnitMatrixProps> = ({
                   </div>
                 </div>
 
-                <div className="text-[10px] font-mono pt-1 border-t border-white/5 flex items-center justify-between text-[#7A8A9E]">
+                <div className="text-[10px] font-mono pt-1 border-t border-[var(--mes-border)] flex items-center justify-between text-[var(--mes-text-muted)]">
                   <span>{defectCount > 0 ? `${defectCount} Defect(s)` : '0 Defects'}</span>
                   {hasRework && <span className="text-purple-400 font-bold">Reworked</span>}
                 </div>

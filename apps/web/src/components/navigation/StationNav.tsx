@@ -22,6 +22,7 @@ interface StationNavProps {
 const STATION_ICONS: Record<NavTab, React.ComponentType<{ className?: string }>> = {
   FLEET: Split,
   SUPERVISOR: Activity,
+  STUDIO: Sliders,
   OPERATOR: Tablet,
   SPI: Sliders,
   SOLDER_PASTE: Layers,

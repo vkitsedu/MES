@@ -207,8 +207,8 @@ describe('OT Fuji Gateway Security & Protocol Suite (Task 7)', () => {
       '0', // subSlotNo
       'FID-W08F-01', // feederId
       'C0402-100NF-16V', // partNo
-      'REEL-NEW-001', // newReelId
-      'LOT-01', // lotNo
+      'REEL-MUR-98125-SPLICE', // newReelId
+      'LOT-MUR-2603', // lotNo
       '5000' // quantity
     ]);
     // 4. PRODSTARTED (board entry check-in)

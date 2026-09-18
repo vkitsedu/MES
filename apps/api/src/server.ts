@@ -5,7 +5,7 @@ import { exec } from 'child_process';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initDatabase, getDatabase } from './db/database';
-import { seedDatabase } from './db/seed';
+import { seedDatabase, seedEquipmentCatalog } from './db/seed';
 import { eventsRouter } from './routes/events.router';
 import { workCentersRouter } from './routes/work-centers.router';
 import { batchesRouter } from './routes/batches.router';
@@ -20,8 +20,11 @@ import { fleetRouter } from './routes/fleet.router';
 import { logisticsRouter } from './routes/logistics.router';
 import { predictiveRouter } from './routes/predictive.router';
 import { reflowRouter } from './routes/reflow.router';
+import { linesRouter } from './routes/lines.router';
+import { equipmentCatalogRouter } from './routes/equipment-catalog.router';
 import { MetricsService } from './services/metrics.service';
 import { FujiNeximAdapter } from './adapters/fuji-nexim.adapter';
+import { FujiConfigService } from './services/fuji-config.service';
 import { MachineControlModule } from './modules/machine-control';
 import { securityHeadersMiddleware, SimpleRateLimiter, timingSafeCompare } from './security/http-security';
 import { SecretsConfigManager } from './config/secrets';
@@ -82,11 +85,25 @@ const PUBLIC_ALLOWLIST = [
   '/api/v1/auth/bootstrap',
   '/api/v1/openapi.json',
   '/api-docs',
-  '/metrics'
+  '/metrics',
+  '/api/v1/smt/fuji/config',
+  '/api/v1/smt/fuji/test-connection',
+  '/api/v1/smt/fuji/wire-logs',
+  '/api/v1/smt/fuji/wire-logs/clear',
+  '/api/v1/smt/management-monitor/fleet',
+  '/api/v1/fleet/overview',
+  '/api/v1/fleet/takt-balancing'
 ] as const;
 
 function isAllowlisted(urlPath: string): boolean {
   const clean = urlPath.split('?')[0].replace(/\/+$/, '') || '/';
+  if (
+    clean.startsWith('/api/v1/smt/management-monitor/') ||
+    clean.startsWith('/api/v1/lines') ||
+    clean.startsWith('/api/v1/equipment/catalog')
+  ) {
+    return true;
+  }
   return PUBLIC_ALLOWLIST.some((p) => {
     const cleanP = p.replace(/\/+$/, '') || '/';
     return clean === cleanP;
@@ -105,6 +122,8 @@ app.use('/api/v1', (req, res, next) => {
 // Register API routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/events', eventsRouter);
+app.use('/api/v1/lines', linesRouter);
+app.use('/api/v1/equipment/catalog', equipmentCatalogRouter);
 app.use('/api/v1/work-centers', workCentersRouter);
 app.use('/api/v1/batches', batchesRouter);
 app.use('/api/v1/reports', reportsRouter);
@@ -219,7 +238,7 @@ for (const dir of possiblePublicDirs) {
 function printBanner(port: string | number, fujiPort: number) {
   const line = '='.repeat(80);
   console.log(`\n${line}`);
-  console.log('   🏭 SMT MANUFACTURING EXECUTION SYSTEM (MES)');
+  console.log('   🏭 i-MES 2.0 - SMT MANUFACTURING EXECUTION SYSTEM');
   console.log('   Cleanroom Operations & Equipment Automation Platform');
   console.log(`${line}`);
   console.log(`  [System Architecture]  TypeScript + Node.js Engine (Dual Dialect SQLite / Postgres)`);
@@ -263,9 +282,21 @@ async function bootstrap() {
     console.log('[API] Bootstrapping SMT MES Engine...');
     SecretsConfigManager.loadConfig();
     await initDatabase();
+    await seedEquipmentCatalog();
 
-    // Check database population status
+    // Ensure baseline work centers have calibrated sequence orders and customer codes
     const db = getDatabase();
+    await db.execScript(`
+      UPDATE work_centers SET sequence_order = 1, customer_code = 'PRN-01' WHERE code IN ('WC-SPG-01', 'WC-PRN-01') AND (customer_code IS NULL OR sequence_order <= 1);
+      UPDATE work_centers SET sequence_order = 2, customer_code = 'MNT-01' WHERE code IN ('WC-NXT-01', 'WC-MNT-01') AND (customer_code IS NULL OR sequence_order <= 1);
+      UPDATE work_centers SET sequence_order = 3, customer_code = 'RFW-01' WHERE code IN ('WC-RFL-01', 'WC-RFW-01') AND (customer_code IS NULL OR sequence_order <= 1);
+      UPDATE work_centers SET sequence_order = 4, customer_code = 'AOI-01' WHERE code IN ('WC-AOI-01') AND (customer_code IS NULL OR sequence_order <= 1);
+
+      UPDATE work_centers SET sequence_order = 1, customer_code = 'PRN-02' WHERE code IN ('WC-SPG-02', 'WC-PRN-02') AND (customer_code IS NULL OR sequence_order <= 1);
+      UPDATE work_centers SET sequence_order = 2, customer_code = 'MNT-02' WHERE code IN ('WC-NXT-02', 'WC-MNT-02') AND (customer_code IS NULL OR sequence_order <= 1);
+      UPDATE work_centers SET sequence_order = 3, customer_code = 'RFW-02' WHERE code IN ('WC-RFL-02', 'WC-RFW-02') AND (customer_code IS NULL OR sequence_order <= 1);
+      UPDATE work_centers SET sequence_order = 4, customer_code = 'AOI-02' WHERE code IN ('WC-AOI-02') AND (customer_code IS NULL OR sequence_order <= 1);
+    `).catch(() => {});
     const countRows = await db.query<{ cnt: number | string }>('SELECT COUNT(*) as cnt FROM component_reels');
     const isEmpty = countRows.length === 0 || Number(countRows[0].cnt) === 0;
     const isProduction = process.env.NODE_ENV === 'production';
@@ -283,11 +314,11 @@ async function bootstrap() {
       await OnboardingService.refreshStateFromDb();
     }
 
-    // Start Fuji Nexim TCP Socket Gateway (Default Port 30040)
+    // Start Fuji Nexim TCP Socket Gateway & OT Configuration
     const PORT = parseInt(process.env.PORT || '4000', 10);
-    const fujiPort = parseInt(process.env.FUJI_PORT || '30040', 10);
     fujiAdapter = new FujiNeximAdapter();
-    fujiAdapter.startListener(fujiPort);
+    await FujiConfigService.initialize(fujiAdapter);
+    const fujiConfig = FujiConfigService.loadConfig();
     setFujiAdapterForHealth(fujiAdapter);
     MachineControlModule.getInstance().registerAdapter(fujiAdapter);
 
@@ -297,7 +328,7 @@ async function bootstrap() {
     );
 
     const server = app.listen(PORT, () => {
-      printBanner(PORT, fujiPort);
+      printBanner(PORT, fujiConfig.port);
       if (!process.env.CI && process.env.NODE_ENV !== 'test' && !process.env.HEADLESS) {
         launchBrowser(`http://localhost:${PORT}`);
       }

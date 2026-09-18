@@ -31,6 +31,17 @@ export interface FujiMachineMapping {
   ipAddress?: string;
 }
 
+export interface FujiWireLogCallbackPayload {
+  direction: 'INBOUND' | 'OUTBOUND';
+  remoteAddress: string;
+  command: string;
+  seqId: number;
+  summary: string;
+  rawPreview: string;
+}
+
+export type FujiWireLogCallback = (payload: FujiWireLogCallbackPayload) => void;
+
 /**
  * Production Fuji Nexim TCP Socket Gateway.
  * Implements the Fuji Host Interface Specification V2.8.0.
@@ -73,7 +84,35 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
   public static readonly IDLE_TIMEOUT_MS: number = 30000; // 30-second socket timeout to prevent hung connections
   private customIdleTimeoutMs: number = FujiNeximAdapter.IDLE_TIMEOUT_MS;
   private customAllowedSubnets: string[] | null = null;
+  private activeSockets: Set<net.Socket> = new Set();
+  private wireLogCallback: FujiWireLogCallback | null = null;
   private machineRegistry: Map<string, FujiMachineMapping> = new Map();
+
+  public setWireLogCallback(cb: FujiWireLogCallback | null): void {
+    this.wireLogCallback = cb;
+  }
+
+  private logWire(payload: FujiWireLogCallbackPayload): void {
+    if (this.wireLogCallback) {
+      try {
+        this.wireLogCallback(payload);
+      } catch (err) {
+        // Suppress logging error
+      }
+    }
+  }
+
+  private writeAndLog(socket: net.Socket, frame: Buffer, command: string, seqId: number, summary: string): void {
+    this.logWire({
+      direction: 'OUTBOUND',
+      remoteAddress: `${socket.remoteAddress || '127.0.0.1'}:${socket.remotePort || 0}`,
+      command,
+      seqId,
+      summary,
+      rawPreview: frame.toString('utf-8').substring(0, 300)
+    });
+    socket.write(frame);
+  }
 
   private get siteId(): string {
     return process.env.MES_SITE_ID || 'SITE-NOIDA-P4';
@@ -604,9 +643,18 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
     const parsed = this.parseRawFrame(frame);
     if (!parsed) return;
 
+    this.logWire({
+      direction: 'INBOUND',
+      remoteAddress: `${socket.remoteAddress || '127.0.0.1'}:${socket.remotePort || 0}`,
+      command: parsed.command,
+      seqId: parsed.seqId,
+      summary: `Received ${parsed.command} (${frame.length} bytes)`,
+      rawPreview: decodedPayload.substring(0, 300)
+    });
+
     // Handle Heartbeat Liveness (120s / 30s)
     if (parsed.command === 'KEEPALIVE') {
-      socket.write(this.buildAckFrame('KEEPALIVE', parsed.seqId, true));
+      this.writeAndLog(socket, this.buildAckFrame('KEEPALIVE', parsed.seqId, true), 'KEEPALIVE_ACK', parsed.seqId, 'Acknowledged KEEPALIVE');
       return;
     }
 
@@ -701,7 +749,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
         }
       }
 
-      socket.write(this.buildAckFrame('BOMLIST', parsed.seqId, true, [machineName, laneNo, programName], isComma));
+      this.writeAndLog(socket, this.buildAckFrame('BOMLIST', parsed.seqId, true, [machineName, laneNo, programName], isComma), 'BOMLIST_ACK', parsed.seqId, `Acknowledged BOMLIST for ${programName}`);
       return;
     }
 
@@ -741,7 +789,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
         });
       }
 
-      socket.write(this.buildLoadCompAckFrame(parsed.seqId, machineName, moduleNo, ackItems, isComma));
+      this.writeAndLog(socket, this.buildLoadCompAckFrame(parsed.seqId, machineName, moduleNo, ackItems, isComma), 'LOADCOMPIV_ACK', parsed.seqId, `Acknowledged LOADCOMPIV (${ackItems.length} slots)`);
       return;
     }
 
@@ -760,7 +808,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
 
       if (!decision.allowed) {
         console.warn(`[Fuji Gateway] SPLICING INTERLOCK BLOCKED (${decision.decisionCode}): Slot ${slotNo} - ${decision.reason}. Halting feeder!`);
-        socket.write(this.buildAckFrame(parsed.command, parsed.seqId, false, [], isComma)); // Result = 1 (NG)
+        this.writeAndLog(socket, this.buildAckFrame(parsed.command, parsed.seqId, false, [], isComma), `${parsed.command}_ACK`, parsed.seqId, `Splicing Interlock Blocked (NG)`);
         return;
       }
     }
@@ -805,34 +853,40 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
     }
 
     // Respond OK ACK
-    socket.write(this.buildAckFrame(parsed.command, parsed.seqId, true));
+    this.writeAndLog(socket, this.buildAckFrame(parsed.command, parsed.seqId, true), `${parsed.command}_ACK`, parsed.seqId, `Acknowledged ${parsed.command}`);
   }
 
   public startListener(port = 30040, workCenterId = 'wc-nxt-01', idleTimeoutMs?: number): void {
-    if (this.isRunning) return;
+    if (this.isRunning) {
+      this.stopListener();
+    }
     this.activePort = port;
-    const socketTimeout = idleTimeoutMs ?? this.customIdleTimeoutMs;
+    const socketTimeout = idleTimeoutMs !== undefined ? idleTimeoutMs : this.customIdleTimeoutMs;
 
     this.server = net.createServer((socket) => {
+      this.activeSockets.add(socket);
       const clientIp = socket.remoteAddress || '';
       const allowed = this.customAllowedSubnets || SecretsConfigManager.loadConfig().allowedSubnets;
 
       // Compensating Control #3: OT Subnet & IP Firewall Interlock
       if (!IpFirewall.isAllowed(clientIp, allowed)) {
         console.warn(`[SECURITY ALERT] Blocked unauthorized SMT TCP connection from IP: ${clientIp}`);
+        this.activeSockets.delete(socket);
         socket.destroy();
         return;
       }
 
-      // Idle Timeout Guard: Configure 30-second socket timeout (or configured timeoutMs)
-      // Closes hung connections on silence/inactivity.
-      socket.setTimeout(socketTimeout);
-      socket.on('timeout', () => {
-        console.warn(
-          `[SECURITY ALERT] OT Socket idle timeout (${socketTimeout}ms) reached for client: ${clientIp}. Terminating connection.`
-        );
-        socket.destroy();
-      });
+      // Idle Timeout Guard: Configure socket timeout if > 0 (0 = disabled / keep alive forever)
+      if (socketTimeout > 0) {
+        socket.setTimeout(socketTimeout);
+        socket.on('timeout', () => {
+          console.warn(
+            `[SECURITY ALERT] OT Socket idle timeout (${socketTimeout}ms) reached for client: ${clientIp}. Terminating connection.`
+          );
+          this.activeSockets.delete(socket);
+          socket.destroy();
+        });
+      }
 
       this.activeConnections++;
       console.log(`[Fuji Gateway] SMT Machine authorized & connected from ${socket.remoteAddress}:${socket.remotePort}`);
@@ -845,6 +899,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
           console.warn(
             `[SECURITY ALERT] Socket buffer overflow attempt from ${clientIp} (${socketBuffer.length + chunk.length} bytes > ${FujiNeximAdapter.MAX_SOCKET_BUFFER}). Terminating connection.`
           );
+          this.activeSockets.delete(socket);
           socketBuffer = Buffer.alloc(0);
           socket.destroy();
           return;
@@ -865,6 +920,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
               console.warn(
                 `[SECURITY ALERT] Malformed declared length (${totalLength} bytes) from ${clientIp}. Terminating connection immediately.`
               );
+              this.activeSockets.delete(socket);
               socketBuffer = Buffer.alloc(0);
               socket.destroy();
               return;
@@ -879,6 +935,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
               console.warn(
                 `[SECURITY ALERT] Corrupt sync header (byte 4 = 0x${stx.toString(16)} != 0x02) from ${clientIp}. Terminating connection immediately.`
               );
+              this.activeSockets.delete(socket);
               socketBuffer = Buffer.alloc(0);
               socket.destroy();
               return;
@@ -904,6 +961,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
             console.warn(
               `[SECURITY ALERT] Corrupt frame boundary (ETX = 0x${etx.toString(16)} != 0x03) from ${clientIp}. Terminating connection immediately.`
             );
+            this.activeSockets.delete(socket);
             socketBuffer = Buffer.alloc(0);
             socket.destroy();
             return;
@@ -924,12 +982,14 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
       });
 
       socket.on('close', () => {
+        this.activeSockets.delete(socket);
         this.activeConnections = Math.max(0, this.activeConnections - 1);
         socketBuffer = Buffer.alloc(0);
         console.log('[Fuji Gateway] SMT Machine disconnected.');
       });
 
       socket.on('error', (err) => {
+        this.activeSockets.delete(socket);
         console.error('[Fuji Gateway] Socket error:', err.message);
       });
     });
@@ -941,15 +1001,32 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
   }
 
   public stop(): void {
-    if (this.server) {
-      this.server.close();
-      this.isRunning = false;
-      this.activeConnections = 0;
-    }
+    this.stopListener();
   }
 
   public stopListener(): void {
-    this.stop();
+    for (const socket of this.activeSockets) {
+      try {
+        socket.destroy();
+      } catch {}
+    }
+    this.activeSockets.clear();
+
+    if (this.server) {
+      try {
+        this.server.close();
+      } catch {}
+      this.server = null;
+    }
+    if (this.clientSocket) {
+      try {
+        this.clientSocket.destroy();
+      } catch {}
+      this.clientSocket = null;
+      this.clientConnected = false;
+    }
+    this.isRunning = false;
+    this.activeConnections = 0;
   }
 
   private isProductionHold: boolean = false;
@@ -1080,7 +1157,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
         frame[4] = FUJI_FRAMING.STX;
         setEvBuffer.copy(frame, 5);
         frame[frame.length - 1] = FUJI_FRAMING.ETX;
-        socket.write(frame);
+        this.writeAndLog(socket, frame, 'SETEV', 1, `Sent SETEV (${FUJI_IMES_SUBSCRIBED_EVENTS.length} events subscribed)`);
 
         // Step 2: Send STARTEV to activate active notification
         const startEvBody = `STARTEV,2,${machineName}`;
@@ -1091,7 +1168,7 @@ export class FujiNeximAdapter implements IFactoryIntegrationAdapter, IControllab
         sFrame[4] = FUJI_FRAMING.STX;
         startEvBuffer.copy(sFrame, 5);
         sFrame[sFrame.length - 1] = FUJI_FRAMING.ETX;
-        socket.write(sFrame);
+        this.writeAndLog(socket, sFrame, 'STARTEV', 2, `Sent STARTEV for ${machineName}`);
 
         resolve();
       });
