@@ -4,35 +4,35 @@
 
 @layer base {
   :root {
-    /* Default Theme Tokens (Obsidian Foundry Baseline) */
-    --mes-bg-canvas: #06080C;
-    --mes-bg-surface: #0C1017;
-    --mes-bg-well: #080B10;
-    --mes-bg-header: #090D14;
-    --mes-bg-tab-active: #131A26;
-    --mes-bg-tab-inactive: #090D14;
-    --mes-bg-modal: #0E1420;
+    /* Default Theme Tokens (Obsidian Foundry Baseline - Tier-1 Industrial Standard) */
+    --mes-bg-canvas: #06090E;
+    --mes-bg-surface: #020617;
+    --mes-bg-well: #0F172A;
+    --mes-bg-header: #020617;
+    --mes-bg-tab-active: #0F172A;
+    --mes-bg-tab-inactive: #020617;
+    --mes-bg-modal: #0B0F17;
 
-    --mes-border-subtle: #182232;
-    --mes-border-strong: #25354D;
-    --mes-border-hairline: #131A26;
-    --mes-border-accent-glow: rgba(56, 189, 248, 0.25);
+    --mes-border-subtle: #1E293B;
+    --mes-border-strong: #334155;
+    --mes-border-hairline: #1E293B;
+    --mes-border-accent-glow: rgba(34, 211, 238, 0.30);
 
     --mes-text-primary: #F1F5F9;
     --mes-text-secondary: #94A3B8;
     --mes-text-muted: #64748B;
     --mes-text-dim: #475569;
-    --mes-text-inverse: #06080C;
+    --mes-text-inverse: #06090E;
 
-    --mes-accent-primary: #38BDF8;
-    --mes-accent-hover: #0EA5E9;
-    --mes-accent-muted: rgba(56, 189, 248, 0.12);
-    --mes-accent-ring: rgba(56, 189, 248, 0.35);
+    --mes-accent-primary: #22D3EE;
+    --mes-accent-hover: #38BDF8;
+    --mes-accent-muted: rgba(34, 211, 238, 0.12);
+    --mes-accent-ring: rgba(34, 211, 238, 0.35);
 
-    --mes-status-pass: #10B981;
-    --mes-status-pass-muted: rgba(16, 185, 129, 0.12);
-    --mes-status-warn: #F59E0B;
-    --mes-status-warn-muted: rgba(245, 158, 11, 0.12);
+    --mes-status-pass: #34D399;
+    --mes-status-pass-muted: rgba(52, 211, 153, 0.12);
+    --mes-status-warn: #FBBF24;
+    --mes-status-warn-muted: rgba(251, 191, 36, 0.12);
     --mes-status-halt: #F43F5E;
     --mes-status-halt-muted: rgba(244, 63, 94, 0.12);
     --mes-status-idle: #64748B;
