@@ -32,15 +32,15 @@ export const ShiftGanttTimeline: React.FC<ShiftGanttTimelineProps> = ({
   const getSegmentStyle = (state: ShiftTimelineSegment['state']) => {
     switch (state) {
       case 'RUN':
-        return { bg: 'bg-emerald-500', text: 'text-emerald-400', label: 'RUN' };
+        return { bg: 'bg-emerald-500 hover:bg-emerald-400', text: 'text-emerald-400', label: 'RUN' };
       case 'WAIT_PREV':
-        return { bg: 'bg-amber-400', text: 'text-amber-400', label: 'WAIT PREV' };
+        return { bg: 'bg-amber-400 hover:bg-amber-300', text: 'text-amber-400', label: 'WAIT PREV' };
       case 'WAIT_NEXT':
-        return { bg: 'bg-orange-500', text: 'text-orange-400', label: 'WAIT NEXT' };
+        return { bg: 'bg-orange-500 hover:bg-orange-400', text: 'text-orange-400', label: 'WAIT NEXT' };
       case 'STOP':
-        return { bg: 'bg-rose-500', text: 'text-rose-400', label: 'STOP' };
+        return { bg: 'bg-rose-500 hover:bg-rose-400', text: 'text-rose-400', label: 'STOP' };
       default:
-        return { bg: 'bg-slate-600', text: 'text-slate-400', label: 'IDLE' };
+        return { bg: 'bg-slate-600 hover:bg-slate-500', text: 'text-slate-400', label: 'IDLE' };
     }
   };
 
@@ -54,41 +54,41 @@ export const ShiftGanttTimeline: React.FC<ShiftGanttTimelineProps> = ({
 
   return (
     <div 
-      className="bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] p-2 font-mono text-xs"
-      style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+      className="bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-3 text-slate-100 font-mono text-xs"
+      style={{ boxShadow: '0 4px 20px -2px rgba(0,0,0,0.6)' }}
     >
       {/* Header Band */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-1.5 mb-1.5 border-b border-[var(--mes-border-hairline)] text-[10.5px]">
-        <div className="flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5 text-[var(--mes-text-muted)]" />
-          <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wider">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 mb-2 border-b border-slate-800/80 text-[11px]">
+        <div className="flex items-center gap-2">
+          <Clock className="w-4 h-4 text-slate-400" />
+          <span className="font-sans font-bold text-slate-100 uppercase tracking-wider text-[12px]">
             {shiftCode} · SHIFT RUN/DOWNTIME TIMELINE
           </span>
-          <span className="text-[var(--mes-text-muted)] text-[10px]">
-            ({Math.floor(totalSegmentMinutes / 60)}h {totalSegmentMinutes % 60}m Elapsed)
+          <span className="text-slate-400 text-[10.5px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+            {Math.floor(totalSegmentMinutes / 60)}h {totalSegmentMinutes % 60}m Elapsed
           </span>
         </div>
 
         {/* Aggregate Breakdown Metrics */}
-        <div className="flex items-center gap-3 text-[10px]">
-          <span className="text-[var(--mes-status-pass)] font-bold flex items-center gap-1">
-            <span className="w-2 h-2 bg-[var(--mes-status-pass)] rounded-none inline-block" />
+        <div className="flex items-center gap-3 text-[11px]">
+          <span className="text-emerald-400 font-bold flex items-center gap-1.5 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/30">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_6px_#10B981]" />
             RUN: {Math.floor(runMinutes / 60)}h {runMinutes % 60}m ({runPct.toFixed(1)}%)
           </span>
-          <span className="text-[var(--mes-status-warn)] font-bold flex items-center gap-1">
-            <span className="w-2 h-2 bg-[var(--mes-status-warn)] rounded-none inline-block" />
+          <span className="text-amber-400 font-bold flex items-center gap-1.5 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/30">
+            <span className="w-2 h-2 bg-amber-400 rounded-full shadow-[0_0_6px_#F59E0B]" />
             WAIT: {waitMinutes}m ({waitPct.toFixed(1)}%)
           </span>
-          <span className="text-[var(--mes-status-halt)] font-bold flex items-center gap-1">
-            <span className="w-2 h-2 bg-[var(--mes-status-halt)] rounded-none inline-block" />
+          <span className="text-rose-400 font-bold flex items-center gap-1.5 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">
+            <span className="w-2 h-2 bg-rose-400 rounded-full shadow-[0_0_6px_#EF4444]" />
             STOP: {stopMinutes}m ({stopPct.toFixed(1)}%)
           </span>
         </div>
       </div>
 
       {/* Segmented Timeline Bar */}
-      <div className="relative pt-0.5 pb-1">
-        <div className="h-5 w-full bg-[var(--mes-bg-well)] rounded-none overflow-hidden flex border border-[var(--mes-border-hairline)]">
+      <div className="relative pt-1 pb-1">
+        <div className="h-6 w-full bg-slate-900 rounded-[2px] overflow-hidden flex border border-slate-800">
           {activeSegments.map((segment, idx) => {
             const pct = (segment.durationMinutes / totalSegmentMinutes) * 100;
             const style = getSegmentStyle(segment.state);
@@ -96,24 +96,39 @@ export const ShiftGanttTimeline: React.FC<ShiftGanttTimelineProps> = ({
               <div
                 key={idx}
                 style={{ width: `${pct}%` }}
-                className={`h-full ${style.bg} border-r border-black/20 relative group cursor-help`}
-                title={`${segment.label}: ${segment.durationMinutes}m (${pct.toFixed(1)}%)`}
+                className={`h-full ${style.bg} border-r border-black/30 relative group cursor-help transition-opacity`}
               >
-                <div className="hidden group-hover:block absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap bg-[var(--mes-bg-modal)] border border-[var(--mes-border-strong)] text-[var(--mes-text-primary)] text-[9.5px] font-mono px-2 py-0.5 shadow-md pointer-events-none rounded-[1px]">
-                  {segment.label}: {segment.durationMinutes}m ({pct.toFixed(1)}%)
+                {/* Tooltip */}
+                <div className="hidden group-hover:block absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap bg-slate-900 border border-slate-700 text-slate-100 text-[11px] font-mono px-2.5 py-1 shadow-2xl pointer-events-none rounded-[2px]">
+                  <strong className="text-white">{segment.label}</strong>: {segment.durationMinutes}m ({pct.toFixed(1)}%)
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* 2-Hour Time Markers */}
-        <div className="flex justify-between text-[9px] text-[var(--mes-text-muted)] px-0.5 mt-0.5">
-          <span>00:00 (Start)</span>
-          <span>02:00</span>
-          <span>04:00 (Mid-Shift)</span>
-          <span>06:00</span>
-          <span>08:00 (Handover)</span>
+        {/* 2-Hour Time Markers with Ticks */}
+        <div className="flex justify-between text-[10px] text-slate-400 px-0.5 mt-1.5 font-mono">
+          <div className="flex flex-col items-start">
+            <span className="w-px h-1 bg-slate-700 mb-0.5" />
+            <span>00:00 (Start)</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="w-px h-1 bg-slate-700 mb-0.5" />
+            <span>02:00</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="w-px h-1 bg-slate-700 mb-0.5" />
+            <span>04:00 (Mid-Shift)</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="w-px h-1 bg-slate-700 mb-0.5" />
+            <span>06:00</span>
+          </div>
+          <div className="flex flex-col items-end">
+            <span className="w-px h-1 bg-slate-700 mb-0.5" />
+            <span>08:00 (Handover)</span>
+          </div>
         </div>
       </div>
     </div>

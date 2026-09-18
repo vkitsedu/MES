@@ -163,7 +163,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
         <div className="flex items-start justify-between gap-2">
           <div>
             {category && (
-              <span className="text-[9.5px] font-mono tracking-wider uppercase text-[var(--mes-text-muted)] block mb-0.5">
+              <span className="text-[10px] font-mono tracking-wider uppercase text-[var(--mes-text-muted)] block mb-0.5">
                 {category}
               </span>
             )}
@@ -174,7 +174,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
 
           {/* Semantic Status Badge */}
           <div 
-            className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-[var(--mes-radius)] border text-[9.5px] font-mono font-bold shrink-0"
+            className="flex items-center gap-1.5 px-2 py-0.5 rounded-[var(--mes-radius)] border text-[10px] font-mono font-bold shrink-0"
             style={{
               backgroundColor: currentThemeStatus.bg,
               borderColor: currentThemeStatus.border,
@@ -251,7 +251,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
 
           {drillDownItems && drillDownItems.length > 0 && (
             <div className="space-y-1.5 pt-1">
-              <span className="text-[9.5px] font-mono uppercase tracking-wider text-[var(--mes-text-muted)] block">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--mes-text-muted)] block">
                 Recent Telemetry Events ({drillDownItems.length})
               </span>
               {drillDownItems.map((item) => (
@@ -263,21 +263,21 @@ export const KpiCard: React.FC<KpiCardProps> = ({
                     <div className="flex items-center gap-1.5 font-mono">
                       <span className="text-[var(--mes-text-primary)] font-bold">{item.title}</span>
                       {item.stationCode && (
-                        <span className="text-[9px] text-[var(--mes-text-muted)] bg-[var(--mes-bg-surface)] px-1 rounded-[1px] border border-[var(--mes-border-hairline)]">
+                        <span className="text-[10px] text-[var(--mes-text-muted)] bg-[var(--mes-bg-surface)] px-1 rounded-[1px] border border-[var(--mes-border-hairline)]">
                           {item.stationCode}
                         </span>
                       )}
-                      <span className="text-[9.5px] text-[var(--mes-text-dim)]">{item.timestamp}</span>
+                      <span className="text-[10px] text-[var(--mes-text-dim)]">{item.timestamp}</span>
                     </div>
-                    <p className="text-[10px] text-[var(--mes-text-muted)] mt-0.5">{item.description}</p>
+                    <p className="text-[10.5px] text-[var(--mes-text-muted)] mt-0.5">{item.description}</p>
                   </div>
                   {item.durationMinutes !== undefined && (
-                    <span className="text-[10px] font-mono text-[var(--mes-status-halt)] font-bold shrink-0">
+                    <span className="text-[10.5px] font-mono text-[var(--mes-status-halt)] font-bold shrink-0">
                       {item.durationMinutes}m lost
                     </span>
                   )}
                   {item.metricDelta && (
-                    <span className="text-[10px] font-mono text-[var(--mes-status-pass)] font-bold shrink-0">
+                    <span className="text-[10.5px] font-mono text-[var(--mes-status-pass)] font-bold shrink-0">
                       {item.metricDelta}
                     </span>
                   )}
@@ -288,7 +288,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
 
           {onClickDrillDown && (
             <div className="flex items-center justify-between pt-1">
-              <span className="text-[9.5px] font-mono text-[var(--mes-text-muted)]">Expanded In-Place</span>
+              <span className="text-[10px] font-mono text-[var(--mes-text-muted)]">Expanded In-Place</span>
               <button
                 type="button"
                 onClick={(e) => {

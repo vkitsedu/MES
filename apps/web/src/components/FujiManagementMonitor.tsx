@@ -58,16 +58,16 @@ const FALLBACK_FLEET: FujiManagementMonitorLineSummary[] = [
     currentPbr: 84.2,
     optimizedPbr: 89.0,
     statusState: 'WAIT_PREV',
-    statusLabel: 'Wait Splicing',
-    statusDurationSeconds: 168,
+    statusLabel: 'Starved Upstream',
+    statusDurationSeconds: 195,
     oee: 82.1,
-    availability: 88.5,
-    performance: 95.0,
+    availability: 86.4,
+    performance: 97.2,
     quality: 97.8,
-    spiYieldPct: 97.5,
-    firstAoiYieldPct: 96.8,
-    secondAoiYieldPct: 97.2,
-    estimatedEndTime: '19:15',
+    spiYieldPct: 97.2,
+    firstAoiYieldPct: 96.1,
+    secondAoiYieldPct: 97.5,
+    estimatedEndTime: '19:10',
     deadline: '19:00',
     deadlineAlert: true
   }
@@ -75,14 +75,14 @@ const FALLBACK_FLEET: FujiManagementMonitorLineSummary[] = [
 
 const FALLBACK_DIAGNOSTICS: DiagnosticsData = {
   nozzleRankings: [
-    { nozzleAddress: 'NXT-M1-H04', machineId: 'MNT-01', headId: 'H12-S', errorRatePct: 0.042, mispickCount: 14 },
-    { nozzleAddress: 'NXT-M2-H08', machineId: 'MNT-02', headId: 'H12-S', errorRatePct: 0.028, mispickCount: 8 },
-    { nozzleAddress: 'NXT-M1-H11', machineId: 'MNT-01', headId: 'H12-S', errorRatePct: 0.015, mispickCount: 4 }
+    { nozzleAddress: 'H01-N04 (0402)', machineId: 'NXT-01', headId: 'H01', mispickCount: 14, errorRatePct: 0.057 },
+    { nozzleAddress: 'H02-N08 (0201)', machineId: 'NXT-01', headId: 'H02', mispickCount: 9, errorRatePct: 0.049 },
+    { nozzleAddress: 'H01-N02 (QFP)', machineId: 'NXT-01', headId: 'H01', mispickCount: 3, errorRatePct: 0.034 }
   ],
   slotRankings: [
-    { slotAddress: 'Slot 04 (L1)', feederId: 'W08-0402-991', partNumber: 'CAP-0402-100NF', errorRatePct: 0.058, mispickCount: 18 },
-    { slotAddress: 'Slot 12 (L1)', feederId: 'W12-0805-442', partNumber: 'RES-0805-10K', errorRatePct: 0.034, mispickCount: 11 },
-    { slotAddress: 'Slot 27 (R2)', feederId: 'W08-0201-884', partNumber: 'RES-0201-0R', errorRatePct: 0.021, mispickCount: 6 }
+    { slotAddress: 'SLOT-04-L', feederId: 'FDR-04', partNumber: 'CAP-0402-100NF', mispickCount: 18, errorRatePct: 0.117 },
+    { slotAddress: 'SLOT-12-R', feederId: 'FDR-12', partNumber: 'RES-0201-10K', mispickCount: 12, errorRatePct: 0.057 },
+    { slotAddress: 'SLOT-22-L', feederId: 'FDR-22', partNumber: 'IC-STM32-LQFP', mispickCount: 4, errorRatePct: 0.065 }
   ],
   dropRatePpm: {
     targetPpm: 310,
@@ -93,10 +93,10 @@ const FALLBACK_DIAGNOSTICS: DiagnosticsData = {
     recogErrors: 144,
     pickupErrors: 224,
     recogDropRatePpm: 112,
-    pickupDropRatePpm: 176
+    pickupDropRatePpm: 175
   },
   shiftMatrix: [
-    { shiftCode: '1 Shift (Day)', pickups: 1280450, pickupErrors: 224, recogErrors: 144, totalErrors: 368, dropRatePpm: 288, recogDropRatePpm: 112, pickupDropRatePpm: 176 },
+    { shiftCode: '1 Shift (Morning)', pickups: 1245000, pickupErrors: 224, recogErrors: 144, totalErrors: 368, dropRatePpm: 295, recogDropRatePpm: 115, pickupDropRatePpm: 180 },
     { shiftCode: '2 Shift (Evening)', pickups: 845200, pickupErrors: 142, recogErrors: 98, totalErrors: 240, dropRatePpm: 284, recogDropRatePpm: 116, pickupDropRatePpm: 168 },
     { shiftCode: '3 Shift (Night)', pickups: 420100, pickupErrors: 64, recogErrors: 48, totalErrors: 112, dropRatePpm: 267, recogDropRatePpm: 114, pickupDropRatePpm: 153 }
   ],
@@ -197,10 +197,10 @@ export const FujiManagementMonitor: React.FC = () => {
   const opWaitNextPct = isRunning ? 6.4 : 9.0;
   const opStopPct = isRunning ? 4.0 : 7.0;
 
-  // Unclipped 100x100 SVG Donut Geometry
-  const donutR = 36;
-  const donutCx = 50;
-  const donutCy = 50;
+  // Unclipped 120x120 SVG Donut Geometry
+  const donutR = 44;
+  const donutCx = 60;
+  const donutCy = 60;
   const donutCircumference = 2 * Math.PI * donutR;
   const runOffset = 0;
   const waitPrevOffset = (opRunPct / 100) * donutCircumference;
@@ -208,30 +208,30 @@ export const FujiManagementMonitor: React.FC = () => {
   const stopOffset = ((opRunPct + opWaitPrevPct + opWaitNextPct) / 100) * donutCircumference;
 
   return (
-    <div className="space-y-2 font-mono">
+    <div className="space-y-2">
       {/* Enterprise Filter & Command Bar */}
       <div 
-        className="bg-[var(--mes-bg-surface)] px-3 py-2 border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] flex flex-wrap items-center justify-between gap-3 text-xs"
-        style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+        className="bg-slate-950 px-3.5 py-2 border border-slate-800 rounded-[var(--mes-radius)] flex flex-wrap items-center justify-between gap-3 text-xs text-slate-100"
+        style={{ boxShadow: '0 4px 20px -2px rgba(0,0,0,0.6)' }}
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-2 h-2 rounded-full bg-[var(--mes-status-pass)] animate-pulse" />
-          <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wider text-[11px]">
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10B981]" />
+          <span className="font-sans font-bold text-slate-100 uppercase tracking-wider text-[12px]">
             FUJI NEXIM MANAGEMENT MONITOR (v2.2.16 SPECIFICATION)
           </span>
-          <span className="text-[10px] text-[var(--mes-text-muted)] bg-[var(--mes-bg-well)] px-2 py-0.5 border border-[var(--mes-border-hairline)] rounded-[var(--mes-radius)]">
-            Active Line: <strong className="text-[var(--mes-text-primary)]">{selectedLine?.lineName || 'SMD_01'}</strong>
+          <span className="text-[10.5px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 border border-slate-800 rounded-[var(--mes-radius)] font-medium">
+            Active Line: <strong className="text-slate-100">{selectedLine?.lineName || 'SMD_01'}</strong>
           </span>
         </div>
 
         {/* View Mode Buttons */}
         <div className="flex items-center gap-2">
-          <div className="flex bg-[var(--mes-bg-well)] p-0.5 border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] text-[10px]">
+          <div className="flex bg-slate-900 p-0.5 border border-slate-800 rounded-[var(--mes-radius)] text-[10.5px] font-mono">
             <button
               type="button"
               onClick={() => setViewMode('COCKPIT')}
-              className={`px-2.5 py-1 font-bold rounded-[var(--mes-radius)] transition-colors ${
-                viewMode === 'COCKPIT' ? 'bg-[var(--mes-accent-muted)] text-[var(--mes-accent-primary)]' : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
+              className={`px-3 py-1 font-bold rounded-[var(--mes-radius)] transition-colors ${
+                viewMode === 'COCKPIT' ? 'bg-cyan-950/80 text-cyan-400 border border-cyan-500/50' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               TWO-PANE MONITOR
@@ -239,15 +239,15 @@ export const FujiManagementMonitor: React.FC = () => {
             <button
               type="button"
               onClick={() => setViewMode('FLOW_AND_DROP')}
-              className={`px-2.5 py-1 font-bold rounded-[var(--mes-radius)] transition-colors ${
-                viewMode === 'FLOW_AND_DROP' ? 'bg-[var(--mes-accent-muted)] text-[var(--mes-accent-primary)]' : 'text-[var(--mes-text-muted)] hover:text-[var(--mes-text-primary)]'
+              className={`px-3 py-1 font-bold rounded-[var(--mes-radius)] transition-colors ${
+                viewMode === 'FLOW_AND_DROP' ? 'bg-cyan-950/80 text-cyan-400 border border-cyan-500/50' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               LINE FLOW & DROP (PPM)
             </button>
           </div>
 
-          <span className="text-[10px] text-[var(--mes-text-dim)]">
+          <span className="text-[10.5px] font-mono text-slate-400">
             {lastUpdated.toLocaleTimeString()} {refreshing && '···'}
           </span>
         </div>
@@ -299,80 +299,80 @@ export const FujiManagementMonitor: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-1.5">
           {/* Left Pane (8 cols): Fleet Overview Table (Fuji Main Window) */}
           <div 
-            className="lg:col-span-8 bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] overflow-hidden flex flex-col justify-between"
-            style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+            className="lg:col-span-8 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] overflow-hidden flex flex-col justify-between"
+            style={{ boxShadow: '0 4px 20px -2px rgba(0,0,0,0.6)' }}
           >
             <div>
               {/* Header */}
-              <div className="bg-[var(--mes-bg-header)] px-3 py-2 border-b border-[var(--mes-border-subtle)] flex items-center justify-between text-xs">
-                <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wider text-[11px]">
+              <div className="bg-slate-900/90 px-3.5 py-2 border-b border-slate-800 flex items-center justify-between text-xs">
+                <span className="font-sans font-bold text-slate-100 uppercase tracking-wider text-[11.5px]">
                   FLEET PRODUCTION LINES OVERVIEW (MAIN WINDOW)
                 </span>
-                <span className="text-[10px] text-[var(--mes-text-muted)]">Click row to synchronize diagnostics</span>
+                <span className="text-[10.5px] font-mono text-slate-400">Click row to synchronize diagnostics</span>
               </div>
 
               {/* Data Table */}
               <div className="overflow-x-auto">
-                <table className="mes-table w-full text-xs">
+                <table className="w-full text-xs font-mono border-collapse">
                   <thead>
-                    <tr className="border-b border-[var(--mes-border-hairline)] bg-[var(--mes-bg-well)] text-[10px] text-[var(--mes-text-muted)] uppercase tracking-wider">
-                      <th className="text-left p-2">Line</th>
-                      <th className="text-left p-2">Recipe / Job</th>
-                      <th className="text-right p-2">Progress</th>
-                      <th className="text-left p-2">Micro-State Timer</th>
-                      <th className="text-right p-2">PBR %</th>
-                      <th className="text-right p-2">OEE %</th>
-                      <th className="text-right p-2">3D SPI</th>
-                      <th className="text-right p-2">Post AOI</th>
-                      <th className="text-left p-2">Est. End</th>
+                    <tr className="border-b border-slate-800 bg-slate-900/80 text-[10.5px] text-slate-400 uppercase tracking-wider font-semibold">
+                      <th className="text-left px-3 py-2">Line</th>
+                      <th className="text-left px-3 py-2">Recipe / Job</th>
+                      <th className="text-right px-3 py-2">Progress</th>
+                      <th className="text-left px-3 py-2">Micro-State Timer</th>
+                      <th className="text-right px-3 py-2">PBR %</th>
+                      <th className="text-right px-3 py-2">OEE %</th>
+                      <th className="text-right px-3 py-2">3D SPI</th>
+                      <th className="text-right px-3 py-2">Post AOI</th>
+                      <th className="text-left px-3 py-2">Est. End</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-slate-800/60">
                     {fleet.map((line) => {
                       const isSelected = line.lineId === selectedLineId;
                       const progressPct = line.progressTarget > 0 
                         ? Math.min(100, Math.round((line.progressCompleted / line.progressTarget) * 100))
                         : 0;
 
-                      let stateBadge = 'text-[var(--mes-status-pass)] bg-[var(--mes-status-pass-muted)] border-[var(--mes-status-pass)]';
-                      if (line.statusState === 'WAIT_PREV') stateBadge = 'text-[var(--mes-status-warn)] bg-[var(--mes-status-warn-muted)] border-[var(--mes-status-warn)]';
-                      if (line.statusState === 'WAIT_NEXT') stateBadge = 'text-orange-400 bg-orange-950/40 border-orange-500/40';
-                      if (line.statusState === 'STOP') stateBadge = 'text-[var(--mes-status-halt)] bg-[var(--mes-status-halt-muted)] border-[var(--mes-status-halt)]';
+                      let stateBadge = 'text-emerald-400 bg-emerald-950/60 border-emerald-500/50';
+                      if (line.statusState === 'WAIT_PREV') stateBadge = 'text-amber-400 bg-amber-950/60 border-amber-500/50';
+                      if (line.statusState === 'WAIT_NEXT') stateBadge = 'text-orange-400 bg-orange-950/60 border-orange-500/50';
+                      if (line.statusState === 'STOP') stateBadge = 'text-rose-400 bg-rose-950/60 border-rose-500/50';
 
                       return (
                         <tr
                           key={line.lineId}
                           onClick={() => setSelectedLineId(line.lineId)}
-                          className={`cursor-pointer transition-colors border-b border-[var(--mes-border-hairline)] hover:bg-[var(--mes-bg-well)] ${
-                            isSelected ? 'bg-[var(--mes-accent-muted)] font-semibold border-l-2 border-l-[var(--mes-accent-primary)]' : ''
+                          className={`cursor-pointer transition-colors hover:bg-slate-900/80 ${
+                            isSelected ? 'bg-slate-900 font-semibold border-l-2 border-l-cyan-400' : ''
                           }`}
                         >
-                          <td className="p-2 font-bold text-[var(--mes-text-primary)]">{line.lineName}</td>
-                          <td className="p-2 truncate max-w-[130px] text-[var(--mes-text-secondary)]">
-                            <div className="font-bold">{line.productName}</div>
-                            <div className="text-[8.5px] text-[var(--mes-text-dim)] truncate">{line.jobName}</div>
+                          <td className="px-3 py-2 font-sans font-bold text-slate-100">{line.lineName}</td>
+                          <td className="px-3 py-2 truncate max-w-[150px]">
+                            <div className="font-bold text-slate-200">{line.productName}</div>
+                            <div className="text-[10px] text-slate-400 truncate">{line.jobName}</div>
                           </td>
-                          <td className="p-2 text-right tabular-nums">
-                            <div>{line.progressCompleted} / {line.progressTarget}</div>
-                            <div className="w-14 h-1 bg-[var(--mes-bg-well)] ml-auto mt-0.5 rounded-[1px] overflow-hidden">
-                              <div className="h-full bg-[var(--mes-accent-primary)]" style={{ width: `${progressPct}%` }} />
+                          <td className="px-3 py-2 text-right tabular-nums">
+                            <div className="text-slate-200">{line.progressCompleted} / {line.progressTarget}</div>
+                            <div className="w-16 h-1 bg-slate-900 ml-auto mt-1 rounded-[1px] overflow-hidden border border-slate-800">
+                              <div className="h-full bg-cyan-400" style={{ width: `${progressPct}%` }} />
                             </div>
                           </td>
-                          <td className="p-2">
-                            <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded-[var(--mes-radius)] border uppercase ${stateBadge}`}>
+                          <td className="px-3 py-2">
+                            <span className={`px-2 py-0.5 text-[10px] font-bold rounded-[2px] border uppercase ${stateBadge}`}>
                               {line.statusLabel} {formatDuration(line.statusDurationSeconds)}
                             </span>
                           </td>
-                          <td className="p-2 text-right tabular-nums">
-                            <span className="font-bold text-[var(--mes-text-primary)]">{line.currentPbr.toFixed(1)}%</span>
-                            <span className="text-[8.5px] text-[var(--mes-text-dim)] block">Opt: {line.optimizedPbr.toFixed(1)}%</span>
+                          <td className="px-3 py-2 text-right tabular-nums">
+                            <span className="font-bold text-slate-100">{line.currentPbr.toFixed(1)}%</span>
+                            <span className="text-[10px] text-slate-400 block font-normal">Opt: {line.optimizedPbr.toFixed(1)}%</span>
                           </td>
-                          <td className="p-2 text-right font-bold text-[var(--mes-status-pass)] tabular-nums">
+                          <td className="px-3 py-2 text-right font-bold text-emerald-400 tabular-nums">
                             {line.oee.toFixed(1)}%
                           </td>
-                          <td className="p-2 text-right tabular-nums text-[var(--mes-text-secondary)]">{line.spiYieldPct.toFixed(1)}%</td>
-                          <td className="p-2 text-right tabular-nums text-[var(--mes-text-secondary)]">{line.secondAoiYieldPct.toFixed(1)}%</td>
-                          <td className="p-2 text-[var(--mes-text-muted)] text-[10px]">{line.estimatedEndTime}</td>
+                          <td className="px-3 py-2 text-right tabular-nums text-slate-300">{line.spiYieldPct.toFixed(1)}%</td>
+                          <td className="px-3 py-2 text-right tabular-nums text-slate-300">{line.secondAoiYieldPct.toFixed(1)}%</td>
+                          <td className="px-3 py-2 text-slate-400 text-[10.5px]">{line.estimatedEndTime}</td>
                         </tr>
                       );
                     })}
@@ -382,111 +382,111 @@ export const FujiManagementMonitor: React.FC = () => {
             </div>
 
             {/* Shift Performance Timeline */}
-            <div className="p-2 border-t border-[var(--mes-border-subtle)]">
+            <div className="p-2 border-t border-slate-800/80">
               <ShiftGanttTimeline />
             </div>
           </div>
 
           {/* Right Pane (4 cols): Root-Cause Sub Window */}
           <div 
-            className="lg:col-span-4 bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] p-3 space-y-3"
-            style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
+            className="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-3 space-y-3"
+            style={{ boxShadow: '0 4px 20px -2px rgba(0,0,0,0.6)' }}
           >
-            <div className="bg-[var(--mes-bg-header)] px-2.5 py-1.5 border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] flex items-center justify-between text-xs">
-              <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wider flex items-center gap-1.5 text-[10.5px]">
-                <Crosshair className="w-3.5 h-3.5 text-[var(--mes-accent-primary)]" />
-                {selectedLine?.lineName || 'LINE 01'} · DIAGNOSTICS (SUB WINDOW)
+            <div className="bg-slate-900/90 px-3 py-2 border border-slate-800 rounded-[var(--mes-radius)] flex items-center justify-between text-xs">
+              <span className="font-sans font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5 text-[11px]">
+                <Crosshair className="w-3.5 h-3.5 text-cyan-400" />
+                {selectedLine?.lineName || 'LINE 01'} · DIAGNOSTICS
               </span>
-              <span className="text-[9px] text-[var(--mes-accent-primary)] border border-[var(--mes-accent-ring)] px-1 rounded-[1px] font-bold">
-                LIVE
+              <span className="text-[10px] font-mono text-cyan-400 border border-cyan-500/40 bg-cyan-950/40 px-1.5 py-0.5 rounded-[2px] font-bold">
+                LIVE BUS
               </span>
             </div>
 
             {/* Operating State Breakdown Donut */}
-            <div className="bg-[var(--mes-bg-well)] p-2.5 border border-[var(--mes-border-subtle)] rounded-[var(--mes-radius)] flex items-center justify-between gap-3">
-              <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
-                <svg width="80" height="80" viewBox="0 0 100 100" className="-rotate-90">
-                  <circle cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="var(--mes-border-subtle)" strokeWidth="8" />
+            <div className="bg-slate-900/80 p-3 border border-slate-800 rounded-[var(--mes-radius)] flex items-center justify-between gap-3.5">
+              <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
+                <svg width="112" height="112" viewBox="0 0 120 120" className="-rotate-90">
+                  <circle cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#1e293b" strokeWidth="10" />
                   <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="var(--mes-status-pass)" strokeWidth="8"
+                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#10B981" strokeWidth="10"
                     strokeDasharray={`${(opRunPct / 100) * donutCircumference} ${donutCircumference}`}
                     strokeDashoffset={-runOffset}
                   />
                   <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="var(--mes-status-warn)" strokeWidth="8"
+                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#F59E0B" strokeWidth="10"
                     strokeDasharray={`${(opWaitPrevPct / 100) * donutCircumference} ${donutCircumference}`}
                     strokeDashoffset={-waitPrevOffset}
                   />
                   <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#EA580C" strokeWidth="8"
+                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#F97316" strokeWidth="10"
                     strokeDasharray={`${(opWaitNextPct / 100) * donutCircumference} ${donutCircumference}`}
                     strokeDashoffset={-waitNextOffset}
                   />
                   <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="var(--mes-status-halt)" strokeWidth="8"
+                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#EF4444" strokeWidth="10"
                     strokeDasharray={`${(opStopPct / 100) * donutCircumference} ${donutCircumference}`}
                     strokeDashoffset={-stopOffset}
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-xs font-bold text-[var(--mes-text-primary)] tabular-nums">{opRunPct}%</span>
-                  <span className="text-[7.5px] text-[var(--mes-text-muted)] uppercase">RUN TIME</span>
+                  <span className="text-sm font-black text-white tabular-nums tracking-tight">{opRunPct}%</span>
+                  <span className="text-[9px] font-mono text-emerald-400 font-bold uppercase tracking-wider">RUN TIME</span>
                 </div>
               </div>
 
               {/* Legend */}
-              <div className="space-y-1 text-[9.5px] flex-1 font-mono">
-                <div className="flex items-center justify-between text-[var(--mes-text-secondary)]">
+              <div className="space-y-1.5 text-[10.5px] flex-1 font-mono">
+                <div className="flex items-center justify-between text-slate-300">
                   <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--mes-status-pass)] inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_4px_#10B981]" />
                     Run (Placement)
                   </span>
-                  <span className="font-bold tabular-nums text-[var(--mes-text-primary)]">{opRunPct}%</span>
+                  <span className="font-bold tabular-nums text-emerald-400">{opRunPct}%</span>
                 </div>
-                <div className="flex items-center justify-between text-[var(--mes-text-secondary)]">
+                <div className="flex items-center justify-between text-slate-300">
                   <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--mes-status-warn)] inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-amber-400 inline-block shadow-[0_0_4px_#F59E0B]" />
                     Wait Upstream (Starved)
                   </span>
-                  <span className="font-bold tabular-nums text-[var(--mes-text-primary)]">{opWaitPrevPct}%</span>
+                  <span className="font-bold tabular-nums text-amber-400">{opWaitPrevPct}%</span>
                 </div>
-                <div className="flex items-center justify-between text-[var(--mes-text-secondary)]">
+                <div className="flex items-center justify-between text-slate-300">
                   <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-orange-500 inline-block shadow-[0_0_4px_#F97316]" />
                     Wait Downstream (Blocked)
                   </span>
-                  <span className="font-bold tabular-nums text-[var(--mes-text-primary)]">{opWaitNextPct}%</span>
+                  <span className="font-bold tabular-nums text-orange-400">{opWaitNextPct}%</span>
                 </div>
-                <div className="flex items-center justify-between text-[var(--mes-text-secondary)]">
+                <div className="flex items-center justify-between text-slate-300">
                   <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--mes-status-halt)] inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-rose-500 inline-block shadow-[0_0_4px_#EF4444]" />
                     Stop / Feeder Alarm
                   </span>
-                  <span className="font-bold tabular-nums text-[var(--mes-text-primary)]">{opStopPct}%</span>
+                  <span className="font-bold tabular-nums text-rose-400">{opStopPct}%</span>
                 </div>
               </div>
             </div>
 
             {/* Nozzle Error Ranking Table */}
             <div>
-              <div className="flex items-center justify-between text-[9.5px] text-[var(--mes-text-secondary)] mb-1">
+              <div className="flex items-center justify-between text-[10.5px] text-slate-300 mb-1 font-sans">
                 <span className="font-bold uppercase tracking-wide">NOZZLE ERROR RANKING (PDERROR)</span>
-                <span className="text-[var(--mes-text-dim)] text-[8.5px]">Top Mispicks</span>
+                <span className="text-slate-400 text-[10px] font-mono">Top Mispicks</span>
               </div>
-              <table className="w-full text-xs font-mono border border-[var(--mes-border-hairline)] rounded-[var(--mes-radius)] overflow-hidden">
+              <table className="w-full text-xs font-mono border border-slate-800 rounded-[var(--mes-radius)] overflow-hidden">
                 <thead>
-                  <tr className="bg-[var(--mes-bg-well)] text-[9px] text-[var(--mes-text-muted)] uppercase">
-                    <th className="text-left p-1.5">Nozzle Address</th>
-                    <th className="text-right p-1.5">Errors</th>
-                    <th className="text-right p-1.5">Rate %</th>
+                  <tr className="bg-slate-900 text-[10px] text-slate-400 uppercase font-semibold">
+                    <th className="text-left px-2 py-1.5">Nozzle Address</th>
+                    <th className="text-right px-2 py-1.5">Errors</th>
+                    <th className="text-right px-2 py-1.5">Rate %</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-800/60 bg-slate-900/40">
                   {(diagnostics?.nozzleRankings || []).slice(0, 3).map((n) => (
-                    <tr key={n.nozzleAddress} className="border-t border-[var(--mes-border-hairline)]">
-                      <td className="p-1.5 font-bold text-[var(--mes-text-primary)]">{n.nozzleAddress}</td>
-                      <td className="p-1.5 text-right text-[var(--mes-status-halt)] font-bold tabular-nums">{n.mispickCount}x</td>
-                      <td className="p-1.5 text-right text-[var(--mes-text-secondary)] tabular-nums">{n.errorRatePct.toFixed(3)}%</td>
+                    <tr key={n.nozzleAddress} className="hover:bg-slate-800/40">
+                      <td className="px-2 py-1.5 font-bold text-slate-200">{n.nozzleAddress}</td>
+                      <td className="px-2 py-1.5 text-right text-rose-400 font-bold tabular-nums">{n.mispickCount}x</td>
+                      <td className="px-2 py-1.5 text-right text-slate-300 tabular-nums">{n.errorRatePct.toFixed(3)}%</td>
                     </tr>
                   ))}
                 </tbody>
@@ -495,26 +495,26 @@ export const FujiManagementMonitor: React.FC = () => {
 
             {/* Feeder Slot Error Ranking */}
             <div>
-              <div className="flex items-center justify-between text-[9.5px] text-[var(--mes-text-secondary)] mb-1">
+              <div className="flex items-center justify-between text-[10.5px] text-slate-300 mb-1 font-sans">
                 <span className="font-bold uppercase tracking-wide">SLOT ERROR RANKING (LOADCOMPIV)</span>
-                <span className="text-[var(--mes-text-dim)] text-[8.5px]">Slot Misfires</span>
+                <span className="text-slate-400 text-[10px] font-mono">Slot Misfires</span>
               </div>
-              <table className="w-full text-xs font-mono border border-[var(--mes-border-hairline)] rounded-[var(--mes-radius)] overflow-hidden">
+              <table className="w-full text-xs font-mono border border-slate-800 rounded-[var(--mes-radius)] overflow-hidden">
                 <thead>
-                  <tr className="bg-[var(--mes-bg-well)] text-[9px] text-[var(--mes-text-muted)] uppercase">
-                    <th className="text-left p-1.5">Slot</th>
-                    <th className="text-left p-1.5">Part Number</th>
-                    <th className="text-right p-1.5">Errors</th>
-                    <th className="text-right p-1.5">Rate %</th>
+                  <tr className="bg-slate-900 text-[10px] text-slate-400 uppercase font-semibold">
+                    <th className="text-left px-2 py-1.5">Slot</th>
+                    <th className="text-left px-2 py-1.5">Part Number</th>
+                    <th className="text-right px-2 py-1.5">Errors</th>
+                    <th className="text-right px-2 py-1.5">Rate %</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-800/60 bg-slate-900/40">
                   {(diagnostics?.slotRankings || []).slice(0, 3).map((s) => (
-                    <tr key={s.slotAddress} className="border-t border-[var(--mes-border-hairline)]">
-                      <td className="p-1.5 font-bold text-[var(--mes-text-primary)]">{s.slotAddress}</td>
-                      <td className="p-1.5 text-[var(--mes-text-muted)] truncate max-w-[80px]">{s.partNumber}</td>
-                      <td className="p-1.5 text-right text-[var(--mes-status-warn)] font-bold tabular-nums">{s.mispickCount}x</td>
-                      <td className="p-1.5 text-right text-[var(--mes-text-secondary)] tabular-nums">{s.errorRatePct.toFixed(3)}%</td>
+                    <tr key={s.slotAddress} className="hover:bg-slate-800/40">
+                      <td className="px-2 py-1.5 font-bold text-slate-200">{s.slotAddress}</td>
+                      <td className="px-2 py-1.5 text-slate-400 truncate max-w-[90px]">{s.partNumber}</td>
+                      <td className="px-2 py-1.5 text-right text-amber-400 font-bold tabular-nums">{s.mispickCount}x</td>
+                      <td className="px-2 py-1.5 text-right text-slate-300 tabular-nums">{s.errorRatePct.toFixed(3)}%</td>
                     </tr>
                   ))}
                 </tbody>
@@ -523,19 +523,19 @@ export const FujiManagementMonitor: React.FC = () => {
 
             {/* PCB Reference Designator Defect Pareto */}
             <div>
-              <div className="flex items-center justify-between text-[9.5px] text-[var(--mes-text-secondary)] mb-1">
+              <div className="flex items-center justify-between text-[10.5px] text-slate-300 mb-1 font-sans">
                 <span className="font-bold uppercase tracking-wide">REF-DES DEFECT PARETO (BOMLIST)</span>
-                <span className="text-[var(--mes-text-dim)] text-[8.5px]">SPI + AOI</span>
+                <span className="text-slate-400 text-[10px] font-mono">SPI + AOI</span>
               </div>
-              <div className="space-y-1.5 bg-[var(--mes-bg-well)] p-2 border border-[var(--mes-border-hairline)] rounded-[var(--mes-radius)] text-[9.5px]">
+              <div className="space-y-2 bg-slate-900/80 p-2.5 border border-slate-800 rounded-[var(--mes-radius)] text-[11px] font-mono">
                 {(diagnostics?.refDesPareto || []).slice(0, 3).map((b) => (
-                  <div key={b.refDes} className="space-y-0.5">
-                    <div className="flex justify-between text-[var(--mes-text-secondary)]">
-                      <span className="font-bold text-[var(--mes-text-primary)]">{b.refDes} <span className="text-[var(--mes-text-dim)] font-normal">({b.partNumber})</span></span>
-                      <span className="text-[var(--mes-status-warn)] font-bold">{b.defectRatePct}%</span>
+                  <div key={b.refDes} className="space-y-1">
+                    <div className="flex justify-between text-slate-300">
+                      <span className="font-bold text-slate-100">{b.refDes} <span className="text-slate-400 font-normal">({b.partNumber})</span></span>
+                      <span className="text-amber-400 font-bold">{b.defectRatePct}%</span>
                     </div>
-                    <div className="w-full bg-[var(--mes-bg-surface)] h-1 rounded-[1px] overflow-hidden">
-                      <div className="bg-[var(--mes-accent-primary)] h-full" style={{ width: `${Math.min(100, b.defectRatePct * 16)}%` }} />
+                    <div className="w-full bg-slate-950 h-1.5 rounded-[1px] overflow-hidden border border-slate-800">
+                      <div className="bg-cyan-400 h-full" style={{ width: `${Math.min(100, b.defectRatePct * 16)}%` }} />
                     </div>
                   </div>
                 ))}

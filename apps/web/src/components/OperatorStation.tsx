@@ -476,7 +476,7 @@ export const OperatorStation: React.FC = () => {
                     {/* Cassette Slot & Indicator Light */}
                     <div className="flex items-center gap-2.5">
                       <div className="w-9 h-9 rounded-[var(--mes-radius)] bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] flex flex-col items-center justify-center font-mono">
-                        <span className="text-[8.5px] text-[var(--mes-text-muted)] leading-none">SLOT</span>
+                        <span className="text-[10px] text-[var(--mes-text-muted)] leading-none font-semibold">SLOT</span>
                         <span className="text-xs font-black text-[var(--mes-text-primary)] leading-none mt-0.5">
                           {slot.slot_no < 10 ? `0${slot.slot_no}` : slot.slot_no}
                         </span>
@@ -491,11 +491,11 @@ export const OperatorStation: React.FC = () => {
                       <div>
                         <div className="text-xs font-bold font-mono text-[var(--mes-text-primary)] flex items-center gap-2">
                           <span>{slot.assigned_part_number}</span>
-                          <span className="text-[9.5px] font-normal text-[var(--mes-text-muted)] px-1.5 py-0.2 bg-[var(--mes-bg-surface)] rounded-[1px] border border-[var(--mes-border-hairline)]">
+                          <span className="text-[10px] font-semibold text-[var(--mes-text-muted)] px-1.5 py-0.5 bg-[var(--mes-bg-surface)] rounded-[1px] border border-[var(--mes-border-hairline)]">
                             {slot.feeder_type.split(' ')[0]}
                           </span>
                         </div>
-                        <div className="text-[10.5px] text-[var(--mes-text-muted)] font-sans truncate max-w-[200px]">
+                        <div className="text-[11px] text-[var(--mes-text-muted)] font-sans truncate max-w-[200px]">
                           {slot.part_name}
                         </div>
                       </div>
@@ -505,15 +505,15 @@ export const OperatorStation: React.FC = () => {
                     <div className="flex items-center gap-3 text-xs font-mono">
                       <div className="text-right">
                         <div className="text-[var(--mes-text-primary)] font-bold tabular-nums">
-                          {(slot.reel_remaining_quantity || 0).toLocaleString()} <span className="text-[9.5px] text-[var(--mes-text-muted)]">PCS</span>
+                          {(slot.reel_remaining_quantity || 0).toLocaleString()} <span className="text-[10px] text-[var(--mes-text-muted)]">PCS</span>
                         </div>
-                        <div className="text-[9.5px] text-[var(--mes-text-muted)] truncate max-w-[110px]">
+                        <div className="text-[10px] text-[var(--mes-text-muted)] truncate max-w-[110px]">
                           {slot.current_reel_id || 'NO REEL'}
                         </div>
                       </div>
 
                       {slot.msl_class && slot.msl_class !== 'MSL_1' ? (
-                        <div className={`px-1.5 py-0.5 rounded-[var(--mes-radius)] border text-[9px] font-bold flex flex-col items-end ${
+                        <div className={`px-2 py-0.5 rounded-[var(--mes-radius)] border text-[10px] font-bold flex flex-col items-end ${
                           slot.is_msl_expired || (slot.msl_remaining_minutes ?? 999) <= 0
                             ? 'bg-[var(--mes-status-halt-muted)] border-[var(--mes-status-halt)] text-[var(--mes-status-halt)]'
                             : slot.floor_clock_state === 'DRY_STORAGE'
@@ -521,10 +521,10 @@ export const OperatorStation: React.FC = () => {
                             : 'bg-[var(--mes-status-warn-muted)] border-[var(--mes-status-warn)] text-[var(--mes-status-warn)]'
                         }`}>
                           <span>{slot.msl_class}</span>
-                          <span className="text-[8px] font-normal opacity-80">{slot.floor_clock_state}</span>
+                          <span className="text-[9.5px] font-normal opacity-90">{slot.floor_clock_state}</span>
                         </div>
                       ) : (
-                        <div className="px-1.5 py-0.5 rounded-[var(--mes-radius)] bg-[var(--mes-bg-surface)] text-[var(--mes-text-muted)] text-[9px] border border-[var(--mes-border-hairline)]">
+                        <div className="px-2 py-0.5 rounded-[var(--mes-radius)] bg-[var(--mes-bg-surface)] text-[var(--mes-text-muted)] text-[10px] font-semibold border border-[var(--mes-border-hairline)]">
                           MSL 1
                         </div>
                       )}

@@ -388,17 +388,17 @@ export const FleetDashboard: React.FC = () => {
                           key={wc.id}
                           className="bg-[var(--mes-bg-well)] p-2 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] text-center flex flex-col justify-between"
                         >
-                          <span className="text-[8px] font-mono text-[var(--mes-text-muted)] truncate block">
+                          <span className="text-[9.5px] font-mono text-[var(--mes-text-muted)] truncate block font-medium">
                             {wc.type.replace('STATION_', '').replace('PRINTER_', 'PRINT_')}
                           </span>
-                          <span className="text-[11px] font-bold text-[var(--mes-text-primary)] font-mono my-0.5 truncate block">
+                          <span className="text-[11.5px] font-bold text-[var(--mes-text-primary)] font-mono my-0.5 truncate block">
                             {wc.code}
                           </span>
                           <div className="flex items-center justify-center gap-1">
                             <span className={`w-1.5 h-1.5 rounded-full ${
                               wc.status === 'RUNNING' || wc.status === 'IDLE' ? 'bg-[var(--mes-status-pass)]' : 'bg-[var(--mes-status-warn)]'
                             }`} />
-                            <span className="text-[8px] font-mono text-[var(--mes-text-muted)]">{wc.status}</span>
+                            <span className="text-[9.5px] font-mono text-[var(--mes-text-muted)]">{wc.status}</span>
                           </div>
                         </div>
                       ))}
@@ -464,7 +464,7 @@ export const FleetDashboard: React.FC = () => {
                         <span className="text-xs font-bold text-[var(--mes-text-primary)]">{tl.lineName}</span>
                         <span className="text-[10px] text-[var(--mes-text-muted)]">({tl.lineId})</span>
                       </div>
-                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border uppercase ${
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase ${
                         isAhead ? 'bg-[var(--mes-status-pass-muted)] text-[var(--mes-status-pass)] border-[var(--mes-status-pass)]' :
                         isOnPace ? 'bg-[var(--mes-accent-muted)] text-[var(--mes-accent-primary)] border-[var(--mes-accent-ring)]' :
                         'bg-[var(--mes-status-warn-muted)] text-[var(--mes-status-warn)] border-[var(--mes-status-warn)]'
@@ -475,15 +475,15 @@ export const FleetDashboard: React.FC = () => {
 
                     <div className="grid grid-cols-3 gap-2 text-center font-mono">
                       <div className="bg-[var(--mes-bg-surface)] p-1.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)]">
-                        <span className="text-[9px] text-[var(--mes-text-muted)] block">TARGET TAKT</span>
+                        <span className="text-[10px] text-[var(--mes-text-muted)] block font-medium">TARGET TAKT</span>
                         <span className="text-xs font-bold text-[var(--mes-text-primary)] mt-0.5 block tabular-nums">{tl.targetTaktSeconds}s</span>
                       </div>
                       <div className="bg-[var(--mes-bg-surface)] p-1.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)]">
-                        <span className="text-[9px] text-[var(--mes-text-muted)] block">ACTUAL CYCLE</span>
+                        <span className="text-[10px] text-[var(--mes-text-muted)] block font-medium">ACTUAL CYCLE</span>
                         <span className="text-xs font-bold text-[var(--mes-status-pass)] mt-0.5 block tabular-nums">{tl.actualCycleTimeSeconds}s</span>
                       </div>
                       <div className="bg-[var(--mes-bg-surface)] p-1.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)]">
-                        <span className="text-[9px] text-[var(--mes-text-muted)] block">VARIANCE</span>
+                        <span className="text-[10px] text-[var(--mes-text-muted)] block font-medium">VARIANCE</span>
                         <span className={`text-xs font-bold mt-0.5 block tabular-nums ${
                           tl.taktVariancePercent <= 0 ? 'text-[var(--mes-status-pass)]' : 'text-[var(--mes-status-warn)]'
                         }`}>
