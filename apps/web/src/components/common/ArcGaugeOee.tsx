@@ -17,90 +17,92 @@ export const ArcGaugeOee: React.FC<ArcGaugeOeeProps> = ({
   target = 85,
   label,
   sublabel,
-  size = 144,
-  strokeWidth = 7,
+  size = 150,
+  strokeWidth = 9,
   unit = '%',
   className = ''
 }) => {
   const clampedValue = Math.max(0, Math.min(100, value));
   const clampedTarget = Math.max(0, Math.min(100, target));
 
-  // Geometry: Semi-circle (180° to 0°)
-  // Radius engineered to leave exact breathing space for micro-ticks & needle
-  const radius = (size - strokeWidth * 2 - 20) / 2;
+  // Geometry: 200-degree modern precision arc (from 170° to 10° for open bottom feel)
+  // Clean, high-end Apple Pro / Tesla instrument cluster aesthetic
+  const startAngleDeg = 190;
+  const sweepAngleDeg = 200;
+  const radius = (size - strokeWidth * 2 - 14) / 2;
   const cx = size / 2;
-  const cy = size / 2 + 10;
-  const circumference = Math.PI * radius;
+  const cy = size / 2 + 6;
 
-  // Progress calculations
-  const progressFraction = clampedValue / 100;
-  const dashOffset = circumference * (1 - progressFraction);
+  // Degrees to radians
+  const degToRad = (deg: number) => (deg * Math.PI) / 180;
 
-  // Target pointer coordinates (Razor-sharp inverted triangle)
-  const targetAngleRad = Math.PI * (1 - clampedTarget / 100);
-  const targetOuterR = radius + strokeWidth / 2 + 4.5;
-  const targetInnerR = radius - strokeWidth / 2 - 1.5;
-  const targetNeedleX1 = cx + targetOuterR * Math.cos(targetAngleRad);
-  const targetNeedleY1 = cy - targetOuterR * Math.sin(targetAngleRad);
-  const targetNeedleX2 = cx + targetInnerR * Math.cos(targetAngleRad);
-  const targetNeedleY2 = cy - targetInnerR * Math.sin(targetAngleRad);
+  // Arc path generator
+  const getArcCoordinates = (startDeg: number, spanDeg: number, r: number) => {
+    const endDeg = startDeg + spanDeg;
+    const startRad = degToRad(startDeg);
+    const endRad = degToRad(endDeg);
+
+    const x1 = cx + r * Math.cos(startRad);
+    const y1 = cy + r * Math.sin(startRad);
+    const x2 = cx + r * Math.cos(endRad);
+    const y2 = cy + r * Math.sin(endRad);
+
+    const largeArcFlag = spanDeg > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2} ${y2}`;
+  };
+
+  const totalArcLength = (sweepAngleDeg / 360) * 2 * Math.PI * radius;
+  const activeLength = (clampedValue / 100) * totalArcLength;
+  const bgPath = getArcCoordinates(startAngleDeg, sweepAngleDeg, radius);
+
+  // Target tick mark position
+  const targetAngleDeg = startAngleDeg + (clampedTarget / 100) * sweepAngleDeg;
+  const targetAngleRad = degToRad(targetAngleDeg);
+  const targetOuterR = radius + strokeWidth / 2 + 5;
+  const targetInnerR = radius - strokeWidth / 2 - 2;
+  const targetX1 = cx + targetInnerR * Math.cos(targetAngleRad);
+  const targetY1 = cy + targetInnerR * Math.sin(targetAngleRad);
+  const targetX2 = cx + targetOuterR * Math.cos(targetAngleRad);
+  const targetY2 = cy + targetOuterR * Math.sin(targetAngleRad);
 
   // Delta calculation against target
   const delta = clampedValue - clampedTarget;
 
   // Semantic status determination
   let strokeColor = 'var(--mes-status-pass)';
-  let glowColor = 'rgba(16, 185, 129, 0.25)';
+  let glowColor = 'rgba(16, 185, 129, 0.4)';
   let statusBadge = 'ON TARGET';
-  let badgeStyle = 'text-[var(--mes-status-pass)] bg-[var(--mes-status-pass-muted)] border-[var(--mes-status-pass)]';
+  let badgeStyle = 'text-emerald-400 bg-emerald-950/40 border-emerald-500/50 shadow-[0_0_8px_rgba(16,185,129,0.2)]';
 
   if (clampedValue < clampedTarget - 6) {
     strokeColor = 'var(--mes-status-halt)';
-    glowColor = 'rgba(244, 63, 94, 0.35)';
+    glowColor = 'rgba(244, 63, 94, 0.45)';
     statusBadge = 'CRITICAL';
-    badgeStyle = 'text-[var(--mes-status-halt)] bg-[var(--mes-status-halt-muted)] border-[var(--mes-status-halt)]';
+    badgeStyle = 'text-rose-400 bg-rose-950/40 border-rose-500/50 shadow-[0_0_8px_rgba(244,63,94,0.2)]';
   } else if (clampedValue < clampedTarget) {
     strokeColor = 'var(--mes-status-warn)';
-    glowColor = 'rgba(245, 158, 11, 0.3)';
+    glowColor = 'rgba(245, 158, 11, 0.4)';
     statusBadge = 'ATTENTION';
-    badgeStyle = 'text-[var(--mes-status-warn)] bg-[var(--mes-status-warn-muted)] border-[var(--mes-status-warn)]';
+    badgeStyle = 'text-amber-400 bg-amber-950/40 border-amber-500/50 shadow-[0_0_8px_rgba(245,158,11,0.2)]';
   }
 
-  // Generate 21 calibrated micro-ticks (every 5%)
-  // Major ticks at 0%, 25%, 50%, 75%, 100%
-  const ticks = Array.from({ length: 21 }, (_, i) => {
-    const pct = i * 5;
-    const isMajor = pct % 25 === 0;
-    const angleRad = Math.PI * (1 - pct / 100);
-    const tickOuterR = radius + strokeWidth / 2 + (isMajor ? 6.5 : 3.5);
-    const tickInnerR = radius + strokeWidth / 2 + 1.5;
-
-    return {
-      pct,
-      isMajor,
-      x1: cx + tickInnerR * Math.cos(angleRad),
-      y1: cy - tickInnerR * Math.sin(angleRad),
-      x2: cx + tickOuterR * Math.cos(angleRad),
-      y2: cy - tickOuterR * Math.sin(angleRad)
-    };
-  });
-
-  const svgHeight = cy + 6;
+  const svgHeight = cy + 18;
 
   return (
     <div 
-      className={`bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] hover:border-[var(--mes-border-strong)] rounded-[var(--mes-radius)] p-2.5 flex flex-col items-center justify-between min-w-[136px] flex-1 select-none transition-all duration-150 ${className}`}
+      className={`bg-[var(--mes-bg-surface)] border border-[var(--mes-border-subtle)] hover:border-[var(--mes-border-strong)] rounded-[var(--mes-radius)] p-3 flex flex-col items-center justify-between min-w-[144px] flex-1 select-none transition-all duration-200 group relative overflow-hidden ${className}`}
       style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
     >
-      {/* Title Header Band */}
-      <div className="w-full text-center pb-1 border-b border-[var(--mes-border-hairline)] mb-1">
-        <span className="font-mono text-[10px] font-bold text-[var(--mes-text-secondary)] uppercase tracking-wider block truncate">
+      {/* Top Header: Clean Label */}
+      <div className="w-full flex items-center justify-between pb-1.5 border-b border-[var(--mes-border-hairline)] mb-1">
+        <span className="font-mono text-[10.5px] font-bold text-[var(--mes-text-secondary)] uppercase tracking-wider block truncate">
           {label}
         </span>
+        <span className={`w-2 h-2 rounded-full ${delta >= 0 ? 'bg-[var(--mes-status-pass)] shadow-[0_0_6px_var(--mes-status-pass)]' : 'bg-[var(--mes-status-halt)] shadow-[0_0_6px_var(--mes-status-halt)]'}`} />
       </div>
 
-      {/* SVG Precision Arc Gauge */}
-      <div className="relative my-1" style={{ width: size, height: svgHeight }}>
+      {/* SVG Precision Dial */}
+      <div className="relative my-0.5 flex items-center justify-center" style={{ width: size, height: svgHeight }}>
         <svg 
           width={size} 
           height={svgHeight} 
@@ -109,112 +111,101 @@ export const ArcGaugeOee: React.FC<ArcGaugeOeeProps> = ({
           aria-hidden="true"
         >
           <defs>
-            {/* Luminous Glow Filter for Arc */}
-            <filter id={`gauge-glow-${label.replace(/\s+/g, '-')}`} x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor={glowColor} />
+            {/* Ambient Radial Glow */}
+            <filter id={`gauge-glow-${label.replace(/[^a-zA-Z0-9]/g, '-')}`} x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor={glowColor} />
             </filter>
           </defs>
 
-          {/* Calibrated Scale Micro-Ticks */}
-          {ticks.map((t, idx) => (
-            <line
-              key={idx}
-              x1={t.x1}
-              y1={t.y1}
-              x2={t.x2}
-              y2={t.y2}
-              stroke={t.isMajor ? 'var(--mes-text-secondary)' : 'var(--mes-border-strong)'}
-              strokeWidth={t.isMajor ? 1.4 : 0.8}
-              strokeLinecap="round"
-            />
-          ))}
-
-          {/* Outer Scale Arc Hairline */}
+          {/* Outer Track Hairline Accent */}
           <path
-            d={`M ${cx - (radius + strokeWidth / 2 + 1.5)} ${cy} A ${radius + strokeWidth / 2 + 1.5} ${radius + strokeWidth / 2 + 1.5} 0 0 1 ${cx + (radius + strokeWidth / 2 + 1.5)} ${cy}`}
+            d={getArcCoordinates(startAngleDeg - 1, sweepAngleDeg + 2, radius + strokeWidth / 2 + 2)}
             fill="none"
-            stroke="var(--mes-border-subtle)"
-            strokeWidth="0.75"
+            stroke="var(--mes-border-hairline)"
+            strokeWidth="1"
+            strokeLinecap="round"
           />
 
-          {/* Background Groove Track */}
+          {/* Background Track Groove */}
           <path
-            d={`M ${cx - radius} ${cy} A ${radius} ${radius} 0 0 1 ${cx + radius} ${cy}`}
+            d={bgPath}
             fill="none"
             stroke="var(--mes-bg-well)"
             strokeWidth={strokeWidth}
             strokeLinecap="round"
           />
 
-          {/* Active Luminous Progress Arc */}
+          {/* Active Progress Arc with Luminous Glow */}
           <path
-            d={`M ${cx - radius} ${cy} A ${radius} ${radius} 0 0 1 ${cx + radius} ${cy}`}
+            d={bgPath}
             fill="none"
             stroke={strokeColor}
             strokeWidth={strokeWidth}
-            strokeDasharray={circumference}
-            strokeDashoffset={dashOffset}
+            strokeDasharray={`${totalArcLength} ${totalArcLength}`}
+            strokeDashoffset={totalArcLength - activeLength}
             strokeLinecap="round"
-            filter={`url(#gauge-glow-${label.replace(/\s+/g, '-')})`}
-            className="transition-all duration-500 ease-out"
+            filter={`url(#gauge-glow-${label.replace(/[^a-zA-Z0-9]/g, '-')})`}
+            className="transition-all duration-700 ease-out"
           />
 
-          {/* High-Precision Target Needle Marker */}
+          {/* Target Needle Pin & Pip */}
           {target !== undefined && (
             <g className="transition-all duration-300">
-              {/* Radial pointer pin */}
               <line
-                x1={targetNeedleX1}
-                y1={targetNeedleY1}
-                x2={targetNeedleX2}
-                y2={targetNeedleY2}
-                stroke="var(--mes-text-primary)"
-                strokeWidth="2"
-                strokeLinecap="square"
+                x1={targetX1}
+                y1={targetY1}
+                x2={targetX2}
+                y2={targetY2}
+                stroke="#FFFFFF"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                className="drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]"
               />
-              {/* Tiny pointer beacon */}
               <circle
-                cx={targetNeedleX1}
-                cy={targetNeedleY1}
-                r="2"
-                fill="var(--mes-text-primary)"
+                cx={targetX2}
+                cy={targetY2}
+                r="2.5"
+                fill="#FFFFFF"
+                className="drop-shadow-[0_0_4px_rgba(255,255,255,0.9)]"
               />
             </g>
           )}
         </svg>
 
-        {/* Center Readout: Tabular Animated Number & Status Pill */}
-        <div className="absolute inset-x-0 top-[28%] flex flex-col items-center justify-center pointer-events-none">
+        {/* Center Tabular Number Readout */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center pt-2 pointer-events-none">
           <div className="flex items-baseline gap-0.5">
             <AnimatedNumber
               value={clampedValue}
               decimals={1}
-              className="font-mono text-2xl lg:text-[26px] font-black tracking-tight text-[var(--mes-text-primary)] tabular-nums leading-none"
+              className="font-mono text-2xl lg:text-[28px] font-black tracking-tight text-[var(--mes-text-primary)] tabular-nums leading-none drop-shadow-sm"
             />
-            <span className="font-mono text-[10.5px] text-[var(--mes-text-muted)] font-semibold">
+            <span className="font-mono text-xs text-[var(--mes-text-muted)] font-bold">
               {unit}
             </span>
           </div>
 
-          <div className="mt-1">
-            <span className={`px-1.5 py-0.5 text-[8.5px] font-mono font-bold uppercase rounded-[var(--mes-radius)] border tracking-wider flex items-center gap-1 ${badgeStyle}`}>
-              <span className="w-1 h-1 rounded-full bg-current animate-pulse" />
+          {/* Status Badge with Glowing Dot */}
+          <div className="mt-2">
+            <span className={`px-2 py-0.5 text-[9px] font-mono font-bold uppercase rounded-[var(--mes-radius)] border tracking-wider flex items-center gap-1.5 transition-all ${badgeStyle}`}>
+              <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
               <span>{statusBadge}</span>
             </span>
           </div>
         </div>
       </div>
 
-      {/* Bottom Context: Target & Dynamic Sublabel */}
-      <div className="w-full pt-1.5 border-t border-[var(--mes-border-hairline)] font-mono text-[10px] text-[var(--mes-text-muted)] flex items-center justify-between px-0.5">
-        <div className="flex items-center gap-1">
-          <span>Tgt: <strong className="text-[var(--mes-text-primary)]">{target.toFixed(1)}{unit}</strong></span>
-          <span className={`text-[9px] font-bold ${delta >= 0 ? 'text-[var(--mes-status-pass)]' : 'text-[var(--mes-status-halt)]'}`}>
-            ({delta >= 0 ? `+${delta.toFixed(1)}` : delta.toFixed(1)})
+      {/* Bottom Context Band: Target Comparison & Subtitle */}
+      <div className="w-full pt-2 border-t border-[var(--mes-border-hairline)] font-mono text-[10.5px] flex items-center justify-between px-0.5 mt-1">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[var(--mes-text-muted)] text-[10px]">Tgt:</span>
+          <strong className="text-[var(--mes-text-primary)] text-[10.5px]">{target.toFixed(1)}{unit}</strong>
+          <span className={`text-[10px] font-bold px-1 py-0.2 rounded ${delta >= 0 ? 'text-emerald-400 bg-emerald-950/30' : 'text-rose-400 bg-rose-950/30'}`}>
+            {delta >= 0 ? `+${delta.toFixed(1)}` : delta.toFixed(1)}
           </span>
         </div>
         {sublabel && (
-          <span className="text-[9.5px] text-[var(--mes-text-dim)] truncate max-w-[80px]" title={sublabel}>
+          <span className="text-[10px] font-semibold text-[var(--mes-text-secondary)] truncate max-w-[95px]" title={sublabel}>
             {sublabel}
           </span>
         )}

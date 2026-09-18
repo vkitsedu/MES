@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, AlertTriangle } from 'lucide-react';
+import { ChevronRight, AlertTriangle } from 'lucide-react';
 import { SmtMachineFlowItem } from '@mes/shared';
 
 export interface SmtLineFlowStripProps {
@@ -14,7 +14,7 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
   machines,
   selectedMachineId,
   onSelectMachine,
-  lineName = 'SMD_02 (FUJI NXT III M6)',
+  lineName = 'SMD_01 (FUJI NXT III M6)',
   targetCycleTimeSec = 18.0
 }) => {
   const maxCycleTime = Math.max(...machines.map(m => m.cycleTimeSec || 0), 1);
@@ -23,39 +23,43 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
     switch (lamp) {
       case 'RUN':
         return {
-          bg: 'bg-emerald-950/20',
-          border: 'border-emerald-500/40',
+          bg: 'bg-emerald-950/40',
+          border: 'border-emerald-500/50',
           text: 'text-emerald-400',
-          lampRed: 'bg-rose-950/40',
-          lampAmber: 'bg-amber-950/40',
-          lampGreen: 'bg-emerald-400 shadow-[0_0_6px_#10B981]'
+          topBar: 'bg-emerald-500',
+          lampRed: 'bg-rose-950/30 opacity-40',
+          lampAmber: 'bg-amber-950/30 opacity-40',
+          lampGreen: 'bg-emerald-400 shadow-[0_0_8px_#10B981] opacity-100'
         };
       case 'WAIT':
         return {
-          bg: 'bg-amber-950/20',
-          border: 'border-amber-500/40',
+          bg: 'bg-amber-950/40',
+          border: 'border-amber-500/50',
           text: 'text-amber-400',
-          lampRed: 'bg-rose-950/40',
-          lampAmber: 'bg-amber-400 shadow-[0_0_6px_#F59E0B]',
-          lampGreen: 'bg-emerald-950/40'
+          topBar: 'bg-amber-500',
+          lampRed: 'bg-rose-950/30 opacity-40',
+          lampAmber: 'bg-amber-400 shadow-[0_0_8px_#F59E0B] opacity-100',
+          lampGreen: 'bg-emerald-950/30 opacity-40'
         };
       case 'STOP':
         return {
-          bg: 'bg-rose-950/30',
-          border: 'border-rose-500/60',
+          bg: 'bg-rose-950/50',
+          border: 'border-rose-500/70',
           text: 'text-rose-400',
-          lampRed: 'bg-rose-500 shadow-[0_0_8px_#EF4444] animate-pulse',
-          lampAmber: 'bg-amber-950/40',
-          lampGreen: 'bg-emerald-950/40'
+          topBar: 'bg-rose-500',
+          lampRed: 'bg-rose-500 shadow-[0_0_10px_#EF4444] animate-pulse opacity-100',
+          lampAmber: 'bg-amber-950/30 opacity-40',
+          lampGreen: 'bg-emerald-950/30 opacity-40'
         };
       default:
         return {
           bg: 'bg-slate-900/40',
           border: 'border-slate-800',
-          text: 'text-slate-500',
-          lampRed: 'bg-rose-950/20',
-          lampAmber: 'bg-amber-950/20',
-          lampGreen: 'bg-emerald-950/20'
+          text: 'text-slate-400',
+          topBar: 'bg-slate-700',
+          lampRed: 'bg-rose-950/20 opacity-30',
+          lampAmber: 'bg-amber-950/20 opacity-30',
+          lampGreen: 'bg-emerald-950/20 opacity-30'
         };
     }
   };
@@ -66,36 +70,36 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
       style={{ boxShadow: 'var(--mes-shadow-subtle)' }}
     >
       {/* Header Band */}
-      <div className="bg-[var(--mes-bg-well)] px-3 py-1.5 border-b border-[var(--mes-border-hairline)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[var(--mes-status-pass)]" />
-          <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wide">
+      <div className="bg-[var(--mes-bg-well)] px-4 py-2 border-b border-[var(--mes-border-hairline)] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--mes-status-pass)] animate-pulse" />
+          <span className="font-bold text-[var(--mes-text-primary)] uppercase tracking-wide text-xs sm:text-[12.5px]">
             {lineName} · PHYSICAL EQUIPMENT FLOW & TOWER LAMPS
           </span>
-          <span className="text-[10px] text-[var(--mes-text-muted)] bg-[var(--mes-bg-surface)] px-1.5 py-0.5 border border-[var(--mes-border-hairline)] rounded-[var(--mes-radius)]">
-            Takt Target: {targetCycleTimeSec.toFixed(1)}s
+          <span className="text-[11px] text-[var(--mes-text-muted)] bg-[var(--mes-bg-surface)] px-2 py-0.5 border border-[var(--mes-border-hairline)] rounded-[var(--mes-radius)] font-semibold">
+            Takt Target: <strong className="text-[var(--mes-text-primary)]">{targetCycleTimeSec.toFixed(1)}s</strong>
           </span>
         </div>
 
         {/* Live Machine State Tallies */}
-        <div className="flex items-center gap-4 text-[10.5px]">
-          <span className="flex items-center gap-1.5 text-[var(--mes-status-pass)] font-bold">
-            <span className="w-2 h-2 bg-[var(--mes-status-pass)] rounded-[1px]" />
+        <div className="flex items-center gap-4 text-xs">
+          <span className="flex items-center gap-1.5 text-emerald-400 font-bold font-mono">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_6px_#10B981]" />
             RUN: {machines.filter(m => m.towerLamp === 'RUN').length}
           </span>
-          <span className="flex items-center gap-1.5 text-[var(--mes-status-warn)] font-bold">
-            <span className="w-2 h-2 bg-[var(--mes-status-warn)] rounded-[1px]" />
+          <span className="flex items-center gap-1.5 text-amber-400 font-bold font-mono">
+            <span className="w-2 h-2 bg-amber-400 rounded-full shadow-[0_0_6px_#F59E0B]" />
             WAIT: {machines.filter(m => m.towerLamp === 'WAIT').length}
           </span>
-          <span className="flex items-center gap-1.5 text-[var(--mes-status-halt)] font-bold">
-            <span className="w-2 h-2 bg-[var(--mes-status-halt)] rounded-[1px]" />
+          <span className="flex items-center gap-1.5 text-rose-400 font-bold font-mono">
+            <span className="w-2 h-2 bg-rose-400 rounded-full shadow-[0_0_6px_#EF4444]" />
             STOP: {machines.filter(m => m.towerLamp === 'STOP').length}
           </span>
         </div>
       </div>
 
-      {/* Horizontal Strip */}
-      <div className="p-2 flex items-center gap-1 overflow-x-auto bg-[var(--mes-bg-canvas)] scrollbar-thin">
+      {/* Horizontal Conveyor Lane Flow Strip */}
+      <div className="p-3 flex items-center gap-2 overflow-x-auto bg-[var(--mes-bg-canvas)] scrollbar-thin">
         {machines.map((machine, index) => {
           const colors = getLampColors(machine.towerLamp);
           const isSelected = selectedMachineId === machine.id;
@@ -103,66 +107,81 @@ export const SmtLineFlowStrip: React.FC<SmtLineFlowStripProps> = ({
 
           return (
             <React.Fragment key={machine.id}>
-              {/* Machine Tile */}
+              {/* Machine Card */}
               <button
                 type="button"
                 onClick={() => onSelectMachine?.(machine.id)}
-                className={`flex flex-col text-left p-2 rounded-[var(--mes-radius)] border transition-all duration-100 min-w-[126px] cursor-pointer relative ${
+                className={`flex flex-col text-left p-3 rounded-[var(--mes-radius)] border transition-all duration-150 min-w-[164px] max-w-[185px] cursor-pointer relative overflow-hidden group select-none ${
                   isSelected
-                    ? 'bg-[var(--mes-accent-muted)] border-[var(--mes-accent-primary)] ring-1 ring-[var(--mes-accent-primary)]'
-                    : 'bg-[var(--mes-bg-surface)] hover:bg-[var(--mes-bg-well)] border-[var(--mes-border-subtle)]'
+                    ? 'bg-[var(--mes-accent-muted)] border-[var(--mes-accent-primary)] ring-2 ring-[var(--mes-accent-primary)] shadow-md'
+                    : isBottleneck
+                      ? 'bg-[var(--mes-bg-surface)] hover:bg-[var(--mes-bg-well)] border-amber-500/70 shadow-[0_0_12px_rgba(245,158,11,0.15)]'
+                      : 'bg-[var(--mes-bg-surface)] hover:bg-[var(--mes-bg-well)] border-[var(--mes-border-subtle)] hover:border-[var(--mes-border-strong)]'
                 }`}
               >
-                {/* Machine Name & Tower Lamp */}
-                <div className="flex items-center justify-between gap-1 w-full mb-1">
-                  <span className="font-mono text-[11px] font-bold text-[var(--mes-text-primary)] truncate">
+                {/* Top Status Color Bar */}
+                <div className={`absolute top-0 inset-x-0 h-1 ${colors.topBar}`} />
+
+                {/* Machine Name & Tower Lamp Bezel */}
+                <div className="flex items-center justify-between gap-1.5 w-full mb-1.5 pt-0.5">
+                  <span className="font-sans text-[13px] font-bold text-[var(--mes-text-primary)] truncate tracking-tight" title={machine.name}>
                     {machine.name}
                   </span>
 
-                  {/* Discrete 3-Lamp Array */}
-                  <div className="flex items-center gap-0.5 bg-[var(--mes-bg-well)] p-1 rounded-[1px] border border-[var(--mes-border-hairline)]">
-                    <span className={`w-1.5 h-1.5 rounded-full ${colors.lampRed}`} />
-                    <span className={`w-1.5 h-1.5 rounded-full ${colors.lampAmber}`} />
-                    <span className={`w-1.5 h-1.5 rounded-full ${colors.lampGreen}`} />
+                  {/* 3-Lamp Precision Optical Bezel */}
+                  <div className="flex items-center gap-1 bg-[var(--mes-bg-well)] px-1.5 py-1 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] shrink-0">
+                    <span className={`w-2 h-2 rounded-full transition-all ${colors.lampRed}`} />
+                    <span className={`w-2 h-2 rounded-full transition-all ${colors.lampAmber}`} />
+                    <span className={`w-2 h-2 rounded-full transition-all ${colors.lampGreen}`} />
                   </div>
                 </div>
 
-                {/* Subtitle & State Badge */}
-                <div className="flex items-center justify-between w-full mb-1.5 font-mono text-[9px]">
-                  <span className="text-[var(--mes-text-muted)] truncate">{machine.equipmentCode}</span>
-                  <span className={`px-1 py-0.2 font-bold uppercase rounded-[1px] border ${colors.bg} ${colors.text} ${colors.border}`}>
+                {/* Equipment Code & State Pill */}
+                <div className="flex items-center justify-between w-full mb-2">
+                  <span className="font-mono text-[10.5px] font-semibold text-[var(--mes-text-secondary)] bg-[var(--mes-bg-well)] px-1.5 py-0.5 rounded border border-[var(--mes-border-hairline)] truncate max-w-[100px]">
+                    {machine.equipmentCode}
+                  </span>
+                  <span className={`px-2 py-0.5 font-mono text-[10px] font-bold uppercase rounded-[var(--mes-radius)] border ${colors.bg} ${colors.text} ${colors.border}`}>
                     {machine.towerLamp}
                   </span>
                 </div>
 
-                {/* Telemetry Metrics */}
-                <div className="space-y-0.5 pt-1 border-t border-[var(--mes-border-hairline)] font-mono text-[9.5px] w-full">
-                  <div className="flex items-center justify-between text-[var(--mes-text-secondary)]">
-                    <span className="text-[var(--mes-text-muted)]">C/Time:</span>
-                    <span className={`font-bold tabular-nums ${machine.cycleTimeSec > targetCycleTimeSec ? 'text-[var(--mes-status-warn)]' : 'text-[var(--mes-text-primary)]'}`}>
+                {/* Telemetry Metrics: High-Contrast & Readable */}
+                <div className="space-y-1 pt-2 border-t border-[var(--mes-border-hairline)] font-mono text-xs w-full">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-[var(--mes-text-muted)] font-medium">Cycle Time:</span>
+                    <span className={`text-[13px] font-black tabular-nums ${
+                      machine.cycleTimeSec > targetCycleTimeSec 
+                        ? 'text-amber-400 drop-shadow-[0_0_4px_rgba(245,158,11,0.4)]' 
+                        : 'text-emerald-400'
+                    }`}>
                       {machine.cycleTimeSec > 0 ? `${machine.cycleTimeSec.toFixed(1)}s` : '—'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[var(--mes-text-muted)] text-[9px]">
-                    <span>Stops:</span>
-                    <span className="tabular-nums">{machine.stopCount}x ({machine.stopTimeMin.toFixed(1)}m)</span>
+
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-[var(--mes-text-muted)]">Stops:</span>
+                    <span className="text-[var(--mes-text-secondary)] font-semibold tabular-nums">
+                      {machine.stopCount}x ({machine.stopTimeMin.toFixed(1)}m)
+                    </span>
                   </div>
                 </div>
 
-                {/* Bottleneck Marker */}
+                {/* Pacing Bottleneck Sentinel Flag */}
                 {isBottleneck && (
-                  <div className="mt-1 w-full text-center">
-                    <span className="px-1 py-0.2 text-[8px] font-mono font-bold text-[var(--mes-status-warn)] bg-[var(--mes-status-warn-muted)] border border-[var(--mes-status-warn)] rounded-[1px] uppercase tracking-wider block">
-                      LOB BOTTLENECK
+                  <div className="mt-2 w-full">
+                    <span className="py-1 px-1 text-[9px] font-mono font-bold text-amber-300 bg-amber-950/70 border border-amber-500/60 rounded-[var(--mes-radius)] uppercase tracking-wider flex items-center justify-center gap-1 shadow-sm">
+                      <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
+                      <span>LINE BOTTLENECK</span>
                     </span>
                   </div>
                 )}
               </button>
 
-              {/* Arrow Connector */}
+              {/* Conveyor Flow Chevron */}
               {index < machines.length - 1 && (
-                <div className="text-[var(--mes-text-muted)] px-0.5 shrink-0">
-                  <ArrowRight className="w-3 h-3" />
+                <div className="text-[var(--mes-text-dim)] shrink-0 px-0.5 flex items-center justify-center">
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
                 </div>
               )}
             </React.Fragment>
