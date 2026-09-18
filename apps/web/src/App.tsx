@@ -24,7 +24,7 @@ import { CollapsibleSidebar } from './components/navigation/CollapsibleSidebar';
 import { OperatorKioskView } from './components/personas/OperatorKioskView';
 import { ManagerExecutiveView } from './components/personas/ManagerExecutiveView';
 import { EngineerDeepDiveView } from './components/personas/EngineerDeepDiveView';
-import { WallKioskDisplay } from './components/personas/WallKioskDisplay';
+import { WallKioskDisplay, KioskChannel, KioskLayout } from './components/personas/WallKioskDisplay';
 
 import { 
   NavTab, 
@@ -104,6 +104,39 @@ const AppContent: React.FC = () => {
   const [briefingCopyError, setBriefingCopyError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState<string>(() => new Date().toLocaleTimeString());
+  const [kioskConfig, setKioskConfig] = useState<{
+    initialChannel?: KioskChannel;
+    initialLayout?: KioskLayout;
+    initialLine?: 'LINE_01' | 'LINE_02';
+    initialCarousel?: boolean;
+    initialInterval?: number;
+  }>({});
+
+  // Parse URL query parameters on boot for zero-touch wall TV / kiosk deployment
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const kioskParam = params.get('kiosk');
+      const channelParam = params.get('channel') as KioskChannel | null;
+      const layoutParam = params.get('layout') as KioskLayout | null;
+      const lineParam = params.get('line') as 'LINE_01' | 'LINE_02' | null;
+      const carouselParam = params.get('carousel');
+      const intervalParam = params.get('interval');
+
+      if (kioskParam === 'true' || kioskParam === '1' || channelParam) {
+        setIsKioskMode(true);
+        setKioskConfig({
+          initialChannel: channelParam || undefined,
+          initialLayout: layoutParam || undefined,
+          initialLine: lineParam === 'LINE_02' ? 'LINE_02' : lineParam === 'LINE_01' ? 'LINE_01' : undefined,
+          initialCarousel: carouselParam === 'true' || carouselParam === '1',
+          initialInterval: intervalParam ? parseInt(intervalParam, 10) : undefined
+        });
+      }
+    } catch (e) {
+      console.error('Failed to parse URL query parameters for Kiosk mode:', e);
+    }
+  }, []);
 
   // 1-second live clock update for industrial cockpit
   useEffect(() => {
@@ -609,7 +642,14 @@ const AppContent: React.FC = () => {
 
       {/* Control-Room Overhead Wall Kiosk Display */}
       {isKioskMode && (
-        <WallKioskDisplay onExitKiosk={() => setIsKioskMode(false)} />
+        <WallKioskDisplay 
+          onExitKiosk={() => setIsKioskMode(false)}
+          initialChannel={kioskConfig.initialChannel}
+          initialLayout={kioskConfig.initialLayout}
+          initialLine={kioskConfig.initialLine}
+          initialCarousel={kioskConfig.initialCarousel}
+          initialInterval={kioskConfig.initialInterval}
+        />
       )}
 
       {/* Operator Authentication Modal */}
