@@ -4,6 +4,7 @@ export type NavTab =
   | 'FLEET' 
   | 'SUPERVISOR' 
   | 'STUDIO'
+  | 'NOC'
   | 'OPERATOR' 
   | 'SPI' 
   | 'SOLDER_PASTE' 
@@ -106,6 +107,18 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     shortcut: 's',
     allowGuestReadOnly: false,
     iconName: 'Sliders'
+  },
+  NOC: {
+    id: 'NOC',
+    domainId: 'EXECUTIVE',
+    label: 'NOC Telemetry Studio',
+    shortLabel: 'NOC Studio',
+    code: 'NOC-01',
+    requiredRoles: ['LINE_LEAD', 'QUALITY_LEAD', 'SYSTEM_ADMIN'],
+    description: 'Unified Grafana cleanroom telemetry matrix, safety stock radar, and stream diagnostics',
+    shortcut: '0',
+    allowGuestReadOnly: false,
+    iconName: 'Radio'
   },
 
   // SMT Line Operations Domain
@@ -239,6 +252,7 @@ export const CANONICAL_STATION_ORDER: NavTab[] = [
   'FLEET',
   'SUPERVISOR',
   'STUDIO',
+  'NOC',
   'OPERATOR',
   'SPI',
   'SOLDER_PASTE',

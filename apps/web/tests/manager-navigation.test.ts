@@ -32,13 +32,13 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
   });
 
   describe('1. Navigation Configuration & Completeness', () => {
-    it('contains all 13 cleanroom stations in canonical order exactly once', () => {
-      expect(CANONICAL_STATION_ORDER).toHaveLength(13);
+    it('contains all 14 cleanroom stations in canonical order exactly once', () => {
+      expect(CANONICAL_STATION_ORDER).toHaveLength(14);
       const uniqueTabs = new Set(CANONICAL_STATION_ORDER);
-      expect(uniqueTabs.size).toBe(13);
+      expect(uniqueTabs.size).toBe(14);
 
       const expectedTabs: NavTab[] = [
-        'FLEET', 'SUPERVISOR', 'STUDIO', 'OPERATOR', 'SPI', 'SOLDER_PASTE',
+        'FLEET', 'SUPERVISOR', 'STUDIO', 'NOC', 'OPERATOR', 'SPI', 'SOLDER_PASTE',
         'REFLOW', 'AGV_LOGISTICS', 'COMPLIANCE', 'GENEALOGY',
         'REWORK', 'PREDICTIVE', 'AUDIT_TRAIL'
       ];
@@ -58,7 +58,7 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
 
       // Verify domain groupings
       const execStations = getStationsForDomain('EXECUTIVE').map(s => s.id);
-      expect(execStations).toEqual(['FLEET', 'SUPERVISOR', 'STUDIO']);
+      expect(execStations).toEqual(['FLEET', 'SUPERVISOR', 'STUDIO', 'NOC']);
 
       const opsStations = getStationsForDomain('OPERATIONS').map(s => s.id);
       expect(opsStations).toEqual(['OPERATOR', 'SPI', 'SOLDER_PASTE', 'REFLOW', 'AGV_LOGISTICS']);

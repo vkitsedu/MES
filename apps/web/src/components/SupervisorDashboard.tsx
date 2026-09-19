@@ -12,6 +12,7 @@ import { MounterDropAnalysisCard } from './common/MounterDropAnalysisCard';
 import { ShiftGanttTimeline } from './common/ShiftGanttTimeline';
 import { FujiManagementMonitor } from './FujiManagementMonitor';
 import { ManagerExecutiveView } from './personas/ManagerExecutiveView';
+import { SmtNocTelemetryStudio } from './SmtNocTelemetryStudio';
 import { KpiCard } from './common/KpiCard';
 import { DrillDownDrawer, DrillDownData } from './common/DrillDownDrawer';
 
@@ -39,7 +40,7 @@ interface FeederErrorItem {
   total_errors: number;
 }
 
-export type SupervisorViewMode = 'COCKPIT' | 'EXECUTIVE' | 'MANAGEMENT_MONITOR';
+export type SupervisorViewMode = 'COCKPIT' | 'EXECUTIVE' | 'MANAGEMENT_MONITOR' | 'NOC_MATRIX';
 
 export const SupervisorDashboard: React.FC = () => {
   const [workCenters, setWorkCenters] = useState<WorkCenter[]>([]);
@@ -259,6 +260,15 @@ _Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
             </button>
             <button
               type="button"
+              onClick={() => setViewMode('NOC_MATRIX')}
+              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
+                viewMode === 'NOC_MATRIX' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              NOC TELEMETRY MATRIX
+            </button>
+            <button
+              type="button"
               onClick={() => setViewMode('EXECUTIVE')}
               className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
                 viewMode === 'EXECUTIVE' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
@@ -297,6 +307,7 @@ _Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
         </div>
       </div>
 
+      {viewMode === 'NOC_MATRIX' && <SmtNocTelemetryStudio />}
       {viewMode === 'MANAGEMENT_MONITOR' && <FujiManagementMonitor />}
       {viewMode === 'EXECUTIVE' && <ManagerExecutiveView />}
       {viewMode === 'COCKPIT' && (

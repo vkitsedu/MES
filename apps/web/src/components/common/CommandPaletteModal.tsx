@@ -83,6 +83,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
       FLEET: Split,
       SUPERVISOR: Activity,
       STUDIO: Sliders,
+      NOC: Radio,
       OPERATOR: Cpu,
       SPI: Sliders,
       SOLDER_PASTE: Layers,

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { 
   Copy, ChevronDown, ChevronUp, Clock, 
-  ShieldAlert, CheckCircle2, ArrowUpRight
+  ShieldAlert, CheckCircle2, ArrowUpRight, Radio
 } from 'lucide-react';
 import { ManagerKpisState, KpiDataStatus } from '../../services/kpi-adapter';
 
 interface ManagerKpiRibbonProps {
   kpis: ManagerKpisState;
   onOpenShiftBriefing: () => void;
+  onNavigateNoc?: () => void;
 }
 
 function renderStatusBadge(status: KpiDataStatus, lastUpdated: number | null) {
@@ -67,7 +68,8 @@ function renderStatusBadge(status: KpiDataStatus, lastUpdated: number | null) {
 
 export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
   kpis,
-  onOpenShiftBriefing
+  onOpenShiftBriefing,
+  onNavigateNoc
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -163,6 +165,17 @@ export const ManagerKpiRibbon: React.FC<ManagerKpiRibbonProps> = ({
           {/* Quick Actions */}
           <div className="flex items-center gap-2.5 shrink-0">
             {renderStatusBadge(kpis.overallStatus, kpis.plantOee.lastUpdated)}
+
+            {onNavigateNoc && (
+              <button
+                onClick={onNavigateNoc}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white border border-indigo-500/30 text-xs font-sans font-medium transition-colors"
+                title="Open NOC Telemetry Studio matrix"
+              >
+                <Radio className="w-3 h-3 text-indigo-400" />
+                <span className="hidden sm:inline">NOC Studio</span>
+              </button>
+            )}
 
             <button
               onClick={onOpenShiftBriefing}

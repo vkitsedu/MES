@@ -18,6 +18,7 @@ import { AgvLogisticsStation } from './components/AgvLogisticsStation';
 import { PredictiveIntelligenceStation } from './components/PredictiveIntelligenceStation';
 import { ReflowThermalStation } from './components/ReflowThermalStation';
 import { LineLayoutStudio } from './components/studio/LineLayoutStudio';
+import { SmtNocTelemetryStudio } from './components/SmtNocTelemetryStudio';
 import { LoginModal } from './components/auth/LoginModal';
 import { authService, OperatorProfile, OperatorRole } from './services/auth.service';
 import { CollapsibleSidebar } from './components/navigation/CollapsibleSidebar';
@@ -59,6 +60,7 @@ interface MdiTabItem {
 const MDI_TABS: MdiTabItem[] = [
   { id: 'SUPERVISOR', code: 'SMD_01', label: 'SMT Line Realtime Flow', icon: Activity, hotkey: '1' },
   { id: 'STUDIO', code: 'STU-01', label: 'Line & Floor Studio', icon: Sliders, hotkey: 's' },
+  { id: 'NOC', code: 'NOC-01', label: 'NOC Telemetry Studio', icon: Radio, hotkey: 'n' },
   { id: 'FLEET', code: 'NEXIM', label: 'Fuji Management Monitor', icon: Split, hotkey: '2' },
   { id: 'SPI', code: 'SPI-01', label: '3D SPI Inspection', icon: Sliders, hotkey: '3' },
   { id: 'OPERATOR', code: 'FDR-01', label: 'Feeder Bay Rails', icon: Cpu, hotkey: '4' },
@@ -615,6 +617,7 @@ const AppContent: React.FC = () => {
               <div className="w-full">
                 {activeTab === 'SUPERVISOR' && <SupervisorDashboard />}
                 {activeTab === 'STUDIO' && <LineLayoutStudio />}
+                {activeTab === 'NOC' && <SmtNocTelemetryStudio onNavigateTab={handleSelectTab} />}
                 {activeTab === 'FLEET' && <FleetDashboard />}
                 {activeTab === 'SPI' && <SpiStation />}
                 {activeTab === 'OPERATOR' && <OperatorStation />}

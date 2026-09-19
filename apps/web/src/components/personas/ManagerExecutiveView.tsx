@@ -7,8 +7,10 @@ import {
 import { KpiCard } from '../common/KpiCard';
 import { DrillDownDrawer, DrillDownData } from '../common/DrillDownDrawer';
 import { AnimatedNumber } from '../common/AnimatedNumber';
+import { SmtNocTelemetryStudio } from '../SmtNocTelemetryStudio';
 
 export const ManagerExecutiveView: React.FC = () => {
+  const [viewSubMode, setViewSubMode] = useState<'BRIEFING' | 'NOC_MATRIX'>('BRIEFING');
   const [selectedDrillDown, setSelectedDrillDown] = useState<DrillDownData | null>(null);
   const [expandedKpiId, setExpandedKpiId] = useState<string | null>(null);
 
@@ -103,18 +105,40 @@ export const ManagerExecutiveView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3 font-mono text-xs">
-          <div className="bg-[var(--mes-bg-well)] px-3 py-1.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] text-right">
+          <div className="flex bg-slate-950 p-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[10px]">
+            <button
+              onClick={() => setViewSubMode('BRIEFING')}
+              className={`px-2.5 py-1 rounded-[var(--mes-radius)] font-semibold transition-colors ${
+                viewSubMode === 'BRIEFING' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              EXECUTIVE BRIEFING
+            </button>
+            <button
+              onClick={() => setViewSubMode('NOC_MATRIX')}
+              className={`px-2.5 py-1 rounded-[var(--mes-radius)] font-semibold transition-colors ${
+                viewSubMode === 'NOC_MATRIX' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 font-bold' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              NOC TELEMETRY MATRIX
+            </button>
+          </div>
+          <div className="bg-[var(--mes-bg-well)] px-3 py-1.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] text-right hidden sm:block">
             <span className="text-[9.5px] text-[var(--mes-text-muted)] uppercase block">Financial Value Today</span>
             <span className="text-sm font-bold text-[var(--mes-text-primary)] tabular-nums">$148,600 USD</span>
           </div>
-          <div className="bg-[var(--mes-bg-well)] px-3 py-1.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] text-right">
+          <div className="bg-[var(--mes-bg-well)] px-3 py-1.5 rounded-[var(--mes-radius)] border border-[var(--mes-border-hairline)] text-right hidden sm:block">
             <span className="text-[9.5px] text-[var(--mes-text-muted)] uppercase block">Run Schedule</span>
             <span className="text-sm font-bold text-[var(--mes-status-pass)]">+35m AHEAD</span>
           </div>
         </div>
       </div>
 
-      {/* 4 Spotlight Focus-on-Hover Executive KPI Cards */}
+      {viewSubMode === 'NOC_MATRIX' ? (
+        <SmtNocTelemetryStudio />
+      ) : (
+        <>
+          {/* 4 Spotlight Focus-on-Hover Executive KPI Cards */}
       <div className="mes-spotlight-group grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <KpiCard
           id="oee"
@@ -334,6 +358,8 @@ export const ManagerExecutiveView: React.FC = () => {
           ))}
         </div>
       </div>
+      </>
+      )}
 
       {/* Drill-Down Slide-Over Drawer */}
       <DrillDownDrawer
