@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Split, Activity, Tablet, Sliders, Layers, 
   Flame, Truck, Shield, GitFork, Crosshair, 
-  Terminal, Lock, Radio 
+  Terminal, Lock, Radio, BarChart3, Cpu
 } from 'lucide-react';
 import { 
   NavTab, 
@@ -24,6 +24,9 @@ const STATION_ICONS: Record<NavTab, React.ComponentType<{ className?: string }>>
   SUPERVISOR: Activity,
   STUDIO: Sliders,
   NOC: Radio,
+  CYBER_GRID: Layers,
+  SIX_SIGMA_LAB: BarChart3,
+  TACTICAL_KIOSK: Cpu,
   OPERATOR: Tablet,
   SPI: Sliders,
   SOLDER_PASTE: Layers,

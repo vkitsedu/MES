@@ -22,7 +22,8 @@ import {
   GitFork,
   Crosshair,
   Terminal,
-  Clock
+  Clock,
+  BarChart3
 } from 'lucide-react';
 
 interface CommandPaletteModalProps {
@@ -84,6 +85,9 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
       SUPERVISOR: Activity,
       STUDIO: Sliders,
       NOC: Radio,
+      CYBER_GRID: Layers,
+      SIX_SIGMA_LAB: BarChart3,
+      TACTICAL_KIOSK: Cpu,
       OPERATOR: Cpu,
       SPI: Sliders,
       SOLDER_PASTE: Layers,

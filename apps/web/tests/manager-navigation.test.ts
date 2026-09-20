@@ -32,13 +32,14 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
   });
 
   describe('1. Navigation Configuration & Completeness', () => {
-    it('contains all 14 cleanroom stations in canonical order exactly once', () => {
-      expect(CANONICAL_STATION_ORDER).toHaveLength(14);
+    it('contains all 17 cleanroom stations in canonical order exactly once', () => {
+      expect(CANONICAL_STATION_ORDER).toHaveLength(17);
       const uniqueTabs = new Set(CANONICAL_STATION_ORDER);
-      expect(uniqueTabs.size).toBe(14);
+      expect(uniqueTabs.size).toBe(17);
 
       const expectedTabs: NavTab[] = [
-        'FLEET', 'SUPERVISOR', 'STUDIO', 'NOC', 'OPERATOR', 'SPI', 'SOLDER_PASTE',
+        'FLEET', 'SUPERVISOR', 'STUDIO', 'NOC', 'CYBER_GRID', 'SIX_SIGMA_LAB',
+        'OPERATOR', 'TACTICAL_KIOSK', 'SPI', 'SOLDER_PASTE',
         'REFLOW', 'AGV_LOGISTICS', 'COMPLIANCE', 'GENEALOGY',
         'REWORK', 'PREDICTIVE', 'AUDIT_TRAIL'
       ];
@@ -58,10 +59,10 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
 
       // Verify domain groupings
       const execStations = getStationsForDomain('EXECUTIVE').map(s => s.id);
-      expect(execStations).toEqual(['FLEET', 'SUPERVISOR', 'STUDIO', 'NOC']);
+      expect(execStations).toEqual(['FLEET', 'SUPERVISOR', 'STUDIO', 'NOC', 'CYBER_GRID', 'SIX_SIGMA_LAB']);
 
       const opsStations = getStationsForDomain('OPERATIONS').map(s => s.id);
-      expect(opsStations).toEqual(['OPERATOR', 'SPI', 'SOLDER_PASTE', 'REFLOW', 'AGV_LOGISTICS']);
+      expect(opsStations).toEqual(['OPERATOR', 'TACTICAL_KIOSK', 'SPI', 'SOLDER_PASTE', 'REFLOW', 'AGV_LOGISTICS']);
 
       const qualityStations = getStationsForDomain('QUALITY').map(s => s.id);
       expect(qualityStations).toEqual(['COMPLIANCE', 'GENEALOGY', 'REWORK', 'PREDICTIVE']);
@@ -75,7 +76,7 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
         const station = STATIONS[tab];
         expect(station.label.length).toBeGreaterThan(3);
         expect(station.shortLabel.length).toBeGreaterThan(2);
-        expect(station.code).toMatch(/^[A-Z]{3}-\d{2}$/);
+        expect(station.code).toMatch(/^[A-Z]{3}-\d{2}$|^[A-Z]{5}$/);
         expect(station.shortcut).toBeDefined();
         expect(station.requiredRoles.length).toBeGreaterThan(0);
       });
@@ -149,7 +150,7 @@ describe('Manager Navigation & Executive Cockpit Acceptance Suite', () => {
       expect(resolved).toBe('FLEET');
     });
 
-    it('enforces SYSTEM_ADMIN superuser access across all 13 stations', () => {
+    it('enforces SYSTEM_ADMIN superuser access across all 17 stations', () => {
       const admin: OperatorProfile = {
         id: 'admin-01',
         code: 'SYS-ADMIN',

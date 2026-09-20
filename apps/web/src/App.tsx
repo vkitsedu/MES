@@ -19,6 +19,9 @@ import { PredictiveIntelligenceStation } from './components/PredictiveIntelligen
 import { ReflowThermalStation } from './components/ReflowThermalStation';
 import { LineLayoutStudio } from './components/studio/LineLayoutStudio';
 import { SmtNocTelemetryStudio } from './components/SmtNocTelemetryStudio';
+import TeslaCyberGridCockpit from './components/cockpits/TeslaCyberGridCockpit';
+import { SixSigmaQualityLab } from './components/cockpits/SixSigmaQualityLab';
+import { TacticalOperatorKiosk } from './components/cockpits/TacticalOperatorKiosk';
 import { LoginModal } from './components/auth/LoginModal';
 import { authService, OperatorProfile, OperatorRole } from './services/auth.service';
 import { CollapsibleSidebar } from './components/navigation/CollapsibleSidebar';
@@ -61,6 +64,9 @@ const MDI_TABS: MdiTabItem[] = [
   { id: 'SUPERVISOR', code: 'SMD_01', label: 'SMT Line Realtime Flow', icon: Activity, hotkey: '1' },
   { id: 'STUDIO', code: 'STU-01', label: 'Line & Floor Studio', icon: Sliders, hotkey: 's' },
   { id: 'NOC', code: 'NOC-01', label: 'NOC Telemetry Studio', icon: Radio, hotkey: 'n' },
+  { id: 'CYBER_GRID', code: 'CGD-01', label: 'Tesla Cyber-Grid 360°', icon: Layers, hotkey: 'g' },
+  { id: 'SIX_SIGMA_LAB', code: 'SPC-02', label: 'Six Sigma SPC Lab', icon: BarChart3, hotkey: 'x' },
+  { id: 'TACTICAL_KIOSK', code: 'KSK-01', label: 'Tactical Operator Kiosk', icon: Cpu, hotkey: 'k' },
   { id: 'FLEET', code: 'NEXIM', label: 'Fuji Management Monitor', icon: Split, hotkey: '2' },
   { id: 'SPI', code: 'SPI-01', label: '3D SPI Inspection', icon: Sliders, hotkey: '3' },
   { id: 'OPERATOR', code: 'FDR-01', label: 'Feeder Bay Rails', icon: Cpu, hotkey: '4' },
@@ -618,6 +624,9 @@ const AppContent: React.FC = () => {
                 {activeTab === 'SUPERVISOR' && <SupervisorDashboard />}
                 {activeTab === 'STUDIO' && <LineLayoutStudio />}
                 {activeTab === 'NOC' && <SmtNocTelemetryStudio onNavigateTab={handleSelectTab} />}
+                {activeTab === 'CYBER_GRID' && <TeslaCyberGridCockpit />}
+                {activeTab === 'SIX_SIGMA_LAB' && <SixSigmaQualityLab />}
+                {activeTab === 'TACTICAL_KIOSK' && <TacticalOperatorKiosk />}
                 {activeTab === 'FLEET' && <FleetDashboard />}
                 {activeTab === 'SPI' && <SpiStation />}
                 {activeTab === 'OPERATOR' && <OperatorStation />}

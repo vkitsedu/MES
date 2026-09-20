@@ -5,6 +5,9 @@ export type NavTab =
   | 'SUPERVISOR' 
   | 'STUDIO'
   | 'NOC'
+  | 'CYBER_GRID'
+  | 'SIX_SIGMA_LAB'
+  | 'TACTICAL_KIOSK'
   | 'OPERATOR' 
   | 'SPI' 
   | 'SOLDER_PASTE' 
@@ -120,8 +123,43 @@ export const STATIONS: Record<NavTab, StationConfig> = {
     allowGuestReadOnly: false,
     iconName: 'Radio'
   },
+  CYBER_GRID: {
+    id: 'CYBER_GRID',
+    domainId: 'EXECUTIVE',
+    label: 'Tesla Cyber-Grid 360°',
+    shortLabel: 'Cyber-Grid',
+    code: 'CGD-01',
+    requiredRoles: ['LINE_LEAD', 'QUALITY_LEAD', 'SYSTEM_ADMIN'],
+    description: '4-quadrant zero-scroll SMT operational situational awareness cockpit with cross-quadrant sync',
+    shortcut: 'g',
+    allowGuestReadOnly: false,
+    iconName: 'Layers'
+  },
+  SIX_SIGMA_LAB: {
+    id: 'SIX_SIGMA_LAB',
+    domainId: 'EXECUTIVE',
+    label: 'Six Sigma SPC Lab',
+    shortLabel: 'SPC Lab',
+    code: 'SPC-02',
+    requiredRoles: ['QUALITY_LEAD', 'LINE_LEAD', 'SYSTEM_ADMIN'],
+    description: 'Cpk/Ppk scorecard, Gaussian distribution, Shewhart X-bar chart, Weibull reliability, and 21 CFR Part 11 signatures',
+    shortcut: 'x',
+    allowGuestReadOnly: false,
+    iconName: 'BarChart3'
+  },
+  TACTICAL_KIOSK: {
+    id: 'TACTICAL_KIOSK',
+    domainId: 'OPERATIONS',
+    label: 'Tactical Operator Kiosk',
+    shortLabel: 'Operator Kiosk',
+    code: 'KSK-01',
+    requiredRoles: ['OPERATOR', 'MAINTENANCE', 'LINE_LEAD', 'SYSTEM_ADMIN'],
+    description: 'Glove-optimized 45-slot feeder rail grid with 1-tap AGV dispatch and actuation tile controls',
+    shortcut: 'k',
+    allowGuestReadOnly: false,
+    iconName: 'Cpu'
+  },
 
-  // SMT Line Operations Domain
   OPERATOR: {
     id: 'OPERATOR',
     domainId: 'OPERATIONS',
@@ -253,7 +291,10 @@ export const CANONICAL_STATION_ORDER: NavTab[] = [
   'SUPERVISOR',
   'STUDIO',
   'NOC',
+  'CYBER_GRID',
+  'SIX_SIGMA_LAB',
   'OPERATOR',
+  'TACTICAL_KIOSK',
   'SPI',
   'SOLDER_PASTE',
   'REFLOW',
