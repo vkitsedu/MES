@@ -3,7 +3,7 @@ import {
   Cpu, Radio, Shield, Key, Lock, LogOut, UserCheck, Search,
   ChevronDown, Check, Activity, Sliders, Layers, Flame, Truck, 
   GitFork, Crosshair, Terminal, Split, RefreshCw, FileText, Settings, 
-  Clock, BarChart3, AlertTriangle, Palette, Tv, User
+  Clock, BarChart3, AlertTriangle, Palette, Tv, User, Monitor
 } from 'lucide-react';
 import { SolderPasteStation } from './components/SolderPasteStation';
 import { OperatorStation } from './components/OperatorStation';

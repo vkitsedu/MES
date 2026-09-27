@@ -23,7 +23,8 @@ import {
   Crosshair,
   Terminal,
   Clock,
-  BarChart3
+  BarChart3,
+  Monitor
 } from 'lucide-react';
 
 interface CommandPaletteModalProps {

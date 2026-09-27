@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Split, Activity, Tablet, Sliders, Layers, 
   Flame, Truck, Shield, GitFork, Crosshair, 
-  Terminal, Lock, Radio, BarChart3, Cpu
+  Terminal, Lock, Radio, BarChart3, Cpu, Monitor
 } from 'lucide-react';
 import { 
   NavTab, 

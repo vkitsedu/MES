@@ -17,6 +17,7 @@ import TeslaCyberGridCockpit from './cockpits/TeslaCyberGridCockpit';
 import { SixSigmaQualityLab } from './cockpits/SixSigmaQualityLab';
 import { KpiCard } from './common/KpiCard';
 import { DrillDownDrawer, DrillDownData } from './common/DrillDownDrawer';
+import { DpxEnterpriseMasterDashboard } from './enterprise-dashboards/DpxEnterpriseMasterDashboard';
 
 interface WorkCenter {
   id: string;
@@ -42,7 +43,7 @@ interface FeederErrorItem {
   total_errors: number;
 }
 
-export type SupervisorViewMode = 'COCKPIT' | 'CYBER_GRID' | 'SIX_SIGMA_LAB' | 'NOC_MATRIX' | 'EXECUTIVE' | 'MANAGEMENT_MONITOR';
+export type SupervisorViewMode = 'COCKPIT' | 'DPX_DASHBOARDS' | 'CYBER_GRID' | 'SIX_SIGMA_LAB' | 'NOC_MATRIX' | 'EXECUTIVE' | 'MANAGEMENT_MONITOR';
 
 export const SupervisorDashboard: React.FC = () => {
   const [workCenters, setWorkCenters] = useState<WorkCenter[]>([]);
@@ -54,7 +55,7 @@ export const SupervisorDashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [copyStatus, setCopyStatus] = useState<string>('');
-  const [viewMode, setViewMode] = useState<SupervisorViewMode>('COCKPIT');
+  const [viewMode, setViewMode] = useState<SupervisorViewMode>('DPX_DASHBOARDS');
   const [drillDownData, setDrillDownData] = useState<DrillDownData | null>(null);
 
   const loadData = async () => {
@@ -262,6 +263,15 @@ _Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
             </button>
             <button
               type="button"
+              onClick={() => setViewMode('DPX_DASHBOARDS')}
+              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
+                viewMode === 'DPX_DASHBOARDS' ? 'bg-blue-600 text-white border border-blue-400 shadow-[0_0_8px_rgba(37,99,235,0.4)] font-bold' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              DPX 20 DASHBOARDS [1-20]
+            </button>
+            <button
+              type="button"
               onClick={() => setViewMode('CYBER_GRID')}
               className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
                 viewMode === 'CYBER_GRID' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
@@ -327,6 +337,7 @@ _Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
         </div>
       </div>
 
+      {viewMode === 'DPX_DASHBOARDS' && <DpxEnterpriseMasterDashboard />}
       {viewMode === 'CYBER_GRID' && <TeslaCyberGridCockpit />}
       {viewMode === 'SIX_SIGMA_LAB' && <SixSigmaQualityLab />}
       {viewMode === 'NOC_MATRIX' && <SmtNocTelemetryStudio />}

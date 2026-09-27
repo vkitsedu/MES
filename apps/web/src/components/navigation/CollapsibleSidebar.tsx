@@ -3,7 +3,7 @@ import {
   Activity, Split, Sliders, Cpu, Layers, Flame, 
   GitFork, Terminal, Shield, Crosshair, Truck, 
   BarChart3, ChevronLeft, ChevronRight, LayoutDashboard,
-  Sparkles, Wrench, ShieldAlert
+  Sparkles, Wrench, ShieldAlert, Monitor
 } from 'lucide-react';
 import { NavTab } from '../../config/navigation';
 
