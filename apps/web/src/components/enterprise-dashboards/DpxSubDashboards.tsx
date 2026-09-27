@@ -6,6 +6,17 @@ import {
   Sliders, Settings, Wrench, BarChart2, ChevronRight, Check,
   Maximize2, Download, Printer, RefreshCw
 } from 'lucide-react';
+import {
+  DpxDonutChart,
+  DpxHorizontalPareto,
+  DpxMultiLineTrend,
+  DpxDualBarChart,
+  DpxReflowThermalCurve,
+  DpxGanttTimeline,
+  Dpx3dHeatmap,
+  DpxOpticalPcb,
+  DpxProcessStepper
+} from './DpxCharts';
 
 // Sequence Badge Component matching top-left [1], [2]... [20]
 export const DpxSeqBadge: React.FC<{ seq: number; title: string; subtitle?: string }> = ({ seq, title, subtitle }) => (
@@ -62,7 +73,7 @@ export const Dashboard1PlantOverview: React.FC = () => {
         </div>
       </div>
 
-      {/* 3 Plant Cards */}
+      {/* 3 Plant Cards with Circular OEE Gauges */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
         {/* Plant 01 Pune */}
         <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
@@ -72,21 +83,30 @@ export const Dashboard1PlantOverview: React.FC = () => {
             </span>
             <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded font-mono">84.2%</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center text-xs mb-2">
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">Plan</div>
-              <div className="font-bold font-mono">45,000</div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
+              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="text-emerald-500" strokeDasharray="84.2, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <span className="absolute font-black text-[11px] font-mono text-slate-800">84%</span>
             </div>
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">Actual</div>
-              <div className="font-bold text-blue-600 font-mono">42,100</div>
-            </div>
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">FPY</div>
-              <div className="font-bold text-emerald-600 font-mono">98.6%</div>
+            <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">Plan</div>
+                <div className="font-bold font-mono text-[11px]">45k</div>
+              </div>
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">Actual</div>
+                <div className="font-bold text-blue-600 font-mono text-[11px]">42.1k</div>
+              </div>
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">FPY</div>
+                <div className="font-bold text-emerald-600 font-mono text-[11px]">98.6%</div>
+              </div>
             </div>
           </div>
-          <div className="text-[11px] text-slate-500 flex justify-between">
+          <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
             <span>Active Lines: <strong>4 / 4</strong></span>
             <span className="text-emerald-600 font-bold">● Operational</span>
           </div>
@@ -100,22 +120,31 @@ export const Dashboard1PlantOverview: React.FC = () => {
             </span>
             <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded font-mono">78.6%</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center text-xs mb-2">
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">Plan</div>
-              <div className="font-bold font-mono">35,000</div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
+              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="text-amber-500" strokeDasharray="78.6, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <span className="absolute font-black text-[11px] font-mono text-slate-800">79%</span>
             </div>
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">Actual</div>
-              <div className="font-bold text-blue-600 font-mono">30,940</div>
-            </div>
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">FPY</div>
-              <div className="font-bold text-emerald-600 font-mono">98.1%</div>
+            <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">Plan</div>
+                <div className="font-bold font-mono text-[11px]">35k</div>
+              </div>
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">Actual</div>
+                <div className="font-bold text-blue-600 font-mono text-[11px]">30.9k</div>
+              </div>
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">FPY</div>
+                <div className="font-bold text-emerald-600 font-mono text-[11px]">98.1%</div>
+              </div>
             </div>
           </div>
-          <div className="text-[11px] text-slate-500 flex justify-between">
-            <span>Active Lines: <strong>3 / 4</strong> (1 Idle)</span>
+          <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
+            <span>Active Lines: <strong>3 / 4</strong></span>
             <span className="text-amber-600 font-bold">● Maintenance</span>
           </div>
         </div>
@@ -128,21 +157,30 @@ export const Dashboard1PlantOverview: React.FC = () => {
             </span>
             <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded font-mono">83.1%</span>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center text-xs mb-2">
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">Plan</div>
-              <div className="font-bold font-mono">45,600</div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
+              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="text-cyan-500" strokeDasharray="83.1, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <span className="absolute font-black text-[11px] font-mono text-slate-800">83%</span>
             </div>
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">Actual</div>
-              <div className="font-bold text-blue-600 font-mono">45,300</div>
-            </div>
-            <div className="bg-slate-50 p-1.5 rounded">
-              <div className="text-[10px] text-slate-400">FPY</div>
-              <div className="font-bold text-emerald-600 font-mono">99.1%</div>
+            <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">Plan</div>
+                <div className="font-bold font-mono text-[11px]">45.6k</div>
+              </div>
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">Actual</div>
+                <div className="font-bold text-blue-600 font-mono text-[11px]">45.3k</div>
+              </div>
+              <div className="bg-slate-50 p-1 rounded">
+                <div className="text-[9px] text-slate-400">FPY</div>
+                <div className="font-bold text-emerald-600 font-mono text-[11px]">99.1%</div>
+              </div>
             </div>
           </div>
-          <div className="text-[11px] text-slate-500 flex justify-between">
+          <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
             <span>Active Lines: <strong>4 / 4</strong></span>
             <span className="text-emerald-600 font-bold">● Peak Output</span>
           </div>
@@ -150,12 +188,15 @@ export const Dashboard1PlantOverview: React.FC = () => {
       </div>
 
       {/* Plan vs Actual Chart + Line Status Donut + Active Alarms */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {/* Plan vs Actual Bar */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 md:col-span-2">
-          <div className="font-bold text-xs text-slate-700 mb-2">Plan vs Actual (All Plants)</div>
-          <div className="h-44 flex items-end justify-between gap-2 px-2 pt-4">
-            {[
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        {/* Plan vs Actual Bar (col-span-6) */}
+        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 md:col-span-6 flex flex-col justify-between">
+          <div className="font-bold text-xs text-slate-700 mb-1 flex items-center justify-between">
+            <span>Plan vs Actual (All Plants)</span>
+            <span className="text-[10px] text-slate-400 font-mono">118,340 / 125,600 pcs</span>
+          </div>
+          <DpxDualBarChart
+            items={[
               { label: 'Line 01', plan: 90, actual: 85 },
               { label: 'Line 02', plan: 95, actual: 92 },
               { label: 'Line 03', plan: 80, actual: 78 },
@@ -164,58 +205,54 @@ export const Dashboard1PlantOverview: React.FC = () => {
               { label: 'Line 06', plan: 90, actual: 89 },
               { label: 'Line 07', plan: 95, actual: 93 },
               { label: 'Line 08', plan: 75, actual: 70 },
-            ].map((col, idx) => (
-              <div key={idx} className="flex-1 flex flex-col items-center gap-1">
-                <div className="w-full flex items-end justify-center gap-1 h-32">
-                  <div style={{ height: `${col.plan}%` }} className="w-2.5 bg-blue-500 rounded-t" title={`Plan: ${col.plan}%`} />
-                  <div style={{ height: `${col.actual}%` }} className="w-2.5 bg-emerald-500 rounded-t" title={`Actual: ${col.actual}%`} />
-                </div>
-                <span className="text-[9px] text-slate-500 font-mono">{col.label}</span>
-              </div>
-            ))}
+            ]}
+            height={155}
+          />
+        </div>
+
+        {/* Line Status SVG Donut Chart (col-span-3) */}
+        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 md:col-span-3 flex flex-col justify-between">
+          <div className="font-bold text-xs text-slate-700 mb-1">Line Status Overview</div>
+          <div className="py-1 flex justify-center">
+            <DpxDonutChart
+              data={[
+                { label: 'Running', value: 11, color: '#059669' },
+                { label: 'Idle', value: 2, color: '#D97706' },
+                { label: 'Down', value: 1, color: '#DC2626' }
+              ]}
+              size={130}
+              donutWidth={20}
+              centerValue="100%"
+              centerLabel="14 Lines"
+              legendPosition="bottom"
+            />
           </div>
-          <div className="flex justify-center gap-4 text-[10px] text-slate-500 pt-2 border-t">
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-blue-500 rounded-xs inline-block" /> Plan</span>
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-emerald-500 rounded-xs inline-block" /> Actual</span>
+          <div className="text-[10px] text-center text-slate-500 border-t pt-1 font-mono">
+            Availability: <strong className="text-emerald-600">92.8% (SEMI E10)</strong>
           </div>
         </div>
 
-        {/* Status & Alarms */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
+        {/* Active Alarms (col-span-3) */}
+        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 md:col-span-3 flex flex-col justify-between">
           <div>
-            <div className="font-bold text-xs text-slate-700 mb-2">Line Status Overview</div>
-            <div className="flex items-center justify-around py-3">
-              <div className="text-center">
-                <div className="text-2xl font-black text-emerald-600 font-mono">11</div>
-                <div className="text-[10px] text-slate-400 font-bold uppercase">Running</div>
+            <div className="font-bold text-xs text-slate-700 mb-2">Active Cleanroom Alarms</div>
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="flex items-center justify-between bg-red-50 text-red-700 px-2.5 py-2 rounded border border-red-200">
+                <span className="font-bold font-sans">Critical Alarms</span>
+                <span className="font-black text-sm">2</span>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-black text-amber-500 font-mono">2</div>
-                <div className="text-[10px] text-slate-400 font-bold uppercase">Idle</div>
+              <div className="flex items-center justify-between bg-amber-50 text-amber-700 px-2.5 py-2 rounded border border-amber-200">
+                <span className="font-bold font-sans">Major Warnings</span>
+                <span className="font-black text-sm">5</span>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-black text-red-500 font-mono">1</div>
-                <div className="text-[10px] text-slate-400 font-bold uppercase">Down</div>
+              <div className="flex items-center justify-between bg-blue-50 text-blue-700 px-2.5 py-2 rounded border border-blue-200">
+                <span className="font-bold font-sans">Minor Notices</span>
+                <span className="font-black text-sm">3</span>
               </div>
             </div>
           </div>
-
-          <div className="border-t pt-3">
-            <div className="font-bold text-xs text-slate-700 mb-2">Active Cleanroom Alarms</div>
-            <div className="space-y-1 text-xs">
-              <div className="flex items-center justify-between bg-red-50 text-red-700 px-2 py-1 rounded border border-red-200">
-                <span className="font-bold">Critical Alarms</span>
-                <span className="font-black font-mono">2</span>
-              </div>
-              <div className="flex items-center justify-between bg-amber-50 text-amber-700 px-2 py-1 rounded border border-amber-200">
-                <span className="font-bold">Major Warnings</span>
-                <span className="font-black font-mono">5</span>
-              </div>
-              <div className="flex items-center justify-between bg-blue-50 text-blue-700 px-2 py-1 rounded border border-blue-200">
-                <span className="font-bold">Minor Notices</span>
-                <span className="font-black font-mono">3</span>
-              </div>
-            </div>
+          <div className="text-[10px] text-slate-400 border-t pt-1 font-mono text-center">
+            Sensor Poll: 2s (Normal)
           </div>
         </div>
       </div>
@@ -259,69 +296,64 @@ export const Dashboard3ProductionPlanning: React.FC = () => {
       {/* Gantt Timeline */}
       <div className="bg-white p-4 rounded shadow-sm border border-slate-200">
         <div className="flex items-center justify-between pb-3 border-b mb-3">
-          <span className="font-bold text-xs text-slate-700 uppercase">Line Work Schedule (25 Sep 2026)</span>
+          <span className="font-bold text-xs text-slate-700 uppercase">Line Work Schedule (25 Sep 2026 - 24h Timeline)</span>
           <div className="flex gap-4 text-xs font-mono">
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-blue-500 rounded-xs" /> Running</span>
+            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-blue-600 rounded-xs" /> Running</span>
             <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-amber-500 rounded-xs" /> Setup / Changeover</span>
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-emerald-500 rounded-xs" /> Planned Next</span>
+            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-emerald-600 rounded-xs" /> Planned Next</span>
           </div>
         </div>
 
-        {/* Time markers */}
-        <div className="grid grid-cols-12 text-[10px] text-slate-400 font-mono pb-2 border-b text-center">
-          {['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '00:00', '02:00', '04:00', '06:00'].map(t => (
-            <span key={t}>{t}</span>
-          ))}
-        </div>
+        <DpxGanttTimeline
+          lines={[
+            {
+              lineName: 'Line-01 SMT',
+              jobs: [
+                { id: 'WO-01', product: 'SMT_ASSY_A', startHour: 0, durationHours: 10, color: '#2563EB', status: 'Running' },
+                { id: 'SETUP', product: 'Changeover', startHour: 10, durationHours: 2, color: '#F59E0B', status: 'Setup' },
+                { id: 'WO-04', product: 'CONTROL_B', startHour: 12, durationHours: 11, color: '#059669', status: 'Planned' }
+              ]
+            },
+            {
+              lineName: 'Line-02 SMT',
+              jobs: [
+                { id: 'WO-02', product: 'SMT_POWER_C', startHour: 0, durationHours: 8, color: '#2563EB', status: 'Running' },
+                { id: 'WO-05', product: 'IOT_GATEWAY', startHour: 9, durationHours: 14, color: '#059669', status: 'Planned' }
+              ]
+            },
+            {
+              lineName: 'Line-03 SMT',
+              jobs: [
+                { id: 'WO-03', product: 'AUTO_SENSOR', startHour: 0, durationHours: 14, color: '#2563EB', status: 'Running' },
+                { id: 'WO-06', product: 'BATTERY_BMS', startHour: 15, durationHours: 8, color: '#059669', status: 'Planned' }
+              ]
+            },
+            {
+              lineName: 'Line-04 SMT',
+              jobs: [
+                { id: 'MAINT', product: 'Preventive PM', startHour: 0, durationHours: 4, color: '#64748B', status: 'Maintenance' },
+                { id: 'WO-07', product: 'SMART_METER', startHour: 4, durationHours: 19, color: '#059669', status: 'Planned' }
+              ]
+            }
+          ]}
+        />
 
-        {/* Line 01 */}
-        <div className="py-4 border-b">
-          <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="font-bold text-slate-800">Line-01 (Main SMT Line)</span>
-            <span className="text-[10px] text-slate-500 font-mono">Capacity: 92% loaded</span>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-3 pt-3 border-t text-xs font-mono">
+          <div className="p-2 bg-slate-50 rounded border border-slate-100">
+            <span className="text-slate-400 block text-[10px]">LINE 01 CAPACITY</span>
+            <span className="font-bold text-slate-800">92% Loaded (23/24h)</span>
           </div>
-          <div className="h-9 bg-slate-100 rounded relative overflow-hidden flex items-center">
-            <div className="absolute left-[0%] w-[45%] h-7 bg-blue-600 text-white rounded text-[11px] font-mono flex items-center px-2 font-bold shadow-xs">
-              WO-20260925-01 (SMT_ASSY_A) • 12,000 pcs
-            </div>
-            <div className="absolute left-[45%] w-[8%] h-7 bg-amber-500 text-white rounded text-[10px] font-mono flex items-center justify-center font-bold">
-              SETUP
-            </div>
-            <div className="absolute left-[53%] w-[40%] h-7 bg-emerald-600 text-white rounded text-[11px] font-mono flex items-center px-2 font-bold">
-              WO-20260925-04 (CONTROL_BOARD_B) • 8,500 pcs
-            </div>
+          <div className="p-2 bg-slate-50 rounded border border-slate-100">
+            <span className="text-slate-400 block text-[10px]">LINE 02 CAPACITY</span>
+            <span className="font-bold text-slate-800">78% Loaded (22/24h)</span>
           </div>
-        </div>
-
-        {/* Line 02 */}
-        <div className="py-4 border-b">
-          <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="font-bold text-slate-800">Line-02 (Flexible Placement Line)</span>
-            <span className="text-[10px] text-slate-500 font-mono">Capacity: 78% loaded</span>
+          <div className="p-2 bg-slate-50 rounded border border-slate-100">
+            <span className="text-slate-400 block text-[10px]">LINE 03 CAPACITY</span>
+            <span className="font-bold text-slate-800">88% Loaded (22/24h)</span>
           </div>
-          <div className="h-9 bg-slate-100 rounded relative overflow-hidden flex items-center">
-            <div className="absolute left-[0%] w-[35%] h-7 bg-blue-600 text-white rounded text-[11px] font-mono flex items-center px-2 font-bold shadow-xs">
-              WO-20260925-02 (SMT_POWER_C) • 6,000 pcs
-            </div>
-            <div className="absolute left-[38%] w-[55%] h-7 bg-emerald-600 text-white rounded text-[11px] font-mono flex items-center px-2 font-bold">
-              WO-20260925-05 (IOT_GATEWAY_V2) • 15,000 pcs
-            </div>
-          </div>
-        </div>
-
-        {/* Line 03 */}
-        <div className="py-4">
-          <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="font-bold text-slate-800">Line-03 (High Density Micro-SMT)</span>
-            <span className="text-[10px] text-slate-500 font-mono">Capacity: 88% loaded</span>
-          </div>
-          <div className="h-9 bg-slate-100 rounded relative overflow-hidden flex items-center">
-            <div className="absolute left-[0%] w-[60%] h-7 bg-blue-600 text-white rounded text-[11px] font-mono flex items-center px-2 font-bold shadow-xs">
-              WO-20260925-03 (AUTO_SENSOR_ECU) • 18,000 pcs
-            </div>
-            <div className="absolute left-[62%] w-[30%] h-7 bg-emerald-600 text-white rounded text-[11px] font-mono flex items-center px-2 font-bold">
-              WO-20260925-06 (BATTERY_BMS_L3) • 5,000 pcs
-            </div>
+          <div className="p-2 bg-slate-50 rounded border border-slate-100">
+            <span className="text-slate-400 block text-[10px]">LINE 04 CAPACITY</span>
+            <span className="font-bold text-slate-800">96% Loaded (23/24h)</span>
           </div>
         </div>
       </div>
@@ -624,68 +656,65 @@ export const Dashboard7QualityOverall: React.FC = () => {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Defect Pareto */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="font-bold text-xs text-slate-700 mb-2">Defect Pareto Breakdown</div>
-          <div className="space-y-2 text-xs font-mono">
-            {[
-              { name: 'Missing Component', pct: 36.0, bar: 'bg-red-500' },
-              { name: 'Tombstone', pct: 22.2, bar: 'bg-amber-500' },
-              { name: 'Polarity', pct: 9.6, bar: 'bg-indigo-500' },
-              { name: 'Solder Bridge', pct: 8.8, bar: 'bg-blue-500' },
-              { name: 'Insufficient', pct: 6.9, bar: 'bg-cyan-500' },
-              { name: 'Excess Solder', pct: 5.8, bar: 'bg-teal-500' },
-              { name: 'Others', pct: 0.9, bar: 'bg-slate-400' },
-            ].map(d => (
-              <div key={d.name}>
-                <div className="flex justify-between text-[11px] mb-0.5">
-                  <span className="font-sans text-slate-700">{d.name}</span>
-                  <span className="font-bold">{d.pct}%</span>
-                </div>
-                <div className="w-full bg-slate-100 rounded-full h-2">
-                  <div className={`${d.bar} h-2 rounded-full`} style={{ width: `${d.pct}%` }} />
-                </div>
-              </div>
-            ))}
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Defect Pareto Breakdown</span>
+            <span className="text-[10px] text-slate-400 font-mono">Pareto Top 80%</span>
           </div>
+          <DpxHorizontalPareto
+            maxPct={40}
+            items={[
+              { name: 'Missing Component', percentage: 36.0, color: '#EF4444' },
+              { name: 'Tombstone', percentage: 22.2, color: '#F59E0B' },
+              { name: 'Polarity Reverse', percentage: 9.6, color: '#6366F1' },
+              { name: 'Solder Bridge', percentage: 8.8, color: '#3B82F6' },
+              { name: 'Insufficient Paste', percentage: 6.9, color: '#06B6D4' },
+              { name: 'Excess Solder', percentage: 5.8, color: '#10B981' },
+              { name: 'Foreign Material', percentage: 0.9, color: '#94A3B8' },
+            ]}
+          />
         </div>
 
-        {/* Defect Trend */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="font-bold text-xs text-slate-700 mb-2">Defect Trend Over Shift</div>
-          <div className="h-44 flex items-end justify-between gap-1 pt-4 px-2">
-            {[
-              { h: '08:00', v: 45 }, { h: '09:00', v: 38 }, { h: '10:00', v: 52 },
-              { h: '11:00', v: 28 }, { h: '12:00', v: 30 }, { h: '13:00', v: 22 },
-              { h: '14:00', v: 18 }, { h: '15:00', v: 14 }
-            ].map((p, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                <div style={{ height: `${p.v * 1.5}%` }} className="w-3 bg-red-500/80 rounded-t" />
-                <span className="text-[9px] text-slate-400 font-mono">{p.h}</span>
-              </div>
-            ))}
+        {/* Defect Trend Over Shift */}
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Defect Trend Over Shift (PPM)</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">▼ -68% Post-Purge</span>
           </div>
-          <div className="text-[10px] text-center text-emerald-600 font-bold pt-2 border-t font-mono">
-            ▼ Defect density reduced by 68% after nozzle purge
-          </div>
+          <DpxMultiLineTrend
+            labels={['08h', '09h', '10h', '11h', '12h', '13h', '14h', '15h']}
+            threshold={40}
+            thresholdLabel="UCL Limit"
+            series={[
+              { name: 'AOI Defects', color: '#EF4444', data: [45, 38, 52, 28, 30, 22, 18, 14] },
+              { name: 'Placement Drops', color: '#F59E0B', data: [22, 18, 25, 14, 12, 10, 8, 5] },
+              { name: 'SPI Offsets', color: '#3B82F6', data: [12, 15, 10, 8, 7, 5, 4, 3] },
+            ]}
+          />
         </div>
 
-        {/* Defect Wise Breakdown Pie/Donut */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
-          <div>
-            <div className="font-bold text-xs text-slate-700 mb-2">Defect Wise by Station</div>
-            <div className="text-center py-2">
-              <div className="inline-block p-4 rounded-full border-4 border-blue-500 border-t-red-500 border-r-amber-500">
-                <div className="text-2xl font-black text-slate-900 font-mono">103</div>
-                <div className="text-[10px] text-slate-400 uppercase font-bold">Total Defects</div>
-              </div>
-            </div>
+        {/* Defect Wise Breakdown Donut */}
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Defect Wise by Station</span>
+            <span className="text-[10px] text-slate-400 font-mono">Current Shift</span>
           </div>
-          <div className="space-y-1 text-xs font-mono border-t pt-2">
-            <div className="flex justify-between"><span>● SPI Inspection:</span> <strong>12 (11.7%)</strong></div>
-            <div className="flex justify-between"><span>● Placement (Fuji):</span> <strong>28 (27.2%)</strong></div>
-            <div className="flex justify-between"><span>● Reflow Oven:</span> <strong>6 (5.8%)</strong></div>
-            <div className="flex justify-between"><span>● AOI Optical:</span> <strong className="text-red-600">55 (53.4%)</strong></div>
-            <div className="flex justify-between"><span>● Others:</span> <strong>2 (1.9%)</strong></div>
+          <div className="py-2 flex justify-center">
+            <DpxDonutChart
+              size={140}
+              donutWidth={24}
+              centerLabel="TOTAL"
+              centerValue="103"
+              data={[
+                { label: 'AOI Optical', value: 55, color: '#EF4444' },
+                { label: 'Placement (Fuji)', value: 28, color: '#F59E0B' },
+                { label: 'SPI Inspection', value: 12, color: '#3B82F6' },
+                { label: 'Reflow Oven', value: 6, color: '#8B5CF6' },
+                { label: 'Others', value: 2, color: '#94A3B8' }
+              ]}
+              showLegend={true}
+              legendPosition="bottom"
+            />
           </div>
         </div>
       </div>
@@ -725,88 +754,73 @@ export const Dashboard8Spi: React.FC = () => {
         </div>
       </div>
 
-      {/* Heatmap & Measurement Table */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {/* 3D Heatmap */}
+      {/* Heatmap & Optical Inspection Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        {/* Optical Camera View */}
         <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
           <div className="flex justify-between items-center mb-2">
-            <span className="font-bold text-xs text-slate-700">3D Volumetric Solder Heatmap</span>
-            <div className="flex gap-1 text-[10px]">
-              <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-bold">3D View</span>
-              <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded">2D View</span>
-            </div>
+            <span className="font-bold text-xs text-slate-700">Koh Young 3D Optical Camera Alignment</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">● MOIRÉ DUAL-PROJECTION ACTIVE</span>
           </div>
-          <div className="h-64 bg-slate-950 rounded flex items-center justify-center p-3 relative overflow-hidden">
-            <svg viewBox="0 0 300 180" className="w-full h-full">
-              <rect width="300" height="180" fill="#0B132B" rx="4" />
-              {Array.from({ length: 15 }).map((_, r) =>
-                Array.from({ length: 8 }).map((_, c) => {
-                  const vol = Math.sin(r * 0.5) * Math.cos(c * 0.5);
-                  const color = vol > 0.4 ? '#10B981' : vol > 0 ? '#3B82F6' : vol > -0.4 ? '#F59E0B' : '#EF4444';
-                  return (
-                    <rect
-                      key={`${r}-${c}`}
-                      x={20 + r * 17}
-                      y={15 + c * 18}
-                      width="12"
-                      height="12"
-                      rx="2"
-                      fill={color}
-                      opacity={0.85}
-                    />
-                  );
-                })
-              )}
-              <text x="20" y="172" fill="#64748B" fontSize="9" fontFamily="monospace">
-                PCB-SM-METER-REV4 • 120 Apertures Verified • Closed-Loop Offset: +8µm X / -4µm Y
-              </text>
-            </svg>
-          </div>
+          <DpxOpticalPcb type="SPI" showBBoxes={true} />
         </div>
 
-        {/* Panel Measurement Table */}
-        <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between">
-          <div className="p-3 border-b bg-slate-50 font-bold text-xs text-slate-700">
-            Realtime Pad Volumetric Readings
+        {/* 3D Volumetric Solder Heatmap */}
+        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-xs text-slate-700">3D Volumetric Solder Height Topology</span>
+            <div className="flex gap-1 text-[10px]">
+              <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-bold font-mono">3D Mesh</span>
+              <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">2D Slice</span>
+            </div>
           </div>
-          <table className="w-full text-xs text-left">
-            <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
-              <tr>
-                <th className="py-2 px-3">Panel No</th>
-                <th className="py-2 px-3">Volume AVG</th>
-                <th className="py-2 px-3">Height AVG</th>
-                <th className="py-2 px-3">Offset X</th>
-                <th className="py-2 px-3 text-center">Result</th>
+          <Dpx3dHeatmap rows={6} cols={10} highlightDefect={true} />
+        </div>
+      </div>
+
+      {/* Panel Measurement Table */}
+      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
+        <div className="p-3 border-b bg-slate-50 font-bold text-xs text-slate-700 flex justify-between items-center">
+          <span>Realtime Pad Volumetric Readings</span>
+          <span className="text-[10px] text-slate-400 font-mono">Threshold: 80% - 130% Volume</span>
+        </div>
+        <table className="w-full text-xs text-left">
+          <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
+            <tr>
+              <th className="py-2 px-3">Panel No</th>
+              <th className="py-2 px-3">Volume AVG</th>
+              <th className="py-2 px-3">Height AVG</th>
+              <th className="py-2 px-3">Offset X</th>
+              <th className="py-2 px-3 text-center">Result</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 font-mono">
+            {[
+              { p: 1, v: '100.8%', h: '65.98 µm', x: '+0.030 mm', res: 'GOOD' },
+              { p: 2, v: '102.1%', h: '66.15 µm', x: '-0.010 mm', res: 'GOOD' },
+              { p: 3, v: '81.4%', h: '54.10 µm', x: '+0.050 mm', res: 'NG' },
+              { p: 4, v: '99.5%', h: '65.53 µm', x: '+0.000 mm', res: 'GOOD' },
+              { p: 5, v: '101.2%', h: '66.20 µm', x: '-0.020 mm', res: 'GOOD' },
+            ].map(r => (
+              <tr key={r.p} className="hover:bg-slate-50">
+                <td className="py-2 px-3 font-bold text-blue-600">Panel-{r.p}</td>
+                <td className="py-2 px-3">{r.v}</td>
+                <td className="py-2 px-3">{r.h}</td>
+                <td className="py-2 px-3">{r.x}</td>
+                <td className="py-2 px-3 text-center">
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    r.res === 'GOOD' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
+                  }`}>
+                    {r.res}
+                  </span>
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-mono">
-              {[
-                { p: 1, v: '100.8%', h: '65.98 µm', x: '+0.030 mm', res: 'GOOD' },
-                { p: 2, v: '102.1%', h: '66.15 µm', x: '-0.010 mm', res: 'GOOD' },
-                { p: 3, v: '81.4%', h: '54.10 µm', x: '+0.050 mm', res: 'NG' },
-                { p: 4, v: '99.5%', h: '65.53 µm', x: '+0.000 mm', res: 'GOOD' },
-                { p: 5, v: '101.2%', h: '66.20 µm', x: '-0.020 mm', res: 'GOOD' },
-              ].map(r => (
-                <tr key={r.p} className="hover:bg-slate-50">
-                  <td className="py-2 px-3 font-bold text-blue-600">Panel-{r.p}</td>
-                  <td className="py-2 px-3">{r.v}</td>
-                  <td className="py-2 px-3">{r.h}</td>
-                  <td className="py-2 px-3">{r.x}</td>
-                  <td className="py-2 px-3 text-center">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      r.res === 'GOOD' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
-                    }`}>
-                      {r.res}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="p-2.5 bg-slate-50 text-[10px] font-mono text-slate-500 border-t flex justify-between">
-            <span>Koh Young aSPIre3 Gateway</span>
-            <span className="text-emerald-600 font-bold">● SPC Closed-Loop Auto-Correction Active</span>
-          </div>
+            ))}
+          </tbody>
+        </table>
+        <div className="p-2.5 bg-slate-50 text-[10px] font-mono text-slate-500 border-t flex justify-between">
+          <span>Koh Young aSPIre3 Gateway (IPC-HERMES-9852)</span>
+          <span className="text-emerald-600 font-bold">● SPC Closed-Loop Auto-Correction Active (Offset: +8µm X / -4µm Y)</span>
         </div>
       </div>
     </div>
@@ -880,27 +894,38 @@ export const Dashboard9FujiPlacement: React.FC = () => {
       {/* Drop Rate & Pick Error Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="font-bold text-xs text-slate-700 mb-2">Drop Rate Trend (PPM)</div>
-          <div className="h-36 flex items-end justify-between gap-1 pt-2 px-2">
-            {[22, 18, 25, 30, 15, 12, 14, 18, 10, 8].map((v, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center">
-                <div style={{ height: `${v * 3}px` }} className="w-3 bg-blue-500 rounded-t" />
-                <span className="text-[9px] text-slate-400 font-mono mt-1">S{i + 1}</span>
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Drop Rate Trend (PPM Target &lt; 25)</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">Current: 8 PPM (OK)</span>
           </div>
+          <DpxMultiLineTrend
+            labels={['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10']}
+            threshold={25}
+            thresholdLabel="Max UCL"
+            series={[
+              { name: 'Drop Rate (PPM)', color: '#3B82F6', data: [22, 18, 25, 30, 15, 12, 14, 18, 10, 8] },
+              { name: 'Shift Target', color: '#10B981', data: [15, 15, 15, 15, 15, 15, 15, 15, 15, 15] },
+            ]}
+          />
         </div>
 
         <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="font-bold text-xs text-slate-700 mb-2">Nozzle Pick Error Analysis</div>
-          <div className="h-36 flex items-end justify-between gap-1 pt-2 px-2">
-            {[4, 2, 7, 1, 0, 3, 5, 2, 8, 1].map((v, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center">
-                <div style={{ height: `${v * 12}px` }} className="w-3 bg-amber-500 rounded-t" />
-                <span className="text-[9px] text-slate-400 font-mono mt-1">N{i + 1}</span>
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Nozzle Pick Error Analysis by Head</span>
+            <span className="text-[10px] text-slate-400 font-mono">H24S Nozzles N1 - N8</span>
           </div>
+          <DpxDualBarChart
+            items={[
+              { label: 'N1', plan: 100, actual: 4 },
+              { label: 'N2', plan: 100, actual: 2 },
+              { label: 'N3', plan: 100, actual: 7 },
+              { label: 'N4', plan: 100, actual: 1 },
+              { label: 'N5', plan: 100, actual: 0 },
+              { label: 'N6', plan: 100, actual: 3 },
+              { label: 'N7', plan: 100, actual: 5 },
+              { label: 'N8', plan: 100, actual: 2 },
+            ]}
+          />
         </div>
       </div>
     </div>
@@ -984,43 +1009,36 @@ export const Dashboard11Aoi: React.FC = () => {
       {/* Image Preview & Defect Table */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Optical Camera Defect View */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="font-bold text-xs text-slate-700 mb-2">AOI Image & Defect Classification</div>
-          <div className="h-64 bg-slate-900 rounded p-3 relative flex items-center justify-center">
-            <div className="w-56 h-44 border-2 border-emerald-500/40 rounded bg-slate-950/80 relative flex items-center justify-center">
-              <div className="absolute top-8 left-12 w-16 h-12 border-2 border-red-500 bg-red-500/20 rounded flex items-center justify-center animate-pulse">
-                <span className="text-[9px] font-mono text-red-300 font-bold bg-black/80 px-1">MISSING: R0402</span>
-              </div>
-              <div className="absolute bottom-6 right-10 w-14 h-10 border border-amber-400 bg-amber-400/20 rounded flex items-center justify-center">
-                <span className="text-[8px] font-mono text-amber-200 font-bold">TOMBSTONE</span>
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono">Koh Young Zenith 3D AOI • FOV 45mm</span>
-            </div>
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Koh Young Zenith 3D AOI Inspection Feed</span>
+            <span className="text-[10px] text-red-600 font-bold font-mono">1 DEFECT LOCATED</span>
           </div>
+          <DpxOpticalPcb type="AOI" showBBoxes={true} />
         </div>
 
         {/* Defect Pareto */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="font-bold text-xs text-slate-700 mb-2">AOI Defect Classification Breakdown</div>
-          <div className="space-y-2 text-xs font-mono">
-            {[
-              { name: 'Missing Component', pct: 35.2, color: 'bg-red-500' },
-              { name: 'Tombstone', pct: 32.1, color: 'bg-amber-500' },
-              { name: 'Polarity Reverse', pct: 15.2, color: 'bg-purple-500' },
-              { name: 'Solder Bridge', pct: 10.8, color: 'bg-blue-500' },
-              { name: 'Insufficient Solder', pct: 5.8, color: 'bg-cyan-500' },
-              { name: 'Wrong Component', pct: 0.9, color: 'bg-slate-400' },
-            ].map(d => (
-              <div key={d.name}>
-                <div className="flex justify-between text-[11px] mb-0.5">
-                  <span className="font-sans text-slate-700">{d.name}</span>
-                  <span className="font-bold">{d.pct}%</span>
-                </div>
-                <div className="w-full bg-slate-100 rounded-full h-2">
-                  <div className={`${d.color} h-2 rounded-full`} style={{ width: `${d.pct}%` }} />
-                </div>
-              </div>
-            ))}
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-bold text-xs text-slate-700">AOI Defect Classification Breakdown</span>
+              <span className="text-[10px] text-slate-400 font-mono">30 NG Boards</span>
+            </div>
+            <DpxHorizontalPareto
+              maxPct={40}
+              items={[
+                { name: 'Missing Component', percentage: 35.2, color: '#EF4444' },
+                { name: 'Tombstone', percentage: 32.1, color: '#F59E0B' },
+                { name: 'Polarity Reverse', percentage: 15.2, color: '#8B5CF6' },
+                { name: 'Solder Bridge', percentage: 10.8, color: '#3B82F6' },
+                { name: 'Insufficient Solder', percentage: 5.8, color: '#06B6D4' },
+                { name: 'Wrong Component', percentage: 0.9, color: '#94A3B8' },
+              ]}
+            />
+          </div>
+          <div className="p-2 bg-slate-50 border rounded text-[10px] text-slate-500 font-mono flex justify-between mt-3">
+            <span>Defect Density: 2.42%</span>
+            <span className="text-blue-600 font-bold">Auto-Review Queue: 4 pending</span>
           </div>
         </div>
       </div>
@@ -1059,32 +1077,27 @@ export const Dashboard12Reflow: React.FC = () => {
       {/* 10-Zone Curve + Table */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Thermal Curve SVG */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="font-bold text-xs text-slate-700 mb-2">10-Zone Thermal Profile Curve</div>
-          <div className="h-64 bg-slate-900 rounded p-2 flex items-center justify-center">
-            <svg viewBox="0 0 320 180" className="w-full h-full">
-              <path
-                d="M 10 160 Q 40 140 80 110 T 160 80 T 230 35 T 270 70 T 310 150"
-                fill="none"
-                stroke="#10B981"
-                strokeWidth="3"
-              />
-              <path
-                d="M 10 160 Q 40 140 80 110 T 160 80 T 230 35 T 270 70 T 310 150 L 310 170 L 10 170 Z"
-                fill="url(#grad)"
-                opacity="0.25"
-              />
-              <defs>
-                <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#10B981" />
-                  <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <line x1="10" y1="60" x2="310" y2="60" stroke="#EF4444" strokeDasharray="3 3" strokeWidth="1" />
-              <text x="15" y="55" fill="#EF4444" fontSize="8" fontFamily="monospace">TAL Peak 245°C Limit</text>
-              <text x="15" y="170" fill="#94A3B8" fontSize="8" fontFamily="monospace">Zone 1 ➔ Zone 10 • Nitrogen: 480 ppm O2</text>
-            </svg>
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">10-Zone Reflow Thermal Profile (SAC305 Lead-Free)</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">● LIVE THERMOCOUPLE FEED</span>
           </div>
+          <DpxReflowThermalCurve
+            liquidusTemp={217}
+            peakTemp={245}
+            zones={[
+              { zone: 1, setTemp: 140, actualTemp: 138, label: 'Preheat 1' },
+              { zone: 2, setTemp: 155, actualTemp: 154, label: 'Preheat 2' },
+              { zone: 3, setTemp: 170, actualTemp: 171, label: 'Soak 1' },
+              { zone: 4, setTemp: 185, actualTemp: 184, label: 'Soak 2' },
+              { zone: 5, setTemp: 200, actualTemp: 199, label: 'Soak 3' },
+              { zone: 6, setTemp: 220, actualTemp: 222, label: 'Reflow 1' },
+              { zone: 7, setTemp: 245, actualTemp: 246, label: 'Peak' },
+              { zone: 8, setTemp: 230, actualTemp: 228, label: 'Reflow 2' },
+              { zone: 9, setTemp: 170, actualTemp: 168, label: 'Cool 1' },
+              { zone: 10, setTemp: 90, actualTemp: 88, label: 'Cool 2' },
+            ]}
+          />
         </div>
 
         {/* Zone 1-10 Table */}
@@ -1164,18 +1177,21 @@ export const Dashboard13PcbTraceability: React.FC = () => {
 
       {/* Stepper Milestone Flow */}
       <div className="bg-white p-4 rounded shadow-sm border border-slate-200 mb-3">
-        <div className="text-xs font-bold text-slate-700 mb-3">Process Route Milestones</div>
-        <div className="flex items-center justify-between text-center relative overflow-x-auto py-2">
-          {['Loader', 'Printer', 'SPI', 'Placement', 'Reflow', 'AOI', 'Unloader'].map((step) => (
-            <div key={step} className="flex-1 flex flex-col items-center relative">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-md z-10">
-                <Check className="w-4 h-4" />
-              </div>
-              <span className="text-xs font-bold text-slate-800 mt-2">{step}</span>
-              <span className="text-[10px] text-emerald-600 font-mono">PASS</span>
-            </div>
-          ))}
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-bold text-slate-700">Process Route Milestones (Traceability Lineage)</span>
+          <span className="text-[10px] text-emerald-600 font-bold font-mono">100% IPC-1782 CERTIFIED</span>
         </div>
+        <DpxProcessStepper
+          steps={[
+            { name: 'Loader', time: '10:08:25', status: 'PASS' },
+            { name: 'Printer', time: '10:09:12', status: 'PASS' },
+            { name: 'SPI', time: '10:10:02', status: 'PASS' },
+            { name: 'Placement', time: '10:11:15', status: 'PASS' },
+            { name: 'Reflow', time: '10:12:45', status: 'PASS' },
+            { name: 'AOI', time: '10:14:10', status: 'PASS' },
+            { name: 'Unloader', time: '10:14:36', status: 'PASS' },
+          ]}
+        />
       </div>
 
       {/* Detailed Steps Table */}
@@ -1494,27 +1510,42 @@ export const Dashboard18AlarmDowntime: React.FC = () => {
         </table>
       </div>
 
-      {/* Pareto Horizontal Chart */}
-      <div className="bg-white p-4 rounded shadow-sm border border-slate-200">
-        <div className="font-bold text-xs text-slate-700 mb-2">Downtime Pareto by Machine</div>
-        <div className="space-y-2 text-xs font-mono">
-          {[
-            { m: 'Reflow Oven', dur: '48m (29%)', color: 'bg-red-500', w: '65%' },
-            { m: 'AOI Optical', dur: '42m (26%)', color: 'bg-amber-500', w: '58%' },
-            { m: 'FUJI NXT III', dur: '28m (17%)', color: 'bg-yellow-500', w: '40%' },
-            { m: 'SPI 3D', dur: '18m (11%)', color: 'bg-blue-500', w: '28%' },
-            { m: 'Screen Printer', dur: '12m (7%)', color: 'bg-cyan-500', w: '18%' },
-          ].map(p => (
-            <div key={p.m}>
-              <div className="flex justify-between text-[11px] mb-0.5">
-                <span className="font-sans font-bold text-slate-700">{p.m}</span>
-                <span className="text-slate-500">{p.dur}</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-2.5">
-                <div className={`${p.color} h-2.5 rounded-full`} style={{ width: p.w }} />
-              </div>
-            </div>
-          ))}
+      {/* Charts Grid: Pareto + Hourly Alarm Trend */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* Pareto Horizontal Chart */}
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Downtime Pareto by Machine</span>
+            <span className="text-[10px] text-slate-400 font-mono">Total: 2h 45m</span>
+          </div>
+          <DpxHorizontalPareto
+            maxPct={35}
+            items={[
+              { name: 'Reflow Oven (Zone 4 Alarm)', percentage: 29.1, color: '#EF4444' },
+              { name: 'AOI Optical (Threshold Exceeded)', percentage: 25.5, color: '#F59E0B' },
+              { name: 'FUJI NXT III (Splice Warning)', percentage: 17.0, color: '#FBBF24' },
+              { name: 'SPI 3D (Calibration Cycle)', percentage: 10.9, color: '#3B82F6' },
+              { name: 'Screen Printer (Wipe Roll Out)', percentage: 7.3, color: '#06B6D4' },
+              { name: 'Conveyor & Board Buffer Jam', percentage: 10.2, color: '#94A3B8' },
+            ]}
+          />
+        </div>
+
+        {/* Hourly Alarm Frequency Trend */}
+        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-bold text-xs text-slate-700">Hourly Alarm Frequency & Recovery Pace</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">MTTR: 8.4 min</span>
+          </div>
+          <DpxMultiLineTrend
+            labels={['08h', '09h', '10h', '11h', '12h', '13h', '14h', '15h']}
+            threshold={5}
+            thresholdLabel="Alarm Limit"
+            series={[
+              { name: 'Triggered Alarms', color: '#EF4444', data: [3, 2, 7, 5, 2, 1, 3, 1] },
+              { name: 'Resolved by Operator', color: '#10B981', data: [3, 2, 6, 5, 2, 1, 3, 1] },
+            ]}
+          />
         </div>
       </div>
     </div>
