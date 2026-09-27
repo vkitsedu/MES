@@ -4,38 +4,38 @@
 
 @layer base {
   :root {
-    /* Default Theme Tokens (Obsidian Foundry Baseline - Tier-1 Industrial Standard) */
-    --mes-bg-canvas: #06090E;
-    --mes-bg-surface: #020617;
-    --mes-bg-well: #0F172A;
-    --mes-bg-header: #020617;
-    --mes-bg-tab-active: #0F172A;
-    --mes-bg-tab-inactive: #020617;
-    --mes-bg-modal: #0B0F17;
+    /* Default Theme Tokens (DPX Enterprise SMT Cleanroom Baseline) */
+    --mes-bg-canvas: #070D18;
+    --mes-bg-surface: #0A192F;
+    --mes-bg-well: #0D1B2A;
+    --mes-bg-header: #0A192F;
+    --mes-bg-tab-active: #0088FF;
+    --mes-bg-tab-inactive: #0A192F;
+    --mes-bg-modal: #0A192F;
 
     --mes-border-subtle: #1E293B;
-    --mes-border-strong: #334155;
-    --mes-border-hairline: #1E293B;
-    --mes-border-accent-glow: rgba(34, 211, 238, 0.30);
+    --mes-border-strong: #2A3B54;
+    --mes-border-hairline: #162234;
+    --mes-border-accent-glow: rgba(0, 136, 255, 0.30);
 
     --mes-text-primary: #F1F5F9;
     --mes-text-secondary: #94A3B8;
     --mes-text-muted: #64748B;
     --mes-text-dim: #475569;
-    --mes-text-inverse: #06090E;
+    --mes-text-inverse: #070D18;
 
-    --mes-accent-primary: #22D3EE;
-    --mes-accent-hover: #38BDF8;
-    --mes-accent-muted: rgba(34, 211, 238, 0.12);
-    --mes-accent-ring: rgba(34, 211, 238, 0.35);
+    --mes-accent-primary: #0088FF;
+    --mes-accent-hover: #2563EB;
+    --mes-accent-muted: rgba(0, 136, 255, 0.15);
+    --mes-accent-ring: rgba(0, 136, 255, 0.35);
 
-    --mes-status-pass: #34D399;
-    --mes-status-pass-muted: rgba(52, 211, 153, 0.12);
-    --mes-status-warn: #FBBF24;
-    --mes-status-warn-muted: rgba(251, 191, 36, 0.12);
-    --mes-status-halt: #F43F5E;
-    --mes-status-halt-muted: rgba(244, 63, 94, 0.12);
-    --mes-status-idle: #64748B;
+    --mes-status-pass: #059669;
+    --mes-status-pass-muted: rgba(5, 150, 105, 0.15);
+    --mes-status-warn: #D97706;
+    --mes-status-warn-muted: rgba(217, 119, 6, 0.15);
+    --mes-status-halt: #DC2626;
+    --mes-status-halt-muted: rgba(220, 38, 38, 0.15);
+    --mes-status-idle: #0284C7;
     --mes-radius: 2px;
 
     --mes-shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
@@ -72,16 +72,16 @@
 }
 
 .mes-machined-card {
-  background: linear-gradient(180deg, #0b111d 0%, #030712 100%);
-  border: 1px solid #1e293b;
+  background: linear-gradient(180deg, #0A192F 0%, #07101E 100%);
+  border: 1px solid #1E293B;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 4px 20px -2px rgba(0, 0, 0, 0.7);
   border-radius: var(--mes-radius, 2px);
 }
 
 .mes-machined-card-glow {
-  background: linear-gradient(180deg, #0b111d 0%, #030712 100%);
-  border: 1px solid #1e293b;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 0 24px -4px rgba(6, 182, 212, 0.12);
+  background: linear-gradient(180deg, #0A192F 0%, #07101E 100%);
+  border: 1px solid #1E293B;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 0 24px -4px rgba(0, 136, 255, 0.18);
   border-radius: var(--mes-radius, 2px);
 }
 

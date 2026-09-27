@@ -9,21 +9,22 @@ interface ThemePaletteModalProps {
 }
 
 const ACCENT_PRESETS = [
-  { name: 'Cryo Cyan', hex: '#38BDF8', category: 'Standard' },
-  { name: 'Phosphor Green', hex: '#22C55E', category: 'Fuji CRT' },
-  { name: 'Electric Indigo', hex: '#818CF8', category: 'Linear' },
-  { name: 'Cockpit Amber', hex: '#F97316', category: 'Tactical' },
-  { name: 'Prussian Cobalt', hex: '#1E40AF', category: 'Clinical' },
-  { name: 'Laser Ruby', hex: '#F43F5E', category: 'Alarm' },
-  { name: 'High-Lux Gold', hex: '#FBBF24', category: 'Telemetry' },
-  { name: 'Teal Surge', hex: '#06B6D4', category: 'Maritime' },
+  { name: 'DPX Electric Blue', hex: '#0088FF', category: 'DPX Flagship' },
+  { name: 'DPX Emerald Pass', hex: '#059669', category: 'DPX Status' },
+  { name: 'DPX Amber Warning', hex: '#D97706', category: 'DPX Status' },
+  { name: 'DPX Crimson Alarm', hex: '#DC2626', category: 'DPX Status' },
+  { name: 'DPX Sky Cyan', hex: '#0284C7', category: 'DPX Telemetry' },
+  { name: 'DPX Royal Purple', hex: '#7C3AED', category: 'DPX Quality' },
+  { name: 'Fuji Phosphor CRT', hex: '#22C55E', category: 'Fuji CRT' },
+  { name: 'Deep Cobalt', hex: '#1D4ED8', category: 'SCADA' },
 ];
 
 const SUBSTRATE_PRESETS = [
-  { name: 'OLED Pitch Black', hex: '#000000', desc: 'Zero glow on OLED / andon monitors' },
-  { name: 'Cold Obsidian', hex: '#06080C', desc: 'Factory default deep graphite' },
-  { name: 'Slate Anthracite', hex: '#0E1118', desc: 'Warm aerospace metal tone' },
-  { name: 'Clinical Light', hex: '#EEF2F6', desc: 'Matte daylight cleanroom paper' }
+  { name: 'DPX Cleanroom Navy', hex: '#0A192F', desc: 'Standard DPX cleanroom master chassis' },
+  { name: 'DPX Midnight Well', hex: '#0D1B2A', desc: 'Deep navy contrast well substrate' },
+  { name: 'Cold Obsidian', hex: '#070D18', desc: 'Factory default deep graphite canvas' },
+  { name: 'DPX Cleanroom Light', hex: '#EEF2F6', desc: 'Matte daylight cleanroom paper substrate' },
+  { name: 'OLED Pitch Black', hex: '#000000', desc: 'Zero glow on OLED / andon monitors' }
 ];
 
 export const ThemePaletteModal: React.FC<ThemePaletteModalProps> = ({ isOpen, onClose }) => {

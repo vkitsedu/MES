@@ -3,7 +3,7 @@ import {
   Cpu, Radio, Shield, Key, Lock, LogOut, UserCheck, Search,
   ChevronDown, Check, Activity, Sliders, Layers, Flame, Truck, 
   GitFork, Crosshair, Terminal, Split, RefreshCw, FileText, Settings, 
-  Clock, BarChart3, AlertTriangle, Palette, Tv, User, Monitor
+  Clock, BarChart3, AlertTriangle, Palette, Tv, User, Monitor, LayoutDashboard
 } from 'lucide-react';
 import { SolderPasteStation } from './components/SolderPasteStation';
 import { OperatorStation } from './components/OperatorStation';
@@ -250,31 +250,32 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Fixed Enterprise System Header (Height 38px) */}
-      <header className="h-[38px] bg-slate-950 border-b border-slate-800 px-3 flex items-center justify-between gap-3 shrink-0 z-30 font-mono text-xs">
+      <header className="h-[38px] bg-[#0A192F] border-b border-[#1E293B] px-3 flex items-center justify-between gap-3 shrink-0 z-30 font-mono text-xs">
         {/* Left: Branding, Cluster, Line Selector & Protocol Link */}
         <div className="flex items-center gap-2.5">
-          {/* System Badge */}
-          <div className="px-2 py-0.5 bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 font-bold text-[10.5px] tracking-wider flex items-center gap-1.5 rounded-[var(--mes-radius)] shadow-[0_0_8px_rgba(6,182,212,0.2)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span>i-MES 2.0</span>
+          {/* DPX System Brand Badge */}
+          <div className="px-2 py-0.5 bg-[#0088FF]/15 border border-[#0088FF]/40 text-[#0088FF] font-bold text-[10.5px] tracking-wider flex items-center gap-1.5 rounded-[var(--mes-radius)] shadow-[0_0_8px_rgba(0,136,255,0.25)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#0088FF] animate-pulse" />
+            <span>SMT MES</span>
           </div>
 
           <div className="flex items-baseline gap-1.5">
-            <span className="font-bold text-slate-100 tracking-tight">
-              i-MES 2.0 · SMT MANUFACTURING EXECUTION SYSTEM
+            <span className="font-bold text-white tracking-tight">
+              SMT MES | Plant-01 | Line-01
             </span>
-            <span className="text-[10px] text-slate-500 hidden xl:inline">
-              · CLEANROOM OPERATIONS
+            <span className="text-[10.5px] text-emerald-400 font-semibold hidden md:inline-flex items-center gap-1 ml-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Live Production
             </span>
           </div>
 
-          <div className="h-3 w-px bg-slate-800 hidden sm:block" />
+          <div className="h-3 w-px bg-[#1E293B] hidden sm:block" />
 
           {/* Line Selector Dropdown */}
           <div className="relative">
             <button
               onClick={() => setIsLineMenuOpen(!isLineMenuOpen)}
-              className="text-[11px] font-bold text-slate-100 tracking-tight flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-[var(--mes-radius)] border border-slate-800 hover:border-slate-700 transition-colors"
+              className="text-[11px] font-bold text-white tracking-tight flex items-center gap-1.5 bg-[#0D1B2A] px-2.5 py-1 rounded-[var(--mes-radius)] border border-[#1E293B] hover:border-blue-500/50 transition-colors"
               aria-haspopup="true"
               aria-expanded={isLineMenuOpen}
             >
@@ -288,19 +289,19 @@ const AppContent: React.FC = () => {
             </button>
 
             {isLineMenuOpen && (
-              <div className="absolute top-full left-0 mt-1 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] shadow-2xl py-1 z-50 w-64 text-xs font-mono">
+              <div className="absolute top-full left-0 mt-1 bg-[#0A192F] border border-[#1E293B] rounded-[var(--mes-radius)] shadow-2xl py-1 z-50 w-64 text-xs font-mono">
                 <button
                   onClick={() => {
                     setSelectedLine('LINE_01');
                     setIsLineMenuOpen(false);
                   }}
-                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-slate-900 ${
-                    selectedLine === 'LINE_01' ? 'text-slate-100 font-bold bg-cyan-950/40' : 'text-slate-400'
+                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-[#13233D] ${
+                    selectedLine === 'LINE_01' ? 'text-white font-bold bg-[#0088FF]/20' : 'text-slate-300'
                   }`}
                 >
                   <div>
-                    <div className="font-bold text-[11px] text-slate-100">SMD_01: Fuji NXT III M6</div>
-                    <div className="text-[9.5px] text-slate-500">High-Speed Smart Meter SMT</div>
+                    <div className="font-bold text-[11px] text-white">SMD_01: Fuji NXT III M6</div>
+                    <div className="text-[9.5px] text-slate-400">High-Speed Smart Meter SMT</div>
                   </div>
                   {selectedLine === 'LINE_01' && <Check className="w-3 h-3 text-emerald-400" />}
                 </button>
@@ -310,13 +311,13 @@ const AppContent: React.FC = () => {
                     setSelectedLine('LINE_02');
                     setIsLineMenuOpen(false);
                   }}
-                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-slate-900 ${
-                    selectedLine === 'LINE_02' ? 'text-slate-100 font-bold bg-cyan-950/40' : 'text-slate-400'
+                  className={`w-full px-3 py-1.5 text-left flex items-center justify-between hover:bg-[#13233D] ${
+                    selectedLine === 'LINE_02' ? 'text-white font-bold bg-[#0088FF]/20' : 'text-slate-300'
                   }`}
                 >
                   <div>
-                    <div className="font-bold text-[11px] text-slate-100">SMD_02: Fuji AIMEX IIIc</div>
-                    <div className="text-[9.5px] text-slate-500">Dual-Lane Flexible Placement</div>
+                    <div className="font-bold text-[11px] text-white">SMD_02: Fuji AIMEX IIIc</div>
+                    <div className="text-[9.5px] text-slate-400">Dual-Lane Flexible Placement</div>
                   </div>
                   {selectedLine === 'LINE_02' && <Check className="w-3 h-3 text-emerald-400" />}
                 </button>
@@ -328,10 +329,10 @@ const AppContent: React.FC = () => {
           <div className="hidden lg:flex items-center gap-1.5">
             <button
               onClick={() => setIsFujiLinkModalOpen(true)}
-              className="flex items-center gap-1.5 text-slate-300 hover:text-slate-100 bg-slate-900 hover:bg-slate-850 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 hover:border-cyan-500/50 transition-all cursor-pointer group"
+              className="flex items-center gap-1.5 text-slate-300 hover:text-white bg-[#0D1B2A] hover:bg-[#13233D] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] hover:border-blue-500/50 transition-all cursor-pointer group"
               title="Click to configure Fuji Machine Link & OT Network IP/Port"
             >
-              <Radio className={`w-3.5 h-3.5 ${fujiStatus?.isListening || fujiStatus?.isClientConnected ? 'text-cyan-400 animate-pulse' : 'text-slate-500'}`} />
+              <Radio className={`w-3.5 h-3.5 ${fujiStatus?.isListening || fujiStatus?.isClientConnected ? 'text-blue-400 animate-pulse' : 'text-slate-500'}`} />
               <span className="font-mono text-[10.5px]">TCP {fujiStatus?.port || 30040}:</span>
               <span className={`font-mono font-bold text-[9.5px] px-1 py-0.2 rounded-[1px] border ${
                 fujiStatus?.activeConnections > 0
@@ -347,7 +348,7 @@ const AppContent: React.FC = () => {
                     : 'OFFLINE'}
               </span>
             </button>
-            <div className="flex items-center gap-1 text-slate-400 bg-slate-900 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800">
+            <div className="flex items-center gap-1 text-slate-400 bg-[#0D1B2A] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B]">
               <span>DB:</span>
               <span className="text-slate-200 font-bold">{stationModes.dbMode}</span>
             </div>
@@ -357,7 +358,7 @@ const AppContent: React.FC = () => {
         {/* Right: Persona Switcher, Kiosk, Theme Studio, Command Jump, Operator Profile, Clock */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Persona View Switcher */}
-          <div className="flex items-center bg-slate-950 p-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[10px] font-mono">
+          <div className="flex items-center bg-[#070D18] p-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] text-[10px] font-mono">
             <button
               onClick={() => {
                 setActivePersona('OPERATOR');
@@ -365,7 +366,7 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'OPERATOR'
-                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  ? 'bg-[#0088FF] text-white font-bold shadow-xs'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Operator Persona (Shop floor / touchscreen tablet / high glanceability)"
@@ -380,7 +381,7 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'SUPERVISOR'
-                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  ? 'bg-[#0088FF] text-white font-bold shadow-xs'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Supervisor Persona (Line flow, stations, multi-machine comparative view)"
@@ -395,7 +396,7 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'ENGINEER'
-                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  ? 'bg-[#0088FF] text-white font-bold shadow-xs'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Engineer Persona (Deep diagnostics, vacuum misfires, reflow drift)"
@@ -410,7 +411,7 @@ const AppContent: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-[var(--mes-radius)] flex items-center gap-1 transition-all ${
                 activePersona === 'EXECUTIVE'
-                  ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold shadow-xs'
+                  ? 'bg-[#0088FF] text-white font-bold shadow-xs'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Plant Manager / Executive Persona (High-level OEE, FPY, scrap financial cost)"
@@ -420,10 +421,23 @@ const AppContent: React.FC = () => {
             </button>
           </div>
 
+          {/* 1-Click DPX 20 SMT Dashboards Suite */}
+          <button
+            onClick={() => {
+              setActivePersona('SUPERVISOR');
+              setActiveTab('SUPERVISOR');
+            }}
+            className="flex items-center gap-1.5 bg-[#0088FF] hover:bg-blue-600 text-white px-2.5 py-0.5 rounded-[var(--mes-radius)] text-[11px] font-bold shadow-[0_0_10px_rgba(0,136,255,0.3)] transition-all cursor-pointer"
+            title="Open DPX Enterprise 20 SMT Dashboards Suite [1-20]"
+          >
+            <LayoutDashboard className="w-3 h-3" />
+            <span className="hidden sm:inline">20 SMT Dashboards</span>
+          </button>
+
           {/* Wall / Overhead Andon Kiosk Button */}
           <button
             onClick={() => setIsKioskMode(true)}
-            className="flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono transition-colors"
+            className="flex items-center gap-1 bg-[#0D1B2A] hover:bg-[#13233D] text-slate-300 hover:text-white px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] text-[11px] font-mono transition-colors"
             title="Switch to Control-Room Wall Kiosk Mode"
           >
             <Tv className="w-3 h-3 text-emerald-400" />
@@ -433,11 +447,11 @@ const AppContent: React.FC = () => {
           {/* Theme & Palette Studio Button */}
           <button
             onClick={() => setIsThemeModalOpen(true)}
-            className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 hover:border-cyan-500/50 text-[11px] font-bold transition-all"
+            className="flex items-center gap-1.5 bg-[#0D1B2A] hover:bg-[#13233D] text-slate-300 hover:text-white px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] hover:border-blue-500/50 text-[11px] font-bold transition-all"
             title="Open Theme & Palette Studio"
           >
-            <Palette className="w-3 h-3 text-cyan-400" />
-            <span className="hidden md:inline uppercase text-[9.5px] tracking-wider text-cyan-400">
+            <Palette className="w-3 h-3 text-blue-400" />
+            <span className="hidden md:inline uppercase text-[9.5px] tracking-wider text-blue-400">
               {theme.name}
             </span>
           </button>
@@ -445,12 +459,12 @@ const AppContent: React.FC = () => {
           {/* Jump to Station Search Button (Cmd+K) */}
           <button
             onClick={() => setIsCommandPaletteOpen(true)}
-            className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] transition-colors"
+            className="flex items-center gap-1.5 bg-[#0D1B2A] hover:bg-[#13233D] text-slate-400 hover:text-white px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] text-[11px] transition-colors"
             title="Jump to any station or command (⌘K)"
           >
             <Search className="w-3 h-3 text-slate-400" />
             <span className="hidden xl:inline">Jump</span>
-            <kbd className="text-[9.5px] font-mono bg-slate-950 border border-slate-800 px-1 rounded-[1px] text-slate-400">
+            <kbd className="text-[9.5px] font-mono bg-[#070D18] border border-[#1E293B] px-1 rounded-[1px] text-slate-400">
               ⌘K
             </kbd>
           </button>
@@ -458,17 +472,17 @@ const AppContent: React.FC = () => {
           {/* Shift Briefing Button */}
           <button
             onClick={handleExportBriefing}
-            className="hidden md:flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono transition-colors"
+            className="hidden md:flex items-center gap-1 bg-[#0D1B2A] hover:bg-[#13233D] text-slate-300 hover:text-white px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] text-[11px] font-mono transition-colors"
             title="SMT Shift Handover Briefing & Markdown Report"
           >
-            <FileText className="w-3 h-3 text-cyan-400" />
+            <FileText className="w-3 h-3 text-blue-400" />
             <span className="hidden xl:inline">Briefing</span>
           </button>
 
           {/* Station Protocol Adapter Status Mode Switcher Button */}
           <button
             onClick={() => setIsStationModeModalOpen(true)}
-            className="hidden xl:flex items-center gap-1 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono transition-colors"
+            className="hidden xl:flex items-center gap-1 bg-[#0D1B2A] hover:bg-[#13233D] text-slate-300 hover:text-white px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] text-[11px] font-mono transition-colors"
             title="Station Machine Driver & Protocol Mode Adapters"
           >
             <Settings className="w-3 h-3 text-amber-400" />
@@ -480,7 +494,7 @@ const AppContent: React.FC = () => {
             onClick={() => setIsLoginModalOpen(true)}
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded-[var(--mes-radius)] border font-mono text-[10.5px] transition-all ${
               operator 
-                ? 'bg-slate-900 border-slate-800 text-slate-200 hover:border-slate-700' 
+                ? 'bg-[#0D1B2A] border-[#1E293B] text-slate-200 hover:border-slate-700' 
                 : 'bg-emerald-950/50 border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/70'
             }`}
             title={operator ? `Logged in as ${operator.name} (${operator.role})` : 'Click to Sign In / Authenticate'}
@@ -494,16 +508,16 @@ const AppContent: React.FC = () => {
           </button>
 
           {/* High-Precision Cleanroom Realtime Clock */}
-          <div className="hidden lg:flex items-center gap-1.5 bg-slate-950 px-2 py-0.5 rounded-[var(--mes-radius)] border border-slate-800 text-[11px] font-mono font-bold text-slate-200">
-            <Clock className="w-3 h-3 text-cyan-400" />
+          <div className="hidden lg:flex items-center gap-1.5 bg-[#070D18] px-2 py-0.5 rounded-[var(--mes-radius)] border border-[#1E293B] text-[11px] font-mono font-bold text-slate-200">
+            <Clock className="w-3 h-3 text-blue-400" />
             <span className="tabular-nums">{currentTime}</span>
           </div>
         </div>
       </header>
 
-      {/* Docked Multi-Document Interface (MDI) Tab Bar (Height 32px) */}
+      {/* Docked Multi-Document Interface (MDI) Tab Bar (Height 34px) */}
       <nav 
-        className="bg-slate-950 border-b border-slate-800 flex items-stretch overflow-x-auto shrink-0 select-none scrollbar-none z-20 font-mono text-xs"
+        className="bg-[#0D1B2A] border-b border-[#1E293B] flex items-stretch overflow-x-auto shrink-0 select-none scrollbar-none z-20 font-mono text-xs"
         aria-label="SMT Cleanroom Instrument Stations"
       >
         {MDI_TABS.map((tab) => {
@@ -514,16 +528,20 @@ const AppContent: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => handleSelectTab(tab.id)}
-              className={`h-8 px-3 flex items-center gap-2 shrink-0 border-r border-slate-800 transition-colors ${
+              className={`h-8 px-3 flex items-center gap-2 shrink-0 border-r border-[#1E293B] transition-all ${
                 isActive 
-                  ? 'bg-slate-900 text-cyan-300 border-t-2 border-t-cyan-400 font-bold shadow-inner' 
-                  : 'bg-slate-950 text-slate-400 border-t-2 border-t-transparent hover:bg-slate-900/60 hover:text-slate-200'
+                  ? 'bg-[#0088FF] text-white font-bold shadow-md rounded-t-sm' 
+                  : 'bg-[#0D1B2A] text-slate-300 hover:bg-[#13233D] hover:text-white'
               }`}
               title={`${tab.label} (Press ${tab.hotkey})`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-cyan-400' : 'text-slate-500'}`} />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
               <span className="text-[11px] tracking-tight whitespace-nowrap">{tab.label}</span>
-              <span className="text-[9px] text-slate-500 bg-slate-950 px-1 rounded-[1px] border border-slate-800 hidden 2xl:inline">
+              <span className={`text-[9px] px-1 rounded-[1px] border hidden 2xl:inline ${
+                isActive 
+                  ? 'text-blue-100 bg-blue-700/50 border-blue-400/40' 
+                  : 'text-slate-400 bg-[#070D18] border-[#1E293B]'
+              }`}>
                 {tab.code}
               </span>
             </button>
@@ -532,14 +550,14 @@ const AppContent: React.FC = () => {
       </nav>
 
       {/* Compact Realtime Telemetry Ribbon & Status Ticker (Height 26px) */}
-      <div className="h-[26px] bg-slate-900/90 border-b border-slate-800 px-3 flex items-center justify-between text-[10.5px] font-mono shrink-0 z-10 overflow-x-auto scrollbar-none text-slate-300">
+      <div className="h-[26px] bg-[#0A192F] border-b border-[#1E293B] px-3 flex items-center justify-between text-[10.5px] font-mono shrink-0 z-10 overflow-x-auto scrollbar-none text-slate-300">
         <div className="flex items-center gap-3 shrink-0">
           <span className="text-slate-400">
-            RECIPE: <strong className="text-slate-100">PROG-SM-METER-TOP-REV4</strong>
+            RECIPE: <strong className="text-white">PROG-SM-METER-TOP-REV4</strong>
           </span>
           <span className="text-slate-700">|</span>
           <span className="text-slate-400">
-            PLAN: <strong className="text-slate-100">1,200</strong>
+            PLAN: <strong className="text-white">1,200</strong>
           </span>
           <span className="text-slate-700">|</span>
           <span className="text-slate-400">
@@ -547,7 +565,7 @@ const AppContent: React.FC = () => {
           </span>
           <span className="text-slate-700">|</span>
           <span className="text-slate-400">
-            TACT: <strong className="text-slate-100">18.2s</strong>
+            TACT: <strong className="text-white">18.2s</strong>
           </span>
           <span className="text-slate-700">|</span>
           <span className="text-slate-400">
@@ -563,7 +581,7 @@ const AppContent: React.FC = () => {
           </span>
           <span className="text-slate-700">|</span>
           <span className="text-slate-400">
-            OEE: <strong className="text-cyan-400 font-bold">88.4% (SEMI E10)</strong>
+            OEE: <strong className="text-[#0088FF] font-bold">88.4% (SEMI E10)</strong>
           </span>
         </div>
 
@@ -573,7 +591,7 @@ const AppContent: React.FC = () => {
             <span>ANDON: NORMAL (RUNNING)</span>
           </div>
           <span className="text-slate-700">|</span>
-          <span className="text-slate-500 text-[10px]">POLL: 4s</span>
+          <span className="text-slate-400 text-[10px]">POLL: 4s</span>
         </div>
       </div>
 
@@ -586,7 +604,7 @@ const AppContent: React.FC = () => {
           onToggleCollapsed={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
 
-        <main className="flex-1 overflow-auto p-2.5 bg-[#06090e] mes-wafer-grid">
+        <main className="flex-1 overflow-auto p-2.5 bg-[#070D18] mes-wafer-grid">
           {activePersona === 'OPERATOR' && <OperatorKioskView />}
           {activePersona === 'ENGINEER' && <EngineerDeepDiveView />}
           {activePersona === 'EXECUTIVE' && <ManagerExecutiveView />}
