@@ -10,11 +10,6 @@ import { ArcGaugeOee } from './common/ArcGaugeOee';
 import { SmtLineFlowStrip } from './common/SmtLineFlowStrip';
 import { MounterDropAnalysisCard } from './common/MounterDropAnalysisCard';
 import { ShiftGanttTimeline } from './common/ShiftGanttTimeline';
-import { FujiManagementMonitor } from './FujiManagementMonitor';
-import { ManagerExecutiveView } from './personas/ManagerExecutiveView';
-import { SmtNocTelemetryStudio } from './SmtNocTelemetryStudio';
-import TeslaCyberGridCockpit from './cockpits/TeslaCyberGridCockpit';
-import { SixSigmaQualityLab } from './cockpits/SixSigmaQualityLab';
 import { KpiCard } from './common/KpiCard';
 import { DrillDownDrawer, DrillDownData } from './common/DrillDownDrawer';
 import { DpxEnterpriseMasterDashboard } from './enterprise-dashboards/DpxEnterpriseMasterDashboard';
@@ -43,7 +38,7 @@ interface FeederErrorItem {
   total_errors: number;
 }
 
-export type SupervisorViewMode = 'COCKPIT' | 'DPX_DASHBOARDS' | 'CYBER_GRID' | 'SIX_SIGMA_LAB' | 'NOC_MATRIX' | 'EXECUTIVE' | 'MANAGEMENT_MONITOR';
+export type SupervisorViewMode = 'COCKPIT' | 'DPX_DASHBOARDS';
 
 export const SupervisorDashboard: React.FC = () => {
   const [workCenters, setWorkCenters] = useState<WorkCenter[]>([]);
@@ -255,7 +250,7 @@ _Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
             <button
               type="button"
               onClick={() => setViewMode('COCKPIT')}
-              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
+              className={`px-3 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
                 viewMode === 'COCKPIT' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -264,56 +259,11 @@ _Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
             <button
               type="button"
               onClick={() => setViewMode('DPX_DASHBOARDS')}
-              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
+              className={`px-3 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
                 viewMode === 'DPX_DASHBOARDS' ? 'bg-blue-600 text-white border border-blue-400 shadow-[0_0_8px_rgba(37,99,235,0.4)] font-bold' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               DPX 20 DASHBOARDS [1-20]
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('CYBER_GRID')}
-              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
-                viewMode === 'CYBER_GRID' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              CYBER-GRID 360°
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('SIX_SIGMA_LAB')}
-              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
-                viewMode === 'SIX_SIGMA_LAB' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              SIX SIGMA SPC LAB
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('NOC_MATRIX')}
-              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
-                viewMode === 'NOC_MATRIX' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              NOC TELEMETRY MATRIX
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('EXECUTIVE')}
-              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
-                viewMode === 'EXECUTIVE' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              EXECUTIVE BRIEFING
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('MANAGEMENT_MONITOR')}
-              className={`px-2.5 py-1 rounded-[var(--mes-radius)] transition-colors font-semibold ${
-                viewMode === 'MANAGEMENT_MONITOR' ? 'bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)] font-bold' : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              NEXIM MANAGEMENT MONITOR
             </button>
           </div>
 
@@ -338,11 +288,6 @@ _Automated by i-MES 2.0 (Fuji Nexim 2.2 / i-MES Gateway)_`;
       </div>
 
       {viewMode === 'DPX_DASHBOARDS' && <DpxEnterpriseMasterDashboard />}
-      {viewMode === 'CYBER_GRID' && <TeslaCyberGridCockpit />}
-      {viewMode === 'SIX_SIGMA_LAB' && <SixSigmaQualityLab />}
-      {viewMode === 'NOC_MATRIX' && <SmtNocTelemetryStudio />}
-      {viewMode === 'MANAGEMENT_MONITOR' && <FujiManagementMonitor />}
-      {viewMode === 'EXECUTIVE' && <ManagerExecutiveView />}
       {viewMode === 'COCKPIT' && (
         <div className="space-y-2">
           {/* Top Row: Precision Aerospace Arc Gauges */}

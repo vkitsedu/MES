@@ -521,7 +521,7 @@ const AppContent: React.FC = () => {
         aria-label="SMT Cleanroom Instrument Stations"
       >
         {MDI_TABS.map((tab) => {
-          const isActive = activeTab === tab.id;
+          const isActive = activePersona === 'SUPERVISOR' && activeTab === tab.id;
           const Icon = tab.icon;
 
           return (
