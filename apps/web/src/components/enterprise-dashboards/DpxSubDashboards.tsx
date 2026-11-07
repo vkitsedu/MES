@@ -2233,627 +2233,109 @@ export const Dashboard8Spi: React.FC = () => {
 };
 
 // -------------------------------------------------------------
-// [9] FUJI Placement & Management Monitor Dashboard
+// [9] FUJI Placement Dashboard
 // -------------------------------------------------------------
 export const Dashboard9FujiPlacement: React.FC = () => {
-  const [selectedModule, setSelectedModule] = useState<'all' | 'mod1' | 'mod2' | 'mod3'>('all');
-  const [activeTab, setActiveTab] = useState<'feeders' | 'events' | 'alerts'>('feeders');
-  const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
-  const [nightMode, setNightMode] = useState<boolean>(false);
-
-  // Theme palettes based on nightMode toggle
-  const cardBg = nightMode ? 'bg-[#0B1528] border-slate-700/60 text-slate-100' : 'bg-white border-slate-200/80 text-slate-800';
-  const tableHeaderBg = nightMode ? 'bg-slate-800/80 text-slate-300' : 'bg-slate-50 text-slate-500';
-  const tableRowHover = nightMode ? 'hover:bg-slate-800/40 text-slate-200' : 'hover:bg-slate-50/80 text-slate-700';
-  const containerBg = nightMode ? 'bg-[#060D1A]' : 'bg-[#F0F5FA]';
-  const subtextMuted = nightMode ? 'text-slate-400' : 'text-slate-500';
-
   return (
-    <div className={`${containerBg} min-h-[750px] p-3 rounded font-sans transition-colors duration-200 space-y-3`}>
-      <DpxSeqBadge seq={9} title="FUJI Management Monitor" subtitle="Fuji Next Technologies Pvt. Ltd. | SMT Enterprise Placement Gateway" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={9} title="FUJI Placement Dashboard" subtitle="AIMEX III / NXT III High-Speed Mounters" />
 
-      {/* TOP GATEWAY SUB-HEADER BAR */}
-      <div className={`${cardBg} p-2.5 rounded-xl border shadow-xs flex flex-wrap items-center justify-between gap-2 text-xs`}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs">
-            <Building2 className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="font-bold text-xs tracking-tight">Fuji Next Technologies Pvt. Ltd.</span>
-            <span className={`${subtextMuted} font-mono text-[11px] ml-2 hidden sm:inline`}>| Main Enterprise Placement Gateway</span>
-          </div>
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            All Systems OK
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2 flex-wrap">
-          {/* Module Selector Tabs */}
-          <div className="flex rounded-lg p-0.5 bg-slate-200/60 dark:bg-slate-800 font-medium text-[11px]">
-            <button
-              onClick={() => setSelectedModule('all')}
-              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'all' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
-            >
-              All Modules (3)
-            </button>
-            <button
-              onClick={() => setSelectedModule('mod1')}
-              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'mod1' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
-            >
-              Mod-1 (NXT M3)
-            </button>
-            <button
-              onClick={() => setSelectedModule('mod2')}
-              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'mod2' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
-            >
-              Mod-2 (NXT M6)
-            </button>
-            <button
-              onClick={() => setSelectedModule('mod3')}
-              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'mod3' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
-            >
-              Mod-3 (AIMEX III)
-            </button>
-          </div>
-
-          {/* Time Filter */}
-          <div className="flex items-center gap-1 text-[11px] font-mono px-2 py-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-800">
-            <Calendar className="w-3 h-3 text-slate-500" />
-            <span>Last 1 Hour ▼</span>
-          </div>
-
-          {/* Theme Palette Toggle (Cleanroom Light / Cyber Night) */}
-          <button
-            onClick={() => setNightMode(!nightMode)}
-            className="text-[11px] font-bold px-2 py-1 rounded-md border border-blue-400/40 bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 hover:bg-blue-100 transition-colors"
-            title="Toggle Cleanroom Light / Cyber Night Mode"
-          >
-            {nightMode ? '☀ Cleanroom Theme' : '🌙 Cyber Night Theme'}
-          </button>
-        </div>
-      </div>
-
-      {/* 5 VIBRANT HERO CARDS - EXACT COLOR PALETTE FROM 20 DASHBOARDS */}
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-        {/* Card 1: Total Feeders */}
-        <div className="bg-[#0284C7] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
-          <div className="z-10">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Total Feeders</div>
-            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">142</div>
-            <div className="text-[10px] text-sky-200 mt-1 flex items-center gap-1 font-mono">
-              <TrendingUp className="w-3 h-3" /> ↑ +2% vs last hour
-            </div>
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Placement Speed</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">44,820 CPH</div>
+            <div className="text-[10px] text-purple-200 mt-1">Peak: 48,200 CPH</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Zap className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Pickup Error</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">12 PPM</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Benchmark &lt;25 PPM</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Active Nozzles</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">24/24 Online</div>
+            <div className="text-[10px] text-sky-200 mt-1">H01-H12 Heads Valid</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
             <Cpu className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* Card 2: Online Feeders */}
-        <div className="bg-[#059669] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
-          <div className="z-10 w-full pr-2">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Online Feeders</div>
-            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">138</div>
-            <div className="flex items-center gap-2 mt-1">
-              <div className="w-20 bg-emerald-800/40 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-emerald-300 h-1.5 rounded-full" style={{ width: '97.2%' }} />
-              </div>
-              <span className="text-[10px] text-emerald-100 font-mono font-bold">97.2%</span>
-            </div>
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Reel Splice Due</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">Slot 08 (12m)</div>
+            <div className="text-[10px] text-orange-200 mt-1">Dispatch AGV Trolley</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
-            <CheckCircle2 className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* Card 3: Offline Feeders */}
-        <div className="bg-[#DC2626] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
-          <div className="z-10 w-full pr-2">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-red-100">Offline / Starved</div>
-            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">4</div>
-            <div className="flex items-center gap-2 mt-1">
-              <div className="w-20 bg-red-900/40 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-red-300 h-1.5 rounded-full" style={{ width: '28%' }} />
-              </div>
-              <span className="text-[10px] text-red-200 font-mono font-bold">2.8%</span>
-            </div>
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Placed Today</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">1.42M chips</div>
+            <div className="text-[10px] text-cyan-200 mt-1">Shift A throughput</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
-            <AlertTriangle className="w-5 h-5 text-white" />
-          </div>
-        </div>
-
-        {/* Card 4: Total Events (1h) */}
-        <div className="bg-[#7C3AED] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
-          <div className="z-10">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Total Events (1h)</div>
-            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">2,847</div>
-            <div className="text-[10px] text-purple-200 mt-1 flex items-center gap-1 font-mono">
-              <TrendingUp className="w-3 h-3" /> ↑ +12% vs prev hour
-            </div>
-          </div>
-          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
-            <Activity className="w-5 h-5 text-white" />
-          </div>
-        </div>
-
-        {/* Card 5: Active Alerts */}
-        <div className="bg-[#EA580C] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden col-span-2 sm:col-span-1">
-          <div className="z-10">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Active Alerts</div>
-            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">12</div>
-            <div className="text-[10px] text-orange-200 mt-1 font-mono">
-              ↑ +1 new alert
-            </div>
-          </div>
-          <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
-              <Bell className="w-5 h-5 text-white" />
-            </div>
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border border-white text-white font-bold text-[9px] rounded-full flex items-center justify-center">
-              1
-            </span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
           </div>
         </div>
       </div>
 
-      {/* MIDDLE ROW: SITE/MODULE-WISE OVERVIEW & EVENT TELEMETRY STATISTICS */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        {/* Panel 1: Site/Module-wise Overview */}
-        <div className={`${cardBg} p-4 rounded-xl border shadow-xs flex flex-col justify-between`}>
-          <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
-            <div className="flex items-center gap-2">
-              <BarChart2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span className="font-bold text-xs tracking-tight">Module-wise Feeder Status Overview</span>
-            </div>
-            <div className="flex rounded p-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-mono">
-              <button
-                onClick={() => setActiveTab('feeders')}
-                className={`px-2 py-0.5 rounded ${activeTab === 'feeders' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
-              >
-                Feeders
-              </button>
-              <button
-                onClick={() => setActiveTab('events')}
-                className={`px-2 py-0.5 rounded ${activeTab === 'events' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
-              >
-                Events
-              </button>
-              <button
-                onClick={() => setActiveTab('alerts')}
-                className={`px-2 py-0.5 rounded ${activeTab === 'alerts' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
-              >
-                Alert Status
-              </button>
-            </div>
+      {/* Fuji Error Trend Chart & Nozzle Distribution */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-xs text-slate-700">Drop Rate Trend (PPM) Across Shift</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">Threshold: 25 PPM (UCL)</span>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-            {/* Donut Gauge */}
-            <div className="sm:col-span-5 flex flex-col items-center justify-center">
-              <div className="relative w-36 h-36 flex items-center justify-center">
-                <svg viewBox="0 0 100 100" className="w-36 h-36 -rotate-90">
-                  {/* Track */}
-                  <circle cx="50" cy="50" r="38" stroke="#E2E8F0" strokeWidth="8" fill="none" className="dark:stroke-slate-800" />
-                  {/* Online Segment (97.2%) */}
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="38"
-                    stroke="#10B981"
-                    strokeWidth="8"
-                    strokeDasharray="232.1 238.8"
-                    strokeDashoffset="0"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                  {/* Offline Segment (2.8%) */}
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="38"
-                    stroke="#EF4444"
-                    strokeWidth="8"
-                    strokeDasharray="6.7 238.8"
-                    strokeDashoffset="-232.1"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
-                <div className="absolute flex flex-col items-center justify-center text-center">
-                  <span className="text-xl font-black font-mono tracking-tight">97.2%</span>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Online</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 text-[11px] font-mono mt-2">
-                <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" /> Online: 138
-                </span>
-                <span className="flex items-center gap-1.5 text-red-600 dark:text-red-400 font-bold">
-                  <span className="w-2 h-2 rounded-full bg-red-500" /> Offline: 4
-                </span>
-              </div>
-            </div>
-
-            {/* Clustered Bar Chart */}
-            <div className="sm:col-span-7 flex flex-col justify-end h-40">
-              <div className="flex justify-end gap-3 text-[10px] font-mono mb-2">
-                <span className="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-bold">
-                  <span className="w-2 h-2 rounded-sm bg-blue-600" /> Online
-                </span>
-                <span className="flex items-center gap-1 text-red-500 font-bold">
-                  <span className="w-2 h-2 rounded-sm bg-red-500" /> Offline
-                </span>
-              </div>
-
-              {/* Chart SVG */}
-              <svg viewBox="0 0 240 120" className="w-full h-auto">
-                {/* Horizontal Grid */}
-                {[0, 20, 40, 60].map((val) => {
-                  const y = 100 - (val / 60) * 85;
-                  return (
-                    <g key={val}>
-                      <line x1="25" y1={y} x2="235" y2={y} stroke="#E2E8F0" strokeWidth="0.8" strokeDasharray="2,2" className="dark:stroke-slate-800" />
-                      <text x="20" y={y + 3} textAnchor="end" fontSize="7.5" fill="#94A3B8" fontFamily="monospace">
-                        {val}
-                      </text>
-                    </g>
-                  );
-                })}
-
-                {/* Bars for Site-1 (Mod-1: 52 / 1) */}
-                <g transform="translate(45, 0)">
-                  {/* Online Bar */}
-                  <rect x="0" y={100 - (52 / 60) * 85} width="18" height={(52 / 60) * 85} rx="2" fill="#1E50ED" />
-                  <text x="9" y={100 - (52 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#1E50ED" fontFamily="monospace">52</text>
-                  {/* Offline Bar */}
-                  <rect x="22" y={100 - (1 / 60) * 85} width="18" height={(1 / 60) * 85 || 3} rx="2" fill="#EF4444" />
-                  <text x="31" y={100 - (1 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#EF4444" fontFamily="monospace">1</text>
-                  <text x="20" y="114" textAnchor="middle" fontSize="8" fill="#64748B" fontFamily="monospace">Mod-1</text>
-                </g>
-
-                {/* Bars for Site-2 (Mod-2: 48 / 2) */}
-                <g transform="translate(115, 0)">
-                  {/* Online Bar */}
-                  <rect x="0" y={100 - (48 / 60) * 85} width="18" height={(48 / 60) * 85} rx="2" fill="#1E50ED" />
-                  <text x="9" y={100 - (48 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#1E50ED" fontFamily="monospace">48</text>
-                  {/* Offline Bar */}
-                  <rect x="22" y={100 - (2 / 60) * 85} width="18" height={(2 / 60) * 85 || 4} rx="2" fill="#EF4444" />
-                  <text x="31" y={100 - (2 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#EF4444" fontFamily="monospace">2</text>
-                  <text x="20" y="114" textAnchor="middle" fontSize="8" fill="#64748B" fontFamily="monospace">Mod-2</text>
-                </g>
-
-                {/* Bars for Site-3 (Mod-3: 38 / 1) */}
-                <g transform="translate(185, 0)">
-                  {/* Online Bar */}
-                  <rect x="0" y={100 - (38 / 60) * 85} width="18" height={(38 / 60) * 85} rx="2" fill="#1E50ED" />
-                  <text x="9" y={100 - (38 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#1E50ED" fontFamily="monospace">38</text>
-                  {/* Offline Bar */}
-                  <rect x="22" y={100 - (1 / 60) * 85} width="18" height={(1 / 60) * 85 || 3} rx="2" fill="#EF4444" />
-                  <text x="31" y={100 - (1 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#EF4444" fontFamily="monospace">1</text>
-                  <text x="20" y="114" textAnchor="middle" fontSize="8" fill="#64748B" fontFamily="monospace">Mod-3</text>
-                </g>
-              </svg>
-            </div>
-          </div>
+          <DpxMultiLineTrend
+            labels={['08h', '09h', '10h', '11h', '12h', '13h', '14h', '15h']}
+            threshold={25}
+            thresholdLabel="25 PPM UCL"
+            series={[
+              { name: '0402 Chips', color: '#1E50ED', data: [18, 14, 12, 10, 15, 11, 8, 9] },
+              { name: '0201 Passives', color: '#EA580C', data: [22, 19, 15, 14, 18, 12, 11, 10] },
+            ]}
+          />
         </div>
 
-        {/* Panel 2: Placement & Drop Telemetry Statistics */}
-        <div className={`${cardBg} p-4 rounded-xl border shadow-xs flex flex-col justify-between`}>
-          <div className="flex items-center justify-between mb-2 border-b border-slate-100 dark:border-slate-800 pb-2">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span className="font-bold text-xs tracking-tight">Placement Telemetry & Drop Rate Trends</span>
-            </div>
-            <div className="flex rounded p-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-mono">
-              {(['1h', '6h', '24h', '7d'] as const).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setTimeRange(r)}
-                  className={`px-2 py-0.5 rounded ${timeRange === r ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
-                >
-                  {r}
-                </button>
-              ))}
-            </div>
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-xs text-slate-700">Nozzle Pick Error by Head (H01-H12)</span>
+            <span className="text-[10px] text-slate-400 font-mono">PPM / Head</span>
           </div>
-
-          {/* Legend */}
-          <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono mb-2">
-            <span className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-bold">
-              <span className="w-2 h-2 rounded-full bg-cyan-400" /> Placements (CPH/10)
-            </span>
-            <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" /> Pick Drops (PPM)
-            </span>
-            <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold">
-              <span className="w-2 h-2 rounded-full bg-amber-500" /> Vision Retries
-            </span>
-            <span className="flex items-center gap-1 text-purple-600 dark:text-purple-400 font-bold">
-              <span className="w-2 h-2 rounded-full bg-purple-500" /> Feeder Starve
-            </span>
-          </div>
-
-          {/* 4 Multi-Wave Spline SVG Chart */}
-          <div className="w-full h-40">
-            <svg viewBox="0 0 400 130" className="w-full h-full overflow-visible">
-              {/* Horizontal Grid */}
-              {[0, 500, 1000, 1500].map((val) => {
-                const y = 110 - (val / 1500) * 95;
-                return (
-                  <g key={val}>
-                    <line x1="25" y1={y} x2="395" y2={y} stroke="#E2E8F0" strokeWidth="0.8" strokeDasharray="2,2" className="dark:stroke-slate-800" />
-                    <text x="20" y={y + 3} textAnchor="end" fontSize="7.5" fill="#94A3B8" fontFamily="monospace">
-                      {val.toLocaleString()}
-                    </text>
-                  </g>
-                );
-              })}
-
-              {/* Curve 1: Placements (Cyan) */}
-              <path
-                d="M 35 32 C 75 22, 115 38, 155 24 C 195 12, 235 44, 275 30 C 315 18, 355 20, 390 28"
-                fill="none"
-                stroke="#06B6D4"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 35 32 C 75 22, 115 38, 155 24 C 195 12, 235 44, 275 30 C 315 18, 355 20, 390 28 L 390 110 L 35 110 Z"
-                fill="#06B6D4"
-                opacity="0.12"
-              />
-
-              {/* Curve 2: Pick Drops (Emerald) */}
-              <path
-                d="M 35 62 C 75 58, 115 72, 155 60 C 195 50, 235 70, 275 58 C 315 48, 355 56, 390 52"
-                fill="none"
-                stroke="#10B981"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-
-              {/* Curve 3: Vision Retries (Amber) */}
-              <path
-                d="M 35 78 C 75 74, 115 85, 155 76 C 195 70, 235 84, 275 74 C 315 68, 355 75, 390 70"
-                fill="none"
-                stroke="#F59E0B"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-
-              {/* Curve 4: Feeder Starve (Purple) */}
-              <path
-                d="M 35 92 C 75 88, 115 96, 155 90 C 195 86, 235 95, 275 88 C 315 84, 355 90, 390 85"
-                fill="none"
-                stroke="#8B5CF6"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-
-              {/* Time X-Axis */}
-              {[
-                { time: '16:30', x: 35 },
-                { time: '16:45', x: 125 },
-                { time: '17:00', x: 215 },
-                { time: '17:15', x: 305 },
-                { time: '17:30', x: 390 },
-              ].map((pt, i) => (
-                <text key={i} x={pt.x} y="124" textAnchor="middle" fontSize="7.5" fill="#64748B" fontFamily="monospace">
-                  {pt.time}
-                </text>
-              ))}
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      {/* BOTTOM ROW: RECENT EVENTS LOG & MODULE HEALTH / HARDWARE RESOURCES */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* Recent Events Table (7 Cols / ~58% width) */}
-        <div className={`${cardBg} p-4 rounded-xl border shadow-xs lg:col-span-7 flex flex-col justify-between`}>
-          <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
-            <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-              <span className="font-bold text-xs tracking-tight">Recent Placement Events & Feeder Stream</span>
-            </div>
-            <button className="text-[11px] text-blue-600 dark:text-blue-400 font-bold hover:underline flex items-center gap-1 font-mono">
-              View All <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono">
-              <thead className={`${tableHeaderBg} text-[10px] uppercase font-bold tracking-wider rounded-t`}>
-                <tr>
-                  <th className="py-2 px-2.5">Time</th>
-                  <th className="py-2 px-2">Module</th>
-                  <th className="py-2 px-2">Feeder/Head</th>
-                  <th className="py-2 px-2">Event Type</th>
-                  <th className="py-2 px-2">Status</th>
-                  <th className="py-2 px-2">Details</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
-                <tr className={tableRowHover}>
-                  <td className="py-2 px-2.5 font-bold">17:26:12</td>
-                  <td className="py-2 px-2">Mod-1 (NXT)</td>
-                  <td className="py-2 px-2 text-blue-600 dark:text-blue-400 font-bold">Slot 04</td>
-                  <td className="py-2 px-2">Auto-Splice Done</td>
-                  <td className="py-2 px-2">
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Normal
-                    </span>
-                  </td>
-                  <td className="py-2 px-2 text-[10.5px] text-slate-500 dark:text-slate-400">AGV Trolley #2 Spliced</td>
-                </tr>
-                <tr className={tableRowHover}>
-                  <td className="py-2 px-2.5 font-bold">17:25:47</td>
-                  <td className="py-2 px-2">Mod-2 (NXT)</td>
-                  <td className="py-2 px-2 text-red-600 dark:text-red-400 font-bold">Head H04</td>
-                  <td className="py-2 px-2">Vision Reject</td>
-                  <td className="py-2 px-2">
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Critical
-                    </span>
-                  </td>
-                  <td className="py-2 px-2 text-[10.5px] text-slate-500 dark:text-slate-400">Nozzle Tip Cleaned</td>
-                </tr>
-                <tr className={tableRowHover}>
-                  <td className="py-2 px-2.5 font-bold">17:25:31</td>
-                  <td className="py-2 px-2">Mod-3 (AIMEX)</td>
-                  <td className="py-2 px-2 text-amber-600 dark:text-amber-400 font-bold">Slot 18</td>
-                  <td className="py-2 px-2">Drop Rate High</td>
-                  <td className="py-2 px-2">
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Warning
-                    </span>
-                  </td>
-                  <td className="py-2 px-2 text-[10.5px] text-slate-500 dark:text-slate-400">Feeder Pitch Calibrated</td>
-                </tr>
-                <tr className={tableRowHover}>
-                  <td className="py-2 px-2.5 font-bold">17:24:58</td>
-                  <td className="py-2 px-2">Mod-1 (NXT)</td>
-                  <td className="py-2 px-2 text-blue-600 dark:text-blue-400 font-bold">Slot 08</td>
-                  <td className="py-2 px-2">Reel Low (&lt;120)</td>
-                  <td className="py-2 px-2">
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Normal
-                    </span>
-                  </td>
-                  <td className="py-2 px-2 text-[10.5px] text-slate-500 dark:text-slate-400">Splicing Buffer Ready</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Module Health & Hardware Resources (5 Cols / ~42% width) */}
-        <div className={`${cardBg} p-4 rounded-xl border shadow-xs lg:col-span-5 flex flex-col justify-between`}>
-          <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span className="font-bold text-xs tracking-tight">Module Health & Machine SCADA</span>
-            </div>
-            <span className="text-[10px] font-mono text-slate-400">Real-time Telemetry</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
-            {/* 3 Circular Health Gauges */}
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 font-mono">
-                Placement Cpk Health
-              </div>
-              <div className="flex items-center justify-between gap-1">
-                {/* Gauge 1: Mod-1 (98.1%) */}
-                <div className="flex flex-col items-center">
-                  <div className="relative w-16 h-16 flex items-center justify-center">
-                    <svg viewBox="0 0 70 70" className="w-16 h-16 -rotate-90">
-                      <circle cx="35" cy="35" r="28" stroke="#E2E8F0" strokeWidth="6" fill="none" className="dark:stroke-slate-800" />
-                      <circle
-                        cx="35"
-                        cy="35"
-                        r="28"
-                        stroke="#10B981"
-                        strokeWidth="6"
-                        strokeDasharray="172.6 175.9"
-                        strokeLinecap="round"
-                        fill="none"
-                      />
-                    </svg>
-                    <span className="absolute text-[10px] font-black font-mono">98.1%</span>
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-500 font-mono mt-1">Mod-1</span>
-                </div>
-
-                {/* Gauge 2: Mod-2 (96.7%) */}
-                <div className="flex flex-col items-center">
-                  <div className="relative w-16 h-16 flex items-center justify-center">
-                    <svg viewBox="0 0 70 70" className="w-16 h-16 -rotate-90">
-                      <circle cx="35" cy="35" r="28" stroke="#E2E8F0" strokeWidth="6" fill="none" className="dark:stroke-slate-800" />
-                      <circle
-                        cx="35"
-                        cy="35"
-                        r="28"
-                        stroke="#06B6D4"
-                        strokeWidth="6"
-                        strokeDasharray="170.1 175.9"
-                        strokeLinecap="round"
-                        fill="none"
-                      />
-                    </svg>
-                    <span className="absolute text-[10px] font-black font-mono">96.7%</span>
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-500 font-mono mt-1">Mod-2</span>
-                </div>
-
-                {/* Gauge 3: Mod-3 (94.4%) */}
-                <div className="flex flex-col items-center">
-                  <div className="relative w-16 h-16 flex items-center justify-center">
-                    <svg viewBox="0 0 70 70" className="w-16 h-16 -rotate-90">
-                      <circle cx="35" cy="35" r="28" stroke="#E2E8F0" strokeWidth="6" fill="none" className="dark:stroke-slate-800" />
-                      <circle
-                        cx="35"
-                        cy="35"
-                        r="28"
-                        stroke="#F59E0B"
-                        strokeWidth="6"
-                        strokeDasharray="166.0 175.9"
-                        strokeLinecap="round"
-                        fill="none"
-                      />
-                    </svg>
-                    <span className="absolute text-[10px] font-black font-mono">94.4%</span>
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-500 font-mono mt-1">Mod-3</span>
-                </div>
-              </div>
-            </div>
-
-            {/* SCADA Machine Resources */}
-            <div className="space-y-2.5 font-mono text-xs pl-2 sm:border-l sm:border-slate-100 dark:sm:border-slate-800">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                SCADA Hardware
-              </div>
-
-              <div>
-                <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-500">Vacuum Pressure</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400">32 kPa</span>
-                </div>
-                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: '32%' }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-500">Conveyor Torque</span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">58%</span>
-                </div>
-                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-emerald-500 h-1.5 rounded-full" style={{ width: '58%' }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-500">Feeder Bus (12ms)</span>
-                  <span className="font-bold text-teal-600 dark:text-teal-400">47%</span>
-                </div>
-                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-teal-500 h-1.5 rounded-full" style={{ width: '47%' }} />
-                </div>
-              </div>
-            </div>
-          </div>
+          <DpxDualBarChart
+            items={[
+              { label: 'H01', plan: 15, actual: 12 },
+              { label: 'H02', plan: 15, actual: 8 },
+              { label: 'H03', plan: 15, actual: 14 },
+              { label: 'H04', plan: 15, actual: 19 },
+              { label: 'H05', plan: 15, actual: 6 },
+              { label: 'H06', plan: 15, actual: 11 },
+            ]}
+          />
         </div>
       </div>
     </div>
   );
 };
-
 
 // -------------------------------------------------------------
 // [10] Stencil Setup & Solder Paste Life
