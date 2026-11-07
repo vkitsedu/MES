@@ -4,7 +4,8 @@ import {
   Search, Play, Pause, AlertOctagon, RotateCw, Filter, Layers, 
   Cpu, Flame, Eye, Shield, Tag, Calendar, Database, Activity,
   Sliders, Settings, Wrench, BarChart2, ChevronRight, Check,
-  Maximize2, Download, Printer, RefreshCw, Star, FileText, TrendingUp, Zap
+  Maximize2, Download, Printer, RefreshCw, Star, FileText, TrendingUp, Zap,
+  Factory, ShieldCheck, Bell, GitFork
 } from 'lucide-react';
 import {
   DpxDonutChart,
@@ -803,6 +804,692 @@ export const Dashboard1PlantOverview: React.FC = () => {
 };
 
 // -------------------------------------------------------------
+// [2] SMT Line Live Monitor (Flagship Single-Pane-of-Glass Cockpit)
+// -------------------------------------------------------------
+export const Dashboard2SmtLineMonitor: React.FC = () => {
+  const [selectedLine, setSelectedLine] = useState<string>('Line-01');
+  const [activeShift, setActiveShift] = useState<string>('Shift A');
+
+  return (
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      {/* Sequence Header */}
+      <DpxSeqBadge 
+        seq={2} 
+        title={`SMT Line Live Monitor (${selectedLine})`} 
+        subtitle="Single-Pane-of-Glass Cleanroom Operational Cockpit" 
+      />
+
+      {/* Control Strip: Line Selector + Shift + Gateway Status */}
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
+        {/* Left: Line Selection Pills */}
+        <div className="flex items-center gap-1.5 font-mono">
+          <span className="text-slate-500 font-sans font-bold text-[11px] mr-1">ACTIVE LINE:</span>
+          {['Line-01', 'Line-02', 'Line-03', 'Line-04'].map((line) => (
+            <button
+              key={line}
+              onClick={() => setSelectedLine(line)}
+              className={`px-2.5 py-1 rounded font-bold transition-all text-xs ${
+                selectedLine === line
+                  ? 'bg-[#1E50ED] text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {line} {line === 'Line-01' && '★'}
+            </button>
+          ))}
+        </div>
+
+        {/* Center: Live Telemetry Badges */}
+        <div className="hidden md:flex items-center gap-3 font-mono text-[11px]">
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-bold">IPC-CFX GATEWAY ● 12ms</span>
+          </div>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
+            <Clock className="w-3 h-3 text-blue-500" />
+            <span>Shift: {activeShift} (06:00 - 14:00)</span>
+          </div>
+          <div className="text-slate-500">
+            Recipe: <strong className="text-slate-800">PCB-SM-METER-REV4</strong>
+          </div>
+        </div>
+
+        {/* Right: Quick Action Buttons */}
+        <div className="flex items-center gap-2">
+          <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded font-mono">
+            AUTO-TUNING ● ACTIVE
+          </span>
+          <button className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 px-2.5 py-1 rounded font-bold text-xs font-mono transition-colors">
+            HOLD LINE
+          </button>
+        </div>
+      </div>
+
+      {/* TOP ROW: 7 REFINED SAPPHIRE CLEANROOM KPI CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+        {/* 1. OEE Card */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">OEE</span>
+            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <Activity className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">86.4%</div>
+            <div className="text-[10px] text-emerald-600 font-mono font-bold mt-1 flex items-center gap-1">
+              <span>↑ +2.1%</span>
+              <span className="text-slate-400 font-normal">vs target (85.0%)</span>
+            </div>
+          </div>
+          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
+            <span>A:92%</span><span>P:94%</span><span>Q:99%</span>
+          </div>
+        </div>
+
+        {/* 2. Availability Card */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Availability</span>
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <Clock className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">92.4%</div>
+            <div className="text-[10px] text-blue-600 font-mono font-bold mt-1 flex items-center gap-1">
+              <span>SEMI E10</span>
+              <span className="text-slate-400 font-normal">Uptime 7h 24m</span>
+            </div>
+          </div>
+          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
+            <span>Planned: 8.0h</span>
+            <span className="text-amber-600 font-bold">Down: 36m</span>
+          </div>
+        </div>
+
+        {/* 3. Performance Card */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-purple-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Performance</span>
+            <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+              <Zap className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">94.2%</div>
+            <div className="text-[10px] text-purple-600 font-mono font-bold mt-1 flex items-center gap-1">
+              <span>44,820 CPH</span>
+              <span className="text-slate-400 font-normal">rate</span>
+            </div>
+          </div>
+          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
+            <span>Peak: 48.2k</span>
+            <span className="text-emerald-600 font-bold">101% Takt</span>
+          </div>
+        </div>
+
+        {/* 4. Quality (FPY) Card */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-indigo-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Quality (FPY)</span>
+            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">98.8%</div>
+            <div className="text-[10px] text-indigo-600 font-mono font-bold mt-1 flex items-center gap-1">
+              <span>↑ +0.4%</span>
+              <span className="text-slate-400 font-normal">vs yesterday</span>
+            </div>
+          </div>
+          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
+            <span>DPMO: 112</span>
+            <span className="text-emerald-600 font-bold">0 Hold</span>
+          </div>
+        </div>
+
+        {/* 5. Plan Card */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-cyan-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Shift Plan</span>
+            <div className="w-7 h-7 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center">
+              <FileText className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">12,000</div>
+            <div className="text-[10px] text-cyan-600 font-mono font-bold mt-1 flex items-center gap-1">
+              <span>Target pcs</span>
+              <span className="text-slate-400 font-normal">Shift A</span>
+            </div>
+          </div>
+          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
+            <span>Pacing: 1,500/h</span>
+            <span className="text-blue-600 font-bold">100% Sched</span>
+          </div>
+        </div>
+
+        {/* 6. Actual Card */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-400 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Actual Output</span>
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#1E50ED] flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-2xl font-black font-mono tracking-tight text-[#1E50ED]">11,420</div>
+            <div className="text-[10px] text-emerald-600 font-mono font-bold mt-1 flex items-center gap-1">
+              <span>95.2%</span>
+              <span className="text-slate-400 font-normal">completion</span>
+            </div>
+          </div>
+          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
+            <span className="text-emerald-600 font-bold">▲ +180 Ahead</span>
+            <span>Rem: 580</span>
+          </div>
+        </div>
+
+        {/* 7. Reject Card */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-red-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Reject / Scrap</span>
+            <div className="w-7 h-7 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
+              <XCircle className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-2xl font-black font-mono tracking-tight text-red-600">138</div>
+            <div className="text-[10px] text-red-500 font-mono font-bold mt-1 flex items-center gap-1">
+              <span>1.2%</span>
+              <span className="text-slate-400 font-normal">reject rate</span>
+            </div>
+          </div>
+          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
+            <span>AOI: 92</span>
+            <span className="text-amber-600 font-bold">SPI: 46</span>
+          </div>
+        </div>
+      </div>
+
+      {/* SMT PRODUCTION FLOW (7 STATIONS CONVEYOR) */}
+      <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
+        <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <Factory className="w-4 h-4 text-[#1E50ED]" />
+            <span className="font-bold text-xs text-slate-800">
+              Cleanroom Production Conveyor Flow – {selectedLine}
+            </span>
+            <span className="text-[10px] text-slate-400 font-mono">
+              [SMEMA / IPC-9852 HERMES COMPLIANT]
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-xs font-mono">
+            <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Running (5)
+            </span>
+            <span className="flex items-center gap-1.5 text-amber-500 font-bold">
+              <span className="w-2 h-2 rounded-full bg-amber-400" /> Idle (1)
+            </span>
+            <span className="flex items-center gap-1.5 text-red-500 font-bold">
+              <span className="w-2 h-2 rounded-full bg-red-500" /> Maintenance (1)
+            </span>
+          </div>
+        </div>
+
+        {/* 7 Machines Flow Sequence */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
+          {[
+            { name: 'Loader', vendor: 'Nutek NTM', status: 'Running', dot: 'bg-emerald-500', out: '11,820 / 12,000', ct: '8.2 s', buff: '6/10', icon: Layers },
+            { name: 'SPI 3D', vendor: 'Koh Young', status: 'Running', dot: 'bg-emerald-500', out: '11,700 / 12,000', ct: '6.5 s', buff: '4/10', icon: Eye },
+            { name: 'Printer', vendor: 'DEK Horizon', status: 'Running', dot: 'bg-emerald-500', out: '11,650 / 12,000', ct: '7.8 s', buff: '5/10', icon: Factory },
+            { name: 'FUJI NXT', vendor: 'AIMEX III', status: 'Running', dot: 'bg-emerald-500', out: '11,520 / 12,000', ct: '12.3 s', buff: '7/10', icon: Cpu },
+            { name: 'Reflow', vendor: 'Heller 1913', status: 'Idle', dot: 'bg-amber-400', out: '11,450 / 12,000', ct: '45.0 s', buff: '2/10', icon: Flame },
+            { name: 'AOI 3D', vendor: 'Zenith 3D', status: 'Down', dot: 'bg-red-500', out: '11,420 / 12,000', ct: '10.8 s', buff: '9/10', icon: Eye },
+            { name: 'Unloader', vendor: 'Nutek NTM', status: 'Running', dot: 'bg-emerald-500', out: '11,420 / 12,000', ct: '6.7 s', buff: '1/10', icon: Layers },
+          ].map((mach, idx) => {
+            const Icon = mach.icon;
+            const isDown = mach.status === 'Down';
+            const isIdle = mach.status === 'Idle';
+
+            return (
+              <div 
+                key={mach.name}
+                className={`p-2.5 rounded-lg border transition-all flex flex-col justify-between text-center relative group ${
+                  isDown 
+                    ? 'bg-red-50/40 border-red-200' 
+                    : isIdle 
+                    ? 'bg-amber-50/40 border-amber-200' 
+                    : 'bg-slate-50/60 border-slate-200/80 hover:border-blue-400 hover:shadow-xs'
+                }`}
+              >
+                {/* Station header */}
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="text-left">
+                    <span className="font-bold text-xs text-slate-800 block">{mach.name}</span>
+                    <span className="text-[9px] text-slate-400 font-mono">{mach.vendor}</span>
+                  </div>
+                  <span className={`w-2 h-2 rounded-full ${mach.dot} shadow-xs shrink-0`} title={mach.status} />
+                </div>
+
+                {/* Machine Illustration Graphic */}
+                <div className="h-14 bg-white rounded-md border border-slate-100 flex items-center justify-center p-2 mb-2 shadow-2xs">
+                  <div className="flex flex-col items-center">
+                    <Icon className={`w-6 h-6 transition-colors ${
+                      isDown ? 'text-red-500' : isIdle ? 'text-amber-500' : 'text-slate-600 group-hover:text-blue-600'
+                    }`} />
+                    <div className="w-8 h-1 bg-slate-200 rounded-full mt-1.5" />
+                  </div>
+                </div>
+
+                {/* Station Telemetry Data */}
+                <div className="text-[10px] text-slate-500 font-mono space-y-0.5">
+                  <div className="flex justify-between text-slate-400 text-[9px]">
+                    <span>OUT</span>
+                    <span className="font-bold text-slate-800 font-mono">{mach.out.split(' / ')[0]}</span>
+                  </div>
+                  <div className="flex justify-between text-slate-400 text-[9px]">
+                    <span>CYCLE</span>
+                    <span className="font-semibold text-slate-700 font-mono">{mach.ct}</span>
+                  </div>
+                  <div className="flex justify-between text-slate-400 text-[9px]">
+                    <span>BUFFER</span>
+                    <span className="font-semibold text-blue-600 font-mono">{mach.buff}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* MIDDLE SECTION: 3 ANALYTICAL CHARTS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Chart 1: Hourly Target vs Actual Dual Bar Chart */}
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <span className="font-bold text-xs text-slate-800 block">
+                Hourly Production Pacing
+              </span>
+              <span className="text-[10px] text-slate-400">Target vs Actual Output (pcs)</span>
+            </div>
+            <div className="flex gap-2 text-[10px] font-mono">
+              <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#1E50ED] rounded-xs" /> Target</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#10B981] rounded-xs" /> Actual</span>
+            </div>
+          </div>
+
+          {/* SVG Bar Chart */}
+          <div className="h-44 pt-2">
+            <svg viewBox="0 0 280 150" className="w-full h-full">
+              {/* Grid lines */}
+              <line x1="30" y1="20" x2="275" y2="20" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="50" x2="275" y2="50" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="80" x2="275" y2="80" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="110" x2="275" y2="110" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="130" x2="275" y2="130" stroke="#CBD5E1" strokeWidth="1" />
+
+              {/* Y-Axis Labels */}
+              <text x="25" y="24" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">2,000</text>
+              <text x="25" y="54" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">1,500</text>
+              <text x="25" y="84" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">1,000</text>
+              <text x="25" y="114" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">500</text>
+              <text x="25" y="133" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">0</text>
+
+              {/* Dual Bars for 10 hours: 08:00 to 17:00 */}
+              {[
+                { h: '08:00', tgt: 950, act: 900 },
+                { h: '09:00', tgt: 1100, act: 980 },
+                { h: '10:00', tgt: 1200, act: 1050 },
+                { h: '11:00', tgt: 1250, act: 1100 },
+                { h: '12:00', tgt: 1350, act: 1280 },
+                { h: '13:00', tgt: 1400, act: 1350 },
+                { h: '14:00', tgt: 1550, act: 1500 },
+                { h: '15:00', tgt: 1650, act: 1600 },
+                { h: '16:00', tgt: 1700, act: 1650 },
+                { h: '17:00', tgt: 1750, act: 1720 },
+              ].map((b, idx) => {
+                const x = 38 + idx * 24;
+                const tH = (b.tgt / 2000) * 110;
+                const aH = (b.act / 2000) * 110;
+
+                return (
+                  <g key={b.h}>
+                    <rect x={x} y={130 - tH} width="8" height={tH} fill="#1E50ED" rx="1" />
+                    <rect x={x + 9} y={130 - aH} width="8" height={aH} fill="#10B981" rx="1" />
+                    <text x={x + 8} y="142" fontSize="7" fill="#64748B" textAnchor="middle" fontFamily="monospace">
+                      {b.h.split(':')[0]}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+        </div>
+
+        {/* Chart 2: OEE Trend (Last 8 Hours) Area Chart */}
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <span className="font-bold text-xs text-slate-800 block">
+                OEE Velocity & Stability
+              </span>
+              <span className="text-[10px] text-slate-400">8-Hour Moving Window</span>
+            </div>
+            <span className="text-[11px] text-[#1E50ED] font-bold font-mono bg-blue-50 px-2 py-0.5 rounded">
+              Current: 86.4%
+            </span>
+          </div>
+
+          <div className="h-44 pt-2">
+            <svg viewBox="0 0 280 150" className="w-full h-full">
+              {/* Y-axis lines */}
+              <line x1="30" y1="20" x2="275" y2="20" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="50" x2="275" y2="50" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="80" x2="275" y2="80" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="110" x2="275" y2="110" stroke="#F1F5F9" strokeWidth="1" />
+              <line x1="30" y1="130" x2="275" y2="130" stroke="#CBD5E1" strokeWidth="1" />
+
+              <text x="25" y="24" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">100%</text>
+              <text x="25" y="54" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">90%</text>
+              <text x="25" y="84" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">80%</text>
+              <text x="25" y="114" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">70%</text>
+              <text x="25" y="133" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">60%</text>
+
+              {/* Data points: 82.1, 83.4, 84.7, 85.6, 86.2, 86.9, 87.4, 86.4 */}
+              <defs>
+                <linearGradient id="oeeGradLine2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#1E50ED" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="#1E50ED" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              {/* Line and Area paths */}
+              <path
+                d="M 40 73 L 72 69 L 105 65 L 138 62 L 171 60 L 204 58 L 237 56 L 270 59 L 270 130 L 40 130 Z"
+                fill="url(#oeeGradLine2)"
+              />
+              <path
+                d="M 40 73 L 72 69 L 105 65 L 138 62 L 171 60 L 204 58 L 237 56 L 270 59"
+                fill="none"
+                stroke="#1E50ED"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+
+              {/* Point Dots & Callout labels */}
+              {[
+                { x: 40, y: 73, v: '82.1%', h: '04h' },
+                { x: 72, y: 69, v: '83.4%', h: '05h' },
+                { x: 105, y: 65, v: '84.7%', h: '06h' },
+                { x: 138, y: 62, v: '85.6%', h: '07h' },
+                { x: 171, y: 60, v: '86.2%', h: '08h' },
+                { x: 204, y: 58, v: '86.9%', h: '09h' },
+                { x: 237, y: 56, v: '87.4%', h: '10h' },
+                { x: 270, y: 59, v: '86.4%', h: '11h' },
+              ].map((pt) => (
+                <g key={pt.h}>
+                  <circle cx={pt.x} cy={pt.y} r="3" fill="#1E50ED" stroke="#FFFFFF" strokeWidth="1.5" />
+                  <text x={pt.x} y={pt.y - 6} fontSize="7" fill="#1E293B" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
+                    {pt.v}
+                  </text>
+                  <text x={pt.x} y="142" fontSize="7" fill="#64748B" textAnchor="middle" fontFamily="monospace">
+                    {pt.h}
+                  </text>
+                </g>
+              ))}
+            </svg>
+          </div>
+        </div>
+
+        {/* Chart 3: Downtime Pareto Horizontal Bars */}
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <span className="font-bold text-xs text-slate-800 block">Downtime Pareto</span>
+              <span className="text-[10px] text-slate-400">Total Downtime: 2h 45m</span>
+            </div>
+            <span className="text-[10px] text-amber-600 font-bold font-mono bg-amber-50 px-2 py-0.5 rounded">
+              MTTR: 8.4m
+            </span>
+          </div>
+
+          <div className="space-y-1.5 pt-1 text-xs font-mono">
+            {[
+              { mach: 'Reflow Oven', dur: '48m (29%)', color: 'bg-[#DC2626]', w: '75%' },
+              { mach: 'AOI 3D', dur: '42m (26%)', color: 'bg-[#EA580C]', w: '66%' },
+              { mach: 'FUJI NXT', dur: '28m (17%)', color: 'bg-[#F59E0B]', w: '44%' },
+              { mach: 'SPI 3D', dur: '18m (11%)', color: 'bg-[#0284C7]', w: '28%' },
+              { mach: 'Screen Printer', dur: '12m (7%)', color: 'bg-[#06B6D4]', w: '19%' },
+              { mach: 'Loader/Unload', dur: '9m (5%)', color: 'bg-[#64748B]', w: '14%' },
+              { mach: 'Feeder Reel', dur: '6m (4%)', color: 'bg-[#94A3B8]', w: '9%' },
+            ].map((d) => (
+              <div key={d.mach}>
+                <div className="flex justify-between text-[10px] mb-0.5">
+                  <span className="font-sans font-medium text-slate-700">{d.mach}</span>
+                  <span className="text-slate-500 font-semibold">{d.dur}</span>
+                </div>
+                <div className="w-full bg-slate-100 rounded-xs h-2">
+                  <div className={`${d.color} h-2 rounded-xs`} style={{ width: d.w }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* BOTTOM SECTION: 2-COLUMN OPERATIONAL SUMMARY & ALERTS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        {/* Left Column (8.5 cols) */}
+        <div className="lg:col-span-8 xl:col-span-9 space-y-3">
+          {/* Summary + Material + Recent Work Orders */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {/* 1. Production Summary */}
+            <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs">
+              <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5 mb-2.5">
+                <BarChart2 className="w-4 h-4 text-[#1E50ED]" /> Production Summary
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-center text-xs font-mono">
+                <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                  <div className="text-[10px] text-slate-400 font-sans">Total Panels</div>
+                  <div className="text-base font-black text-slate-800 mt-0.5">11,420</div>
+                </div>
+                <div className="bg-emerald-50/70 p-2 rounded-lg border border-emerald-100">
+                  <div className="text-[10px] text-emerald-700 font-sans">Good Panels</div>
+                  <div className="text-base font-black text-emerald-600 mt-0.5">11,282</div>
+                </div>
+                <div className="bg-red-50/70 p-2 rounded-lg border border-red-100">
+                  <div className="text-[10px] text-red-700 font-sans">Reject Panels</div>
+                  <div className="text-base font-black text-red-600 mt-0.5">138</div>
+                </div>
+                <div className="bg-blue-50/70 p-2 rounded-lg border border-blue-100">
+                  <div className="text-[10px] text-blue-700 font-sans">Rework</div>
+                  <div className="text-base font-black text-blue-600 mt-0.5">56</div>
+                </div>
+              </div>
+              <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-500 font-mono flex justify-between">
+                <span>Takt: 28.8s</span>
+                <span className="text-emerald-600 font-bold">Cpk: 1.48</span>
+              </div>
+            </div>
+
+            {/* 2. Material & Consumables Status */}
+            <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+              <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5 mb-2">
+                <Database className="w-4 h-4 text-indigo-600" /> Material & Consumables
+              </div>
+              <div className="space-y-2.5 text-xs font-mono">
+                <div>
+                  <div className="flex justify-between text-[11px] mb-1">
+                    <span className="font-sans font-medium text-slate-700">Solder Paste (SAC305)</span>
+                    <span className="font-bold text-emerald-600">78%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-2">
+                    <div className="bg-emerald-500 h-2 rounded-full" style={{ width: '78%' }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between text-[11px] mb-1">
+                    <span className="font-sans font-medium text-slate-700">Feeder Reels (Slot 08)</span>
+                    <span className="font-bold text-amber-500">64%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-2">
+                    <div className="bg-amber-400 h-2 rounded-full" style={{ width: '64%' }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between text-[11px] mb-1">
+                    <span className="font-sans font-medium text-slate-700">Raw PCB Buffer</span>
+                    <span className="font-bold text-[#1E50ED]">92%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-2">
+                    <div className="bg-[#1E50ED] h-2 rounded-full" style={{ width: '92%' }} />
+                  </div>
+                </div>
+              </div>
+              <div className="text-[9.5px] text-slate-400 font-mono pt-1 text-right">
+                Auto-replenishment: ON (&lt;20%)
+              </div>
+            </div>
+
+            {/* 3. Recent Work Orders */}
+            <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+              <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5 mb-2">
+                <Layers className="w-4 h-4 text-[#1E50ED]" /> Recent Work Orders
+              </div>
+              <table className="w-full text-left font-mono text-[10.5px]">
+                <thead className="text-slate-400 border-b border-slate-100 uppercase text-[9px]">
+                  <tr>
+                    <th className="pb-1">WO No.</th>
+                    <th className="pb-1">Prod</th>
+                    <th className="pb-1">Qty</th>
+                    <th className="pb-1 text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {[
+                    { wo: 'WO-014', prod: 'P1234', qty: '3.0k/2.8k', st: 'Running', dot: 'bg-emerald-500' },
+                    { wo: 'WO-013', prod: 'P5678', qty: '2.0k/2.0k', st: 'Done', dot: 'bg-blue-600' },
+                    { wo: 'WO-012', prod: 'P9012', qty: '4.0k/4.0k', st: 'Done', dot: 'bg-blue-600' },
+                    { wo: 'WO-011', prod: 'P3456', qty: '2.0k/2.0k', st: 'Done', dot: 'bg-blue-600' },
+                  ].map((r) => (
+                    <tr key={r.wo} className="hover:bg-slate-50">
+                      <td className="py-1 text-[#1E50ED] font-semibold">{r.wo}</td>
+                      <td className="py-1 text-slate-700">{r.prod}</td>
+                      <td className="py-1 text-slate-600">{r.qty}</td>
+                      <td className="py-1 text-center">
+                        <span className="inline-flex items-center gap-1 text-[9.5px]">
+                          <span className={`w-1.5 h-1.5 rounded-full ${r.dot}`} />
+                          <span>{r.st}</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column (3.5 cols) - Alerts & Traceability */}
+        <div className="lg:col-span-4 xl:col-span-3 space-y-3">
+          {/* Live Alerts & Events */}
+          <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+              <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                <Bell className="w-3.5 h-3.5 text-[#1E50ED]" /> Live Alerts & Events
+              </span>
+              <span className="text-[10px] text-[#1E50ED] font-bold font-mono">
+                3 Active
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {[
+                {
+                  lvl: 'HIGH',
+                  lvlCol: 'bg-red-600',
+                  title: 'AOI 3D – Defect Detected',
+                  time: '11:37',
+                  sub: 'Panel: PNL-0004587 | Defect: Missing 0402',
+                },
+                {
+                  lvl: 'WARN',
+                  lvlCol: 'bg-amber-500',
+                  title: 'Feeder Low Stock Warning',
+                  time: '11:21',
+                  sub: 'FUJI NXT – Slot 12 (R0201) &lt; 50 units',
+                },
+                {
+                  lvl: 'INFO',
+                  lvlCol: 'bg-blue-600',
+                  title: 'New Work Order Loaded',
+                  time: '09:43',
+                  sub: 'WO-2026-0925-014 | Product: P1234',
+                },
+              ].map((al, idx) => (
+                <div key={idx} className="p-2 bg-slate-50/70 rounded-lg border border-slate-100 text-xs">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={`${al.lvlCol} text-white font-mono font-bold text-[9px] px-1.5 py-0.5 rounded`}>
+                      {al.lvl}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">{al.time}</span>
+                  </div>
+                  <div className="font-bold text-slate-800 text-[11px]">{al.title}</div>
+                  <div className="text-[10px] text-slate-500 font-mono mt-0.5 line-clamp-1">{al.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Active Unit Traceability */}
+          <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+              <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                <GitFork className="w-3.5 h-3.5 text-[#1E50ED]" /> Active Unit Traceability
+              </span>
+              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-bold">
+                IPC-1782 PASS
+              </span>
+            </div>
+
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="flex justify-between py-0.5 border-b border-slate-50">
+                <span className="text-slate-500">Panel ID:</span>
+                <strong className="text-[#1E50ED] font-bold">PNL-0004587</strong>
+              </div>
+              <div className="flex justify-between py-0.5 border-b border-slate-50">
+                <span className="text-slate-500">Barcode:</span>
+                <span className="text-slate-800 font-bold">A123456789012</span>
+              </div>
+              <div className="flex justify-between py-0.5 border-b border-slate-50">
+                <span className="text-slate-500">Product:</span>
+                <span className="text-slate-800 font-medium">Control Board Rev 4</span>
+              </div>
+              <div className="flex items-center justify-between py-0.5 border-b border-slate-50">
+                <span className="text-slate-500">SPI 3D:</span>
+                <span className="bg-emerald-600 text-white font-black text-[9px] px-2 py-0.5 rounded">
+                  PASS (0.12mm)
+                </span>
+              </div>
+              <div className="flex items-center justify-between py-0.5">
+                <span className="text-slate-500">AOI 3D:</span>
+                <span className="bg-emerald-600 text-white font-black text-[9px] px-2 py-0.5 rounded">
+                  PASS (0 Defect)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// -------------------------------------------------------------
 // [3] Production Planning Dashboard
 // -------------------------------------------------------------
 export const Dashboard3ProductionPlanning: React.FC = () => {
@@ -1159,46 +1846,131 @@ export const Dashboard6WipManagement: React.FC = () => {
 // [7] Quality Dashboard (Overall)
 // -------------------------------------------------------------
 export const Dashboard7QualityOverall: React.FC = () => {
+  const [selectedScope, setSelectedScope] = useState<string>('All Lines');
+
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={7} title="Quality Dashboard (Overall)" subtitle="Cleanroom Defect Pareto & Six Sigma SPC" />
 
-      {/* Top 7 Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-7 gap-2 my-3 font-mono">
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Overall FPY</div>
-          <div className="text-xl font-black text-emerald-600 mt-1">98.9%</div>
+      {/* Control Strip: Scope Selector + Six Sigma Telemetry */}
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
+        <div className="flex items-center gap-1.5 font-mono">
+          <span className="text-slate-500 font-sans font-bold text-[11px] mr-1">SCOPE:</span>
+          {['All Lines', 'Line-01', 'Line-02', 'Line-03'].map((scope) => (
+            <button
+              key={scope}
+              onClick={() => setSelectedScope(scope)}
+              className={`px-2.5 py-1 rounded font-bold transition-all text-xs ${
+                selectedScope === scope
+                  ? 'bg-[#1E50ED] text-white shadow-xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {scope}
+            </button>
+          ))}
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">SPI FPY</div>
-          <div className="text-xl font-black text-blue-600 mt-1">99.2%</div>
+
+        <div className="flex items-center gap-3 font-mono text-[11px]">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
+            <Star className="w-3.5 h-3.5 text-emerald-600 fill-emerald-500" />
+            <span className="font-bold">SIX SIGMA SPC ● 1.48 Cpk (4.8σ)</span>
+          </div>
+          <span className="text-slate-500 hidden sm:inline">Defect Threshold: &lt; 8,000 PPM</span>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Placement FPY</div>
-          <div className="text-xl font-black text-indigo-600 mt-1">99.5%</div>
+      </div>
+
+      {/* Top 7 Saturated/Sapphire Metric Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-7 gap-2.5 font-mono">
+        {/* 1. Overall FPY */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Overall FPY</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          </div>
+          <div className="text-2xl font-black text-emerald-600 mt-1">98.9%</div>
+          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
+            Target: 98.5% (Pass)
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">AOI FPY</div>
-          <div className="text-xl font-black text-purple-600 mt-1">98.1%</div>
+
+        {/* 2. SPI FPY */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">SPI FPY</span>
+            <span className="w-2 h-2 rounded-full bg-blue-500" />
+          </div>
+          <div className="text-2xl font-black text-blue-600 mt-1">99.2%</div>
+          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
+            Vol: 100.8% Avg
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Defect PPM</div>
-          <div className="text-xl font-black text-red-600 mt-1">6,250</div>
+
+        {/* 3. Placement FPY */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-purple-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Placement FPY</span>
+            <span className="w-2 h-2 rounded-full bg-purple-500" />
+          </div>
+          <div className="text-2xl font-black text-purple-600 mt-1">99.5%</div>
+          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
+            Pick Err: 12 PPM
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Repair Rate</div>
-          <div className="text-xl font-black text-amber-600 mt-1">0.8%</div>
+
+        {/* 4. AOI FPY */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-indigo-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">AOI FPY</span>
+            <span className="w-2 h-2 rounded-full bg-indigo-500" />
+          </div>
+          <div className="text-2xl font-black text-indigo-600 mt-1">98.1%</div>
+          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
+            False Call: 0.15%
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Scrap Rate</div>
-          <div className="text-xl font-black text-slate-700 mt-1">0.3%</div>
+
+        {/* 5. Defect PPM */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-red-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Defect PPM</span>
+            <span className="w-2 h-2 rounded-full bg-red-500" />
+          </div>
+          <div className="text-2xl font-black text-red-600 mt-1">6,250</div>
+          <div className="text-[9.5px] text-emerald-600 font-mono mt-1 pt-1 border-t border-slate-100 font-bold">
+            ▼ -18% vs UCL
+          </div>
+        </div>
+
+        {/* 6. Repair Rate */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-amber-300 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Repair Rate</span>
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
+          </div>
+          <div className="text-2xl font-black text-amber-600 mt-1">0.8%</div>
+          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
+            91 Bds Reworked
+          </div>
+        </div>
+
+        {/* 7. Scrap Rate */}
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-400 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Scrap Rate</span>
+            <span className="w-2 h-2 rounded-full bg-slate-400" />
+          </div>
+          <div className="text-2xl font-black text-slate-800 mt-1">0.3%</div>
+          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
+            34 Bds Scrapped
+          </div>
         </div>
       </div>
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Defect Pareto */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-xs text-slate-700">Defect Pareto Breakdown</span>
             <span className="text-[10px] text-slate-400 font-mono">Pareto Top 80%</span>
@@ -1218,7 +1990,7 @@ export const Dashboard7QualityOverall: React.FC = () => {
         </div>
 
         {/* Defect Trend Over Shift */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-xs text-slate-700">Defect Trend Over Shift (PPM)</span>
             <span className="text-[10px] text-emerald-600 font-bold font-mono">▼ -68% Post-Purge</span>
@@ -1236,7 +2008,7 @@ export const Dashboard7QualityOverall: React.FC = () => {
         </div>
 
         {/* Defect Wise Breakdown Donut */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-xs text-slate-700">Defect Wise by Station</span>
             <span className="text-[10px] text-slate-400 font-mono">Current Shift</span>
@@ -1269,37 +2041,60 @@ export const Dashboard7QualityOverall: React.FC = () => {
 // -------------------------------------------------------------
 export const Dashboard8Spi: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={8} title="SPI Dashboard" subtitle="Koh Young 3D Solder Paste Inspection" />
 
-      {/* Top metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 my-3 font-mono">
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Boards Inspected</div>
-          <div className="text-xl font-black text-slate-900 mt-1">1,240</div>
+      {/* Control Strip */}
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
+        <div className="flex items-center gap-2 font-mono">
+          <span className="font-bold text-slate-800">EQUIPMENT:</span>
+          <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-bold border border-blue-200">
+            Koh Young aSPIre3 (Line-01)
+          </span>
+          <span className="text-slate-400 text-[11px] hidden sm:inline">Dual Moiré 25µm</span>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Boards OK</div>
-          <div className="text-xl font-black text-emerald-600 mt-1">1,226</div>
+
+        <div className="flex items-center gap-3 font-mono text-[11px]">
+          <span className="text-slate-500">Threshold: 80% - 130% Volume</span>
+          <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">
+            CLOSED-LOOP FEEDBACK ● ON
+          </span>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Boards NG</div>
-          <div className="text-xl font-black text-red-600 mt-1">14</div>
+      </div>
+
+      {/* Top 5 Metrics */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 font-mono">
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Boards Inspected</div>
+          <div className="text-2xl font-black text-slate-900 mt-1">1,240</div>
+          <div className="text-[9.5px] text-slate-400 mt-1 pt-1 border-t border-slate-100">Shift A Progress</div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">SPI FPY</div>
-          <div className="text-xl font-black text-blue-600 mt-1">98.9%</div>
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Boards OK</div>
+          <div className="text-2xl font-black text-emerald-600 mt-1">1,226</div>
+          <div className="text-[9.5px] text-emerald-600 font-bold mt-1 pt-1 border-t border-slate-100">98.9% Pass Rate</div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Total Cycle Time</div>
-          <div className="text-xl font-black text-indigo-600 mt-1">4.8 s</div>
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Boards NG</div>
+          <div className="text-2xl font-black text-red-600 mt-1">14</div>
+          <div className="text-[9.5px] text-red-500 mt-1 pt-1 border-t border-slate-100">1.1% Defect Rate</div>
+        </div>
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">SPI FPY</div>
+          <div className="text-2xl font-black text-[#1E50ED] mt-1">98.9%</div>
+          <div className="text-[9.5px] text-blue-500 mt-1 pt-1 border-t border-slate-100">Target: 98.0%</div>
+        </div>
+        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Cycle Time</div>
+          <div className="text-2xl font-black text-purple-600 mt-1">4.8 s</div>
+          <div className="text-[9.5px] text-slate-400 mt-1 pt-1 border-t border-slate-100">Takt Cap: 6.5s</div>
         </div>
       </div>
 
       {/* Heatmap & Optical Inspection Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
         {/* Optical Camera View */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
           <div className="flex justify-between items-center mb-2">
             <span className="font-bold text-xs text-slate-700">Koh Young 3D Optical Camera Alignment</span>
             <span className="text-[10px] text-emerald-600 font-bold font-mono">● MOIRÉ DUAL-PROJECTION ACTIVE</span>
@@ -1308,11 +2103,11 @@ export const Dashboard8Spi: React.FC = () => {
         </div>
 
         {/* 3D Volumetric Solder Heatmap */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <div className="flex justify-between items-center mb-2">
             <span className="font-bold text-xs text-slate-700">3D Volumetric Solder Height Topology</span>
             <div className="flex gap-1 text-[10px]">
-              <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-bold font-mono">3D Mesh</span>
+              <span className="bg-[#1E50ED] text-white px-2 py-0.5 rounded font-bold font-mono">3D Mesh</span>
               <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">2D Slice</span>
             </div>
           </div>
@@ -1321,8 +2116,8 @@ export const Dashboard8Spi: React.FC = () => {
       </div>
 
       {/* Panel Measurement Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-3 border-b bg-slate-50 font-bold text-xs text-slate-700 flex justify-between items-center">
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="p-3 border-b bg-slate-50/70 font-bold text-xs text-slate-700 flex justify-between items-center">
           <span>Realtime Pad Volumetric Readings</span>
           <span className="text-[10px] text-slate-400 font-mono">Threshold: 80% - 130% Volume</span>
         </div>
@@ -1345,7 +2140,7 @@ export const Dashboard8Spi: React.FC = () => {
               { p: 5, v: '101.2%', h: '66.20 µm', x: '-0.020 mm', res: 'GOOD' },
             ].map(r => (
               <tr key={r.p} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">Panel-{r.p}</td>
+                <td className="py-2 px-3 font-bold text-[#1E50ED]">Panel-{r.p}</td>
                 <td className="py-2 px-3">{r.v}</td>
                 <td className="py-2 px-3">{r.h}</td>
                 <td className="py-2 px-3">{r.x}</td>
@@ -1360,7 +2155,7 @@ export const Dashboard8Spi: React.FC = () => {
             ))}
           </tbody>
         </table>
-        <div className="p-2.5 bg-slate-50 text-[10px] font-mono text-slate-500 border-t flex justify-between">
+        <div className="p-2.5 bg-slate-50/70 text-[10px] font-mono text-slate-500 border-t flex justify-between">
           <span>Koh Young aSPIre3 Gateway (IPC-HERMES-9852)</span>
           <span className="text-emerald-600 font-bold">● SPC Closed-Loop Auto-Correction Active (Offset: +8µm X / -4µm Y)</span>
         </div>
