@@ -8,7 +8,9 @@ import {
   ShiftDropMatrixItem 
 } from '@mes/shared';
 import { 
-  Clock, RefreshCw, Cpu, Crosshair, Sliders, Shield, Filter, Download
+  Clock, RefreshCw, Cpu, Crosshair, Sliders, Shield, Filter, Download,
+  Building2, CheckCircle2, AlertTriangle, TrendingUp, Bell, Activity,
+  FileText, ArrowRight, BarChart2, Calendar, ShieldCheck, Layers, ArrowUpRight
 } from 'lucide-react';
 import { authService } from '../services/auth.service';
 import { ArcGaugeOee } from './common/ArcGaugeOee';
@@ -98,25 +100,23 @@ const FALLBACK_DIAGNOSTICS: DiagnosticsData = {
   shiftMatrix: [
     { shiftCode: '1 Shift (Morning)', pickups: 1245000, pickupErrors: 224, recogErrors: 144, totalErrors: 368, dropRatePpm: 295, recogDropRatePpm: 115, pickupDropRatePpm: 180 },
     { shiftCode: '2 Shift (Evening)', pickups: 845200, pickupErrors: 142, recogErrors: 98, totalErrors: 240, dropRatePpm: 284, recogDropRatePpm: 116, pickupDropRatePpm: 168 },
-    { shiftCode: '3 Shift (Night)', pickups: 420100, pickupErrors: 64, recogErrors: 48, totalErrors: 112, dropRatePpm: 267, recogDropRatePpm: 114, pickupDropRatePpm: 153 }
+    { shiftCode: '3 Shift (Night)', pickups: 654000, pickupErrors: 110, recogErrors: 78, totalErrors: 188, dropRatePpm: 287, recogDropRatePpm: 119, pickupDropRatePpm: 168 }
   ],
   refDesPareto: [
-    { refDes: 'C104', partNumber: 'CAP-0402-100NF', defectRatePct: 0.12 },
-    { refDes: 'R12', partNumber: 'RES-0805-10K', defectRatePct: 0.08 },
-    { refDes: 'U02', partNumber: 'STM32F401-LQFP', defectRatePct: 0.04 }
+    { refDes: 'C104', partNumber: 'CAP-0402-100NF', defectRatePct: 0.082 },
+    { refDes: 'R12', partNumber: 'RES-0201-10K', defectRatePct: 0.045 },
+    { refDes: 'U3', partNumber: 'IC-STM32-LQFP', defectRatePct: 0.031 }
   ]
 };
 
 const FALLBACK_FLOW: SmtMachineFlowItem[] = [
-  { id: 'm1', name: 'Laser Marker', equipmentCode: 'LSR-01', type: 'LASER', towerLamp: 'RUN', cycleTimeSec: 12.4, stopCount: 2, stopTimeMin: 1.5, nozzleBypass: false },
-  { id: 'm2', name: 'Screen Printer', equipmentCode: 'PRN-01', type: 'PRINTER', towerLamp: 'RUN', cycleTimeSec: 17.4, stopCount: 1, stopTimeMin: 0.8, nozzleBypass: false },
-  { id: 'm3', name: '3D SPI', equipmentCode: 'SPI-01', type: 'SPI', towerLamp: 'RUN', cycleTimeSec: 14.2, stopCount: 0, stopTimeMin: 0.0, nozzleBypass: false },
-  { id: 'm4', name: 'NXT III (Mod 1)', equipmentCode: 'MNT-01', type: 'MOUNTER', towerLamp: 'RUN', cycleTimeSec: 22.1, stopCount: 3, stopTimeMin: 4.2, nozzleBypass: false },
+  { id: 'm1', name: 'DEK NeoHorizon', equipmentCode: 'PRN-01', type: 'PRINTER', towerLamp: 'RUN', cycleTimeSec: 14.2, stopCount: 0, stopTimeMin: 0.0, nozzleBypass: false },
+  { id: 'm2', name: 'Koh Young SPI', equipmentCode: 'SPI-01', type: 'SPI', towerLamp: 'RUN', cycleTimeSec: 12.0, stopCount: 0, stopTimeMin: 0.0, nozzleBypass: false },
+  { id: 'm4', name: 'NXT III (Mod 1)', equipmentCode: 'MNT-01', type: 'MOUNTER', towerLamp: 'RUN', cycleTimeSec: 21.0, stopCount: 0, stopTimeMin: 0.0, nozzleBypass: false },
   { id: 'm5', name: 'NXT III (Mod 2)', equipmentCode: 'MNT-02', type: 'MOUNTER', towerLamp: 'RUN', cycleTimeSec: 21.4, stopCount: 1, stopTimeMin: 1.1, nozzleBypass: false },
   { id: 'm6', name: 'NXT III (Mod 3)', equipmentCode: 'MNT-03', type: 'MOUNTER', towerLamp: 'RUN', cycleTimeSec: 21.8, stopCount: 2, stopTimeMin: 1.8, nozzleBypass: false },
   { id: 'm7', name: 'Reflow 10-Zone', equipmentCode: 'RFW-01', type: 'REFLOW', towerLamp: 'RUN', cycleTimeSec: 18.0, stopCount: 0, stopTimeMin: 0.0, nozzleBypass: false },
-  { id: 'm8', name: '3D AOI Post', equipmentCode: 'AOI-01', type: 'AOI_POST', towerLamp: 'RUN', cycleTimeSec: 15.1, stopCount: 1, stopTimeMin: 0.5, nozzleBypass: false },
-  { id: 'm9', name: 'X-Ray Test', equipmentCode: 'XRY-01', type: 'XRAY', towerLamp: 'RUN', cycleTimeSec: 16.5, stopCount: 0, stopTimeMin: 0.0, nozzleBypass: false }
+  { id: 'm8', name: '3D AOI Post', equipmentCode: 'AOI-01', type: 'AOI_POST', towerLamp: 'RUN', cycleTimeSec: 15.1, stopCount: 1, stopTimeMin: 0.5, nozzleBypass: false }
 ];
 
 export const FujiManagementMonitor: React.FC = () => {
@@ -124,10 +124,20 @@ export const FujiManagementMonitor: React.FC = () => {
   const [selectedLineId, setSelectedLineId] = useState<string>('LINE_01');
   const [diagnostics, setDiagnostics] = useState<DiagnosticsData>(FALLBACK_DIAGNOSTICS);
   const [machineFlow, setMachineFlow] = useState<SmtMachineFlowItem[]>(FALLBACK_FLOW);
-  const [loading, setLoading] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'COCKPIT' | 'FLOW_AND_DROP'>('COCKPIT');
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [selectedModule, setSelectedModule] = useState<'all' | 'LINE_01' | 'LINE_02' | 'LINE_03'>('all');
+  const [activeTab, setActiveTab] = useState<'feeders' | 'events' | 'alerts'>('feeders');
+  const [bottomTableMode, setBottomTableMode] = useState<'FLEET' | 'EVENTS'>('FLEET');
+  const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
+  const [nightMode, setNightMode] = useState<boolean>(false);
+
+  // Dynamic Theme Styling
+  const containerBg = nightMode ? 'bg-[#070D19]' : 'bg-[#F0F5FA]';
+  const cardBg = nightMode ? 'bg-[#0B1528] border-slate-700/60 text-slate-100' : 'bg-white border-slate-200/80 text-slate-800';
+  const tableHeaderBg = nightMode ? 'bg-slate-800/90 text-slate-300' : 'bg-slate-50 text-slate-500';
+  const tableRowHover = nightMode ? 'hover:bg-slate-800/40 text-slate-200' : 'hover:bg-slate-50/80 text-slate-700';
+  const subtextMuted = nightMode ? 'text-slate-400' : 'text-slate-500';
 
   const fetchFleet = useCallback(async () => {
     try {
@@ -167,7 +177,6 @@ export const FujiManagementMonitor: React.FC = () => {
         const f = Array.isArray(json) ? json : json?.data;
         if (Array.isArray(f) && f.length > 0) setMachineFlow(f);
       }
-      setLastUpdated(new Date());
     } catch (err) {
       console.warn(`Using simulation fallback for ${lineId}`, err);
     }
@@ -193,385 +202,736 @@ export const FujiManagementMonitor: React.FC = () => {
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Compute operating state donut values dynamically from selectedLine
-  const isRunning = selectedLine?.statusState === 'RUN';
-  const opRunPct = isRunning ? 78.4 : 52.0;
-  const opWaitPrevPct = isRunning ? 11.2 : 32.0;
-  const opWaitNextPct = isRunning ? 6.4 : 9.0;
-  const opStopPct = isRunning ? 4.0 : 7.0;
-
-  // Unclipped 120x120 SVG Donut Geometry
-  const donutR = 44;
-  const donutCx = 60;
-  const donutCy = 60;
-  const donutCircumference = 2 * Math.PI * donutR;
-  const runOffset = 0;
-  const waitPrevOffset = (opRunPct / 100) * donutCircumference;
-  const waitNextOffset = ((opRunPct + opWaitPrevPct) / 100) * donutCircumference;
-  const stopOffset = ((opRunPct + opWaitPrevPct + opWaitNextPct) / 100) * donutCircumference;
-
   return (
-    <div className="space-y-2">
-      {/* Enterprise Filter & Command Bar */}
-      <div 
-        className="bg-slate-950 px-3.5 py-2 border border-slate-800 rounded-[var(--mes-radius)] flex flex-wrap items-center justify-between gap-3 text-xs text-slate-100"
-        style={{ boxShadow: '0 4px 20px -2px rgba(0,0,0,0.6)' }}
-      >
+    <div className={`${containerBg} p-3 rounded font-sans transition-colors duration-200 space-y-3`}>
+      {/* 1. TOP ENTERPRISE GATEWAY SUB-HEADER BAR */}
+      <div className={`${cardBg} p-2.5 rounded-xl border shadow-xs flex flex-wrap items-center justify-between gap-2 text-xs`}>
         <div className="flex items-center gap-2.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10B981]" />
-          <span className="font-sans font-bold text-slate-100 uppercase tracking-wider text-[12px]">
-            FUJI NEXIM MANAGEMENT MONITOR (v2.2.16 SPECIFICATION)
-          </span>
-          <span className="text-[10.5px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 border border-slate-800 rounded-[var(--mes-radius)] font-medium">
-            Active Line: <strong className="text-slate-100">{selectedLine?.lineName || 'SMD_01'}</strong>
+          <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs">
+            <Building2 className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="font-bold text-xs tracking-tight">Fuji Next Technologies Pvt. Ltd.</span>
+            <span className={`${subtextMuted} font-mono text-[11px] ml-2 hidden sm:inline`}>
+              | Main Enterprise Placement Gateway
+            </span>
+          </div>
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-[10px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            All Systems OK
           </span>
         </div>
 
-        {/* View Mode Buttons */}
-        <div className="flex items-center gap-2">
-          <div className="flex bg-slate-900 p-0.5 border border-slate-800 rounded-[var(--mes-radius)] text-[10.5px] font-mono">
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Multi-Module Tabs */}
+          <div className="flex rounded-lg p-0.5 bg-slate-200/60 dark:bg-slate-800 font-medium text-[11px]">
             <button
-              type="button"
+              onClick={() => { setSelectedModule('all'); setSelectedLineId('LINE_01'); }}
+              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'all' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
+            >
+              All Sites (3)
+            </button>
+            <button
+              onClick={() => { setSelectedModule('LINE_01'); setSelectedLineId('LINE_01'); }}
+              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'LINE_01' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
+            >
+              SMD_01 (NXT M6)
+            </button>
+            <button
+              onClick={() => { setSelectedModule('LINE_02'); setSelectedLineId('LINE_02'); }}
+              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'LINE_02' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
+            >
+              SMD_02 (AIMEX III)
+            </button>
+            <button
+              onClick={() => { setSelectedModule('LINE_03'); }}
+              className={`px-2.5 py-1 rounded-md transition-all ${selectedModule === 'LINE_03' ? 'bg-[#1E50ED] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}`}
+            >
+              SMD_03 (NXT M3)
+            </button>
+          </div>
+
+          {/* View Mode Toggle */}
+          <div className="flex rounded-lg p-0.5 bg-slate-200/60 dark:bg-slate-800 font-mono text-[10.5px]">
+            <button
               onClick={() => setViewMode('COCKPIT')}
-              className={`px-3 py-1 font-bold rounded-[var(--mes-radius)] transition-colors ${
-                viewMode === 'COCKPIT' ? 'bg-cyan-950/80 text-cyan-400 border border-cyan-500/50' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-2 py-1 rounded-md transition-all ${viewMode === 'COCKPIT' ? 'bg-cyan-600 text-white font-bold' : 'text-slate-500 hover:text-slate-800'}`}
             >
               TWO-PANE MONITOR
             </button>
             <button
-              type="button"
               onClick={() => setViewMode('FLOW_AND_DROP')}
-              className={`px-3 py-1 font-bold rounded-[var(--mes-radius)] transition-colors ${
-                viewMode === 'FLOW_AND_DROP' ? 'bg-cyan-950/80 text-cyan-400 border border-cyan-500/50' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-2 py-1 rounded-md transition-all ${viewMode === 'FLOW_AND_DROP' ? 'bg-cyan-600 text-white font-bold' : 'text-slate-500 hover:text-slate-800'}`}
             >
-              LINE FLOW & DROP (PPM)
+              LINE FLOW & DROP
             </button>
           </div>
 
-          <span className="text-[10.5px] font-mono text-slate-400">
-            {lastUpdated.toLocaleTimeString()} {refreshing && '···'}
-          </span>
+          {/* Time Filter */}
+          <div className="hidden sm:flex items-center gap-1 text-[11px] font-mono px-2 py-1 rounded-md border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-800">
+            <Calendar className="w-3 h-3 text-slate-500" />
+            <span>Last 1 Hour ▼</span>
+          </div>
+
+          {/* Theme Palette Toggle */}
+          <button
+            onClick={() => setNightMode(!nightMode)}
+            className="text-[11px] font-bold px-2 py-1 rounded-md border border-blue-400/40 bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 hover:bg-blue-100 transition-colors"
+            title="Toggle between Cleanroom Light and Cyber Night Themes"
+          >
+            {nightMode ? '☀ Cleanroom Theme' : '🌙 Cyber Night Theme'}
+          </button>
         </div>
       </div>
 
-      {/* Primary Arc Gauges Row */}
-      {selectedLine && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5">
-          <ArcGaugeOee
-            value={selectedLine?.oee ?? 88.4}
-            target={85.0}
-            label="LINE OEE"
-            sublabel="SEMI E10"
-            size={136}
-          />
-          <ArcGaugeOee
-            value={selectedLine?.availability ?? 91.2}
-            target={90.0}
-            label="AVAILABILITY"
-            sublabel="Uptime"
-            size={136}
-          />
-          <ArcGaugeOee
-            value={Math.min(100, selectedLine?.performance ?? 99.6)}
-            target={88.0}
-            label="PERFORMANCE"
-            sublabel={`${(selectedLine?.performance ?? 99.6).toFixed(0)}% Rate`}
-            size={136}
-          />
-          <ArcGaugeOee
-            value={selectedLine?.quality ?? 98.4}
-            target={98.0}
-            label="QUALITY RATE"
-            sublabel="Yield"
-            size={136}
-          />
-          <ArcGaugeOee
-            value={selectedLine?.currentPbr ?? 88.4}
-            target={selectedLine?.optimizedPbr ?? 92.7}
-            label="LINE BALANCE (PBR)"
-            sublabel={`Opt: ${(selectedLine?.optimizedPbr ?? 92.7).toFixed(1)}%`}
-            size={136}
-          />
-        </div>
-      )}
-
-      {/* Main Content Pane */}
       {viewMode === 'COCKPIT' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-1.5">
-          {/* Left Pane (8 cols): Fleet Overview Table (Fuji Main Window) */}
-          <div 
-            className="lg:col-span-8 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] overflow-hidden flex flex-col justify-between"
-            style={{ boxShadow: '0 4px 20px -2px rgba(0,0,0,0.6)' }}
-          >
-            <div>
-              {/* Header */}
-              <div className="bg-slate-900/90 px-3.5 py-2 border-b border-slate-800 flex items-center justify-between text-xs">
-                <span className="font-sans font-bold text-slate-100 uppercase tracking-wider text-[11.5px]">
-                  FLEET PRODUCTION LINES OVERVIEW (MAIN WINDOW)
-                </span>
-                <span className="text-[10.5px] font-mono text-slate-400">Click row to synchronize diagnostics</span>
+        <>
+          {/* 2. TOP ROW: 5 VIBRANT SATURATED HERO CARDS (EXACT PALETTE FROM 20 DASHBOARDS) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+            {/* Card 1: Total Feeders */}
+            <div className="bg-[#0284C7] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
+              <div className="z-10">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Total Feeders</div>
+                <div className="text-2xl font-black font-mono tracking-tight mt-0.5">142</div>
+                <div className="text-[10px] text-sky-200 mt-1 flex items-center gap-1 font-mono">
+                  <TrendingUp className="w-3 h-3" /> ↑ +2% vs last hour
+                </div>
               </div>
-
-              {/* Data Table */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs font-mono border-collapse">
-                  <thead>
-                    <tr className="border-b border-slate-800 bg-slate-900/80 text-[10.5px] text-slate-400 uppercase tracking-wider font-semibold">
-                      <th className="text-left px-3 py-2">Line</th>
-                      <th className="text-left px-3 py-2">Recipe / Job</th>
-                      <th className="text-right px-3 py-2">Progress</th>
-                      <th className="text-left px-3 py-2">Micro-State Timer</th>
-                      <th className="text-right px-3 py-2">PBR %</th>
-                      <th className="text-right px-3 py-2">OEE %</th>
-                      <th className="text-right px-3 py-2">3D SPI</th>
-                      <th className="text-right px-3 py-2">Post AOI</th>
-                      <th className="text-left px-3 py-2">Est. End</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {fleet.map((line) => {
-                      const isSelected = line.lineId === selectedLineId;
-                      const progressPct = line.progressTarget > 0 
-                        ? Math.min(100, Math.round((line.progressCompleted / line.progressTarget) * 100))
-                        : 0;
-
-                      let stateBadge = 'text-emerald-400 bg-emerald-950/60 border-emerald-500/50';
-                      if (line.statusState === 'WAIT_PREV') stateBadge = 'text-amber-400 bg-amber-950/60 border-amber-500/50';
-                      if (line.statusState === 'WAIT_NEXT') stateBadge = 'text-orange-400 bg-orange-950/60 border-orange-500/50';
-                      if (line.statusState === 'STOP') stateBadge = 'text-rose-400 bg-rose-950/60 border-rose-500/50';
-
-                      return (
-                        <tr
-                          key={line.lineId}
-                          onClick={() => setSelectedLineId(line.lineId)}
-                          className={`cursor-pointer transition-colors hover:bg-slate-900/80 ${
-                            isSelected ? 'bg-slate-900 font-semibold border-l-2 border-l-cyan-400' : ''
-                          }`}
-                        >
-                          <td className="px-3 py-2 font-sans font-bold text-slate-100">{line.lineName}</td>
-                          <td className="px-3 py-2 truncate max-w-[150px]">
-                            <div className="font-bold text-slate-200">{line.productName}</div>
-                            <div className="text-[10px] text-slate-400 truncate">{line.jobName}</div>
-                          </td>
-                          <td className="px-3 py-2 text-right tabular-nums">
-                            <div className="text-slate-200">{line.progressCompleted} / {line.progressTarget}</div>
-                            <div className="w-16 h-1 bg-slate-900 ml-auto mt-1 rounded-[1px] overflow-hidden border border-slate-800">
-                              <div className="h-full bg-cyan-400" style={{ width: `${progressPct}%` }} />
-                            </div>
-                          </td>
-                          <td className="px-3 py-2">
-                            <span className={`px-2 py-0.5 text-[10px] font-bold rounded-[2px] border uppercase ${stateBadge}`}>
-                              {line.statusLabel} {formatDuration(line.statusDurationSeconds)}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2 text-right tabular-nums">
-                            <span className="font-bold text-slate-100">{(line.currentPbr ?? 0).toFixed(1)}%</span>
-                            <span className="text-[10px] text-slate-400 block font-normal">Opt: {(line.optimizedPbr ?? 0).toFixed(1)}%</span>
-                          </td>
-                          <td className="px-3 py-2 text-right font-bold text-emerald-400 tabular-nums">
-                            {(line.oee ?? 0).toFixed(1)}%
-                          </td>
-                          <td className="px-3 py-2 text-right tabular-nums text-slate-300">{(line.spiYieldPct ?? 0).toFixed(1)}%</td>
-                          <td className="px-3 py-2 text-right tabular-nums text-slate-300">{(line.secondAoiYieldPct ?? 0).toFixed(1)}%</td>
-                          <td className="px-3 py-2 text-slate-400 text-[10.5px]">{line.estimatedEndTime}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
+                <Cpu className="w-5 h-5 text-white" />
               </div>
             </div>
 
-            {/* Shift Performance Timeline */}
-            <div className="p-2 border-t border-slate-800/80">
-              <ShiftGanttTimeline />
+            {/* Card 2: Online Feeders */}
+            <div className="bg-[#059669] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
+              <div className="z-10 w-full pr-2">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Online Feeders</div>
+                <div className="text-2xl font-black font-mono tracking-tight mt-0.5">138</div>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="w-20 bg-emerald-800/40 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-emerald-300 h-1.5 rounded-full" style={{ width: '97.2%' }} />
+                  </div>
+                  <span className="text-[10px] text-emerald-100 font-mono font-bold">97.2%</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
+                <CheckCircle2 className="w-5 h-5 text-white" />
+              </div>
+            </div>
+
+            {/* Card 3: Offline Feeders */}
+            <div className="bg-[#DC2626] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
+              <div className="z-10 w-full pr-2">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-red-100">Offline / Starved</div>
+                <div className="text-2xl font-black font-mono tracking-tight mt-0.5">4</div>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="w-20 bg-red-900/40 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-red-300 h-1.5 rounded-full" style={{ width: '28%' }} />
+                  </div>
+                  <span className="text-[10px] text-red-200 font-mono font-bold">2.8%</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
+                <AlertTriangle className="w-5 h-5 text-white" />
+              </div>
+            </div>
+
+            {/* Card 4: Total Events (1h) */}
+            <div className="bg-[#7C3AED] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden">
+              <div className="z-10">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Total Events (1h)</div>
+                <div className="text-2xl font-black font-mono tracking-tight mt-0.5">2,847</div>
+                <div className="text-[10px] text-purple-200 mt-1 flex items-center gap-1 font-mono">
+                  <TrendingUp className="w-3 h-3" /> ↑ +12% vs prev hour
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
+                <Activity className="w-5 h-5 text-white" />
+              </div>
+            </div>
+
+            {/* Card 5: Active Alerts */}
+            <div className="bg-[#EA580C] text-white p-3.5 rounded-xl shadow-sm flex items-center justify-between relative overflow-hidden col-span-2 sm:col-span-1">
+              <div className="z-10">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Active Alerts</div>
+                <div className="text-2xl font-black font-mono tracking-tight mt-0.5">12</div>
+                <div className="text-[10px] text-orange-200 mt-1 font-mono">
+                  ↑ +1 new alert
+                </div>
+              </div>
+              <div className="relative">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 z-10">
+                  <Bell className="w-5 h-5 text-white" />
+                </div>
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border border-white text-white font-bold text-[9px] rounded-full flex items-center justify-center">
+                  1
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Right Pane (4 cols): Root-Cause Sub Window */}
-          <div 
-            className="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-[var(--mes-radius)] p-3 space-y-3"
-            style={{ boxShadow: '0 4px 20px -2px rgba(0,0,0,0.6)' }}
-          >
-            <div className="bg-slate-900/90 px-3 py-2 border border-slate-800 rounded-[var(--mes-radius)] flex items-center justify-between text-xs">
-              <span className="font-sans font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5 text-[11px]">
-                <Crosshair className="w-3.5 h-3.5 text-cyan-400" />
-                {selectedLine?.lineName || 'LINE 01'} · DIAGNOSTICS
-              </span>
-              <span className="text-[10px] font-mono text-cyan-400 border border-cyan-500/40 bg-cyan-950/40 px-1.5 py-0.5 rounded-[2px] font-bold">
-                LIVE BUS
-              </span>
+          {/* 3. MIDDLE ROW: MODULE-WISE OVERVIEW & EVENT TELEMETRY STATISTICS */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            {/* Panel 1: Site/Module-wise Overview */}
+            <div className={`${cardBg} p-4 rounded-xl border shadow-xs flex flex-col justify-between`}>
+              <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
+                <div className="flex items-center gap-2">
+                  <BarChart2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span className="font-bold text-xs tracking-tight">Module-wise Feeder Status Overview</span>
+                </div>
+                <div className="flex rounded p-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-mono">
+                  <button
+                    onClick={() => setActiveTab('feeders')}
+                    className={`px-2 py-0.5 rounded ${activeTab === 'feeders' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
+                  >
+                    Feeders
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('events')}
+                    className={`px-2 py-0.5 rounded ${activeTab === 'events' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
+                  >
+                    Events
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('alerts')}
+                    className={`px-2 py-0.5 rounded ${activeTab === 'alerts' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
+                  >
+                    Alert Status
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                {/* Donut Gauge */}
+                <div className="sm:col-span-5 flex flex-col items-center justify-center">
+                  <div className="relative w-36 h-36 flex items-center justify-center">
+                    <svg viewBox="0 0 100 100" className="w-36 h-36 -rotate-90">
+                      <circle cx="50" cy="50" r="38" stroke="#E2E8F0" strokeWidth="8" fill="none" className="dark:stroke-slate-800" />
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="38"
+                        stroke="#10B981"
+                        strokeWidth="8"
+                        strokeDasharray="232.1 238.8"
+                        strokeDashoffset="0"
+                        strokeLinecap="round"
+                        fill="none"
+                      />
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="38"
+                        stroke="#EF4444"
+                        strokeWidth="8"
+                        strokeDasharray="6.7 238.8"
+                        strokeDashoffset="-232.1"
+                        strokeLinecap="round"
+                        fill="none"
+                      />
+                    </svg>
+                    <div className="absolute flex flex-col items-center justify-center text-center">
+                      <span className="text-xl font-black font-mono tracking-tight">97.2%</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Online</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 text-[11px] font-mono mt-2">
+                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" /> Online: 138
+                    </span>
+                    <span className="flex items-center gap-1.5 text-red-600 dark:text-red-400 font-bold">
+                      <span className="w-2 h-2 rounded-full bg-red-500" /> Offline: 4
+                    </span>
+                  </div>
+                </div>
+
+                {/* Clustered Bar Chart */}
+                <div className="sm:col-span-7 flex flex-col justify-end h-40">
+                  <div className="flex justify-end gap-3 text-[10px] font-mono mb-2">
+                    <span className="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-bold">
+                      <span className="w-2 h-2 rounded-sm bg-blue-600" /> Online
+                    </span>
+                    <span className="flex items-center gap-1 text-red-500 font-bold">
+                      <span className="w-2 h-2 rounded-sm bg-red-500" /> Offline
+                    </span>
+                  </div>
+
+                  <svg viewBox="0 0 240 120" className="w-full h-auto">
+                    {[0, 20, 40, 60].map((val) => {
+                      const y = 100 - (val / 60) * 85;
+                      return (
+                        <g key={val}>
+                          <line x1="25" y1={y} x2="235" y2={y} stroke="#E2E8F0" strokeWidth="0.8" strokeDasharray="2,2" className="dark:stroke-slate-800" />
+                          <text x="20" y={y + 3} textAnchor="end" fontSize="7.5" fill="#94A3B8" fontFamily="monospace">
+                            {val}
+                          </text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Bars for Site-1 (Mod-1: 52 / 1) */}
+                    <g transform="translate(45, 0)">
+                      <rect x="0" y={100 - (52 / 60) * 85} width="18" height={(52 / 60) * 85} rx="2" fill="#1E50ED" />
+                      <text x="9" y={100 - (52 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#1E50ED" fontFamily="monospace">52</text>
+                      <rect x="22" y={100 - (1 / 60) * 85} width="18" height={(1 / 60) * 85 || 3} rx="2" fill="#EF4444" />
+                      <text x="31" y={100 - (1 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#EF4444" fontFamily="monospace">1</text>
+                      <text x="20" y="114" textAnchor="middle" fontSize="8" fill="#64748B" fontFamily="monospace">Site-1</text>
+                    </g>
+
+                    {/* Bars for Site-2 (Mod-2: 48 / 2) */}
+                    <g transform="translate(115, 0)">
+                      <rect x="0" y={100 - (48 / 60) * 85} width="18" height={(48 / 60) * 85} rx="2" fill="#1E50ED" />
+                      <text x="9" y={100 - (48 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#1E50ED" fontFamily="monospace">48</text>
+                      <rect x="22" y={100 - (2 / 60) * 85} width="18" height={(2 / 60) * 85 || 4} rx="2" fill="#EF4444" />
+                      <text x="31" y={100 - (2 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#EF4444" fontFamily="monospace">2</text>
+                      <text x="20" y="114" textAnchor="middle" fontSize="8" fill="#64748B" fontFamily="monospace">Site-2</text>
+                    </g>
+
+                    {/* Bars for Site-3 (Mod-3: 38 / 1) */}
+                    <g transform="translate(185, 0)">
+                      <rect x="0" y={100 - (38 / 60) * 85} width="18" height={(38 / 60) * 85} rx="2" fill="#1E50ED" />
+                      <text x="9" y={100 - (38 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#1E50ED" fontFamily="monospace">38</text>
+                      <rect x="22" y={100 - (1 / 60) * 85} width="18" height={(1 / 60) * 85 || 3} rx="2" fill="#EF4444" />
+                      <text x="31" y={100 - (1 / 60) * 85 - 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#EF4444" fontFamily="monospace">1</text>
+                      <text x="20" y="114" textAnchor="middle" fontSize="8" fill="#64748B" fontFamily="monospace">Site-3</text>
+                    </g>
+                  </svg>
+                </div>
+              </div>
             </div>
 
-            {/* Operating State Breakdown Donut */}
-            <div className="bg-slate-900/90 p-3 border border-slate-800 rounded-[var(--mes-radius)] flex items-center justify-between gap-3.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
-              <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
-                <svg width="112" height="112" viewBox="0 0 120 120" className="-rotate-90 overflow-visible">
-                  <defs>
-                    <filter id="fuji-donut-glow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#34D399" floodOpacity="0.4" />
-                    </filter>
-                    <radialGradient id="fuji-donut-well" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#030712" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#0F172A" stopOpacity="0.3" />
-                    </radialGradient>
-                  </defs>
-                  {/* Recessed Socket Well */}
-                  <circle cx={donutCx} cy={donutCy} r={donutR - 8} fill="url(#fuji-donut-well)" />
-                  {/* Concentric Precision Hairlines */}
-                  <circle cx={donutCx} cy={donutCy} r={donutR + 7} fill="none" stroke="#1E293B" strokeWidth="0.75" />
-                  <circle cx={donutCx} cy={donutCy} r={donutR - 7} fill="none" stroke="#1E293B" strokeWidth="0.75" />
-                  {/* Background Track Groove */}
-                  <circle cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#0B1220" strokeWidth="9" />
-                  {/* Phosphor Active Segments */}
-                  <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#34D399" strokeWidth="8"
-                    strokeDasharray={`${(opRunPct / 100) * donutCircumference} ${donutCircumference}`}
-                    strokeDashoffset={-runOffset}
-                    filter="url(#fuji-donut-glow)"
-                    className="transition-all duration-500"
-                  />
-                  <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#FBBF24" strokeWidth="8"
-                    strokeDasharray={`${(opWaitPrevPct / 100) * donutCircumference} ${donutCircumference}`}
-                    strokeDashoffset={-waitPrevOffset}
-                    className="transition-all duration-500"
-                  />
-                  <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#FB923C" strokeWidth="8"
-                    strokeDasharray={`${(opWaitNextPct / 100) * donutCircumference} ${donutCircumference}`}
-                    strokeDashoffset={-waitNextOffset}
-                    className="transition-all duration-500"
-                  />
-                  <circle
-                    cx={donutCx} cy={donutCy} r={donutR} fill="none" stroke="#F43F5E" strokeWidth="8"
-                    strokeDasharray={`${(opStopPct / 100) * donutCircumference} ${donutCircumference}`}
-                    strokeDashoffset={-stopOffset}
-                    className="transition-all duration-500"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-base font-black text-slate-100 tabular-nums tracking-tight drop-shadow-sm">{opRunPct}%</span>
-                  <span className="text-[8.5px] font-mono text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1">
-                    <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
-                    RUN
-                  </span>
+            {/* Panel 2: Placement & Drop Telemetry Statistics */}
+            <div className={`${cardBg} p-4 rounded-xl border shadow-xs flex flex-col justify-between`}>
+              <div className="flex items-center justify-between mb-2 border-b border-slate-100 dark:border-slate-800 pb-2">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="font-bold text-xs tracking-tight">Event Statistics</span>
+                </div>
+                <div className="flex rounded p-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-mono">
+                  {(['1h', '6h', '24h', '7d'] as const).map((r) => (
+                    <button
+                      key={r}
+                      onClick={() => setTimeRange(r)}
+                      className={`px-2 py-0.5 rounded ${timeRange === r ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
+                    >
+                      {r}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               {/* Legend */}
-              <div className="space-y-1.5 text-[10.5px] flex-1 font-mono">
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_4px_#10B981]" />
-                    Run (Placement)
-                  </span>
-                  <span className="font-bold tabular-nums text-emerald-400">{opRunPct}%</span>
-                </div>
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 inline-block shadow-[0_0_4px_#F59E0B]" />
-                    Wait Upstream (Starved)
-                  </span>
-                  <span className="font-bold tabular-nums text-amber-400">{opWaitPrevPct}%</span>
-                </div>
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-orange-500 inline-block shadow-[0_0_4px_#F97316]" />
-                    Wait Downstream (Blocked)
-                  </span>
-                  <span className="font-bold tabular-nums text-orange-400">{opWaitNextPct}%</span>
-                </div>
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 inline-block shadow-[0_0_4px_#EF4444]" />
-                    Stop / Feeder Alarm
-                  </span>
-                  <span className="font-bold tabular-nums text-rose-400">{opStopPct}%</span>
-                </div>
+              <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono mb-2">
+                <span className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400" /> Motion / Placements
+                </span>
+                <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" /> Video Loss / Pick Drop
+                </span>
+                <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-amber-500" /> Alarm / Retries
+                </span>
+                <span className="flex items-center gap-1 text-purple-600 dark:text-purple-400 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-purple-500" /> Other / Jams
+                </span>
               </div>
-            </div>
 
-            {/* Nozzle Error Ranking Table */}
-            <div>
-              <div className="flex items-center justify-between text-[10.5px] text-slate-300 mb-1 font-sans">
-                <span className="font-bold uppercase tracking-wide">NOZZLE ERROR RANKING (PDERROR)</span>
-                <span className="text-slate-400 text-[10px] font-mono">Top Mispicks</span>
-              </div>
-              <table className="w-full text-xs font-mono border border-slate-800 rounded-[var(--mes-radius)] overflow-hidden">
-                <thead>
-                  <tr className="bg-slate-900 text-[10px] text-slate-400 uppercase font-semibold">
-                    <th className="text-left px-2 py-1.5">Nozzle Address</th>
-                    <th className="text-right px-2 py-1.5">Errors</th>
-                    <th className="text-right px-2 py-1.5">Rate %</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60 bg-slate-900/40">
-                  {(diagnostics?.nozzleRankings || []).slice(0, 3).map((n) => (
-                    <tr key={n.nozzleAddress} className="hover:bg-slate-800/40">
-                      <td className="px-2 py-1.5 font-bold text-slate-200">{n.nozzleAddress}</td>
-                      <td className="px-2 py-1.5 text-right text-rose-400 font-bold tabular-nums">{n.mispickCount}x</td>
-                      <td className="px-2 py-1.5 text-right text-slate-300 tabular-nums">{(n.errorRatePct ?? 0).toFixed(3)}%</td>
-                    </tr>
+              {/* 4 Multi-Wave Spline SVG Chart */}
+              <div className="w-full h-40">
+                <svg viewBox="0 0 400 130" className="w-full h-full overflow-visible">
+                  {[0, 500, 1000, 1500].map((val) => {
+                    const y = 110 - (val / 1500) * 95;
+                    return (
+                      <g key={val}>
+                        <line x1="25" y1={y} x2="395" y2={y} stroke="#E2E8F0" strokeWidth="0.8" strokeDasharray="2,2" className="dark:stroke-slate-800" />
+                        <text x="20" y={y + 3} textAnchor="end" fontSize="7.5" fill="#94A3B8" fontFamily="monospace">
+                          {val.toLocaleString()}
+                        </text>
+                      </g>
+                    );
+                  })}
+
+                  {/* Curve 1: Placements (Cyan) */}
+                  <path
+                    d="M 35 32 C 75 22, 115 38, 155 24 C 195 12, 235 44, 275 30 C 315 18, 355 20, 390 28"
+                    fill="none"
+                    stroke="#06B6D4"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 35 32 C 75 22, 115 38, 155 24 C 195 12, 235 44, 275 30 C 315 18, 355 20, 390 28 L 390 110 L 35 110 Z"
+                    fill="#06B6D4"
+                    opacity="0.12"
+                  />
+
+                  {/* Curve 2: Pick Drops (Emerald) */}
+                  <path
+                    d="M 35 62 C 75 58, 115 72, 155 60 C 195 50, 235 70, 275 58 C 315 48, 355 56, 390 52"
+                    fill="none"
+                    stroke="#10B981"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Curve 3: Vision Retries (Amber) */}
+                  <path
+                    d="M 35 78 C 75 74, 115 85, 155 76 C 195 70, 235 84, 275 74 C 315 68, 355 75, 390 70"
+                    fill="none"
+                    stroke="#F59E0B"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Curve 4: Feeder Starve (Purple) */}
+                  <path
+                    d="M 35 92 C 75 88, 115 96, 155 90 C 195 86, 235 95, 275 88 C 315 84, 355 90, 390 85"
+                    fill="none"
+                    stroke="#8B5CF6"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Time X-Axis */}
+                  {[
+                    { time: '16:30', x: 35 },
+                    { time: '16:45', x: 125 },
+                    { time: '17:00', x: 215 },
+                    { time: '17:15', x: 305 },
+                    { time: '17:30', x: 390 },
+                  ].map((pt, i) => (
+                    <text key={i} x={pt.x} y="124" textAnchor="middle" fontSize="7.5" fill="#64748B" fontFamily="monospace">
+                      {pt.time}
+                    </text>
                   ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Feeder Slot Error Ranking */}
-            <div>
-              <div className="flex items-center justify-between text-[10.5px] text-slate-300 mb-1 font-sans">
-                <span className="font-bold uppercase tracking-wide">SLOT ERROR RANKING (LOADCOMPIV)</span>
-                <span className="text-slate-400 text-[10px] font-mono">Slot Misfires</span>
-              </div>
-              <table className="w-full text-xs font-mono border border-slate-800 rounded-[var(--mes-radius)] overflow-hidden">
-                <thead>
-                  <tr className="bg-slate-900 text-[10px] text-slate-400 uppercase font-semibold">
-                    <th className="text-left px-2 py-1.5">Slot</th>
-                    <th className="text-left px-2 py-1.5">Part Number</th>
-                    <th className="text-right px-2 py-1.5">Errors</th>
-                    <th className="text-right px-2 py-1.5">Rate %</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60 bg-slate-900/40">
-                  {(diagnostics?.slotRankings || []).slice(0, 3).map((s) => (
-                    <tr key={s.slotAddress} className="hover:bg-slate-800/40">
-                      <td className="px-2 py-1.5 font-bold text-slate-200">{s.slotAddress}</td>
-                      <td className="px-2 py-1.5 text-slate-400 truncate max-w-[90px]">{s.partNumber}</td>
-                      <td className="px-2 py-1.5 text-right text-amber-400 font-bold tabular-nums">{s.mispickCount}x</td>
-                      <td className="px-2 py-1.5 text-right text-slate-300 tabular-nums">{(s.errorRatePct ?? 0).toFixed(3)}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* PCB Reference Designator Defect Pareto */}
-            <div>
-              <div className="flex items-center justify-between text-[10.5px] text-slate-300 mb-1 font-sans">
-                <span className="font-bold uppercase tracking-wide">REF-DES DEFECT PARETO (BOMLIST)</span>
-                <span className="text-slate-400 text-[10px] font-mono">SPI + AOI</span>
-              </div>
-              <div className="space-y-2 bg-slate-900/80 p-2.5 border border-slate-800 rounded-[var(--mes-radius)] text-[11px] font-mono">
-                {(diagnostics?.refDesPareto || []).slice(0, 3).map((b) => (
-                  <div key={b.refDes} className="space-y-1">
-                    <div className="flex justify-between text-slate-300">
-                      <span className="font-bold text-slate-100">{b.refDes} <span className="text-slate-400 font-normal">({b.partNumber})</span></span>
-                      <span className="text-amber-400 font-bold">{b.defectRatePct}%</span>
-                    </div>
-                    <div className="w-full bg-slate-950 h-1.5 rounded-[1px] overflow-hidden border border-slate-800">
-                      <div className="bg-cyan-400 h-full" style={{ width: `${Math.min(100, b.defectRatePct * 16)}%` }} />
-                    </div>
-                  </div>
-                ))}
+                </svg>
               </div>
             </div>
           </div>
-        </div>
+
+          {/* 4. BOTTOM ROW: FLEET OVERVIEW / RECENT EVENTS & DIAGNOSTICS */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+            {/* Left 7 Columns: Toggle between Fleet Production Lines and Live Event Stream */}
+            <div className={`${cardBg} p-4 rounded-xl border shadow-xs lg:col-span-7 flex flex-col justify-between`}>
+              <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <span className="font-bold text-xs tracking-tight">
+                    {bottomTableMode === 'FLEET' ? 'FLEET PRODUCTION LINES OVERVIEW (MAIN WINDOW)' : 'Recent Placement Events & Feeder Stream'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex rounded p-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-mono">
+                    <button
+                      onClick={() => setBottomTableMode('FLEET')}
+                      className={`px-2 py-0.5 rounded ${bottomTableMode === 'FLEET' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
+                    >
+                      Fleet Lines
+                    </button>
+                    <button
+                      onClick={() => setBottomTableMode('EVENTS')}
+                      className={`px-2 py-0.5 rounded ${bottomTableMode === 'EVENTS' ? 'bg-[#1E50ED] text-white font-bold' : 'text-slate-500'}`}
+                    >
+                      Event Stream
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {bottomTableMode === 'FLEET' ? (
+                /* Fleet Lines Table matching screenshot */
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs font-mono border-collapse">
+                    <thead>
+                      <tr className={`${tableHeaderBg} text-[10px] uppercase font-bold tracking-wider rounded-t`}>
+                        <th className="text-left px-2.5 py-2">Line</th>
+                        <th className="text-left px-2 py-2">Recipe / Job</th>
+                        <th className="text-right px-2 py-2">Progress</th>
+                        <th className="text-left px-2 py-2">Micro-State Timer</th>
+                        <th className="text-right px-2 py-2">PBR %</th>
+                        <th className="text-right px-2 py-2">OEE %</th>
+                        <th className="text-right px-2 py-2">3D SPI</th>
+                        <th className="text-right px-2 py-2">Post AOI</th>
+                        <th className="text-left px-2 py-2">Est. End</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
+                      {fleet.map((line) => {
+                        const isSelected = line.lineId === selectedLineId;
+                        const progressPct = line.progressTarget > 0 
+                          ? Math.min(100, Math.round((line.progressCompleted / line.progressTarget) * 100))
+                          : 0;
+
+                        return (
+                          <tr
+                            key={line.lineId}
+                            onClick={() => setSelectedLineId(line.lineId)}
+                            className={`cursor-pointer transition-colors ${
+                              isSelected
+                                ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-900 dark:text-blue-200 font-semibold'
+                                : tableRowHover
+                            }`}
+                          >
+                            <td className="px-2.5 py-2.5 font-bold whitespace-nowrap">
+                              {line.lineName}
+                            </td>
+                            <td className="px-2 py-2.5">
+                              <div className="font-sans font-medium text-[11px] truncate max-w-[140px]">
+                                {line.productName}
+                              </div>
+                              <div className="text-[9.5px] text-slate-400 font-mono">
+                                {line.jobName}
+                              </div>
+                            </td>
+                            <td className="px-2 py-2.5 text-right whitespace-nowrap">
+                              <div>{line.progressCompleted} / {line.progressTarget}</div>
+                              <div className="w-full bg-slate-200 dark:bg-slate-700 h-1 rounded-full mt-1 overflow-hidden">
+                                <div className="bg-[#1E50ED] h-full" style={{ width: `${progressPct}%` }} />
+                              </div>
+                            </td>
+                            <td className="px-2 py-2.5 whitespace-nowrap">
+                              <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-bold ${
+                                line.statusState === 'RUN'
+                                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                                  : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                              }`}>
+                                {line.statusLabel.toUpperCase()} {formatDuration(line.statusDurationSeconds)}
+                              </span>
+                            </td>
+                            <td className="px-2 py-2.5 text-right font-bold text-blue-600 dark:text-blue-400">
+                              {line.currentPbr.toFixed(1)}%
+                            </td>
+                            <td className="px-2 py-2.5 text-right font-bold text-emerald-600 dark:text-emerald-400">
+                              {line.oee.toFixed(1)}%
+                            </td>
+                            <td className="px-2 py-2.5 text-right text-slate-500">
+                              {line.spiYieldPct.toFixed(1)}%
+                            </td>
+                            <td className="px-2 py-2.5 text-right text-slate-500">
+                              {line.secondAoiYieldPct.toFixed(1)}%
+                            </td>
+                            <td className="px-2 py-2.5 text-slate-500">
+                              {line.estimatedEndTime}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                /* Live Placement Event Stream Table */
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs font-mono">
+                    <thead className={`${tableHeaderBg} text-[10px] uppercase font-bold tracking-wider rounded-t`}>
+                      <tr>
+                        <th className="py-2 px-2.5">Time</th>
+                        <th className="py-2 px-2">Line</th>
+                        <th className="py-2 px-2">Feeder/Head</th>
+                        <th className="py-2 px-2">Event Type</th>
+                        <th className="py-2 px-2">Status</th>
+                        <th className="py-2 px-2">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
+                      <tr className={tableRowHover}>
+                        <td className="py-2 px-2.5 font-bold">17:26:12</td>
+                        <td className="py-2 px-2">SMD_01</td>
+                        <td className="py-2 px-2 text-blue-600 dark:text-blue-400 font-bold">Slot 04</td>
+                        <td className="py-2 px-2">Auto-Splice Done</td>
+                        <td className="py-2 px-2">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Normal
+                          </span>
+                        </td>
+                        <td className="py-2 px-2 text-[10.5px] text-slate-500">AGV Trolley #2 Spliced</td>
+                      </tr>
+                      <tr className={tableRowHover}>
+                        <td className="py-2 px-2.5 font-bold">17:25:47</td>
+                        <td className="py-2 px-2">SMD_02</td>
+                        <td className="py-2 px-2 text-red-600 dark:text-red-400 font-bold">Head H04</td>
+                        <td className="py-2 px-2">Vision Reject</td>
+                        <td className="py-2 px-2">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Critical
+                          </span>
+                        </td>
+                        <td className="py-2 px-2 text-[10.5px] text-slate-500">Nozzle Tip Cleaned</td>
+                      </tr>
+                      <tr className={tableRowHover}>
+                        <td className="py-2 px-2.5 font-bold">17:25:31</td>
+                        <td className="py-2 px-2">SMD_01</td>
+                        <td className="py-2 px-2 text-amber-600 dark:text-amber-400 font-bold">Slot 18</td>
+                        <td className="py-2 px-2">Drop Rate High</td>
+                        <td className="py-2 px-2">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Warning
+                          </span>
+                        </td>
+                        <td className="py-2 px-2 text-[10.5px] text-slate-500">Feeder Pitch Calibrated</td>
+                      </tr>
+                      <tr className={tableRowHover}>
+                        <td className="py-2 px-2.5 font-bold">17:24:58</td>
+                        <td className="py-2 px-2">SMD_01</td>
+                        <td className="py-2 px-2 text-blue-600 dark:text-blue-400 font-bold">Slot 08</td>
+                        <td className="py-2 px-2">Reel Low (&lt;120)</td>
+                        <td className="py-2 px-2">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Normal
+                          </span>
+                        </td>
+                        <td className="py-2 px-2 text-[10.5px] text-slate-500">Splicing Buffer Ready</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Right 5 Columns: Diagnostics, 3 Cpk Health Rings & SCADA Hardware Resources */}
+            <div className={`${cardBg} p-4 rounded-xl border shadow-xs lg:col-span-5 flex flex-col justify-between space-y-3`}>
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="font-bold text-xs tracking-tight">
+                    {selectedLine?.lineName || 'SMD_01'} - DIAGNOSTICS & HEALTH
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-600 font-bold bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded">
+                  LIVE BUS
+                </span>
+              </div>
+
+              {/* 3 Circular Health Gauges matching screenshot */}
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 font-mono">
+                  Site & Line Placement Health
+                </div>
+                <div className="flex items-center justify-between gap-1">
+                  {/* Gauge 1: Site-1 (98.1%) */}
+                  <div className="flex flex-col items-center">
+                    <div className="relative w-16 h-16 flex items-center justify-center">
+                      <svg viewBox="0 0 70 70" className="w-16 h-16 -rotate-90">
+                        <circle cx="35" cy="35" r="28" stroke="#E2E8F0" strokeWidth="6" fill="none" className="dark:stroke-slate-800" />
+                        <circle
+                          cx="35"
+                          cy="35"
+                          r="28"
+                          stroke="#10B981"
+                          strokeWidth="6"
+                          strokeDasharray="172.6 175.9"
+                          strokeLinecap="round"
+                          fill="none"
+                        />
+                      </svg>
+                      <span className="absolute text-[10px] font-black font-mono">98.1%</span>
+                    </div>
+                    <span className="text-[9px] font-bold text-slate-500 font-mono mt-1">Site-1</span>
+                  </div>
+
+                  {/* Gauge 2: Site-2 (96.7%) */}
+                  <div className="flex flex-col items-center">
+                    <div className="relative w-16 h-16 flex items-center justify-center">
+                      <svg viewBox="0 0 70 70" className="w-16 h-16 -rotate-90">
+                        <circle cx="35" cy="35" r="28" stroke="#E2E8F0" strokeWidth="6" fill="none" className="dark:stroke-slate-800" />
+                        <circle
+                          cx="35"
+                          cy="35"
+                          r="28"
+                          stroke="#06B6D4"
+                          strokeWidth="6"
+                          strokeDasharray="170.1 175.9"
+                          strokeLinecap="round"
+                          fill="none"
+                        />
+                      </svg>
+                      <span className="absolute text-[10px] font-black font-mono">96.7%</span>
+                    </div>
+                    <span className="text-[9px] font-bold text-slate-500 font-mono mt-1">Site-2</span>
+                  </div>
+
+                  {/* Gauge 3: Site-3 (94.4%) */}
+                  <div className="flex flex-col items-center">
+                    <div className="relative w-16 h-16 flex items-center justify-center">
+                      <svg viewBox="0 0 70 70" className="w-16 h-16 -rotate-90">
+                        <circle cx="35" cy="35" r="28" stroke="#E2E8F0" strokeWidth="6" fill="none" className="dark:stroke-slate-800" />
+                        <circle
+                          cx="35"
+                          cy="35"
+                          r="28"
+                          stroke="#F59E0B"
+                          strokeWidth="6"
+                          strokeDasharray="166.0 175.9"
+                          strokeLinecap="round"
+                          fill="none"
+                        />
+                      </svg>
+                      <span className="absolute text-[10px] font-black font-mono">94.4%</span>
+                    </div>
+                    <span className="text-[9px] font-bold text-slate-500 font-mono mt-1">Site-3</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* SCADA Machine Resources & Live Diagnostics */}
+              <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800 font-mono text-xs">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                  SCADA Machine Resources
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-[11px] mb-1">
+                    <span className="text-slate-500">Vacuum Pressure</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">32 kPa</span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: '32%' }} />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-[11px] mb-1">
+                    <span className="text-slate-500">Conveyor Torque</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">58%</span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-emerald-500 h-1.5 rounded-full" style={{ width: '58%' }} />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-[11px] mb-1">
+                    <span className="text-slate-500">Feeder Bus Latency (12ms)</span>
+                    <span className="font-bold text-teal-600 dark:text-teal-400">47%</span>
+                  </div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-teal-500 h-1.5 rounded-full" style={{ width: '47%' }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Nozzle Error Ranking Table */}
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase font-mono font-bold mb-1">
+                  <span>NOZZLE ERROR RANKING (PDERROR)</span>
+                  <span>Top Mispicks</span>
+                </div>
+                <div className="space-y-1 text-[10.5px] font-mono">
+                  {(diagnostics?.nozzleRankings || []).slice(0, 3).map((n) => (
+                    <div key={n.nozzleAddress} className="flex justify-between items-center py-0.5 border-b border-slate-50 dark:border-slate-800/50">
+                      <span className="text-slate-600 dark:text-slate-300 font-semibold">{n.nozzleAddress}</span>
+                      <span className="text-rose-600 dark:text-rose-400 font-bold">{n.mispickCount}x</span>
+                      <span className="text-slate-400">{(n.errorRatePct ?? 0).toFixed(3)}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
       ) : (
-        <div className="space-y-2">
+        /* LINE FLOW & DROP ANALYSIS MODE */
+        <div className="space-y-3">
           <SmtLineFlowStrip
             machines={machineFlow}
             lineName={selectedLine?.lineName || 'SMD_01'}
