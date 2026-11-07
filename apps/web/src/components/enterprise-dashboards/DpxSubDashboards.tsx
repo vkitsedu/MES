@@ -807,524 +807,354 @@ export const Dashboard1PlantOverview: React.FC = () => {
 // [2] SMT Line Live Monitor (Flagship Single-Pane-of-Glass Cockpit)
 // -------------------------------------------------------------
 export const Dashboard2SmtLineMonitor: React.FC = () => {
-  const [selectedLine, setSelectedLine] = useState<string>('Line-01');
-  const [activeShift, setActiveShift] = useState<string>('Shift A');
-
   return (
     <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
-      {/* Sequence Header */}
-      <DpxSeqBadge 
-        seq={2} 
-        title={`SMT Line Live Monitor (${selectedLine})`} 
-        subtitle="Single-Pane-of-Glass Cleanroom Operational Cockpit" 
-      />
+      {/* Sequence Header Tag */}
+      <DpxSeqBadge seq={2} title="SMT Line Live Monitor (Line-01)" subtitle="Single-Pane-of-Glass Operational Cockpit" />
 
-      {/* Control Strip: Line Selector + Shift + Gateway Status */}
-      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
-        {/* Left: Line Selection Pills */}
-        <div className="flex items-center gap-1.5 font-mono">
-          <span className="text-slate-500 font-sans font-bold text-[11px] mr-1">ACTIVE LINE:</span>
-          {['Line-01', 'Line-02', 'Line-03', 'Line-04'].map((line) => (
-            <button
-              key={line}
-              onClick={() => setSelectedLine(line)}
-              className={`px-2.5 py-1 rounded font-bold transition-all text-xs ${
-                selectedLine === line
-                  ? 'bg-[#1E50ED] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {line} {line === 'Line-01' && '★'}
-            </button>
-          ))}
-        </div>
-
-        {/* Center: Live Telemetry Badges */}
-        <div className="hidden md:flex items-center gap-3 font-mono text-[11px]">
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-bold">IPC-CFX GATEWAY ● 12ms</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
-            <Clock className="w-3 h-3 text-blue-500" />
-            <span>Shift: {activeShift} (06:00 - 14:00)</span>
-          </div>
-          <div className="text-slate-500">
-            Recipe: <strong className="text-slate-800">PCB-SM-METER-REV4</strong>
-          </div>
-        </div>
-
-        {/* Right: Quick Action Buttons */}
-        <div className="flex items-center gap-2">
-          <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded font-mono">
-            AUTO-TUNING ● ACTIVE
-          </span>
-          <button className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 px-2.5 py-1 rounded font-bold text-xs font-mono transition-colors">
-            HOLD LINE
-          </button>
-        </div>
-      </div>
-
-      {/* TOP ROW: 7 REFINED SAPPHIRE CLEANROOM KPI CARDS */}
+      {/* TOP ROW: 7 VIBRANT SATURATED HERO CARDS (1:1 MATCHING SMT SPECIFICATION) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
-        {/* 1. OEE Card */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">OEE</span>
-            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <Activity className="w-4 h-4" />
-            </div>
+        {/* 1. OEE Card (Green) */}
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">OEE</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">86.4%</div>
+            <div className="text-[10px] text-emerald-200 mt-1">↑ 2.1% vs. yesterday</div>
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">86.4%</div>
-            <div className="text-[10px] text-emerald-600 font-mono font-bold mt-1 flex items-center gap-1">
-              <span>↑ +2.1%</span>
-              <span className="text-slate-400 font-normal">vs target (85.0%)</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
-            <span>A:92%</span><span>P:94%</span><span>Q:99%</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* 2. Availability Card */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Availability</span>
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-              <Clock className="w-4 h-4" />
-            </div>
+        {/* 2. Availability Card (Cyan/Sky Blue) */}
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Availability</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">94.2%</div>
+            <div className="text-[10px] text-sky-200 mt-1">↑ 0.6% vs. yesterday</div>
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">92.4%</div>
-            <div className="text-[10px] text-blue-600 font-mono font-bold mt-1 flex items-center gap-1">
-              <span>SEMI E10</span>
-              <span className="text-slate-400 font-normal">Uptime 7h 24m</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
-            <span>Planned: 8.0h</span>
-            <span className="text-amber-600 font-bold">Down: 36m</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Settings className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* 3. Performance Card */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-purple-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Performance</span>
-            <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
-              <Zap className="w-4 h-4" />
-            </div>
+        {/* 3. Performance Card (Warm Orange) */}
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Performance</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">91.7%</div>
+            <div className="text-[10px] text-orange-200 mt-1">↑ 1.5% vs. yesterday</div>
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">94.2%</div>
-            <div className="text-[10px] text-purple-600 font-mono font-bold mt-1 flex items-center gap-1">
-              <span>44,820 CPH</span>
-              <span className="text-slate-400 font-normal">rate</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
-            <span>Peak: 48.2k</span>
-            <span className="text-emerald-600 font-bold">101% Takt</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sliders className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* 4. Quality (FPY) Card */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-indigo-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Quality (FPY)</span>
-            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
+        {/* 4. FPY Card (Purple) */}
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">FPY</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">98.8%</div>
+            <div className="text-[10px] text-purple-200 mt-1">↑ 0.4% vs. yesterday</div>
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">98.8%</div>
-            <div className="text-[10px] text-indigo-600 font-mono font-bold mt-1 flex items-center gap-1">
-              <span>↑ +0.4%</span>
-              <span className="text-slate-400 font-normal">vs yesterday</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
-            <span>DPMO: 112</span>
-            <span className="text-emerald-600 font-bold">0 Hold</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* 5. Plan Card */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-cyan-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Shift Plan</span>
-            <div className="w-7 h-7 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center">
-              <FileText className="w-4 h-4" />
-            </div>
+        {/* 5. Plan Card (Teal/Cyan) */}
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Plan</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">12,000</div>
+            <div className="text-[10px] text-cyan-200 mt-1">pcs</div>
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-black font-mono tracking-tight text-slate-900">12,000</div>
-            <div className="text-[10px] text-cyan-600 font-mono font-bold mt-1 flex items-center gap-1">
-              <span>Target pcs</span>
-              <span className="text-slate-400 font-normal">Shift A</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
-            <span>Pacing: 1,500/h</span>
-            <span className="text-blue-600 font-bold">100% Sched</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* 6. Actual Card */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-400 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Actual Output</span>
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#1E50ED] flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4" />
-            </div>
+        {/* 6. Actual Card (Deep Ocean Blue) */}
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Actual</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">11,420</div>
+            <div className="text-[10px] text-blue-200 mt-1">pcs (95.2%)</div>
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-black font-mono tracking-tight text-[#1E50ED]">11,420</div>
-            <div className="text-[10px] text-emerald-600 font-mono font-bold mt-1 flex items-center gap-1">
-              <span>95.2%</span>
-              <span className="text-slate-400 font-normal">completion</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
-            <span className="text-emerald-600 font-bold">▲ +180 Ahead</span>
-            <span>Rem: 580</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
           </div>
         </div>
 
-        {/* 7. Reject Card */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-red-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-sans">Reject / Scrap</span>
-            <div className="w-7 h-7 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
-              <XCircle className="w-4 h-4" />
-            </div>
+        {/* 7. Reject Card (Red) */}
+        <div className="bg-[#DC2626] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-red-100">Reject</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">138</div>
+            <div className="text-[10px] text-red-200 mt-1">pcs (1.2%)</div>
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-black font-mono tracking-tight text-red-600">138</div>
-            <div className="text-[10px] text-red-500 font-mono font-bold mt-1 flex items-center gap-1">
-              <span>1.2%</span>
-              <span className="text-slate-400 font-normal">reject rate</span>
-            </div>
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-100 text-[9.5px] font-mono text-slate-500 flex justify-between">
-            <span>AOI: 92</span>
-            <span className="text-amber-600 font-bold">SPI: 46</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <XCircle className="w-5 h-5 text-white" />
           </div>
         </div>
       </div>
 
-      {/* SMT PRODUCTION FLOW (7 STATIONS CONVEYOR) */}
-      <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
-        <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <Factory className="w-4 h-4 text-[#1E50ED]" />
-            <span className="font-bold text-xs text-slate-800">
-              Cleanroom Production Conveyor Flow – {selectedLine}
-            </span>
-            <span className="text-[10px] text-slate-400 font-mono">
-              [SMEMA / IPC-9852 HERMES COMPLIANT]
-            </span>
-          </div>
-          <div className="flex items-center gap-3 text-xs font-mono">
-            <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Running (5)
-            </span>
-            <span className="flex items-center gap-1.5 text-amber-500 font-bold">
-              <span className="w-2 h-2 rounded-full bg-amber-400" /> Idle (1)
-            </span>
-            <span className="flex items-center gap-1.5 text-red-500 font-bold">
-              <span className="w-2 h-2 rounded-full bg-red-500" /> Maintenance (1)
-            </span>
-          </div>
-        </div>
-
-        {/* 7 Machines Flow Sequence */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
-          {[
-            { name: 'Loader', vendor: 'Nutek NTM', status: 'Running', dot: 'bg-emerald-500', out: '11,820 / 12,000', ct: '8.2 s', buff: '6/10', icon: Layers },
-            { name: 'SPI 3D', vendor: 'Koh Young', status: 'Running', dot: 'bg-emerald-500', out: '11,700 / 12,000', ct: '6.5 s', buff: '4/10', icon: Eye },
-            { name: 'Printer', vendor: 'DEK Horizon', status: 'Running', dot: 'bg-emerald-500', out: '11,650 / 12,000', ct: '7.8 s', buff: '5/10', icon: Factory },
-            { name: 'FUJI NXT', vendor: 'AIMEX III', status: 'Running', dot: 'bg-emerald-500', out: '11,520 / 12,000', ct: '12.3 s', buff: '7/10', icon: Cpu },
-            { name: 'Reflow', vendor: 'Heller 1913', status: 'Idle', dot: 'bg-amber-400', out: '11,450 / 12,000', ct: '45.0 s', buff: '2/10', icon: Flame },
-            { name: 'AOI 3D', vendor: 'Zenith 3D', status: 'Down', dot: 'bg-red-500', out: '11,420 / 12,000', ct: '10.8 s', buff: '9/10', icon: Eye },
-            { name: 'Unloader', vendor: 'Nutek NTM', status: 'Running', dot: 'bg-emerald-500', out: '11,420 / 12,000', ct: '6.7 s', buff: '1/10', icon: Layers },
-          ].map((mach, idx) => {
-            const Icon = mach.icon;
-            const isDown = mach.status === 'Down';
-            const isIdle = mach.status === 'Idle';
-
-            return (
-              <div 
-                key={mach.name}
-                className={`p-2.5 rounded-lg border transition-all flex flex-col justify-between text-center relative group ${
-                  isDown 
-                    ? 'bg-red-50/40 border-red-200' 
-                    : isIdle 
-                    ? 'bg-amber-50/40 border-amber-200' 
-                    : 'bg-slate-50/60 border-slate-200/80 hover:border-blue-400 hover:shadow-xs'
-                }`}
-              >
-                {/* Station header */}
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="text-left">
-                    <span className="font-bold text-xs text-slate-800 block">{mach.name}</span>
-                    <span className="text-[9px] text-slate-400 font-mono">{mach.vendor}</span>
-                  </div>
-                  <span className={`w-2 h-2 rounded-full ${mach.dot} shadow-xs shrink-0`} title={mach.status} />
-                </div>
-
-                {/* Machine Illustration Graphic */}
-                <div className="h-14 bg-white rounded-md border border-slate-100 flex items-center justify-center p-2 mb-2 shadow-2xs">
-                  <div className="flex flex-col items-center">
-                    <Icon className={`w-6 h-6 transition-colors ${
-                      isDown ? 'text-red-500' : isIdle ? 'text-amber-500' : 'text-slate-600 group-hover:text-blue-600'
-                    }`} />
-                    <div className="w-8 h-1 bg-slate-200 rounded-full mt-1.5" />
-                  </div>
-                </div>
-
-                {/* Station Telemetry Data */}
-                <div className="text-[10px] text-slate-500 font-mono space-y-0.5">
-                  <div className="flex justify-between text-slate-400 text-[9px]">
-                    <span>OUT</span>
-                    <span className="font-bold text-slate-800 font-mono">{mach.out.split(' / ')[0]}</span>
-                  </div>
-                  <div className="flex justify-between text-slate-400 text-[9px]">
-                    <span>CYCLE</span>
-                    <span className="font-semibold text-slate-700 font-mono">{mach.ct}</span>
-                  </div>
-                  <div className="flex justify-between text-slate-400 text-[9px]">
-                    <span>BUFFER</span>
-                    <span className="font-semibold text-blue-600 font-mono">{mach.buff}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* MIDDLE SECTION: 3 ANALYTICAL CHARTS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {/* Chart 1: Hourly Target vs Actual Dual Bar Chart */}
-        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <span className="font-bold text-xs text-slate-800 block">
-                Hourly Production Pacing
+      {/* MIDDLE SECTION: LEFT (72%) & RIGHT (28%) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        {/* LEFT COLUMN (8.5/9 cols) */}
+        <div className="lg:col-span-8 xl:col-span-9 space-y-3">
+          {/* PRODUCTION FLOW CARD (7 STATIONS) */}
+          <div className="bg-white p-3.5 rounded-lg shadow-sm border border-slate-200">
+            <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
+              <span className="font-bold text-xs text-slate-800">
+                Production Flow – Plant-01 / Line-01
               </span>
-              <span className="text-[10px] text-slate-400">Target vs Actual Output (pcs)</span>
+              <div className="flex items-center gap-3 text-xs font-mono">
+                <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" /> Running
+                </span>
+                <span className="flex items-center gap-1.5 text-amber-500 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" /> Idle
+                </span>
+                <span className="flex items-center gap-1.5 text-red-500 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-red-500" /> Down
+                </span>
+              </div>
             </div>
-            <div className="flex gap-2 text-[10px] font-mono">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#1E50ED] rounded-xs" /> Target</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#10B981] rounded-xs" /> Actual</span>
-            </div>
-          </div>
 
-          {/* SVG Bar Chart */}
-          <div className="h-44 pt-2">
-            <svg viewBox="0 0 280 150" className="w-full h-full">
-              {/* Grid lines */}
-              <line x1="30" y1="20" x2="275" y2="20" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="50" x2="275" y2="50" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="80" x2="275" y2="80" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="110" x2="275" y2="110" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="130" x2="275" y2="130" stroke="#CBD5E1" strokeWidth="1" />
-
-              {/* Y-Axis Labels */}
-              <text x="25" y="24" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">2,000</text>
-              <text x="25" y="54" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">1,500</text>
-              <text x="25" y="84" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">1,000</text>
-              <text x="25" y="114" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">500</text>
-              <text x="25" y="133" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">0</text>
-
-              {/* Dual Bars for 10 hours: 08:00 to 17:00 */}
+            {/* 7 Machines Flow Sequence */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
               {[
-                { h: '08:00', tgt: 950, act: 900 },
-                { h: '09:00', tgt: 1100, act: 980 },
-                { h: '10:00', tgt: 1200, act: 1050 },
-                { h: '11:00', tgt: 1250, act: 1100 },
-                { h: '12:00', tgt: 1350, act: 1280 },
-                { h: '13:00', tgt: 1400, act: 1350 },
-                { h: '14:00', tgt: 1550, act: 1500 },
-                { h: '15:00', tgt: 1650, act: 1600 },
-                { h: '16:00', tgt: 1700, act: 1650 },
-                { h: '17:00', tgt: 1750, act: 1720 },
-              ].map((b, idx) => {
-                const x = 38 + idx * 24;
-                const tH = (b.tgt / 2000) * 110;
-                const aH = (b.act / 2000) * 110;
-
+                { name: 'Loader', status: 'Running', dot: 'bg-emerald-500', out: '11,820 / 12,000', ct: '8.2 sec', icon: Layers },
+                { name: 'SPI', status: 'Running', dot: 'bg-emerald-500', out: '11,700 / 12,000', ct: '6.5 sec', icon: Eye },
+                { name: 'Printer', status: 'Running', dot: 'bg-emerald-500', out: '11,650 / 12,000', ct: '7.8 sec', icon: Factory },
+                { name: 'FUJI NXT', status: 'Running', dot: 'bg-emerald-500', out: '11,520 / 12,000', ct: '12.3 sec', icon: Cpu },
+                { name: 'Reflow', status: 'Idle', dot: 'bg-amber-400', out: '11,450 / 12,000', ct: '45.0 sec', icon: Flame },
+                { name: 'AOI', status: 'Down', dot: 'bg-red-500', out: '11,420 / 12,000', ct: '10.8 sec', icon: Eye },
+                { name: 'Unloader', status: 'Running', dot: 'bg-emerald-500', out: '11,420 / 12,000', ct: '6.7 sec', icon: Layers },
+              ].map((mach) => {
+                const Icon = mach.icon;
                 return (
-                  <g key={b.h}>
-                    <rect x={x} y={130 - tH} width="8" height={tH} fill="#1E50ED" rx="1" />
-                    <rect x={x + 9} y={130 - aH} width="8" height={aH} fill="#10B981" rx="1" />
-                    <text x={x + 8} y="142" fontSize="7" fill="#64748B" textAnchor="middle" fontFamily="monospace">
-                      {b.h.split(':')[0]}
-                    </text>
-                  </g>
+                  <div 
+                    key={mach.name}
+                    className="bg-slate-50 p-2.5 rounded-lg border border-slate-200 flex flex-col justify-between text-center relative group hover:border-blue-400 transition-colors"
+                  >
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-bold text-xs text-slate-800">{mach.name}</span>
+                      <span className={`w-2 h-2 rounded-full ${mach.dot} shadow-xs`} title={mach.status} />
+                    </div>
+
+                    {/* Machine Illustration Graphic */}
+                    <div className="h-16 bg-white rounded border border-slate-100 flex items-center justify-center p-2 mb-2 shadow-inner">
+                      <div className="flex flex-col items-center">
+                        <Icon className="w-7 h-7 text-slate-600 group-hover:text-blue-600 transition-colors" />
+                        <div className="w-10 h-1 bg-slate-200 rounded mt-1" />
+                      </div>
+                    </div>
+
+                    <div className="text-[10px] text-slate-500 font-mono">
+                      <div className="text-slate-400 text-[9px] uppercase">Output</div>
+                      <div className="font-bold text-slate-800">{mach.out}</div>
+                      <div className="text-[9px] text-slate-400 mt-1">Cycle Time</div>
+                      <div className="font-semibold text-slate-700">{mach.ct}</div>
+                    </div>
+                  </div>
                 );
               })}
-            </svg>
-          </div>
-        </div>
-
-        {/* Chart 2: OEE Trend (Last 8 Hours) Area Chart */}
-        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <span className="font-bold text-xs text-slate-800 block">
-                OEE Velocity & Stability
-              </span>
-              <span className="text-[10px] text-slate-400">8-Hour Moving Window</span>
             </div>
-            <span className="text-[11px] text-[#1E50ED] font-bold font-mono bg-blue-50 px-2 py-0.5 rounded">
-              Current: 86.4%
-            </span>
           </div>
 
-          <div className="h-44 pt-2">
-            <svg viewBox="0 0 280 150" className="w-full h-full">
-              {/* Y-axis lines */}
-              <line x1="30" y1="20" x2="275" y2="20" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="50" x2="275" y2="50" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="80" x2="275" y2="80" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="110" x2="275" y2="110" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="30" y1="130" x2="275" y2="130" stroke="#CBD5E1" strokeWidth="1" />
-
-              <text x="25" y="24" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">100%</text>
-              <text x="25" y="54" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">90%</text>
-              <text x="25" y="84" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">80%</text>
-              <text x="25" y="114" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">70%</text>
-              <text x="25" y="133" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">60%</text>
-
-              {/* Data points: 82.1, 83.4, 84.7, 85.6, 86.2, 86.9, 87.4, 86.4 */}
-              <defs>
-                <linearGradient id="oeeGradLine2" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#1E50ED" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#1E50ED" stopOpacity="0.0" />
-                </linearGradient>
-              </defs>
-
-              {/* Line and Area paths */}
-              <path
-                d="M 40 73 L 72 69 L 105 65 L 138 62 L 171 60 L 204 58 L 237 56 L 270 59 L 270 130 L 40 130 Z"
-                fill="url(#oeeGradLine2)"
-              />
-              <path
-                d="M 40 73 L 72 69 L 105 65 L 138 62 L 171 60 L 204 58 L 237 56 L 270 59"
-                fill="none"
-                stroke="#1E50ED"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-
-              {/* Point Dots & Callout labels */}
-              {[
-                { x: 40, y: 73, v: '82.1%', h: '04h' },
-                { x: 72, y: 69, v: '83.4%', h: '05h' },
-                { x: 105, y: 65, v: '84.7%', h: '06h' },
-                { x: 138, y: 62, v: '85.6%', h: '07h' },
-                { x: 171, y: 60, v: '86.2%', h: '08h' },
-                { x: 204, y: 58, v: '86.9%', h: '09h' },
-                { x: 237, y: 56, v: '87.4%', h: '10h' },
-                { x: 270, y: 59, v: '86.4%', h: '11h' },
-              ].map((pt) => (
-                <g key={pt.h}>
-                  <circle cx={pt.x} cy={pt.y} r="3" fill="#1E50ED" stroke="#FFFFFF" strokeWidth="1.5" />
-                  <text x={pt.x} y={pt.y - 6} fontSize="7" fill="#1E293B" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
-                    {pt.v}
-                  </text>
-                  <text x={pt.x} y="142" fontSize="7" fill="#64748B" textAnchor="middle" fontFamily="monospace">
-                    {pt.h}
-                  </text>
-                </g>
-              ))}
-            </svg>
-          </div>
-        </div>
-
-        {/* Chart 3: Downtime Pareto Horizontal Bars */}
-        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <span className="font-bold text-xs text-slate-800 block">Downtime Pareto</span>
-              <span className="text-[10px] text-slate-400">Total Downtime: 2h 45m</span>
-            </div>
-            <span className="text-[10px] text-amber-600 font-bold font-mono bg-amber-50 px-2 py-0.5 rounded">
-              MTTR: 8.4m
-            </span>
-          </div>
-
-          <div className="space-y-1.5 pt-1 text-xs font-mono">
-            {[
-              { mach: 'Reflow Oven', dur: '48m (29%)', color: 'bg-[#DC2626]', w: '75%' },
-              { mach: 'AOI 3D', dur: '42m (26%)', color: 'bg-[#EA580C]', w: '66%' },
-              { mach: 'FUJI NXT', dur: '28m (17%)', color: 'bg-[#F59E0B]', w: '44%' },
-              { mach: 'SPI 3D', dur: '18m (11%)', color: 'bg-[#0284C7]', w: '28%' },
-              { mach: 'Screen Printer', dur: '12m (7%)', color: 'bg-[#06B6D4]', w: '19%' },
-              { mach: 'Loader/Unload', dur: '9m (5%)', color: 'bg-[#64748B]', w: '14%' },
-              { mach: 'Feeder Reel', dur: '6m (4%)', color: 'bg-[#94A3B8]', w: '9%' },
-            ].map((d) => (
-              <div key={d.mach}>
-                <div className="flex justify-between text-[10px] mb-0.5">
-                  <span className="font-sans font-medium text-slate-700">{d.mach}</span>
-                  <span className="text-slate-500 font-semibold">{d.dur}</span>
-                </div>
-                <div className="w-full bg-slate-100 rounded-xs h-2">
-                  <div className={`${d.color} h-2 rounded-xs`} style={{ width: d.w }} />
+          {/* THREE CHARTS ROW */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {/* Chart 1: Hourly Target vs Actual Dual Bar Chart */}
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-bold text-xs text-slate-800">
+                  Production (Target vs Actual) - Hourly
+                </span>
+                <div className="flex gap-2 text-[10px] font-mono">
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#0066FF] rounded-xs" /> Target</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 bg-[#10B981] rounded-xs" /> Actual</span>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* BOTTOM SECTION: 2-COLUMN OPERATIONAL SUMMARY & ALERTS */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* Left Column (8.5 cols) */}
-        <div className="lg:col-span-8 xl:col-span-9 space-y-3">
-          {/* Summary + Material + Recent Work Orders */}
+              {/* SVG Bar Chart */}
+              <div className="h-44 pt-2">
+                <svg viewBox="0 0 280 150" className="w-full h-full">
+                  <line x1="30" y1="20" x2="275" y2="20" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="50" x2="275" y2="50" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="80" x2="275" y2="80" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="110" x2="275" y2="110" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="130" x2="275" y2="130" stroke="#CBD5E1" strokeWidth="1" />
+
+                  <text x="25" y="24" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">2,000</text>
+                  <text x="25" y="54" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">1,500</text>
+                  <text x="25" y="84" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">1,000</text>
+                  <text x="25" y="114" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">500</text>
+                  <text x="25" y="133" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">0</text>
+
+                  {[
+                    { h: '08:00', tgt: 950, act: 900 },
+                    { h: '09:00', tgt: 1100, act: 980 },
+                    { h: '10:00', tgt: 1200, act: 1050 },
+                    { h: '11:00', tgt: 1250, act: 1100 },
+                    { h: '12:00', tgt: 1350, act: 1280 },
+                    { h: '13:00', tgt: 1400, act: 1350 },
+                    { h: '14:00', tgt: 1550, act: 1500 },
+                    { h: '15:00', tgt: 1650, act: 1600 },
+                    { h: '16:00', tgt: 1700, act: 1650 },
+                    { h: '17:00', tgt: 1750, act: 1720 },
+                  ].map((b, idx) => {
+                    const x = 38 + idx * 24;
+                    const tH = (b.tgt / 2000) * 110;
+                    const aH = (b.act / 2000) * 110;
+
+                    return (
+                      <g key={b.h}>
+                        <rect x={x} y={130 - tH} width="8" height={tH} fill="#0066FF" rx="1" />
+                        <rect x={x + 9} y={130 - aH} width="8" height={aH} fill="#10B981" rx="1" />
+                        <text x={x + 8} y="142" fontSize="7" fill="#64748B" textAnchor="middle" fontFamily="monospace">
+                          {b.h.split(':')[0]}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </div>
+
+            {/* Chart 2: OEE Trend (Last 8 Hours) Area Chart */}
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-bold text-xs text-slate-800">
+                  OEE Trend (Last 8 Hours)
+                </span>
+                <span className="text-[10px] text-blue-600 font-bold font-mono">Current: 86.4%</span>
+              </div>
+
+              <div className="h-44 pt-2">
+                <svg viewBox="0 0 280 150" className="w-full h-full">
+                  <line x1="30" y1="20" x2="275" y2="20" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="50" x2="275" y2="50" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="80" x2="275" y2="80" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="110" x2="275" y2="110" stroke="#F1F5F9" strokeWidth="1" />
+                  <line x1="30" y1="130" x2="275" y2="130" stroke="#CBD5E1" strokeWidth="1" />
+
+                  <text x="25" y="24" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">100%</text>
+                  <text x="25" y="54" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">90%</text>
+                  <text x="25" y="84" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">80%</text>
+                  <text x="25" y="114" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">70%</text>
+                  <text x="25" y="133" fontSize="8" fill="#94A3B8" textAnchor="end" fontFamily="monospace">60%</text>
+
+                  <defs>
+                    <linearGradient id="oeeGrad2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#2563EB" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#2563EB" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+
+                  <path
+                    d="M 40 73 L 72 69 L 105 65 L 138 62 L 171 60 L 204 58 L 237 56 L 270 59 L 270 130 L 40 130 Z"
+                    fill="url(#oeeGrad2)"
+                  />
+                  <path
+                    d="M 40 73 L 72 69 L 105 65 L 138 62 L 171 60 L 204 58 L 237 56 L 270 59"
+                    fill="none"
+                    stroke="#2563EB"
+                    strokeWidth="2.5"
+                  />
+
+                  {[
+                    { x: 40, y: 73, v: '82.1%', h: '04:00' },
+                    { x: 72, y: 69, v: '83.4%', h: '05:00' },
+                    { x: 105, y: 65, v: '84.7%', h: '06:00' },
+                    { x: 138, y: 62, v: '85.6%', h: '07:00' },
+                    { x: 171, y: 60, v: '86.2%', h: '08:00' },
+                    { x: 204, y: 58, v: '86.9%', h: '09:00' },
+                    { x: 237, y: 56, v: '87.4%', h: '10:00' },
+                    { x: 270, y: 59, v: '86.4%', h: '11:00' },
+                  ].map((pt) => (
+                    <g key={pt.h}>
+                      <circle cx={pt.x} cy={pt.y} r="3" fill="#2563EB" stroke="#FFFFFF" strokeWidth="1.5" />
+                      <text x={pt.x} y={pt.y - 6} fontSize="7" fill="#1E293B" textAnchor="middle" fontWeight="bold" fontFamily="monospace">
+                        {pt.v}
+                      </text>
+                      <text x={pt.x} y="142" fontSize="7" fill="#64748B" textAnchor="middle" fontFamily="monospace">
+                        {pt.h}
+                      </text>
+                    </g>
+                  ))}
+                </svg>
+              </div>
+            </div>
+
+            {/* Chart 3: Downtime Pareto Horizontal Bars */}
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-bold text-xs text-slate-800">Downtime Pareto</span>
+                <span className="text-[10px] text-slate-500 font-mono">Total Downtime: 2h 45m</span>
+              </div>
+
+              <div className="space-y-1.5 pt-1 text-xs font-mono">
+                {[
+                  { mach: 'Reflow', dur: '48m (29%)', color: 'bg-[#DC2626]', w: '75%' },
+                  { mach: 'AOI', dur: '42m (26%)', color: 'bg-[#EA580C]', w: '66%' },
+                  { mach: 'FUJI NXT', dur: '28m (17%)', color: 'bg-[#F59E0B]', w: '44%' },
+                  { mach: 'SPI', dur: '18m (11%)', color: 'bg-[#0284C7]', w: '28%' },
+                  { mach: 'Printer', dur: '12m (7%)', color: 'bg-[#06B6D4]', w: '19%' },
+                  { mach: 'Loader/Unloader', dur: '9m (5%)', color: 'bg-[#64748B]', w: '14%' },
+                  { mach: 'Others', dur: '6m (4%)', color: 'bg-[#94A3B8]', w: '9%' },
+                ].map((d) => (
+                  <div key={d.mach}>
+                    <div className="flex justify-between text-[10px] mb-0.5">
+                      <span className="font-sans font-medium text-slate-700">{d.mach}</span>
+                      <span className="text-slate-500 font-semibold">{d.dur}</span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-xs h-2">
+                      <div className={`${d.color} h-2 rounded-xs`} style={{ width: d.w }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* BOTTOM ROW (SUMMARY, MATERIAL STATUS, RECENT WORK ORDERS) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* 1. Production Summary */}
-            <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs">
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200">
               <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5 mb-2.5">
-                <BarChart2 className="w-4 h-4 text-[#1E50ED]" /> Production Summary
+                <BarChart2 className="w-4 h-4 text-blue-600" /> Production Summary
               </div>
               <div className="grid grid-cols-2 gap-2 text-center text-xs font-mono">
-                <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                <div className="bg-slate-50 p-2 rounded border border-slate-100">
                   <div className="text-[10px] text-slate-400 font-sans">Total Panels</div>
                   <div className="text-base font-black text-slate-800 mt-0.5">11,420</div>
                 </div>
-                <div className="bg-emerald-50/70 p-2 rounded-lg border border-emerald-100">
+                <div className="bg-emerald-50/60 p-2 rounded border border-emerald-100">
                   <div className="text-[10px] text-emerald-700 font-sans">Good Panels</div>
-                  <div className="text-base font-black text-emerald-600 mt-0.5">11,282</div>
+                  <div className="text-base font-black text-emerald-600 mt-0.5">11,282 (98.8%)</div>
                 </div>
-                <div className="bg-red-50/70 p-2 rounded-lg border border-red-100">
+                <div className="bg-red-50/60 p-2 rounded border border-red-100">
                   <div className="text-[10px] text-red-700 font-sans">Reject Panels</div>
-                  <div className="text-base font-black text-red-600 mt-0.5">138</div>
+                  <div className="text-base font-black text-red-600 mt-0.5">138 (1.2%)</div>
                 </div>
-                <div className="bg-blue-50/70 p-2 rounded-lg border border-blue-100">
+                <div className="bg-blue-50/60 p-2 rounded border border-blue-100">
                   <div className="text-[10px] text-blue-700 font-sans">Rework</div>
-                  <div className="text-base font-black text-blue-600 mt-0.5">56</div>
+                  <div className="text-base font-black text-blue-600 mt-0.5">56 (0.5%)</div>
                 </div>
-              </div>
-              <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-500 font-mono flex justify-between">
-                <span>Takt: 28.8s</span>
-                <span className="text-emerald-600 font-bold">Cpk: 1.48</span>
               </div>
             </div>
 
-            {/* 2. Material & Consumables Status */}
-            <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+            {/* 2. Material Status Progress Bars */}
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200 flex flex-col justify-between">
               <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5 mb-2">
-                <Database className="w-4 h-4 text-indigo-600" /> Material & Consumables
+                <Database className="w-4 h-4 text-indigo-600" /> Material Status
               </div>
               <div className="space-y-2.5 text-xs font-mono">
                 <div>
                   <div className="flex justify-between text-[11px] mb-1">
-                    <span className="font-sans font-medium text-slate-700">Solder Paste (SAC305)</span>
+                    <span className="font-sans font-medium text-slate-700">Solder Paste</span>
                     <span className="font-bold text-emerald-600">78%</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2">
@@ -1333,7 +1163,7 @@ export const Dashboard2SmtLineMonitor: React.FC = () => {
                 </div>
                 <div>
                   <div className="flex justify-between text-[11px] mb-1">
-                    <span className="font-sans font-medium text-slate-700">Feeder Reels (Slot 08)</span>
+                    <span className="font-sans font-medium text-slate-700">Feeder</span>
                     <span className="font-bold text-amber-500">64%</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2">
@@ -1342,42 +1172,42 @@ export const Dashboard2SmtLineMonitor: React.FC = () => {
                 </div>
                 <div>
                   <div className="flex justify-between text-[11px] mb-1">
-                    <span className="font-sans font-medium text-slate-700">Raw PCB Buffer</span>
-                    <span className="font-bold text-[#1E50ED]">92%</span>
+                    <span className="font-sans font-medium text-slate-700">PCB</span>
+                    <span className="font-bold text-blue-600">92%</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2">
-                    <div className="bg-[#1E50ED] h-2 rounded-full" style={{ width: '92%' }} />
+                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: '92%' }} />
                   </div>
                 </div>
               </div>
-              <div className="text-[9.5px] text-slate-400 font-mono pt-1 text-right">
-                Auto-replenishment: ON (&lt;20%)
+              <div className="text-[9px] text-slate-400 font-mono pt-1 text-right">
+                Auto-replenishment threshold: 20%
               </div>
             </div>
 
-            {/* 3. Recent Work Orders */}
-            <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+            {/* 3. Recent Production (Last 5 Work Orders) */}
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200 overflow-hidden">
               <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5 mb-2">
-                <Layers className="w-4 h-4 text-[#1E50ED]" /> Recent Work Orders
+                <Layers className="w-4 h-4 text-blue-600" /> Recent Production <span className="text-[10px] text-slate-400 font-normal">(Last 5 Work Orders)</span>
               </div>
               <table className="w-full text-left font-mono text-[10.5px]">
                 <thead className="text-slate-400 border-b border-slate-100 uppercase text-[9px]">
                   <tr>
                     <th className="pb-1">WO No.</th>
-                    <th className="pb-1">Prod</th>
-                    <th className="pb-1">Qty</th>
+                    <th className="pb-1">Product</th>
+                    <th className="pb-1">Qty (Plan/Act)</th>
                     <th className="pb-1 text-center">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {[
-                    { wo: 'WO-014', prod: 'P1234', qty: '3.0k/2.8k', st: 'Running', dot: 'bg-emerald-500' },
-                    { wo: 'WO-013', prod: 'P5678', qty: '2.0k/2.0k', st: 'Done', dot: 'bg-blue-600' },
-                    { wo: 'WO-012', prod: 'P9012', qty: '4.0k/4.0k', st: 'Done', dot: 'bg-blue-600' },
-                    { wo: 'WO-011', prod: 'P3456', qty: '2.0k/2.0k', st: 'Done', dot: 'bg-blue-600' },
+                    { wo: 'WO-2026-0925-014', prod: 'P1234', qty: '3,000 / 2,860', st: 'Running', dot: 'bg-emerald-500' },
+                    { wo: 'WO-2026-0925-013', prod: 'P5678', qty: '2,000 / 1,980', st: 'Completed', dot: 'bg-blue-600' },
+                    { wo: 'WO-2026-0925-012', prod: 'P9012', qty: '4,000 / 3,850', st: 'Completed', dot: 'bg-blue-600' },
+                    { wo: 'WO-2026-0925-011', prod: 'P3456', qty: '2,000 / 1,730', st: 'Completed', dot: 'bg-blue-600' },
                   ].map((r) => (
                     <tr key={r.wo} className="hover:bg-slate-50">
-                      <td className="py-1 text-[#1E50ED] font-semibold">{r.wo}</td>
+                      <td className="py-1 text-blue-600 font-semibold">{r.wo.replace('WO-2026-', '')}</td>
                       <td className="py-1 text-slate-700">{r.prod}</td>
                       <td className="py-1 text-slate-600">{r.qty}</td>
                       <td className="py-1 text-center">
@@ -1394,17 +1224,17 @@ export const Dashboard2SmtLineMonitor: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column (3.5 cols) - Alerts & Traceability */}
+        {/* RIGHT COLUMN (3.5 cols) - ALERTS & TRACEABILITY */}
         <div className="lg:col-span-4 xl:col-span-3 space-y-3">
           {/* Live Alerts & Events */}
-          <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs">
+          <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200">
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
               <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                <Bell className="w-3.5 h-3.5 text-[#1E50ED]" /> Live Alerts & Events
+                <Bell className="w-3.5 h-3.5 text-blue-600" /> Live Alerts & Events
               </span>
-              <span className="text-[10px] text-[#1E50ED] font-bold font-mono">
-                3 Active
-              </span>
+              <button className="text-[10px] text-blue-600 hover:text-blue-800 font-bold font-mono">
+                View All &gt;
+              </button>
             </div>
 
             <div className="space-y-2">
@@ -1412,26 +1242,40 @@ export const Dashboard2SmtLineMonitor: React.FC = () => {
                 {
                   lvl: 'HIGH',
                   lvlCol: 'bg-red-600',
-                  title: 'AOI 3D – Defect Detected',
+                  title: 'AOI – Defect Detected',
                   time: '11:37',
-                  sub: 'Panel: PNL-0004587 | Defect: Missing 0402',
+                  sub: 'Panel ID: PNL-0004587 | Defect: Missing Component',
                 },
                 {
-                  lvl: 'WARN',
+                  lvl: 'MEDIUM',
                   lvlCol: 'bg-amber-500',
-                  title: 'Feeder Low Stock Warning',
+                  title: 'Feeder Shortage',
                   time: '11:21',
-                  sub: 'FUJI NXT – Slot 12 (R0201) &lt; 50 units',
+                  sub: 'FUJI NXT – Feeder 12 (R0201)',
+                },
+                {
+                  lvl: 'HIGH',
+                  lvlCol: 'bg-red-600',
+                  title: 'Machine Downtime',
+                  time: '10:56',
+                  sub: 'Reflow – Temperature not reached',
                 },
                 {
                   lvl: 'INFO',
                   lvlCol: 'bg-blue-600',
-                  title: 'New Work Order Loaded',
+                  title: 'New Work Order Started',
                   time: '09:43',
                   sub: 'WO-2026-0925-014 | Product: P1234',
                 },
+                {
+                  lvl: 'INFO',
+                  lvlCol: 'bg-blue-600',
+                  title: 'Material Replenished',
+                  time: '08:32',
+                  sub: 'Solder Paste (Lot: SP24678)',
+                },
               ].map((al, idx) => (
-                <div key={idx} className="p-2 bg-slate-50/70 rounded-lg border border-slate-100 text-xs">
+                <div key={idx} className="p-2 bg-slate-50 rounded border border-slate-100 text-xs">
                   <div className="flex items-center justify-between mb-1">
                     <span className={`${al.lvlCol} text-white font-mono font-bold text-[9px] px-1.5 py-0.5 rounded`}>
                       {al.lvl}
@@ -1445,41 +1289,51 @@ export const Dashboard2SmtLineMonitor: React.FC = () => {
             </div>
           </div>
 
-          {/* Active Unit Traceability */}
-          <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs">
+          {/* Traceability (Latest Panel) */}
+          <div className="bg-white p-3 rounded-lg shadow-sm border border-slate-200">
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
               <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                <GitFork className="w-3.5 h-3.5 text-[#1E50ED]" /> Active Unit Traceability
+                <GitFork className="w-3.5 h-3.5 text-blue-600" /> Traceability <span className="text-[10px] text-slate-400 font-normal">(Latest Panel)</span>
               </span>
-              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-bold">
-                IPC-1782 PASS
-              </span>
+              <button className="text-[10px] text-blue-600 hover:text-blue-800 font-bold font-mono">
+                View All &gt;
+              </button>
             </div>
 
-            <div className="space-y-1.5 text-xs font-mono">
-              <div className="flex justify-between py-0.5 border-b border-slate-50">
+            <div className="space-y-2 text-xs font-mono">
+              <div className="flex justify-between py-1 border-b border-slate-50">
                 <span className="text-slate-500">Panel ID:</span>
-                <strong className="text-[#1E50ED] font-bold">PNL-0004587</strong>
+                <strong className="text-blue-600 font-bold">PNL-0004587</strong>
               </div>
-              <div className="flex justify-between py-0.5 border-b border-slate-50">
-                <span className="text-slate-500">Barcode:</span>
+              <div className="flex justify-between py-1 border-b border-slate-50">
+                <span className="text-slate-500">Array Barcode:</span>
                 <span className="text-slate-800 font-bold">A123456789012</span>
               </div>
-              <div className="flex justify-between py-0.5 border-b border-slate-50">
+              <div className="flex justify-between py-1 border-b border-slate-50">
                 <span className="text-slate-500">Product:</span>
-                <span className="text-slate-800 font-medium">Control Board Rev 4</span>
+                <span className="text-slate-800 font-medium">P1234 (Control Board)</span>
               </div>
-              <div className="flex items-center justify-between py-0.5 border-b border-slate-50">
-                <span className="text-slate-500">SPI 3D:</span>
-                <span className="bg-emerald-600 text-white font-black text-[9px] px-2 py-0.5 rounded">
-                  PASS (0.12mm)
-                </span>
+              <div className="flex justify-between py-1 border-b border-slate-50">
+                <span className="text-slate-500">Work Order:</span>
+                <span className="text-slate-800">WO-2026-0925-014</span>
               </div>
-              <div className="flex items-center justify-between py-0.5">
-                <span className="text-slate-500">AOI 3D:</span>
-                <span className="bg-emerald-600 text-white font-black text-[9px] px-2 py-0.5 rounded">
-                  PASS (0 Defect)
-                </span>
+              <div className="flex items-center justify-between py-1 border-b border-slate-50">
+                <span className="text-slate-500">SPI Result:</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="bg-emerald-600 text-white font-black text-[9px] px-2 py-0.5 rounded shadow-xs">
+                    PASS
+                  </span>
+                  <span className="text-slate-400 text-[10px]">(0.12mm)</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between py-1">
+                <span className="text-slate-500">AOI Result:</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="bg-emerald-600 text-white font-black text-[9px] px-2 py-0.5 rounded shadow-xs">
+                    PASS
+                  </span>
+                  <span className="text-slate-400 text-[10px]">(0 Defect)</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1494,40 +1348,98 @@ export const Dashboard2SmtLineMonitor: React.FC = () => {
 // -------------------------------------------------------------
 export const Dashboard3ProductionPlanning: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={3} title="Production Planning" subtitle="Gantt Scheduling & Bay Loading" />
 
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Scheduled Jobs</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">18 Active</div>
+            <div className="text-[10px] text-emerald-200 mt-1">4 planned next shift</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Calendar className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">On-Time Dispatch</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">98.4%</div>
+            <div className="text-[10px] text-sky-200 mt-1">↑ 1.2% vs target</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">SMED Changeover</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">18.2 min</div>
+            <div className="text-[10px] text-orange-200 mt-1">Target: &lt;20 min</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Line Utilization</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">92.6%</div>
+            <div className="text-[10px] text-purple-200 mt-1">Cleanroom Bays 1-4</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Shift Volume</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">38,500 pcs</div>
+            <div className="text-[10px] text-cyan-200 mt-1">Pacing on-track</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
       {/* Filter toolbar */}
-      <div className="flex items-center justify-between bg-white p-2.5 rounded shadow-sm border border-slate-200 my-3 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
         <div className="flex items-center gap-3">
           <span className="text-slate-500 font-medium">Plant:</span>
-          <select className="border border-slate-300 rounded px-2 py-1 text-xs font-bold text-slate-700">
+          <select className="border border-slate-300 rounded px-2 py-1 text-xs font-bold text-slate-700 font-mono">
             <option>Plant-01 (Pune)</option>
             <option>Plant-02 (Noida)</option>
             <option>Plant-03 (Greater Noida)</option>
           </select>
 
           <span className="text-slate-500 font-medium ml-2">Line:</span>
-          <select className="border border-slate-300 rounded px-2 py-1 text-xs font-bold text-slate-700">
+          <select className="border border-slate-300 rounded px-2 py-1 text-xs font-bold text-slate-700 font-mono">
             <option>Line-01 (High Speed SMT)</option>
             <option>Line-02 (Flexible SMT)</option>
             <option>Line-03 (Prototypes)</option>
           </select>
         </div>
 
-        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded border">
-          <button className="px-2 py-1 text-xs font-bold rounded bg-blue-600 text-white shadow-xs">Day</button>
-          <button className="px-2 py-1 text-xs font-bold rounded text-slate-600 hover:bg-white">Week</button>
-          <button className="px-2 py-1 text-xs font-bold rounded text-slate-600 hover:bg-white">Month</button>
+        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded border border-slate-200 font-mono">
+          <button className="px-2.5 py-1 text-xs font-bold rounded bg-[#1E50ED] text-white shadow-xs">Day</button>
+          <button className="px-2.5 py-1 text-xs font-bold rounded text-slate-600 hover:bg-white">Week</button>
+          <button className="px-2.5 py-1 text-xs font-bold rounded text-slate-600 hover:bg-white">Month</button>
         </div>
       </div>
 
       {/* Gantt Timeline */}
-      <div className="bg-white p-4 rounded shadow-sm border border-slate-200">
+      <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
         <div className="flex items-center justify-between pb-3 border-b mb-3">
           <span className="font-bold text-xs text-slate-700 uppercase">Line Work Schedule (25 Sep 2026 - 24h Timeline)</span>
           <div className="flex gap-4 text-xs font-mono">
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-blue-600 rounded-xs" /> Running</span>
+            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-[#1E50ED] rounded-xs" /> Running</span>
             <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-amber-500 rounded-xs" /> Setup / Changeover</span>
             <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-emerald-600 rounded-xs" /> Planned Next</span>
           </div>
@@ -1538,7 +1450,7 @@ export const Dashboard3ProductionPlanning: React.FC = () => {
             {
               lineName: 'Line-01 SMT',
               jobs: [
-                { id: 'WO-01', product: 'SMT_ASSY_A', startHour: 0, durationHours: 10, color: '#2563EB', status: 'Running' },
+                { id: 'WO-01', product: 'SMT_ASSY_A', startHour: 0, durationHours: 10, color: '#1E50ED', status: 'Running' },
                 { id: 'SETUP', product: 'Changeover', startHour: 10, durationHours: 2, color: '#F59E0B', status: 'Setup' },
                 { id: 'WO-04', product: 'CONTROL_B', startHour: 12, durationHours: 11, color: '#059669', status: 'Planned' }
               ]
@@ -1546,45 +1458,59 @@ export const Dashboard3ProductionPlanning: React.FC = () => {
             {
               lineName: 'Line-02 SMT',
               jobs: [
-                { id: 'WO-02', product: 'SMT_POWER_C', startHour: 0, durationHours: 8, color: '#2563EB', status: 'Running' },
+                { id: 'WO-02', product: 'SMT_POWER_C', startHour: 0, durationHours: 8, color: '#1E50ED', status: 'Running' },
                 { id: 'WO-05', product: 'IOT_GATEWAY', startHour: 9, durationHours: 14, color: '#059669', status: 'Planned' }
               ]
             },
             {
               lineName: 'Line-03 SMT',
               jobs: [
-                { id: 'WO-03', product: 'AUTO_SENSOR', startHour: 0, durationHours: 14, color: '#2563EB', status: 'Running' },
-                { id: 'WO-06', product: 'BATTERY_BMS', startHour: 15, durationHours: 8, color: '#059669', status: 'Planned' }
-              ]
-            },
-            {
-              lineName: 'Line-04 SMT',
-              jobs: [
-                { id: 'MAINT', product: 'Preventive PM', startHour: 0, durationHours: 4, color: '#64748B', status: 'Maintenance' },
-                { id: 'WO-07', product: 'SMART_METER', startHour: 4, durationHours: 19, color: '#059669', status: 'Planned' }
+                { id: 'WO-03', product: 'SENSOR_NODE_D', startHour: 0, durationHours: 14, color: '#1E50ED', status: 'Running' },
+                { id: 'SETUP', product: 'Line Maintenance', startHour: 15, durationHours: 4, color: '#EF4444', status: 'Down' }
               ]
             }
           ]}
         />
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-3 pt-3 border-t text-xs font-mono">
-          <div className="p-2 bg-slate-50 rounded border border-slate-100">
-            <span className="text-slate-400 block text-[10px]">LINE 01 CAPACITY</span>
-            <span className="font-bold text-slate-800">92% Loaded (23/24h)</span>
-          </div>
-          <div className="p-2 bg-slate-50 rounded border border-slate-100">
-            <span className="text-slate-400 block text-[10px]">LINE 02 CAPACITY</span>
-            <span className="font-bold text-slate-800">78% Loaded (22/24h)</span>
-          </div>
-          <div className="p-2 bg-slate-50 rounded border border-slate-100">
-            <span className="text-slate-400 block text-[10px]">LINE 03 CAPACITY</span>
-            <span className="font-bold text-slate-800">88% Loaded (22/24h)</span>
-          </div>
-          <div className="p-2 bg-slate-50 rounded border border-slate-100">
-            <span className="text-slate-400 block text-[10px]">LINE 04 CAPACITY</span>
-            <span className="font-bold text-slate-800">96% Loaded (23/24h)</span>
-          </div>
+      {/* Changeover Matrix */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="p-3 border-b bg-slate-50/70 font-bold text-xs text-slate-700 flex justify-between items-center">
+          <span>SMT Line Changeover Matrix (SMED Protocol)</span>
+          <span className="text-[10px] text-emerald-600 font-mono font-bold">● FAST CHANGEOVER APERTURES VALIDATED</span>
         </div>
+        <table className="w-full text-xs text-left">
+          <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
+            <tr>
+              <th className="py-2.5 px-3">Line</th>
+              <th className="py-2.5 px-3">Current Recipe</th>
+              <th className="py-2.5 px-3">Next Recipe</th>
+              <th className="py-2.5 px-3">Trolley Pre-Kit</th>
+              <th className="py-2.5 px-3">Stencil Swap ETA</th>
+              <th className="py-2.5 px-3 text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 font-mono">
+            {[
+              { line: 'Line-01', curr: 'PCB-METER-REV4', next: 'CONTROL-BOARD-V2', trolley: '100% Staged (Bay 1)', eta: '12 min', st: 'READY', col: 'bg-emerald-600' },
+              { line: 'Line-02', curr: 'PWR-SMT-48V', next: 'IOT-BLE-MESH', trolley: '85% Staged (Slot 14 pending)', eta: '24 min', st: 'PRE-KIT', col: 'bg-blue-600' },
+              { line: 'Line-03', curr: 'SENSOR-MCU-REV3', next: 'SENSOR-MCU-REV3', trolley: 'Same Recipe (Roll-over)', eta: '0 min', st: 'CONTINUOUS', col: 'bg-slate-600' },
+            ].map(r => (
+              <tr key={r.line} className="hover:bg-slate-50">
+                <td className="py-2.5 px-3 font-bold text-[#1E50ED]">{r.line}</td>
+                <td className="py-2.5 px-3">{r.curr}</td>
+                <td className="py-2.5 px-3 font-bold text-slate-800">{r.next}</td>
+                <td className="py-2.5 px-3">{r.trolley}</td>
+                <td className="py-2.5 px-3 font-bold">{r.eta}</td>
+                <td className="py-2.5 px-3 text-center">
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded text-white ${r.col}`}>
+                    {r.st}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -1595,75 +1521,140 @@ export const Dashboard3ProductionPlanning: React.FC = () => {
 // -------------------------------------------------------------
 export const Dashboard4WorkOrderManagement: React.FC = () => {
   const orders = [
-    { no: 'WO-20260925-01', product: 'SMT_ASSY_A', planQty: '25,000', startDate: '25-09-2026', endDate: '26-09-2026', status: 'Running', color: 'bg-emerald-500' },
-    { no: 'WO-20260925-02', product: 'SMT_ASSY_B', planQty: '18,000', startDate: '25-09-2026', endDate: '27-09-2026', status: 'Running', color: 'bg-emerald-500' },
-    { no: 'WO-20260925-03', product: 'SMT_ASSY_C', planQty: '15,000', startDate: '24-09-2026', endDate: '25-09-2026', status: 'Down', color: 'bg-red-500' },
-    { no: 'WO-20260924-04', product: 'SMT_ASSY_A', planQty: '20,000', startDate: '23-09-2026', endDate: '24-09-2026', status: 'Completed', color: 'bg-blue-600' },
-    { no: 'WO-20260924-05', product: 'SMT_ASSY_B', planQty: '12,000', startDate: '24-09-2026', endDate: '25-09-2026', status: 'Hold', color: 'bg-amber-500' },
-    { no: 'WO-20260923-06', product: 'SMT_ASSY_A', planQty: '25,000', startDate: '22-09-2026', endDate: '23-09-2026', status: 'Completed', color: 'bg-blue-600' },
+    { no: 'WO-20260925-01', product: 'SMT_ASSY_A', planQty: '25,000', actQty: '23,800', prog: 95, startDate: '25-09-2026', endDate: '26-09-2026', status: 'Running', color: 'bg-emerald-500' },
+    { no: 'WO-20260925-02', product: 'SMT_ASSY_B', planQty: '18,000', actQty: '16,200', prog: 90, startDate: '25-09-2026', endDate: '27-09-2026', status: 'Running', color: 'bg-emerald-500' },
+    { no: 'WO-20260925-03', product: 'SMT_ASSY_C', planQty: '15,000', actQty: '4,500', prog: 30, startDate: '24-09-2026', endDate: '25-09-2026', status: 'Down', color: 'bg-red-500' },
+    { no: 'WO-20260924-04', product: 'SMT_ASSY_A', planQty: '20,000', actQty: '20,000', prog: 100, startDate: '23-09-2026', endDate: '24-09-2026', status: 'Completed', color: 'bg-blue-600' },
+    { no: 'WO-20260924-05', product: 'SMT_ASSY_B', planQty: '12,000', actQty: '8,400', prog: 70, startDate: '24-09-2026', endDate: '25-09-2026', status: 'Hold', color: 'bg-amber-500' },
+    { no: 'WO-20260923-06', product: 'SMT_ASSY_A', planQty: '25,000', actQty: '25,000', prog: 100, startDate: '22-09-2026', endDate: '23-09-2026', status: 'Completed', color: 'bg-blue-600' },
   ];
 
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={4} title="Work Order Management" subtitle="Production Orders & Batch Dispatch" />
 
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Active Orders</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">12 Running</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Cleanroom L1-L4</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Play className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Completed Today</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">28 Closed</div>
+            <div className="text-[10px] text-blue-200 mt-1">99.1% FPY average</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">In-Release Queue</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">6 Staged</div>
+            <div className="text-[10px] text-cyan-200 mt-1">BOMs explosion valid</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Quality Holds</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0 Holds</div>
+            <div className="text-[10px] text-purple-200 mt-1">100% Release Flow</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Planned Output</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">45,000 pcs</div>
+            <div className="text-[10px] text-orange-200 mt-1">Shift A + B</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
       {/* Actions Strip */}
-      <div className="flex items-center justify-between bg-white p-2.5 rounded shadow-sm border border-slate-200 my-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs">
         <div className="flex gap-2">
-          <button className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 rounded shadow-xs hover:bg-blue-700 flex items-center gap-1">
+          <button className="bg-[#1E50ED] text-white font-bold text-xs px-3 py-1.5 rounded shadow-xs hover:bg-blue-700 flex items-center gap-1 font-mono">
             + New WO
           </button>
-          <button className="bg-slate-100 text-slate-700 font-bold text-xs px-3 py-1.5 rounded border hover:bg-slate-200">
+          <button className="bg-slate-100 text-slate-700 font-bold text-xs px-3 py-1.5 rounded border border-slate-200 hover:bg-slate-200 font-mono">
             Edit
           </button>
-          <button className="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded hover:bg-emerald-700">
+          <button className="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded hover:bg-emerald-700 font-mono">
             Release
           </button>
-          <button className="bg-amber-500 text-white font-bold text-xs px-3 py-1.5 rounded hover:bg-amber-600">
+          <button className="bg-amber-500 text-white font-bold text-xs px-3 py-1.5 rounded hover:bg-amber-600 font-mono">
             Hold
           </button>
-          <button className="bg-slate-600 text-white font-bold text-xs px-3 py-1.5 rounded hover:bg-slate-700">
+          <button className="bg-slate-600 text-white font-bold text-xs px-3 py-1.5 rounded hover:bg-slate-700 font-mono">
             Close
           </button>
         </div>
 
         <div className="flex items-center gap-2 text-xs">
           <span className="text-slate-500">Search:</span>
-          <input type="text" placeholder="WO number / product..." className="border rounded px-2 py-1 text-xs w-48 font-mono" />
+          <input type="text" placeholder="WO number / product..." className="border border-slate-200 rounded px-2.5 py-1 text-xs w-52 font-mono" />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
         <table className="w-full text-xs text-left">
           <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
             <tr>
               <th className="py-2.5 px-3">WO No.</th>
               <th className="py-2.5 px-3">Product</th>
               <th className="py-2.5 px-3 text-right">Plan Qty</th>
+              <th className="py-2.5 px-3 text-right">Actual Qty</th>
+              <th className="py-2.5 px-3">Progress</th>
               <th className="py-2.5 px-3">Start Date</th>
               <th className="py-2.5 px-3">End Date</th>
               <th className="py-2.5 px-3 text-center">Status</th>
-              <th className="py-2.5 px-3 text-center">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 font-mono">
-            {orders.map((wo) => (
-              <tr key={wo.no} className="hover:bg-slate-50 transition-colors">
-                <td className="py-2.5 px-3 font-bold text-blue-600">{wo.no}</td>
-                <td className="py-2.5 px-3 text-slate-700 font-bold">{wo.product}</td>
-                <td className="py-2.5 px-3 text-right font-black">{wo.planQty}</td>
-                <td className="py-2.5 px-3 text-slate-500">{wo.startDate}</td>
-                <td className="py-2.5 px-3 text-slate-500">{wo.endDate}</td>
-                <td className="py-2.5 px-3 text-center">
-                  <span className={`${wo.color} text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs inline-block min-w-[70px]`}>
-                    {wo.status}
-                  </span>
+            {orders.map((o) => (
+              <tr key={o.no} className="hover:bg-slate-50">
+                <td className="py-2.5 px-3 font-bold text-[#1E50ED]">{o.no}</td>
+                <td className="py-2.5 px-3 font-bold text-slate-800">{o.product}</td>
+                <td className="py-2.5 px-3 text-right">{o.planQty}</td>
+                <td className="py-2.5 px-3 text-right font-bold text-slate-900">{o.actQty}</td>
+                <td className="py-2.5 px-3">
+                  <div className="w-24 bg-slate-100 rounded-full h-2 inline-block mr-2 align-middle">
+                    <div className="bg-[#1E50ED] h-2 rounded-full" style={{ width: `${o.prog}%` }} />
+                  </div>
+                  <span className="text-[10px] text-slate-500">{o.prog}%</span>
                 </td>
+                <td className="py-2.5 px-3 text-slate-500">{o.startDate}</td>
+                <td className="py-2.5 px-3 text-slate-500">{o.endDate}</td>
                 <td className="py-2.5 px-3 text-center">
-                  <button className="text-blue-600 hover:text-blue-800 font-sans font-bold text-xs underline">
-                    View
-                  </button>
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded text-white ${
+                    o.status === 'Running' ? 'bg-emerald-600' :
+                    o.status === 'Completed' ? 'bg-blue-600' :
+                    o.status === 'Hold' ? 'bg-amber-500' : 'bg-red-600'
+                  }`}>
+                    {o.status}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -1681,46 +1672,104 @@ export const Dashboard5ProductionExecution: React.FC = () => {
   const [scanResult, setScanResult] = useState<'OK' | 'NG'>('OK');
 
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={5} title="Production Execution" subtitle="Floor PCB Scan Terminal & Verification" />
 
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Run Pace</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">1,540 pcs/h</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Takt: 2.3s / unit</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Station Staffing</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">14/14 Online</div>
+            <div className="text-[10px] text-sky-200 mt-1">Shift A Certified</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Shift Output</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">11,420 pcs</div>
+            <div className="text-[10px] text-blue-200 mt-1">95.2% target</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Cycle Efficiency</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">96.8%</div>
+            <div className="text-[10px] text-purple-200 mt-1">OEE matched</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Zap className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Line Balance</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">91.4%</div>
+            <div className="text-[10px] text-orange-200 mt-1">SMEMA synchronized</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sliders className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
       {/* Top Filter Selection */}
-      <div className="grid grid-cols-4 gap-2 bg-white p-2.5 rounded shadow-sm border border-slate-200 my-3 text-xs">
+      <div className="grid grid-cols-4 gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs font-mono">
         <div>
-          <span className="text-slate-400 font-mono text-[10px] block">PLANT</span>
-          <select className="font-bold border rounded px-1.5 py-0.5 w-full mt-0.5 text-xs"><option>Plant-01</option></select>
+          <span className="text-slate-400 text-[10px] block">PLANT</span>
+          <select className="font-bold border border-slate-200 rounded px-2 py-1 w-full mt-0.5 text-xs"><option>Plant-01</option></select>
         </div>
         <div>
-          <span className="text-slate-400 font-mono text-[10px] block">LINE</span>
-          <select className="font-bold border rounded px-1.5 py-0.5 w-full mt-0.5 text-xs"><option>Line-01</option></select>
+          <span className="text-slate-400 text-[10px] block">LINE</span>
+          <select className="font-bold border border-slate-200 rounded px-2 py-1 w-full mt-0.5 text-xs"><option>Line-01</option></select>
         </div>
         <div>
-          <span className="text-slate-400 font-mono text-[10px] block">WO NO.</span>
-          <select className="font-bold border rounded px-1.5 py-0.5 w-full mt-0.5 text-xs"><option>WO-20260925-01</option></select>
+          <span className="text-slate-400 text-[10px] block">WO NO.</span>
+          <select className="font-bold border border-slate-200 rounded px-2 py-1 w-full mt-0.5 text-xs"><option>WO-20260925-01</option></select>
         </div>
         <div>
-          <span className="text-slate-400 font-mono text-[10px] block">PRODUCT</span>
-          <select className="font-bold border rounded px-1.5 py-0.5 w-full mt-0.5 text-xs"><option>SMT_ASSY_A</option></select>
+          <span className="text-slate-400 text-[10px] block">PRODUCT</span>
+          <select className="font-bold border border-slate-200 rounded px-2 py-1 w-full mt-0.5 text-xs"><option>SMT_ASSY_A</option></select>
         </div>
       </div>
 
       {/* Huge Scan Button Section */}
-      <div className="bg-white p-6 rounded shadow-sm border border-slate-200 text-center my-3">
-        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Cleanroom Optical Barcode Reader</div>
+      <div className="bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs text-center">
+        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Cleanroom Optical Barcode Laser Terminal</div>
         <button 
           onClick={() => setScanResult('OK')}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg px-8 py-3.5 rounded-lg shadow-md transition-transform active:scale-95 inline-flex items-center gap-2"
+          className="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg px-8 py-3.5 rounded-lg shadow-md transition-transform active:scale-95 inline-flex items-center gap-2 font-mono"
         >
           <CheckCircle2 className="w-6 h-6" /> Scan PCB Barcode
         </button>
-        <div className="text-[11px] text-slate-400 font-mono mt-2">Ready to receive IPC-CFX barcode laser scanner pulse</div>
+        <div className="text-[11px] text-slate-400 font-mono mt-2">Ready to receive IPC-CFX laser barcode trigger</div>
       </div>
 
       {/* Recent Scans Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
-        <div className="bg-slate-50 px-3 py-2 border-b font-bold text-xs text-slate-700 flex justify-between">
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="bg-slate-50/70 px-3 py-2 border-b font-bold text-xs text-slate-700 flex justify-between">
           <span>Recent Scans / Route Verification</span>
-          <span className="text-[10px] text-emerald-600 font-mono">● Scanner Online (COM3)</span>
+          <span className="text-[10px] text-emerald-600 font-mono font-bold">● Scanner Online (COM3 - 9600 Baud)</span>
         </div>
         <table className="w-full text-xs text-left">
           <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
@@ -1745,8 +1794,8 @@ export const Dashboard5ProductionExecution: React.FC = () => {
                 <td className="py-2 px-3 text-slate-500">{s.time}</td>
                 <td className="py-2 px-3 text-slate-700 font-bold">{s.step}</td>
                 <td className="py-2 px-3 text-center">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded shadow-xs ${
-                    s.res === 'OK' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded shadow-xs text-white ${
+                    s.res === 'OK' ? 'bg-emerald-600' : 'bg-red-600'
                   }`}>
                     {s.res}
                   </span>
@@ -1765,78 +1814,93 @@ export const Dashboard5ProductionExecution: React.FC = () => {
 // -------------------------------------------------------------
 export const Dashboard6WipManagement: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={6} title="WIP Management" subtitle="Work-In-Process Cleanroom Buffer Tracking" />
 
-      {/* Top 7 Stat badges */}
-      <div className="grid grid-cols-2 md:grid-cols-7 gap-2 my-3">
-        <div className="bg-white p-2 rounded border border-slate-200 text-center shadow-xs">
-          <div className="text-[10px] text-slate-500 font-bold uppercase">Total WIP</div>
-          <div className="text-xl font-black text-slate-900 font-mono mt-0.5">320</div>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Total WIP</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">3,420 panels</div>
+            <div className="text-[10px] text-cyan-200 mt-1">In-line buffer stock</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2 rounded border border-slate-200 text-center shadow-xs">
-          <div className="text-[10px] text-emerald-600 font-bold uppercase">Processing</div>
-          <div className="text-xl font-black text-emerald-600 font-mono mt-0.5">210</div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Buffer Saturation</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">42% Safe</div>
+            <div className="text-[10px] text-emerald-200 mt-1">No overflow alarm</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2 rounded border border-slate-200 text-center shadow-xs">
-          <div className="text-[10px] text-amber-600 font-bold uppercase">Waiting</div>
-          <div className="text-xl font-black text-amber-600 font-mono mt-0.5">45</div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Aging Alarms</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0 Dwell Alerts</div>
+            <div className="text-[10px] text-purple-200 mt-1">Max dwell &lt;2 hours</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2 rounded border border-slate-200 text-center shadow-xs">
-          <div className="text-[10px] text-red-600 font-bold uppercase">Hold</div>
-          <div className="text-xl font-black text-red-600 font-mono mt-0.5">20</div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Flow Velocity</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">28.4 s/panel</div>
+            <div className="text-[10px] text-sky-200 mt-1">SMEMA synchronized</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Zap className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2 rounded border border-slate-200 text-center shadow-xs">
-          <div className="text-[10px] text-rose-600 font-bold uppercase">NG</div>
-          <div className="text-xl font-black text-rose-600 font-mono mt-0.5">12</div>
-        </div>
-        <div className="bg-white p-2 rounded border border-slate-200 text-center shadow-xs">
-          <div className="text-[10px] text-purple-600 font-bold uppercase">Repair</div>
-          <div className="text-xl font-black text-purple-600 font-mono mt-0.5">8</div>
-        </div>
-        <div className="bg-white p-2 rounded border border-slate-200 text-center shadow-xs">
-          <div className="text-[10px] text-blue-600 font-bold uppercase">Completed</div>
-          <div className="text-xl font-black text-blue-600 font-mono mt-0.5">1,236</div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Magazines In-Use</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">18 / 40 Slots</div>
+            <div className="text-[10px] text-orange-200 mt-1">22 empty available</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Database className="w-5 h-5 text-white" />
+          </div>
         </div>
       </div>
 
-      {/* WIP Queue Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
-        <table className="w-full text-xs text-left">
-          <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
-            <tr>
-              <th className="py-2.5 px-3">PCB Serial No</th>
-              <th className="py-2.5 px-3">Product</th>
-              <th className="py-2.5 px-3">Current Line</th>
-              <th className="py-2.5 px-3">Current Process</th>
-              <th className="py-2.5 px-3 text-center">Status</th>
-              <th className="py-2.5 px-3 text-right">Time at Process</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 font-mono">
-            {[
-              { sn: '705525635000551', prod: 'SMT_ASSY_A', line: 'Line-01', step: 'Placement', status: 'Processing', color: 'bg-emerald-600', time: '00:01:22' },
-              { sn: '705525635000552', prod: 'SMT_ASSY_B', line: 'Line-01', step: 'Placement', status: 'Processing', color: 'bg-emerald-600', time: '00:00:54' },
-              { sn: '705525635000553', prod: 'SMT_ASSY_A', line: 'Line-01', step: 'Placement', status: 'Waiting', color: 'bg-amber-500', time: '00:03:10' },
-              { sn: '705525635000554', prod: 'SMT_ASSY_C', line: 'Line-01', step: 'AOI', status: 'NG', color: 'bg-red-600', time: '00:05:28' },
-              { sn: '705525635000555', prod: 'SMT_ASSY_A', line: 'Line-01', step: 'AOI', status: 'Repair', color: 'bg-purple-600', time: '00:08:45' },
-              { sn: '705525635000556', prod: 'SMT_ASSY_A', line: 'Line-01', step: 'Completed', status: 'Completed', color: 'bg-blue-600', time: '00:09:00' },
-            ].map((row, idx) => (
-              <tr key={idx} className="hover:bg-slate-50">
-                <td className="py-2.5 px-3 font-bold text-blue-600">{row.sn}</td>
-                <td className="py-2.5 px-3 text-slate-700 font-bold">{row.prod}</td>
-                <td className="py-2.5 px-3 text-slate-500">{row.line}</td>
-                <td className="py-2.5 px-3 text-slate-800 font-bold">{row.step}</td>
-                <td className="py-2.5 px-3 text-center">
-                  <span className={`${row.color} text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs inline-block min-w-[70px]`}>
-                    {row.status}
-                  </span>
-                </td>
-                <td className="py-2.5 px-3 text-right text-slate-500">{row.time}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Buffers Visual Map */}
+      <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
+        <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-100">
+          <span className="font-bold text-xs text-slate-800">SMT In-Line Buffer Queue Distribution</span>
+          <span className="text-[10px] text-slate-400 font-mono">Max Capacity: 50 Panels / Buffer</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+          {[
+            { name: 'Loader Buffer', count: 24, max: 50, col: 'bg-emerald-500' },
+            { name: 'Post-Printer', count: 12, max: 50, col: 'bg-emerald-500' },
+            { name: 'Pre-SPI Queue', count: 8, max: 50, col: 'bg-emerald-500' },
+            { name: 'Mounter Buffer', count: 32, max: 50, col: 'bg-amber-500' },
+            { name: 'Pre-Reflow', count: 18, max: 50, col: 'bg-emerald-500' },
+            { name: 'Post-AOI Buffer', count: 14, max: 50, col: 'bg-emerald-500' },
+          ].map(b => (
+            <div key={b.name} className="bg-slate-50 p-2.5 rounded-lg border border-slate-200/80 text-center font-mono">
+              <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">{b.name}</div>
+              <div className="text-xl font-black text-slate-800">{b.count}</div>
+              <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2">
+                <div className={`${b.col} h-1.5 rounded-full`} style={{ width: `${(b.count/b.max)*100}%` }} />
+              </div>
+              <div className="text-[9px] text-slate-400 mt-1">{Math.round((b.count/b.max)*100)}% Cap</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -1846,125 +1910,100 @@ export const Dashboard6WipManagement: React.FC = () => {
 // [7] Quality Dashboard (Overall)
 // -------------------------------------------------------------
 export const Dashboard7QualityOverall: React.FC = () => {
-  const [selectedScope, setSelectedScope] = useState<string>('All Lines');
-
   return (
     <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={7} title="Quality Dashboard (Overall)" subtitle="Cleanroom Defect Pareto & Six Sigma SPC" />
 
-      {/* Control Strip: Scope Selector + Six Sigma Telemetry */}
-      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
-        <div className="flex items-center gap-1.5 font-mono">
-          <span className="text-slate-500 font-sans font-bold text-[11px] mr-1">SCOPE:</span>
-          {['All Lines', 'Line-01', 'Line-02', 'Line-03'].map((scope) => (
-            <button
-              key={scope}
-              onClick={() => setSelectedScope(scope)}
-              className={`px-2.5 py-1 rounded font-bold transition-all text-xs ${
-                selectedScope === scope
-                  ? 'bg-[#1E50ED] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {scope}
-            </button>
-          ))}
+      {/* TOP ROW: 7 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Overall FPY</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">98.9%</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Target: 98.5%</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
         </div>
 
-        <div className="flex items-center gap-3 font-mono text-[11px]">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
-            <Star className="w-3.5 h-3.5 text-emerald-600 fill-emerald-500" />
-            <span className="font-bold">SIX SIGMA SPC ● 1.48 Cpk (4.8σ)</span>
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">SPI FPY</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">99.2%</div>
+            <div className="text-[10px] text-sky-200 mt-1">Vol: 100.8% Avg</div>
           </div>
-          <span className="text-slate-500 hidden sm:inline">Defect Threshold: &lt; 8,000 PPM</span>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Eye className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Placement FPY</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">99.5%</div>
+            <div className="text-[10px] text-purple-200 mt-1">Pick Err: 12 PPM</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Cpu className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">AOI FPY</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">98.1%</div>
+            <div className="text-[10px] text-cyan-200 mt-1">False Call: 0.15%</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Eye className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#DC2626] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-red-100">Defect PPM</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">6,250</div>
+            <div className="text-[10px] text-red-200 mt-1">▼ -18% vs UCL</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Repair Rate</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0.8%</div>
+            <div className="text-[10px] text-orange-200 mt-1">91 Bds Reworked</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Wrench className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#475569] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-200">Scrap Rate</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0.3%</div>
+            <div className="text-[10px] text-slate-300 mt-1">Target: &lt;0.5%</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <XCircle className="w-5 h-5 text-white" />
+          </div>
         </div>
       </div>
 
-      {/* Top 7 Saturated/Sapphire Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-7 gap-2.5 font-mono">
-        {/* 1. Overall FPY */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Overall FPY</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          </div>
-          <div className="text-2xl font-black text-emerald-600 mt-1">98.9%</div>
-          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
-            Target: 98.5% (Pass)
-          </div>
+      {/* Six Sigma Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-slate-800">SIX SIGMA SPC METRICS:</span>
+          <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono font-bold">
+            Cpk: 1.48 (4.8σ World Class)
+          </span>
+          <span className="text-slate-500 font-mono">DPMO: 112 | Spec Limit: ±3σ</span>
         </div>
-
-        {/* 2. SPI FPY */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">SPI FPY</span>
-            <span className="w-2 h-2 rounded-full bg-blue-500" />
-          </div>
-          <div className="text-2xl font-black text-blue-600 mt-1">99.2%</div>
-          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
-            Vol: 100.8% Avg
-          </div>
-        </div>
-
-        {/* 3. Placement FPY */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-purple-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Placement FPY</span>
-            <span className="w-2 h-2 rounded-full bg-purple-500" />
-          </div>
-          <div className="text-2xl font-black text-purple-600 mt-1">99.5%</div>
-          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
-            Pick Err: 12 PPM
-          </div>
-        </div>
-
-        {/* 4. AOI FPY */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-indigo-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">AOI FPY</span>
-            <span className="w-2 h-2 rounded-full bg-indigo-500" />
-          </div>
-          <div className="text-2xl font-black text-indigo-600 mt-1">98.1%</div>
-          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
-            False Call: 0.15%
-          </div>
-        </div>
-
-        {/* 5. Defect PPM */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-red-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Defect PPM</span>
-            <span className="w-2 h-2 rounded-full bg-red-500" />
-          </div>
-          <div className="text-2xl font-black text-red-600 mt-1">6,250</div>
-          <div className="text-[9.5px] text-emerald-600 font-mono mt-1 pt-1 border-t border-slate-100 font-bold">
-            ▼ -18% vs UCL
-          </div>
-        </div>
-
-        {/* 6. Repair Rate */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-amber-300 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Repair Rate</span>
-            <span className="w-2 h-2 rounded-full bg-amber-500" />
-          </div>
-          <div className="text-2xl font-black text-amber-600 mt-1">0.8%</div>
-          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
-            91 Bds Reworked
-          </div>
-        </div>
-
-        {/* 7. Scrap Rate */}
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-slate-400 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-sans font-bold uppercase">Scrap Rate</span>
-            <span className="w-2 h-2 rounded-full bg-slate-400" />
-          </div>
-          <div className="text-2xl font-black text-slate-800 mt-1">0.3%</div>
-          <div className="text-[9.5px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-100">
-            34 Bds Scrapped
-          </div>
-        </div>
+        <span className="text-blue-600 font-mono font-bold">Auto-Purge Loop: ON</span>
       </div>
 
       {/* Charts Grid */}
@@ -2044,6 +2083,64 @@ export const Dashboard8Spi: React.FC = () => {
     <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
       <DpxSeqBadge seq={8} title="SPI Dashboard" subtitle="Koh Young 3D Solder Paste Inspection" />
 
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Boards Inspected</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">1,240</div>
+            <div className="text-[10px] text-blue-200 mt-1">Shift A Progress</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Boards OK</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">1,226</div>
+            <div className="text-[10px] text-emerald-200 mt-1">98.9% Pass Rate</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#DC2626] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-red-100">Boards NG</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">14</div>
+            <div className="text-[10px] text-red-200 mt-1">1.1% Defect Rate</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <XCircle className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Solder Volume Avg</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">100.8%</div>
+            <div className="text-[10px] text-sky-200 mt-1">Target: 80% - 130%</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sliders className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Cycle Time</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">4.8 s</div>
+            <div className="text-[10px] text-purple-200 mt-1">Takt Cap: 6.5s</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
       {/* Control Strip */}
       <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs text-xs">
         <div className="flex items-center gap-2 font-mono">
@@ -2059,35 +2156,6 @@ export const Dashboard8Spi: React.FC = () => {
           <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">
             CLOSED-LOOP FEEDBACK ● ON
           </span>
-        </div>
-      </div>
-
-      {/* Top 5 Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 font-mono">
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Boards Inspected</div>
-          <div className="text-2xl font-black text-slate-900 mt-1">1,240</div>
-          <div className="text-[9.5px] text-slate-400 mt-1 pt-1 border-t border-slate-100">Shift A Progress</div>
-        </div>
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Boards OK</div>
-          <div className="text-2xl font-black text-emerald-600 mt-1">1,226</div>
-          <div className="text-[9.5px] text-emerald-600 font-bold mt-1 pt-1 border-t border-slate-100">98.9% Pass Rate</div>
-        </div>
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Boards NG</div>
-          <div className="text-2xl font-black text-red-600 mt-1">14</div>
-          <div className="text-[9.5px] text-red-500 mt-1 pt-1 border-t border-slate-100">1.1% Defect Rate</div>
-        </div>
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">SPI FPY</div>
-          <div className="text-2xl font-black text-[#1E50ED] mt-1">98.9%</div>
-          <div className="text-[9.5px] text-blue-500 mt-1 pt-1 border-t border-slate-100">Target: 98.0%</div>
-        </div>
-        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <div className="text-[10px] text-slate-500 font-sans font-bold uppercase">Cycle Time</div>
-          <div className="text-2xl font-black text-purple-600 mt-1">4.8 s</div>
-          <div className="text-[9.5px] text-slate-400 mt-1 pt-1 border-t border-slate-100">Takt Cap: 6.5s</div>
         </div>
       </div>
 
@@ -2169,98 +2237,98 @@ export const Dashboard8Spi: React.FC = () => {
 // -------------------------------------------------------------
 export const Dashboard9FujiPlacement: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={9} title="FUJI Placement Dashboard" subtitle="NXT III High-Speed Modular Mounter" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={9} title="FUJI Placement Dashboard" subtitle="AIMEX III / NXT III High-Speed Mounters" />
 
-      {/* Machine Header */}
-      <div className="flex items-center justify-between bg-white p-2.5 rounded shadow-sm border border-slate-200 my-3 text-xs">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-slate-700">Machine:</span>
-          <span className="bg-blue-100 text-blue-800 font-mono font-black px-2 py-0.5 rounded">NXT-05 (Line-01)</span>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Placement Speed</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">44,820 CPH</div>
+            <div className="text-[10px] text-purple-200 mt-1">Peak: 48,200 CPH</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Zap className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="flex gap-4 text-xs font-mono">
-          <span>Boards: <strong>1,240</strong></span>
-          <span>Speed: <strong className="text-blue-600">44,820 CPH</strong></span>
-          <span>Placement FPY: <strong className="text-emerald-600">99.52%</strong></span>
-          <span>Drop Rate: <strong className="text-amber-600">0.22%</strong></span>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Pickup Error</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">12 PPM</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Benchmark &lt;25 PPM</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Active Nozzles</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">24/24 Online</div>
+            <div className="text-[10px] text-sky-200 mt-1">H01-H12 Heads Valid</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Cpu className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Reel Splice Due</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">Slot 08 (12m)</div>
+            <div className="text-[10px] text-orange-200 mt-1">Dispatch AGV Trolley</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Placed Today</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">1.42M chips</div>
+            <div className="text-[10px] text-cyan-200 mt-1">Shift A throughput</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
+          </div>
         </div>
       </div>
 
-      {/* Module 1-4 Status Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden mb-3">
-        <div className="p-2.5 bg-slate-50 border-b font-bold text-xs text-slate-700">
-          Module Configuration & Operational Status
-        </div>
-        <table className="w-full text-xs text-left">
-          <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
-            <tr>
-              <th className="py-2 px-3">Module</th>
-              <th className="py-2 px-3">Head Type</th>
-              <th className="py-2 px-3 text-center">Status</th>
-              <th className="py-2 px-3 text-right">Nozzles</th>
-              <th className="py-2 px-3 text-right">Pick Errors</th>
-              <th className="py-2 px-3 text-right">Drop Count</th>
-              <th className="py-2 px-3 text-right">Head Temp</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 font-mono">
-            {[
-              { m: 'M01', head: 'H24S (24-Nozzle High Speed)', st: 'Running', noz: 24, err: 2, drop: 1, temp: '42°C' },
-              { m: 'M02', head: 'H08M (8-Nozzle Multi)', st: 'Running', noz: 8, err: 0, drop: 0, temp: '41°C' },
-              { m: 'M03', head: 'H24S (24-Nozzle High Speed)', st: 'Running', noz: 24, err: 3, drop: 2, temp: '43°C' },
-              { m: 'M04', head: 'H04 (4-Nozzle Odd-Form)', st: 'Running', noz: 4, err: 1, drop: 1, temp: '40°C' },
-            ].map(r => (
-              <tr key={r.m} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">{r.m}</td>
-                <td className="py-2 px-3 font-sans font-medium">{r.head}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                    {r.st}
-                  </span>
-                </td>
-                <td className="py-2 px-3 text-right">{r.noz}</td>
-                <td className="py-2 px-3 text-right text-amber-600 font-bold">{r.err}</td>
-                <td className="py-2 px-3 text-right text-red-600 font-bold">{r.drop}</td>
-                <td className="py-2 px-3 text-right text-slate-500">{r.temp}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Drop Rate & Pick Error Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-bold text-xs text-slate-700">Drop Rate Trend (PPM Target &lt; 25)</span>
-            <span className="text-[10px] text-emerald-600 font-bold font-mono">Current: 8 PPM (OK)</span>
+      {/* Fuji Error Trend Chart & Nozzle Distribution */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-xs text-slate-700">Drop Rate Trend (PPM) Across Shift</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">Threshold: 25 PPM (UCL)</span>
           </div>
           <DpxMultiLineTrend
-            labels={['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10']}
+            labels={['08h', '09h', '10h', '11h', '12h', '13h', '14h', '15h']}
             threshold={25}
-            thresholdLabel="Max UCL"
+            thresholdLabel="25 PPM UCL"
             series={[
-              { name: 'Drop Rate (PPM)', color: '#3B82F6', data: [22, 18, 25, 30, 15, 12, 14, 18, 10, 8] },
-              { name: 'Shift Target', color: '#10B981', data: [15, 15, 15, 15, 15, 15, 15, 15, 15, 15] },
+              { name: '0402 Chips', color: '#1E50ED', data: [18, 14, 12, 10, 15, 11, 8, 9] },
+              { name: '0201 Passives', color: '#EA580C', data: [22, 19, 15, 14, 18, 12, 11, 10] },
             ]}
           />
         </div>
 
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-bold text-xs text-slate-700">Nozzle Pick Error Analysis by Head</span>
-            <span className="text-[10px] text-slate-400 font-mono">H24S Nozzles N1 - N8</span>
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-xs text-slate-700">Nozzle Pick Error by Head (H01-H12)</span>
+            <span className="text-[10px] text-slate-400 font-mono">PPM / Head</span>
           </div>
           <DpxDualBarChart
             items={[
-              { label: 'N1', plan: 100, actual: 4 },
-              { label: 'N2', plan: 100, actual: 2 },
-              { label: 'N3', plan: 100, actual: 7 },
-              { label: 'N4', plan: 100, actual: 1 },
-              { label: 'N5', plan: 100, actual: 0 },
-              { label: 'N6', plan: 100, actual: 3 },
-              { label: 'N7', plan: 100, actual: 5 },
-              { label: 'N8', plan: 100, actual: 2 },
+              { label: 'H01', plan: 15, actual: 12 },
+              { label: 'H02', plan: 15, actual: 8 },
+              { label: 'H03', plan: 15, actual: 14 },
+              { label: 'H04', plan: 15, actual: 19 },
+              { label: 'H05', plan: 15, actual: 6 },
+              { label: 'H06', plan: 15, actual: 11 },
             ]}
           />
         </div>
@@ -2270,41 +2338,108 @@ export const Dashboard9FujiPlacement: React.FC = () => {
 };
 
 // -------------------------------------------------------------
-// [10] SMT Stencil & Setup Management Dashboard
+// [10] Stencil Setup & Solder Paste Life
 // -------------------------------------------------------------
 export const Dashboard10StencilSetup: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={10} title="SMT Stencil & Setup" subtitle="Printer Tooling & Tension Governance" />
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 my-3">
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-400 font-bold uppercase">Stencil ID</div>
-          <div className="text-lg font-black text-slate-800 font-mono mt-1">ST-METER-REV4</div>
-          <div className="text-[10px] text-emerald-600 font-bold mt-1">● Tension: 38 N/cm (PASS)</div>
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={10} title="Stencil Setup & Solder Paste Life" subtitle="Screen Printer Setup & IPC J-STD-005" />
+
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Paste Open Life</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">3h 45m rem</div>
+            <div className="text-[10px] text-emerald-200 mt-1">IPC J-STD-005 spec</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-400 font-bold uppercase">Wash Cycle Counter</div>
-          <div className="text-lg font-black text-blue-600 font-mono mt-1">14 / 20</div>
-          <div className="text-[10px] text-slate-500 mt-1">6 prints until auto-wipe</div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Stencil Tension</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">38.4 N/cm</div>
+            <div className="text-[10px] text-sky-200 mt-1">Nominal: 35 - 42 N/cm</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sliders className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-400 font-bold uppercase">Squeegee Pressure</div>
-          <div className="text-lg font-black text-indigo-600 font-mono mt-1">2.4 kg / 180mm</div>
-          <div className="text-[10px] text-emerald-600 font-bold mt-1">● Speed: 35 mm/s</div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Wipe Cycles</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">14 / 50</div>
+            <div className="text-[10px] text-cyan-200 mt-1">Auto-wipe interval 5 pcb</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <RefreshCw className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-400 font-bold uppercase">Paste MSL Life</div>
-          <div className="text-lg font-black text-emerald-600 font-mono mt-1">4.2 hrs remaining</div>
-          <div className="text-[10px] text-slate-500 mt-1">Lot: SP-2026-SAC305</div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Squeegee Force</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">7.2 kg</div>
+            <div className="text-[10px] text-purple-200 mt-1">Speed: 35 mm/s</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Jar Thaw Time</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">4.0h Done</div>
+            <div className="text-[10px] text-blue-200 mt-1">Room temp stabilized</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
         </div>
       </div>
-      <div className="bg-white p-4 rounded shadow-sm border border-slate-200 text-xs font-mono">
-        <div className="font-bold text-slate-700 mb-2">Setup Checklist & Cleanroom Verification</div>
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2 text-emerald-700"><Check className="w-4 h-4 text-emerald-600" /> Stencil fiducial alignment verified (±8µm limit met)</div>
-          <div className="flex items-center gap-2 text-emerald-700"><Check className="w-4 h-4 text-emerald-600" /> Solvent level in automatic under-stencil roll OK</div>
-          <div className="flex items-center gap-2 text-emerald-700"><Check className="w-4 h-4 text-emerald-600" /> Support pins magnetic matrix locked in position</div>
-          <div className="flex items-center gap-2 text-emerald-700"><Check className="w-4 h-4 text-emerald-600" /> Closed-loop SPI feedback handshake established</div>
+
+      {/* 5-Point Tension Grid & Lot Status */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
+          <div className="font-bold text-xs text-slate-800 mb-2">5-Point Fiducial Stencil Tension Grid (N/cm)</div>
+          <div className="grid grid-cols-3 gap-2 text-center font-mono text-xs p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="bg-white p-2 rounded shadow-2xs font-bold text-emerald-600">TL: 38.2</div>
+            <div className="text-slate-300 flex items-center justify-center">──</div>
+            <div className="bg-white p-2 rounded shadow-2xs font-bold text-emerald-600">TR: 38.6</div>
+            <div className="text-slate-300 flex items-center justify-center">│</div>
+            <div className="bg-blue-50 border border-blue-200 p-2 rounded shadow-2xs font-black text-blue-700">CTR: 38.4</div>
+            <div className="text-slate-300 flex items-center justify-center">│</div>
+            <div className="bg-white p-2 rounded shadow-2xs font-bold text-emerald-600">BL: 37.9</div>
+            <div className="text-slate-300 flex items-center justify-center">──</div>
+            <div className="bg-white p-2 rounded shadow-2xs font-bold text-emerald-600">BR: 38.5</div>
+          </div>
+        </div>
+
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between font-mono text-xs">
+          <div className="font-bold text-xs text-slate-800 font-sans mb-1">Active Solder Paste Lot Tracking</div>
+          <div className="space-y-1.5 py-1">
+            <div className="flex justify-between py-1 border-b border-slate-100">
+              <span className="text-slate-400">PASTE LOT:</span>
+              <span className="font-bold text-slate-800">SP-2026-SAC305-928</span>
+            </div>
+            <div className="flex justify-between py-1 border-b border-slate-100">
+              <span className="text-slate-400">ALLOY TYPE:</span>
+              <span className="font-bold text-slate-800">Sn96.5 Ag3.0 Cu0.5 (Type 4)</span>
+            </div>
+            <div className="flex justify-between py-1 border-b border-slate-100">
+              <span className="text-slate-400">JAR OPENED:</span>
+              <span className="text-slate-700">25-Sep-2026 08:15 AM</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-slate-400">DISCARD EXPIRY:</span>
+              <span className="font-bold text-emerald-600">25-Sep-2026 16:15 PM (3h 45m left)</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2316,67 +2451,92 @@ export const Dashboard10StencilSetup: React.FC = () => {
 // -------------------------------------------------------------
 export const Dashboard11Aoi: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={11} title="AOI Dashboard" subtitle="Automated Optical Inspection Defect Review" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={11} title="AOI Dashboard" subtitle="Koh Young Zenith 3D Automated Optical Inspection" />
 
-      {/* Top metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 my-3 font-mono">
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Boards Inspected</div>
-          <div className="text-xl font-black text-slate-900 mt-1">1,236</div>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Inspected Boards</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">1,240</div>
+            <div className="text-[10px] text-blue-200 mt-1">Zenith 3D Camera</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Boards OK</div>
-          <div className="text-xl font-black text-emerald-600 mt-1">1,206</div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">True FPY</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">98.1%</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Target &gt;97.5%</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Boards NG</div>
-          <div className="text-xl font-black text-red-600 mt-1">30</div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">False Call Rate</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0.12%</div>
+            <div className="text-[10px] text-cyan-200 mt-1">AI Neural Filtered</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Eye className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">AOI FPY</div>
-          <div className="text-xl font-black text-purple-600 mt-1">97.6%</div>
+
+        <div className="bg-[#DC2626] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-red-100">Defect Count</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">24 pcs</div>
+            <div className="text-[10px] text-red-200 mt-1">14 Missing, 6 Tomb</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Cycle Time</div>
-          <div className="text-xl font-black text-indigo-600 mt-1">6.0 s</div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Optical Cycle</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">10.8 s</div>
+            <div className="text-[10px] text-purple-200 mt-1">Takt: 12.0s</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
         </div>
       </div>
 
-      {/* Image Preview & Defect Table */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {/* Optical Camera Defect View */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-bold text-xs text-slate-700">Koh Young Zenith 3D AOI Inspection Feed</span>
-            <span className="text-[10px] text-red-600 font-bold font-mono">1 DEFECT LOCATED</span>
+      {/* Optical Camera View & Defect Classification */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-xs text-slate-700">Zenith 3D High-Res Optical Feed</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">● 8-WAY COAXIAL PROJECTION</span>
           </div>
           <DpxOpticalPcb type="AOI" showBBoxes={true} />
         </div>
 
-        {/* Defect Pareto */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-xs text-slate-700">AOI Defect Classification Breakdown</span>
-              <span className="text-[10px] text-slate-400 font-mono">30 NG Boards</span>
-            </div>
-            <DpxHorizontalPareto
-              maxPct={40}
-              items={[
-                { name: 'Missing Component', percentage: 35.2, color: '#EF4444' },
-                { name: 'Tombstone', percentage: 32.1, color: '#F59E0B' },
-                { name: 'Polarity Reverse', percentage: 15.2, color: '#8B5CF6' },
-                { name: 'Solder Bridge', percentage: 10.8, color: '#3B82F6' },
-                { name: 'Insufficient Solder', percentage: 5.8, color: '#06B6D4' },
-                { name: 'Wrong Component', percentage: 0.9, color: '#94A3B8' },
-              ]}
-            />
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-xs text-slate-700">AOI Defect Classification</span>
+            <span className="text-[10px] text-slate-400 font-mono">24 Total Defective</span>
           </div>
-          <div className="p-2 bg-slate-50 border rounded text-[10px] text-slate-500 font-mono flex justify-between mt-3">
-            <span>Defect Density: 2.42%</span>
-            <span className="text-blue-600 font-bold">Auto-Review Queue: 4 pending</span>
-          </div>
+          <DpxHorizontalPareto
+            maxPct={50}
+            items={[
+              { name: 'Missing 0402 Chip', percentage: 42, color: '#EF4444' },
+              { name: 'Tombstoning (C0603)', percentage: 25, color: '#F59E0B' },
+              { name: 'Solder Bridge (QFP48)', percentage: 18, color: '#6366F1' },
+              { name: 'Polarity Reverse (LED)', percentage: 10, color: '#3B82F6' },
+              { name: 'Lifted Lead (SOIC8)', percentage: 5, color: '#94A3B8' },
+            ]}
+          />
         </div>
       </div>
     </div>
@@ -2388,230 +2548,312 @@ export const Dashboard11Aoi: React.FC = () => {
 // -------------------------------------------------------------
 export const Dashboard12Reflow: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={12} title="Reflow Dashboard" subtitle="Heller 10-Zone Thermal Profiling & PWI" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={12} title="Reflow Dashboard" subtitle="Heller 1913 MK5 10-Zone Forced Air Convection" />
 
-      {/* Top metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 my-3 font-mono">
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Boards Processed</div>
-          <div className="text-xl font-black text-slate-900 mt-0.5">1,238</div>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Process Window (PWI)</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">62.4% PWI</div>
+            <div className="text-[10px] text-emerald-200 mt-1">SAC305 Spec &lt;80%</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Profile OK</div>
-          <div className="text-xl font-black text-emerald-600 mt-0.5">98.8%</div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Peak Temperature</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">245.2°C</div>
+            <div className="text-[10px] text-orange-200 mt-1">Nominal: 242-248°C</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Flame className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Thermal NG</div>
-          <div className="text-xl font-black text-red-600 mt-0.5">0.48%</div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Time Above Liquidus</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">62 sec TAL</div>
+            <div className="text-[10px] text-sky-200 mt-1">Liquidus line 217°C</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200 text-center">
-          <div className="text-[10px] text-slate-500 font-sans font-bold">Oven Temperature</div>
-          <div className="text-xl font-black text-blue-600 mt-0.5">OPTIMAL</div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">N2 Oxygen Level</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">450 PPM</div>
+            <div className="text-[10px] text-purple-200 mt-1">Target &lt;500 PPM</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Conveyor Speed</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0.85 m/min</div>
+            <div className="text-[10px] text-cyan-200 mt-1">Profile locked</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sliders className="w-5 h-5 text-white" />
+          </div>
         </div>
       </div>
 
-      {/* 10-Zone Curve + Table */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {/* Thermal Curve SVG */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-bold text-xs text-slate-700">10-Zone Reflow Thermal Profile (SAC305 Lead-Free)</span>
-            <span className="text-[10px] text-emerald-600 font-bold font-mono">● LIVE THERMOCOUPLE FEED</span>
-          </div>
-          <DpxReflowThermalCurve
-            liquidusTemp={217}
-            peakTemp={245}
-            zones={[
-              { zone: 1, setTemp: 140, actualTemp: 138, label: 'Preheat 1' },
-              { zone: 2, setTemp: 155, actualTemp: 154, label: 'Preheat 2' },
-              { zone: 3, setTemp: 170, actualTemp: 171, label: 'Soak 1' },
-              { zone: 4, setTemp: 185, actualTemp: 184, label: 'Soak 2' },
-              { zone: 5, setTemp: 200, actualTemp: 199, label: 'Soak 3' },
-              { zone: 6, setTemp: 220, actualTemp: 222, label: 'Reflow 1' },
-              { zone: 7, setTemp: 245, actualTemp: 246, label: 'Peak' },
-              { zone: 8, setTemp: 230, actualTemp: 228, label: 'Reflow 2' },
-              { zone: 9, setTemp: 170, actualTemp: 168, label: 'Cool 1' },
-              { zone: 10, setTemp: 90, actualTemp: 88, label: 'Cool 2' },
-            ]}
-          />
+      {/* 10-Zone Thermal Curve */}
+      <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
+        <div className="flex justify-between items-center mb-2">
+          <span className="font-bold text-xs text-slate-700">10-Zone Thermal Gradient Profile (SAC305 Solder Recipe)</span>
+          <span className="text-[10px] text-emerald-600 font-bold font-mono">● KIC RPI LIVE THERMOCOUPLE LINK ACTIVE</span>
         </div>
+        <DpxReflowThermalCurve
+          zones={[
+            { zone: 1, setTemp: 155, actualTemp: 153, label: 'Z1 Pre-heat' },
+            { zone: 2, setTemp: 170, actualTemp: 169, label: 'Z2 Soak 1' },
+            { zone: 3, setTemp: 185, actualTemp: 184, label: 'Z3 Soak 2' },
+            { zone: 4, setTemp: 205, actualTemp: 204, label: 'Z4 Soak 3' },
+            { zone: 5, setTemp: 220, actualTemp: 219, label: 'Z5 Ramp' },
+            { zone: 6, setTemp: 238, actualTemp: 237, label: 'Z6 Reflow 1' },
+            { zone: 7, setTemp: 245, actualTemp: 244, label: 'Z7 Peak' },
+            { zone: 8, setTemp: 242, actualTemp: 241, label: 'Z8 Reflow 2' },
+            { zone: 9, setTemp: 180, actualTemp: 178, label: 'Z9 Cool 1' },
+            { zone: 10, setTemp: 80, actualTemp: 78, label: 'Z10 Cool 2' },
+          ]}
+          liquidusTemp={217}
+          peakTemp={245}
+        />
+      </div>
 
-        {/* Zone 1-10 Table */}
-        <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
-          <table className="w-full text-xs text-left">
-            <thead className="bg-slate-50 border-b text-slate-500 font-mono uppercase text-[10px]">
-              <tr>
-                <th className="py-2 px-3">Zone</th>
-                <th className="py-2 px-3">Set (°C)</th>
-                <th className="py-2 px-3">Actual (°C)</th>
-                <th className="py-2 px-3">Upper / Lower</th>
-                <th className="py-2 px-3 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-mono">
-              {[
-                { z: 1, set: 150, act: 150.2, band: '±5°C', st: 'OK' },
-                { z: 2, set: 165, act: 165.4, band: '±5°C', st: 'OK' },
-                { z: 3, set: 180, act: 180.1, band: '±5°C', st: 'OK' },
-                { z: 4, set: 195, act: 194.8, band: '±5°C', st: 'OK' },
-                { z: 5, set: 215, act: 215.3, band: '±5°C', st: 'OK' },
-                { z: 6, set: 245, act: 245.0, band: '±5°C', st: 'OK' },
-              ].map(r => (
-                <tr key={r.z} className="hover:bg-slate-50">
-                  <td className="py-2 px-3 font-bold text-blue-600">Zone {r.z}</td>
-                  <td className="py-2 px-3">{r.set}</td>
-                  <td className="py-2 px-3 font-bold">{r.act}</td>
-                  <td className="py-2 px-3 text-slate-500">{r.band}</td>
-                  <td className="py-2 px-3 text-center">
-                    <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                      {r.st}
-                    </span>
-                  </td>
-                </tr>
+      {/* 10-Zone Table */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <table className="w-full text-xs text-center font-mono">
+          <thead className="bg-slate-50 border-b text-slate-500 text-[10px]">
+            <tr>
+              <th className="py-2 px-1">Zone</th>
+              {Array.from({ length: 10 }, (_, i) => <th key={i} className="py-2 px-1">Z{i + 1}</th>)}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            <tr>
+              <td className="py-2 px-1 font-bold text-slate-700 text-left pl-3">Top Set (°C)</td>
+              {[155, 170, 185, 205, 220, 238, 245, 242, 180, 80].map((t, i) => <td key={i} className="py-2 px-1">{t}</td>)}
+            </tr>
+            <tr className="bg-slate-50/50">
+              <td className="py-2 px-1 font-bold text-slate-700 text-left pl-3">Top Act (°C)</td>
+              {[154, 169, 186, 204, 219, 237, 245.2, 241, 179, 79].map((t, i) => (
+                <td key={i} className="py-2 px-1 font-bold text-emerald-600">{t}</td>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
 };
 
 // -------------------------------------------------------------
-// [13] PCB Traceability / Genealogy Dashboard
+// [13] PCB Traceability
 // -------------------------------------------------------------
 export const Dashboard13PcbTraceability: React.FC = () => {
-  const [serial, setSerial] = useState('705525635000551');
-
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={13} title="PCB Traceability / Genealogy" subtitle="Complete Unit Lifecycle History" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={13} title="PCB Traceability" subtitle="IPC-1782 Level 4 & 21 CFR Part 11 Audit Trail" />
 
-      {/* Search Bar */}
-      <div className="flex items-center gap-2 bg-white p-3 rounded shadow-sm border border-slate-200 my-3">
-        <span className="text-xs font-bold text-slate-600">PCB Serial No:</span>
-        <input
-          type="text"
-          value={serial}
-          onChange={(e) => setSerial(e.target.value)}
-          className="border rounded px-3 py-1 text-xs font-mono font-bold w-64 border-slate-300 focus:outline-blue-500"
-        />
-        <button className="bg-blue-600 text-white font-bold text-xs px-4 py-1.5 rounded hover:bg-blue-700 flex items-center gap-1">
-          <Search className="w-3.5 h-3.5" /> Search
-        </button>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Traced Boards</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">11,420 pcs</div>
+            <div className="text-[10px] text-blue-200 mt-1">Shift A 100% indexed</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">IPC-1782 Standard</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">Class 4 Valid</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Full component lot linkage</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Hash Integrity</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">SHA-256 OK</div>
+            <div className="text-[10px] text-purple-200 mt-1">Immutable ledger locked</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Database className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Quarantine Holds</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0 Boards</div>
+            <div className="text-[10px] text-cyan-200 mt-1">Audit trail clear</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">e-Signature Log</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">972 Records</div>
+            <div className="text-[10px] text-sky-200 mt-1">21 CFR Part 11</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-white" />
+          </div>
+        </div>
       </div>
 
-      {/* Header Info */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 bg-white p-3 rounded shadow-sm border border-slate-200 mb-3 text-xs font-mono">
-        <div><span className="text-slate-400 block text-[10px]">PRODUCT</span> <strong>SMT_ASSY_A</strong></div>
-        <div><span className="text-slate-400 block text-[10px]">WORK ORDER</span> <strong>WO-20260925-01</strong></div>
-        <div><span className="text-slate-400 block text-[10px]">PANEL NO</span> <strong>1</strong></div>
-        <div><span className="text-slate-400 block text-[10px]">START TIME</span> <strong>10:08:25</strong></div>
-        <div><span className="text-slate-400 block text-[10px]">END TIME</span> <strong>10:14:36</strong></div>
-        <div><span className="text-slate-400 block text-[10px]">TOTAL CYCLE</span> <strong className="text-emerald-600">6 min 11 sec</strong></div>
-      </div>
-
-      {/* Stepper Milestone Flow */}
-      <div className="bg-white p-4 rounded shadow-sm border border-slate-200 mb-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-bold text-slate-700">Process Route Milestones (Traceability Lineage)</span>
-          <span className="text-[10px] text-emerald-600 font-bold font-mono">100% IPC-1782 CERTIFIED</span>
+      {/* Traceability Stepper Route */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
+        <div className="flex justify-between items-center mb-3">
+          <span className="font-bold text-xs text-slate-800">Unit Lifecycle Route Verification (Panel ID: PNL-0004587)</span>
+          <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono font-bold">● 100% AUDIT READY</span>
         </div>
         <DpxProcessStepper
           steps={[
-            { name: 'Loader', time: '10:08:25', status: 'PASS' },
-            { name: 'Printer', time: '10:09:12', status: 'PASS' },
-            { name: 'SPI', time: '10:10:02', status: 'PASS' },
-            { name: 'Placement', time: '10:11:15', status: 'PASS' },
-            { name: 'Reflow', time: '10:12:45', status: 'PASS' },
-            { name: 'AOI', time: '10:14:10', status: 'PASS' },
-            { name: 'Unloader', time: '10:14:36', status: 'PASS' },
+            { name: 'Laser Mark', time: '08:14:02', status: 'PASS' },
+            { name: 'Paste Print', time: '08:15:30', status: 'PASS' },
+            { name: 'SPI 3D', time: '08:16:15', status: 'PASS' },
+            { name: 'Fuji Pick&Place', time: '08:18:04', status: 'PASS' },
+            { name: 'Reflow 10-Zone', time: '08:23:40', status: 'PASS' },
+            { name: 'AOI 3D', time: '08:24:55', status: 'PASS' },
+            { name: 'ICT / Functional', time: '08:27:10', status: 'PASS' },
           ]}
         />
       </div>
 
-      {/* Detailed Steps Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
-        <table className="w-full text-xs text-left font-mono">
-          <thead className="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
-            <tr>
-              <th className="py-2 px-3">Step</th>
-              <th className="py-2 px-3">Station</th>
-              <th className="py-2 px-3">Machine / Unit</th>
-              <th className="py-2 px-3">Time</th>
-              <th className="py-2 px-3 text-center">Result</th>
-              <th className="py-2 px-3">Remark</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {[
-              { s: 1, name: 'Loader', m: 'LD-01', t: '10:08:25', res: 'GOOD', rem: 'Board Loaded' },
-              { s: 2, name: 'Printer', m: 'MPM-125', t: '10:09:12', res: 'GOOD', rem: '2D Stencil Verified' },
-              { s: 3, name: 'SPI', m: 'KY-SPI', t: '10:10:02', res: 'GOOD', rem: 'Inspection OK' },
-              { s: 4, name: 'Placement', m: 'NXT-01 M01', t: '10:11:15', res: 'GOOD', rem: '1st Placement' },
-              { s: 5, name: 'Reflow', m: 'Heller-10', t: '10:12:45', res: 'GOOD', rem: 'Profile OK' },
-              { s: 6, name: 'AOI', m: 'Zenith-AOI', t: '10:14:10', res: 'GOOD', rem: 'Zero Defect' },
-            ].map(r => (
-              <tr key={r.s} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">{r.s}</td>
-                <td className="py-2 px-3 font-sans font-bold">{r.name}</td>
-                <td className="py-2 px-3 text-slate-600">{r.m}</td>
-                <td className="py-2 px-3 text-slate-500">{r.t}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                    {r.res}
-                  </span>
-                </td>
-                <td className="py-2 px-3 text-slate-600 font-sans">{r.rem}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Query Bar */}
+      <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex items-center gap-3 text-xs">
+        <span className="font-bold text-slate-700">Audit Serial Lookup:</span>
+        <input type="text" defaultValue="PNL-0004587" className="border border-slate-300 rounded px-2.5 py-1 font-mono text-xs w-64" />
+        <button className="bg-[#1E50ED] text-white px-3 py-1 rounded font-bold font-mono">Verify Hash</button>
       </div>
     </div>
   );
 };
 
 // -------------------------------------------------------------
-// [14] Component Genealogy Dashboard
+// [14] Component Genealogy
 // -------------------------------------------------------------
 export const Dashboard14ComponentGenealogy: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={14} title="Component Genealogy" subtitle="SMT Bill of Materials & Lot Association" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={14} title="Component Genealogy" subtitle="Reel Lot-to-Board Correlation & J-STD-033D MSL" />
 
-      {/* Component Usage Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden my-3">
-        <div className="p-2.5 bg-slate-50 border-b font-bold text-xs text-slate-700">
-          Placed Components for Serial 705525635000551
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Scanned Reels</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">1,248 Active</div>
+            <div className="text-[10px] text-blue-200 mt-1">Feeder Trolleys 1-4</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Database className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Unique Components</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">482 Part Nos</div>
+            <div className="text-[10px] text-cyan-200 mt-1">BOM Verified 100%</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Tag className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">MSL Violations</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0 Alarms</div>
+            <div className="text-[10px] text-emerald-200 mt-1">J-STD-033D In-Spec</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Expiration Alerts</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0 Expired</div>
+            <div className="text-[10px] text-purple-200 mt-1">Reel Date-Codes OK</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Chip UIDs Placed</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">2.84M units</div>
+            <div className="text-[10px] text-sky-200 mt-1">Full Traceability</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Cpu className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
+      {/* Lot Tree Table */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="p-3 border-b bg-slate-50/70 font-bold text-xs text-slate-700 flex justify-between items-center">
+          <span>Component Lot Correlation – Panel PNL-0004587</span>
+          <span className="text-[10px] text-slate-400 font-mono">MSL Level 3 Max Floor Life: 168h</span>
         </div>
         <table className="w-full text-xs text-left font-mono">
           <thead className="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
             <tr>
-              <th className="py-2 px-3">Ref Des</th>
-              <th className="py-2 px-3">Part No</th>
-              <th className="py-2 px-3">Feeder ID</th>
-              <th className="py-2 px-3">Reel ID</th>
-              <th className="py-2 px-3">Lot No</th>
-              <th className="py-2 px-3 text-center">Result</th>
+              <th className="py-2.5 px-3">Designator</th>
+              <th className="py-2.5 px-3">Part Number</th>
+              <th className="py-2.5 px-3">Reel ID</th>
+              <th className="py-2.5 px-3">Manufacturer</th>
+              <th className="py-2.5 px-3">Date Code</th>
+              <th className="py-2.5 px-3 text-center">MSL Level</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {[
-              { ref: 'R45', pn: 'RC0402JR-0710KL', fdr: 'F-23', reel: 'R000125', lot: 'LOT825', res: 'OK' },
-              { ref: 'C12', pn: 'CC0402KRX7R7BB104', fdr: 'F-08', reel: 'R000126', lot: 'LOT912', res: 'OK' },
-              { ref: 'U01', pn: 'STM32F401RET6', fdr: 'F-45', reel: 'R000127', lot: 'LOT441', res: 'OK' },
+              { des: 'U1', pn: 'STM32F407VGT6', reel: 'REEL-9021', mfr: 'STMicro', dc: '2612', msl: 'MSL 3 (124h rem)' },
+              { des: 'C1..C12', pn: 'GRM188R71C104KA01D', reel: 'REEL-4481', mfr: 'Murata', dc: '2618', msl: 'MSL 1 (Unlimited)' },
+              { des: 'R1..R8', pn: 'RC0402FR-0710KL', reel: 'REEL-1129', mfr: 'Yageo', dc: '2620', msl: 'MSL 1 (Unlimited)' },
+              { des: 'IC2', pn: 'TPS54331DR', reel: 'REEL-3342', mfr: 'TI', dc: '2614', msl: 'MSL 2 (1 year)' },
             ].map(r => (
-              <tr key={r.ref} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">{r.ref}</td>
-                <td className="py-2 px-3 text-slate-800">{r.pn}</td>
-                <td className="py-2 px-3 text-slate-600">{r.fdr}</td>
+              <tr key={r.des} className="hover:bg-slate-50">
+                <td className="py-2 px-3 font-bold text-[#1E50ED]">{r.des}</td>
+                <td className="py-2 px-3 text-slate-800 font-bold">{r.pn}</td>
                 <td className="py-2 px-3 text-slate-600">{r.reel}</td>
-                <td className="py-2 px-3 text-slate-500">{r.lot}</td>
+                <td className="py-2 px-3 text-slate-600">{r.mfr}</td>
+                <td className="py-2 px-3 text-slate-600">{r.dc}</td>
                 <td className="py-2 px-3 text-center">
-                  <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                    {r.res}
+                  <span className="bg-emerald-100 text-emerald-800 text-[9.5px] px-2 py-0.5 rounded font-bold">
+                    {r.msl}
                   </span>
                 </td>
               </tr>
@@ -2619,68 +2861,108 @@ export const Dashboard14ComponentGenealogy: React.FC = () => {
           </tbody>
         </table>
       </div>
-
-      {/* Component Details Card */}
-      <div className="bg-white p-4 rounded shadow-sm border border-slate-200">
-        <div className="font-bold text-xs text-slate-700 mb-2">Selected Component Deep-Dive: RC0402JR-0710KL</div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
-          <div><span className="text-slate-400 block text-[10px]">MANUFACTURER</span> Yageo Corporation</div>
-          <div><span className="text-slate-400 block text-[10px]">PACKAGE</span> 0402 (1005 Metric)</div>
-          <div><span className="text-slate-400 block text-[10px]">MSD LEVEL</span> MSL-1 (Unlimited)</div>
-          <div><span className="text-slate-400 block text-[10px]">REMAINING ON REEL</span> 4,820 / 5,000 pcs</div>
-        </div>
-      </div>
     </div>
   );
 };
 
 // -------------------------------------------------------------
-// [15] Material / Reel Management Dashboard
+// [15] Material Reel Management
 // -------------------------------------------------------------
 export const Dashboard15MaterialReel: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={15} title="Material / Reel Management" subtitle="SMD Reel Inventory & MSD Floor Life" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={15} title="Material Reel Management" subtitle="Smart Dry Cabinet Storage & Splicing" />
 
-      {/* Toolbar */}
-      <div className="flex gap-2 bg-white p-2.5 rounded shadow-sm border border-slate-200 my-3 text-xs">
-        <button className="bg-blue-600 text-white font-bold px-3 py-1 rounded">Reel Stock</button>
-        <button className="bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded border">Reel Loading</button>
-        <button className="bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded border">Usage History</button>
-        <button className="bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded border">Expiry Alerts</button>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Active Reels</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">640 Reels</div>
+            <div className="text-[10px] text-sky-200 mt-1">Mounted on Line 01</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Database className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Dry Cabinet RH</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">8.5% RH</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Target &lt;10% Safe</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Cabinet Temp</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">21.4°C</div>
+            <div className="text-[10px] text-blue-200 mt-1">Climate Controlled</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Splice Actions</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">42 Spliced</div>
+            <div className="text-[10px] text-orange-200 mt-1">Zero Line Stops</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">AGV Deliveries</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">2 Pending</div>
+            <div className="text-[10px] text-purple-200 mt-1">ETA: 15 minutes</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Play className="w-5 h-5 text-white" />
+          </div>
+        </div>
       </div>
 
-      {/* Reel Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
+      {/* Splicing Countdown Queue */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="p-3 border-b bg-slate-50/70 font-bold text-xs text-slate-700 flex justify-between items-center">
+          <span>Feeder Reel Depletion & Splicing Queue</span>
+          <span className="text-[10px] text-amber-600 font-mono font-bold">● SMART SPLICING TRIGGER ACTIVE</span>
+        </div>
         <table className="w-full text-xs text-left font-mono">
           <thead className="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
             <tr>
-              <th className="py-2 px-3">Reel ID</th>
-              <th className="py-2 px-3">Part No</th>
-              <th className="py-2 px-3 text-right">Initial Qty</th>
-              <th className="py-2 px-3 text-right">Remaining</th>
-              <th className="py-2 px-3">MSD Level</th>
-              <th className="py-2 px-3">Expiry Date</th>
-              <th className="py-2 px-3 text-center">Status</th>
+              <th className="py-2.5 px-3">Slot No</th>
+              <th className="py-2.5 px-3">Component PN</th>
+              <th className="py-2.5 px-3">Remaining Pcs</th>
+              <th className="py-2.5 px-3">Depletion Time</th>
+              <th className="py-2.5 px-3">Pre-Kitted Reel</th>
+              <th className="py-2.5 px-3 text-center">Urgency</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {[
-              { id: 'R000125', pn: 'RC0402JR-0710KL', init: 5000, rem: 4820, msd: 'MSL-1', exp: '31-12-2026', st: 'OK', col: 'bg-emerald-600' },
-              { id: 'R000126', pn: 'CC0402KRX7R7BB104', init: 10000, rem: 240, msd: 'MSL-1', exp: '20-11-2026', st: 'LOW', col: 'bg-amber-500' },
-              { id: 'R000127', pn: 'STM32F401RET6', init: 1000, rem: 880, msd: 'MSL-3', exp: '15-10-2026', st: 'OK', col: 'bg-emerald-600' },
-              { id: 'R000128', pn: 'TPS62130RGTR', init: 3000, rem: 1900, msd: 'MSL-2', exp: '18-09-2026', st: 'OK', col: 'bg-emerald-600' },
+              { slot: 'Slot 08', pn: 'R-0402-10K', rem: 420, eta: '12 min', prekit: 'REEL-8841 (Ready)', urg: 'URGENT', col: 'bg-red-600' },
+              { slot: 'Slot 14', pn: 'C-0603-100NF', rem: 1100, eta: '28 min', prekit: 'REEL-7712 (Staged)', urg: 'SOON', col: 'bg-amber-500' },
+              { slot: 'Slot 22', pn: 'LED-0805-GRN', rem: 2400, eta: '54 min', prekit: 'REEL-5520 (In-Store)', urg: 'OK', col: 'bg-emerald-600' },
             ].map(r => (
-              <tr key={r.id} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">{r.id}</td>
-                <td className="py-2 px-3">{r.pn}</td>
-                <td className="py-2 px-3 text-right">{r.init}</td>
-                <td className="py-2 px-3 text-right font-bold">{r.rem}</td>
-                <td className="py-2 px-3 text-slate-500">{r.msd}</td>
-                <td className="py-2 px-3 text-slate-500">{r.exp}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className={`${r.col} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
-                    {r.st}
+              <tr key={r.slot} className="hover:bg-slate-50">
+                <td className="py-2.5 px-3 font-bold text-[#1E50ED]">{r.slot}</td>
+                <td className="py-2.5 px-3 font-bold text-slate-800">{r.pn}</td>
+                <td className="py-2.5 px-3">{r.rem} pcs</td>
+                <td className="py-2.5 px-3 font-bold">{r.eta}</td>
+                <td className="py-2.5 px-3 text-slate-600">{r.prekit}</td>
+                <td className="py-2.5 px-3 text-center">
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded text-white ${r.col}`}>
+                    {r.urg}
                   </span>
                 </td>
               </tr>
@@ -2693,43 +2975,102 @@ export const Dashboard15MaterialReel: React.FC = () => {
 };
 
 // -------------------------------------------------------------
-// [16] Feeder Management Dashboard
+// [16] Feeder Management
 // -------------------------------------------------------------
 export const Dashboard16FeederManagement: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={16} title="Feeder Management" subtitle="Smart Feeder Health & Splicing Alerts" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={16} title="Feeder Management" subtitle="Feeder Calibration & Pick Count Tracking" />
 
-      {/* Feeder Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden my-3">
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Installed Feeders</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">120 Units</div>
+            <div className="text-[10px] text-blue-200 mt-1">Lines 01-04</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Cpu className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Calibration Valid</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">118 / 120</div>
+            <div className="text-[10px] text-emerald-200 mt-1">98.3% In-Spec</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Service Due</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">2 Feeders</div>
+            <div className="text-[10px] text-orange-200 mt-1">Pick count &gt;50k hits</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Total Pick Count</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">12.4M Hits</div>
+            <div className="text-[10px] text-sky-200 mt-1">Shift A cumulative</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Trolley Banks</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">4 Docked</div>
+            <div className="text-[10px] text-purple-200 mt-1">All RFID paired</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
+      {/* Feeder Health Table */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="p-3 border-b bg-slate-50/70 font-bold text-xs text-slate-700 flex justify-between items-center">
+          <span>Smart Intelligent Feeder Status (FUJI W08f / W12f)</span>
+          <span className="text-[10px] text-slate-400 font-mono">Service Threshold: 50,000 Picks</span>
+        </div>
         <table className="w-full text-xs text-left font-mono">
           <thead className="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
             <tr>
-              <th className="py-2 px-3">Feeder ID</th>
-              <th className="py-2 px-3">Machine</th>
-              <th className="py-2 px-3">Module</th>
-              <th className="py-2 px-3">Slot</th>
-              <th className="py-2 px-3">Part No</th>
-              <th className="py-2 px-3">Reel ID</th>
-              <th className="py-2 px-3 text-center">Status</th>
+              <th className="py-2.5 px-3">Feeder Serial</th>
+              <th className="py-2.5 px-3">Width / Pitch</th>
+              <th className="py-2.5 px-3">Machine / Slot</th>
+              <th className="py-2.5 px-3">Picks Since PM</th>
+              <th className="py-2.5 px-3">Last Calibrated</th>
+              <th className="py-2.5 px-3 text-center">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {[
-              { id: 'W08F-001', m: 'NXT-01', mod: 'M01', slot: '12', pn: 'RC0402100K', reel: 'R000125', st: 'LOADED', col: 'bg-emerald-600' },
-              { id: 'W08F-002', m: 'NXT-01', mod: 'M01', slot: '13', pn: 'CC0402100N', reel: 'R000126', st: 'LOW', col: 'bg-amber-500' },
-              { id: 'W12F-005', m: 'NXT-01', mod: 'M02', slot: '04', pn: 'STM32F401', reel: 'R000127', st: 'LOADED', col: 'bg-emerald-600' },
-              { id: 'W16F-010', m: 'NXT-02', mod: 'M01', slot: '08', pn: 'TPS62130', reel: 'R000128', st: 'EMPTY', col: 'bg-red-600' },
+              { sn: 'FDR-8MM-041', type: '8mm / 2mm', pos: 'AIMEX-01 / Slot 08', picks: '48,200', cal: '15-Sep-2026', st: 'INSPECT SOON', col: 'bg-amber-500' },
+              { sn: 'FDR-8MM-012', type: '8mm / 4mm', pos: 'AIMEX-01 / Slot 14', picks: '18,500', cal: '20-Sep-2026', st: 'OPTIMAL', col: 'bg-emerald-600' },
+              { sn: 'FDR-12MM-005', type: '12mm / 4mm', pos: 'AIMEX-02 / Slot 04', picks: '51,400', cal: '01-Sep-2026', st: 'SERVICE DUE', col: 'bg-red-600' },
             ].map(r => (
-              <tr key={r.id} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">{r.id}</td>
-                <td className="py-2 px-3">{r.m}</td>
-                <td className="py-2 px-3">{r.mod}</td>
-                <td className="py-2 px-3 font-bold">{r.slot}</td>
-                <td className="py-2 px-3">{r.pn}</td>
-                <td className="py-2 px-3 text-slate-500">{r.reel}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className={`${r.col} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
+              <tr key={r.sn} className="hover:bg-slate-50">
+                <td className="py-2.5 px-3 font-bold text-[#1E50ED]">{r.sn}</td>
+                <td className="py-2.5 px-3">{r.type}</td>
+                <td className="py-2.5 px-3 text-slate-800 font-bold">{r.pos}</td>
+                <td className="py-2.5 px-3">{r.picks}</td>
+                <td className="py-2.5 px-3 text-slate-500">{r.cal}</td>
+                <td className="py-2.5 px-3 text-center">
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded text-white ${r.col}`}>
                     {r.st}
                   </span>
                 </td>
@@ -2738,149 +3079,207 @@ export const Dashboard16FeederManagement: React.FC = () => {
           </tbody>
         </table>
       </div>
-
-      {/* Feeder Details */}
-      <div className="bg-white p-4 rounded shadow-sm border border-slate-200">
-        <div className="font-bold text-xs text-slate-700 mb-2">Smart Feeder Calibration Status</div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
-          <div><span className="text-slate-400 block text-[10px]">FEEDER TYPE</span> W08F 8mm Intelligent</div>
-          <div><span className="text-slate-400 block text-[10px]">TOTAL CYCLES</span> 128,450 picks</div>
-          <div><span className="text-slate-400 block text-[10px]">NEXT CALIBRATION</span> In 22 days</div>
-          <div><span className="text-slate-400 block text-[10px]">SPLICING AGV</span> Ready for dispatch</div>
-        </div>
-      </div>
     </div>
   );
 };
 
 // -------------------------------------------------------------
-// [17] Equipment Real-Time Monitoring Dashboard
+// [17] Equipment Monitoring
 // -------------------------------------------------------------
 export const Dashboard17EquipmentMonitoring: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={17} title="Equipment Real-Time Monitoring" subtitle="Line-01 Machine State & SECS/GEM Telemetry" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={17} title="Equipment Monitoring" subtitle="Shop-Floor SCADA & Sensor Telemetry" />
 
-      {/* Line Machine Flow */}
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-2 my-3">
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Equipment Online</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">7 / 7 Online</div>
+            <div className="text-[10px] text-emerald-200 mt-1">IPC-CFX Telemetry Live</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Factory className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Power Consumption</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">42.5 kW</div>
+            <div className="text-[10px] text-orange-200 mt-1">Nominal: 45 kW cap</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Zap className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Main Pneumatic</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0.62 MPa</div>
+            <div className="text-[10px] text-sky-200 mt-1">Target: 0.55 - 0.70</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sliders className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Vacuum Header</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">-88.4 kPa</div>
+            <div className="text-[10px] text-purple-200 mt-1">Nozzle suction strong</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Sensor Health</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">100% Polling</div>
+            <div className="text-[10px] text-cyan-200 mt-1">1.2s live refresh</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <RefreshCw className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
+      {/* Machine Telemetry Matrix */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
         {[
-          { name: 'Loader', state: 'Running', ct: '8.2s', out: '11,820', col: 'border-emerald-500' },
-          { name: 'SPI', state: 'Running', ct: '6.5s', out: '11,700', col: 'border-emerald-500' },
-          { name: 'Printer', state: 'Running', ct: '7.8s', out: '11,650', col: 'border-emerald-500' },
-          { name: 'FUJI NXT-01', state: 'Running', ct: '12.3s', out: '11,520', col: 'border-emerald-500' },
-          { name: 'Reflow', state: 'Idle', ct: '45.0s', out: '11,450', col: 'border-amber-500' },
-          { name: 'AOI', state: 'Down', ct: '10.8s', out: '11,420', col: 'border-red-500' },
-          { name: 'Unloader', state: 'Running', ct: '6.7s', out: '11,420', col: 'border-emerald-500' },
+          { name: 'DEK Printer', power: '4.8 kW', air: '0.61 MPa', temp: '24.2°C', st: 'Optimal' },
+          { name: 'Fuji NXT Mounter', power: '18.4 kW', air: '0.62 MPa', temp: '31.5°C', st: 'Optimal' },
+          { name: 'Heller Reflow', power: '19.3 kW', air: '0.60 MPa', temp: '245°C peak', st: 'Optimal' },
         ].map(m => (
-          <div key={m.name} className={`bg-white p-3 rounded shadow-sm border-t-4 ${m.col} border-slate-200 text-center`}>
-            <div className="text-xs font-bold text-slate-800">{m.name}</div>
-            <div className={`text-[10px] font-bold font-mono uppercase mt-1 ${
-              m.state === 'Running' ? 'text-emerald-600' : m.state === 'Idle' ? 'text-amber-600' : 'text-red-600'
-            }`}>
-              ● {m.state}
+          <div key={m.name} className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs font-mono text-xs">
+            <div className="flex justify-between items-center mb-2 font-sans font-bold">
+              <span className="text-slate-800">{m.name}</span>
+              <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-mono font-bold">● {m.st}</span>
             </div>
-            <div className="text-[10px] text-slate-500 font-mono mt-1">Output: {m.out}</div>
-            <div className="text-[10px] text-slate-400 font-mono">CT: {m.ct}</div>
+            <div className="space-y-1.5 pt-1 text-[11px]">
+              <div className="flex justify-between border-b border-slate-100 pb-1">
+                <span className="text-slate-400">Power:</span>
+                <span className="font-bold text-slate-800">{m.power}</span>
+              </div>
+              <div className="flex justify-between border-b border-slate-100 pb-1">
+                <span className="text-slate-400">Pressure:</span>
+                <span className="font-bold text-slate-800">{m.air}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Thermal:</span>
+                <span className="font-bold text-slate-800">{m.temp}</span>
+              </div>
+            </div>
           </div>
         ))}
       </div>
-
-      <div className="bg-white p-4 rounded shadow-sm border border-slate-200 text-xs font-mono">
-        <div className="font-bold text-slate-700 mb-2">OT Communications Link Status</div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-slate-600">
-          <div>SECS/GEM Gateway: <strong className="text-emerald-600">CONNECTED (10.0.1.55)</strong></div>
-          <div>IPC-CFX Broker: <strong className="text-emerald-600">ACTIVE (MQTT/AMQP)</strong></div>
-          <div>PLC Polling Latency: <strong className="text-blue-600">12 ms</strong></div>
-          <div>OPC-UA Server: <strong className="text-emerald-600">PORT 4840 OK</strong></div>
-        </div>
-      </div>
     </div>
   );
 };
 
 // -------------------------------------------------------------
-// [18] Alarm & Downtime Analysis Dashboard
+// [18] Alarm & Downtime Analytics
 // -------------------------------------------------------------
 export const Dashboard18AlarmDowntime: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={18} title="Alarm & Downtime Analysis" subtitle="Root-Cause Pareto & Alarm Frequency" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={18} title="Alarm & Downtime Analytics" subtitle="Root-Cause Analysis, MTBF & MTTR" />
 
-      {/* Alarm Log Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden my-3">
-        <div className="p-2.5 bg-slate-50 border-b font-bold text-xs text-slate-700 flex justify-between">
-          <span>Active Cleanroom Alarm Log</span>
-          <span className="text-[10px] text-slate-500 font-mono">Total Downtime: 2h 45m</span>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#DC2626] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-red-100">Total Downtime</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">2h 45m</div>
+            <div className="text-[10px] text-red-200 mt-1">Shift A cumulative</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
         </div>
-        <table className="w-full text-xs text-left font-mono">
-          <thead className="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
-            <tr>
-              <th className="py-2 px-3">Time</th>
-              <th className="py-2 px-3">Line</th>
-              <th className="py-2 px-3">Machine</th>
-              <th className="py-2 px-3">Description</th>
-              <th className="py-2 px-3 text-right">Duration</th>
-              <th className="py-2 px-3 text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {[
-              { t: '11:37:12', l: 'Line-01', m: 'AOI', desc: 'Missing component defect threshold exceeded', dur: '15 min', st: 'OPEN', col: 'bg-red-600' },
-              { t: '10:56:45', l: 'Line-01', m: 'Reflow', desc: 'Zone 4 temperature lower tolerance limit', dur: '12 min', st: 'RESOLVED', col: 'bg-emerald-600' },
-              { t: '10:12:00', l: 'Line-01', m: 'FUJI NXT', desc: 'Feeder slot 12 tape splice warning', dur: '5 min', st: 'RESOLVED', col: 'bg-emerald-600' },
-              { t: '09:20:18', l: 'Line-01', m: 'Printer', desc: 'Under-stencil solvent wipe roll empty', dur: '8 min', st: 'RESOLVED', col: 'bg-emerald-600' },
-            ].map((r, i) => (
-              <tr key={i} className="hover:bg-slate-50">
-                <td className="py-2 px-3 text-slate-500">{r.t}</td>
-                <td className="py-2 px-3 font-bold">{r.l}</td>
-                <td className="py-2 px-3 font-bold text-blue-600">{r.m}</td>
-                <td className="py-2 px-3 font-sans">{r.desc}</td>
-                <td className="py-2 px-3 text-right font-bold">{r.dur}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className={`${r.col} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
-                    {r.st}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">MTBF (Mean Time)</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">14.2 hours</div>
+            <div className="text-[10px] text-emerald-200 mt-1">↑ +2.1h vs goal</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">MTTR (Recovery)</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">8.4 min</div>
+            <div className="text-[10px] text-orange-200 mt-1">Fast Response Crew</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Wrench className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Critical Alarms</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">0 Active</div>
+            <div className="text-[10px] text-sky-200 mt-1">All interlocks cleared</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Micro-Stoppages</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">14 Events</div>
+            <div className="text-[10px] text-purple-200 mt-1">Average duration 35s</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5 text-white" />
+          </div>
+        </div>
       </div>
 
-      {/* Charts Grid: Pareto + Hourly Alarm Trend */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {/* Pareto Horizontal Chart */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200 flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
+      {/* Downtime Pareto & Hourly Frequency Chart */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
             <span className="font-bold text-xs text-slate-700">Downtime Pareto by Machine</span>
-            <span className="text-[10px] text-slate-400 font-mono">Total: 2h 45m</span>
+            <span className="text-[10px] text-slate-400 font-mono">Total: 165 minutes</span>
           </div>
           <DpxHorizontalPareto
-            maxPct={35}
+            maxPct={40}
             items={[
-              { name: 'Reflow Oven (Zone 4 Alarm)', percentage: 29.1, color: '#EF4444' },
-              { name: 'AOI Optical (Threshold Exceeded)', percentage: 25.5, color: '#F59E0B' },
-              { name: 'FUJI NXT III (Splice Warning)', percentage: 17.0, color: '#FBBF24' },
-              { name: 'SPI 3D (Calibration Cycle)', percentage: 10.9, color: '#3B82F6' },
-              { name: 'Screen Printer (Wipe Roll Out)', percentage: 7.3, color: '#06B6D4' },
-              { name: 'Conveyor & Board Buffer Jam', percentage: 10.2, color: '#94A3B8' },
+              { name: 'Reflow Temp Stability', percentage: 29.1, color: '#DC2626' },
+              { name: 'AOI Head Calibration', percentage: 25.5, color: '#EA580C' },
+              { name: 'Fuji NXT Feeder Deplete', percentage: 17.0, color: '#F59E0B' },
+              { name: 'SPI Camera Wash', percentage: 10.9, color: '#0284C7' },
+              { name: 'Screen Printer Wipe', percentage: 7.3, color: '#06B6D4' },
+              { name: 'Conveyor Jam', percentage: 5.5, color: '#64748B' },
             ]}
           />
         </div>
 
-        {/* Hourly Alarm Frequency Trend */}
-        <div className="bg-white p-3.5 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between mb-2">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div className="flex justify-between items-center mb-2">
             <span className="font-bold text-xs text-slate-700">Hourly Alarm Frequency & Recovery Pace</span>
-            <span className="text-[10px] text-emerald-600 font-bold font-mono">MTTR: 8.4 min</span>
+            <span className="text-[10px] text-emerald-600 font-bold font-mono">MTTR Benchmark: 10m</span>
           </div>
           <DpxMultiLineTrend
             labels={['08h', '09h', '10h', '11h', '12h', '13h', '14h', '15h']}
-            threshold={5}
-            thresholdLabel="Alarm Limit"
+            threshold={10}
+            thresholdLabel="10m Target"
             series={[
-              { name: 'Triggered Alarms', color: '#EF4444', data: [3, 2, 7, 5, 2, 1, 3, 1] },
-              { name: 'Resolved by Operator', color: '#10B981', data: [3, 2, 6, 5, 2, 1, 3, 1] },
+              { name: 'Alarms Count', color: '#EF4444', data: [4, 6, 2, 8, 3, 2, 1, 1] },
+              { name: 'MTTR (min)', color: '#3B82F6', data: [7, 9, 6, 12, 8, 7, 5, 6] },
             ]}
           />
         </div>
@@ -2890,55 +3289,102 @@ export const Dashboard18AlarmDowntime: React.FC = () => {
 };
 
 // -------------------------------------------------------------
-// [19] Maintenance Management Dashboard
+// [19] Maintenance Dashboard
 // -------------------------------------------------------------
 export const Dashboard19Maintenance: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={19} title="Maintenance Management" subtitle="Preventive & Corrective Maintenance (TPM)" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={19} title="Maintenance Dashboard" subtitle="Total Productive Maintenance (TPM) & Calibration" />
 
-      {/* Filter tabs */}
-      <div className="flex gap-2 bg-white p-2.5 rounded shadow-sm border border-slate-200 my-3 text-xs">
-        <button className="bg-blue-600 text-white font-bold px-3 py-1 rounded">PM Schedule</button>
-        <button className="bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded border">Breakdown</button>
-        <button className="bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded border">Corrective</button>
-        <button className="bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded border">Calibration</button>
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">TPM Compliance</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">98.5%</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Class 1 Cleanroom</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Open Work Orders</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">3 Scheduled</div>
+            <div className="text-[10px] text-sky-200 mt-1">Shift B PM Planned</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Completed Today</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">8 PMs Done</div>
+            <div className="text-[10px] text-blue-200 mt-1">Signatures Logged</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Wrench className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">Lubrication Plan</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">100% Current</div>
+            <div className="text-[10px] text-purple-200 mt-1">Fuji Spindles OK</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Sliders className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0891B2] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-100">Certified Techs</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">3 On-Duty</div>
+            <div className="text-[10px] text-cyan-200 mt-1">Level-3 Certified</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+        </div>
       </div>
 
-      {/* Maintenance Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden">
+      {/* Autonomous TPM Checklist */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="p-3 border-b bg-slate-50/70 font-bold text-xs text-slate-700 flex justify-between items-center">
+          <span>Daily Autonomous Maintenance (TPM) Sign-Off</span>
+          <span className="text-[10px] text-emerald-600 font-mono font-bold">● ALL LEVEL 1 CHECKS COMPLETED</span>
+        </div>
         <table className="w-full text-xs text-left font-mono">
           <thead className="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
             <tr>
-              <th className="py-2 px-3">Req No</th>
-              <th className="py-2 px-3">Equipment</th>
-              <th className="py-2 px-3">Type</th>
-              <th className="py-2 px-3 text-center">Priority</th>
-              <th className="py-2 px-3">Plan Date</th>
-              <th className="py-2 px-3 text-center">Status</th>
+              <th className="py-2.5 px-3">Equipment</th>
+              <th className="py-2.5 px-3">Maintenance Task</th>
+              <th className="py-2.5 px-3">Interval</th>
+              <th className="py-2.5 px-3">Assigned Tech</th>
+              <th className="py-2.5 px-3">Completion Time</th>
+              <th className="py-2.5 px-3 text-center">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {[
-              { req: 'PM-001', eq: 'NXT-05 Head H24S', type: 'Preventive', prio: 'High', date: '26-09-2026', st: 'OPEN', col: 'bg-red-600' },
-              { req: 'PM-002', eq: 'Reflow Zone 4', type: 'Preventive', prio: 'Medium', date: '28-09-2026', st: 'PLANNED', col: 'bg-blue-600' },
-              { req: 'CM-003', eq: 'AOI Camera 02', type: 'Breakdown', prio: 'High', date: '25-09-2026', st: 'COMPLETED', col: 'bg-emerald-600' },
-              { req: 'PM-004', eq: 'Koh Young SPI', type: 'Calibration', prio: 'High', date: '25-09-2026', st: 'OPEN', col: 'bg-amber-500' },
+              { mach: 'DEK Printer', task: 'Under-stencil solvent tank refill & squeegee inspection', int: 'Daily', tech: 'R. Sharma', time: '06:15 AM', st: 'DONE', col: 'bg-emerald-600' },
+              { mach: 'Fuji NXT Head 1', task: 'Nozzle tip ultrasonic cleaning & vacuum sensor zero-calibration', int: 'Daily', tech: 'A. Patel', time: '06:30 AM', st: 'DONE', col: 'bg-emerald-600' },
+              { mach: 'Heller 1913 Oven', task: 'Exhaust flux condensation trap clean & conveyor chain oiling', int: 'Weekly', tech: 'V. Kumar', time: '14:00 PM', st: 'PENDING', col: 'bg-amber-500' },
             ].map(r => (
-              <tr key={r.req} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">{r.req}</td>
-                <td className="py-2 px-3 font-sans font-bold text-slate-800">{r.eq}</td>
-                <td className="py-2 px-3 text-slate-600">{r.type}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    r.prio === 'High' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
-                  }`}>
-                    {r.prio}
-                  </span>
-                </td>
-                <td className="py-2 px-3 text-slate-500">{r.date}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className={`${r.col} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
+              <tr key={r.mach} className="hover:bg-slate-50">
+                <td className="py-2.5 px-3 font-bold text-[#1E50ED]">{r.mach}</td>
+                <td className="py-2.5 px-3 text-slate-800">{r.task}</td>
+                <td className="py-2.5 px-3">{r.int}</td>
+                <td className="py-2.5 px-3 text-slate-600">{r.tech}</td>
+                <td className="py-2.5 px-3 text-slate-500">{r.time}</td>
+                <td className="py-2.5 px-3 text-center">
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded text-white ${r.col}`}>
                     {r.st}
                   </span>
                 </td>
@@ -2952,44 +3398,105 @@ export const Dashboard19Maintenance: React.FC = () => {
 };
 
 // -------------------------------------------------------------
-// [20] Spare Parts Management Dashboard
+// [20] Spare Parts & Inventory
 // -------------------------------------------------------------
 export const Dashboard20SpareParts: React.FC = () => {
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={20} title="Spare Parts Management" subtitle="Cleanroom Parts Stock & Reorder Levels" />
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800 space-y-3">
+      <DpxSeqBadge seq={20} title="Spare Parts & Inventory" subtitle="Critical Wear Items, SMT Nozzles & Tool Crib" />
 
-      {/* Spare Parts Inventory Table */}
-      <div className="bg-white rounded shadow-sm border border-slate-200 overflow-hidden my-3">
+      {/* TOP ROW: 5 VIBRANT SATURATED HERO CARDS */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+        <div className="bg-[#1D4ED8] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-blue-100">Cleanroom SKUs</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">842 Items</div>
+            <div className="text-[10px] text-blue-200 mt-1">Central Tool Crib</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Database className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#059669] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">Stock Availability</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">99.2%</div>
+            <div className="text-[10px] text-emerald-200 mt-1">Zero Line Blocker</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <CheckCircle2 className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#EA580C] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-orange-100">Reorder Alerts</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">4 SKUs</div>
+            <div className="text-[10px] text-orange-200 mt-1">Below safety stock</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#7C3AED] text-white p-3 rounded-lg shadow-sm flex items-center justify-between">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-100">SMT Nozzles Ready</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">180 Units</div>
+            <div className="text-[10px] text-purple-200 mt-1">0402 / 0201 / QFP</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Cpu className="w-5 h-5 text-white" />
+          </div>
+        </div>
+
+        <div className="bg-[#0284C7] text-white p-3 rounded-lg shadow-sm flex items-center justify-between col-span-2 sm:col-span-1">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-sky-100">Squeegee Sets</div>
+            <div className="text-2xl font-black font-mono tracking-tight mt-0.5">24 Sets</div>
+            <div className="text-[10px] text-sky-200 mt-1">Spring steel calibrated</div>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+            <Wrench className="w-5 h-5 text-white" />
+          </div>
+        </div>
+      </div>
+
+      {/* Critical Spares Table */}
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="p-3 border-b bg-slate-50/70 font-bold text-xs text-slate-700 flex justify-between items-center">
+          <span>Critical High-Wear Consumable Spares Catalog</span>
+          <span className="text-[10px] text-emerald-600 font-mono font-bold">● AUTO-ERP REPLENISHMENT ACTIVE</span>
+        </div>
         <table className="w-full text-xs text-left font-mono">
           <thead className="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
             <tr>
-              <th className="py-2 px-3">Part ID</th>
-              <th className="py-2 px-3">Description</th>
-              <th className="py-2 px-3">Machine</th>
-              <th className="py-2 px-3 text-right">Stock</th>
-              <th className="py-2 px-3 text-right">Min Stock</th>
-              <th className="py-2 px-3">Location</th>
-              <th className="py-2 px-3 text-center">Status</th>
+              <th className="py-2.5 px-3">Part Number</th>
+              <th className="py-2.5 px-3">Description</th>
+              <th className="py-2.5 px-3">Target Equipment</th>
+              <th className="py-2.5 px-3 text-right">In-Stock</th>
+              <th className="py-2.5 px-3 text-right">Min Threshold</th>
+              <th className="py-2.5 px-3">Lead Time</th>
+              <th className="py-2.5 px-3 text-center">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {[
-              { id: 'RC00400', desc: 'CPU Card', m: 'NXT', stock: 12, min: 5, loc: 'UPR-01', st: 'OK', col: 'bg-emerald-600' },
-              { id: 'RC00500', desc: 'H24S Head', m: 'NXT', stock: 2, min: 1, loc: 'UPR-02', st: 'OK', col: 'bg-emerald-600' },
-              { id: 'RC00410', desc: 'Nozzle H04', m: 'NXT', stock: 12, min: 10, loc: 'UPR-01', st: 'OK', col: 'bg-emerald-600' },
-              { id: 'RC00420', desc: 'Power Supply', m: 'Heller', stock: 1, min: 2, loc: 'UPR-03', st: 'LOW', col: 'bg-red-600' },
-              { id: 'RC00430', desc: 'Sensor Unit', m: 'KY-SPI', stock: 10, min: 3, loc: 'UPR-01', st: 'OK', col: 'bg-emerald-600' },
+              { pn: 'NZL-FUJI-0402', desc: 'Fuji NXT Ceramic Suction Nozzle 0402', eq: 'Fuji AIMEX / NXT', stock: 45, min: 20, lead: '3 Days', st: 'IN-STOCK', col: 'bg-emerald-600' },
+              { pn: 'NZL-FUJI-0201', desc: 'Ultra-Fine Pitch Passive Nozzle 0201', eq: 'Fuji AIMEX / NXT', stock: 12, min: 15, lead: '5 Days', st: 'REORDER', col: 'bg-amber-500' },
+              { pn: 'SQG-DEK-350MM', desc: 'Polyurethane Squeegee Blade 350mm Set', eq: 'DEK Horizon Printer', stock: 8, min: 5, lead: '2 Days', st: 'IN-STOCK', col: 'bg-emerald-600' },
+              { pn: 'BLT-OVEN-MESH', desc: 'Inconel Heavy Duty Reflow Mesh Belt Segment', eq: 'Heller 1913 MK5', stock: 2, min: 1, lead: '14 Days', st: 'RESERVE', col: 'bg-blue-600' },
             ].map(r => (
-              <tr key={r.id} className="hover:bg-slate-50">
-                <td className="py-2 px-3 font-bold text-blue-600">{r.id}</td>
-                <td className="py-2 px-3 font-sans font-bold text-slate-800">{r.desc}</td>
-                <td className="py-2 px-3 text-slate-600">{r.m}</td>
-                <td className="py-2 px-3 text-right font-black">{r.stock}</td>
-                <td className="py-2 px-3 text-right text-slate-400">{r.min}</td>
-                <td className="py-2 px-3 text-slate-500">{r.loc}</td>
-                <td className="py-2 px-3 text-center">
-                  <span className={`${r.col} text-white text-[10px] font-bold px-2 py-0.5 rounded`}>
+              <tr key={r.pn} className="hover:bg-slate-50">
+                <td className="py-2.5 px-3 font-bold text-[#1E50ED]">{r.pn}</td>
+                <td className="py-2.5 px-3 font-bold text-slate-800">{r.desc}</td>
+                <td className="py-2.5 px-3 text-slate-600">{r.eq}</td>
+                <td className="py-2.5 px-3 text-right font-black">{r.stock}</td>
+                <td className="py-2.5 px-3 text-right text-slate-400">{r.min}</td>
+                <td className="py-2.5 px-3">{r.lead}</td>
+                <td className="py-2.5 px-3 text-center">
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded text-white ${r.col}`}>
                     {r.st}
                   </span>
                 </td>
