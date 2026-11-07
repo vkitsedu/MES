@@ -7,12 +7,12 @@ import {
 } from '../src/themes/theme-definitions';
 
 describe('i-MES 2.0 Theme Engine & Design Token Architecture', () => {
-  const themeKeys: ThemeId[] = ['obsidian', 'nordic', 'titanium', 'kyoto', 'monaco', 'tactical'];
+  const themeKeys: ThemeId[] = ['obsidian', 'nordic', 'titanium', 'kyoto', 'monaco', 'tactical', 'sapphire'];
 
   describe('1. Theme Catalog Integrity', () => {
-    it('defines exactly the 6 enterprise cleanroom themes', () => {
+    it('defines exactly the 7 enterprise cleanroom themes', () => {
       const definedKeys = Object.keys(ENTERPRISE_THEMES);
-      expect(definedKeys).toHaveLength(6);
+      expect(definedKeys).toHaveLength(7);
       themeKeys.forEach((key) => {
         expect(ENTERPRISE_THEMES[key]).toBeDefined();
         expect(ENTERPRISE_THEMES[key].id).toBe(key);

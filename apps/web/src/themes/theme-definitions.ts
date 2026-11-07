@@ -3,7 +3,7 @@
  * Calibrated for industrial cleanrooms, overhead andon displays, and rugged mobile tablets.
  */
 
-export type ThemeId = 'obsidian' | 'nordic' | 'titanium' | 'kyoto' | 'monaco' | 'tactical';
+export type ThemeId = 'obsidian' | 'nordic' | 'titanium' | 'kyoto' | 'monaco' | 'tactical' | 'sapphire';
 
 export interface ThemeTokens {
   id: ThemeId;
@@ -325,6 +325,48 @@ export const ENTERPRISE_THEMES: Record<ThemeId, ThemeTokens> = {
     shadowSubtle: '0 1px 3px 0 rgba(0, 0, 0, 0.4)',
     shadowElevated: '0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 4px 10px -2px rgba(0, 0, 0, 0.4)',
     shadowModal: '0 25px 50px -12px rgba(0, 0, 0, 0.85)'
+  },
+
+  // 7. Sapphire Cloud Analytics (Executive Cloud SaaS / Saturated Hero Cards)
+  sapphire: {
+    id: 'sapphire',
+    name: 'Sapphire Cloud Analytics',
+    category: 'LIGHT',
+    tagline: 'Executive Cloud Analytics & Saturated SaaS Palette',
+    description: 'Ice-blue canvas (#F0F5FA) with saturated hero telemetry cards (cobalt blue, ocean cyan, deep indigo, electric purple), high-contrast data pills, and clean corporate analytics.',
+    recommendedEnvironment: 'Executive Operations / Control Room / Analytics Screen',
+    bgCanvas: '#F0F5FA',
+    bgSurface: '#FFFFFF',
+    bgWell: '#E8EFF7',
+    bgHeader: '#0A192F',
+    bgTabActive: '#1E50ED',
+    bgTabInactive: '#0D1B2A',
+    bgModal: '#FFFFFF',
+    borderSubtle: '#CBD5E1',
+    borderStrong: '#94A3B8',
+    borderHairline: '#E2E8F0',
+    borderAccentGlow: 'rgba(30, 80, 237, 0.25)',
+    textPrimary: '#0F172A',
+    textSecondary: '#334155',
+    textMuted: '#64748B',
+    textDim: '#94A3B8',
+    textInverse: '#FFFFFF',
+    accentPrimary: '#1E50ED',
+    accentHover: '#1D4ED8',
+    accentMuted: 'rgba(30, 80, 237, 0.15)',
+    accentRing: 'rgba(30, 80, 237, 0.35)',
+    statusPass: '#10B981',
+    statusPassMuted: 'rgba(16, 185, 129, 0.15)',
+    statusWarn: '#F59E0B',
+    statusWarnMuted: 'rgba(245, 158, 11, 0.15)',
+    statusHalt: '#EF4444',
+    statusHaltMuted: 'rgba(239, 68, 68, 0.15)',
+    statusIdle: '#06B6D4',
+    radiusDefault: '6px',
+    contrastScore: '15.8:1 (WCAG AAA)',
+    shadowSubtle: '0 1px 3px 0 rgba(0, 0, 0, 0.08)',
+    shadowElevated: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)',
+    shadowModal: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
   }
 };
 

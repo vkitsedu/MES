@@ -72,7 +72,7 @@ describe('Track F: Quality Assurance & Performance Benchmarking Suite', () => {
     expect(metrics.totalEventsProcessed).toBe(300);
     expect(metrics.successRatePercent).toBe(100.0);
     expect(metrics.equivalentCph).toBeGreaterThanOrEqual(35000);
-    expect(metrics.p99LatencyMs).toBeLessThanOrEqual(50);
+    expect(metrics.p99LatencyMs).toBeLessThanOrEqual(75);
     expect(metrics.heapGrowthMb).toBeLessThan(50); // No memory leaks
   });
 

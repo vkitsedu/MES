@@ -29,10 +29,10 @@ function getContrastRatio(fgHex: string, bgHex: string): number {
 }
 
 describe('i-MES 2.0 Design System Specification & Accessibility Verification', () => {
-  const themeIds: ThemeId[] = ['obsidian', 'nordic', 'titanium', 'kyoto', 'monaco', 'tactical'];
+  const themeIds: ThemeId[] = ['obsidian', 'nordic', 'titanium', 'kyoto', 'monaco', 'tactical', 'sapphire'];
 
   describe('1. WCAG 2.1 Contrast Standards (Section 4.1 of Brief)', () => {
-    it('verifies all 6 themes satisfy WCAG-AA (>= 4.5:1) for primary text over canvas', () => {
+    it('verifies all 7 themes satisfy WCAG-AA (>= 4.5:1) for primary text over canvas', () => {
       themeIds.forEach(id => {
         const theme = ENTERPRISE_THEMES[id];
         const ratio = getContrastRatio(theme.textPrimary, theme.bgCanvas);
@@ -40,7 +40,7 @@ describe('i-MES 2.0 Design System Specification & Accessibility Verification', (
       });
     });
 
-    it('verifies all 6 themes satisfy WCAG-AA (>= 4.5:1) for primary text over surface cards', () => {
+    it('verifies all 7 themes satisfy WCAG-AA (>= 4.5:1) for primary text over surface cards', () => {
       themeIds.forEach(id => {
         const theme = ENTERPRISE_THEMES[id];
         const ratio = getContrastRatio(theme.textPrimary, theme.bgSurface);

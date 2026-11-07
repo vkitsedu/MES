@@ -4,7 +4,7 @@ import {
   Search, Play, Pause, AlertOctagon, RotateCw, Filter, Layers, 
   Cpu, Flame, Eye, Shield, Tag, Calendar, Database, Activity,
   Sliders, Settings, Wrench, BarChart2, ChevronRight, Check,
-  Maximize2, Download, Printer, RefreshCw
+  Maximize2, Download, Printer, RefreshCw, Star, FileText, TrendingUp, Zap
 } from 'lucide-react';
 import {
   DpxDonutChart,
@@ -35,227 +35,769 @@ export const DpxSeqBadge: React.FC<{ seq: number; title: string; subtitle?: stri
 // [1] Plant Overview Dashboard
 // -------------------------------------------------------------
 export const Dashboard1PlantOverview: React.FC = () => {
+  const [activeView, setActiveView] = useState<'sapphire' | 'multi_plant'>('sapphire');
+  const [timeRange, setTimeRange] = useState<string>('Shift A');
+
   return (
-    <div className="bg-slate-100 min-h-[750px] p-3 rounded font-sans text-slate-800">
-      <DpxSeqBadge seq={1} title="Plant Overview Dashboard" subtitle="DPX Multi-Facility Production" />
-      
-      {/* Top 6 KPI summary */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 my-3">
-        <div className="bg-white p-2.5 rounded shadow-sm border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-bold uppercase">Total Plan</div>
-          <div className="text-xl font-black text-slate-900 mt-1 font-mono">125,600</div>
-          <div className="text-[10px] text-slate-400">Target units</div>
+    <div className="bg-[#F0F5FA] min-h-[750px] p-3 rounded font-sans text-slate-800">
+      <DpxSeqBadge seq={1} title="Plant Overview Dashboard" subtitle="DPX Enterprise Cloud Analytics" />
+
+      {/* Control Strip: Sub-view Switcher + Filter Pills + Action Buttons */}
+      <div className="flex flex-wrap items-center justify-between gap-2 my-3 bg-white p-2.5 rounded-lg border border-slate-200/80 shadow-xs">
+        {/* View Toggle */}
+        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-md border border-slate-200 text-xs">
+          <button
+            onClick={() => setActiveView('sapphire')}
+            className={`px-3 py-1 font-bold rounded transition-all ${
+              activeView === 'sapphire'
+                ? 'bg-[#1E50ED] text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Executive Cloud View (Sapphire)
+          </button>
+          <button
+            onClick={() => setActiveView('multi_plant')}
+            className={`px-3 py-1 font-bold rounded transition-all ${
+              activeView === 'multi_plant'
+                ? 'bg-[#1E50ED] text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Multi-Plant Facility Grid
+          </button>
         </div>
-        <div className="bg-white p-2.5 rounded shadow-sm border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-bold uppercase">Total Actual</div>
-          <div className="text-xl font-black text-blue-600 mt-1 font-mono">118,340</div>
-          <div className="text-[10px] text-slate-400">Achieved units</div>
+
+        {/* Time Range Pills */}
+        <div className="flex items-center gap-1 text-xs">
+          {['Today', 'Shift A', 'Last 7 days', 'Last 30 days', 'All Time'].map((r) => (
+            <button
+              key={r}
+              onClick={() => setTimeRange(r)}
+              className={`px-2.5 py-1 rounded font-medium transition-all ${
+                timeRange === r
+                  ? 'bg-blue-50 text-[#1E50ED] border border-blue-200 font-bold'
+                  : 'text-slate-600 hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              {r}
+            </button>
+          ))}
         </div>
-        <div className="bg-white p-2.5 rounded shadow-sm border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-bold uppercase">Achievement</div>
-          <div className="text-xl font-black text-emerald-600 mt-1 font-mono">94.2%</div>
-          <div className="text-[10px] text-emerald-500">↑ 1.2% shift pace</div>
-        </div>
-        <div className="bg-white p-2.5 rounded shadow-sm border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-bold uppercase">Overall OEE</div>
-          <div className="text-xl font-black text-amber-600 mt-1 font-mono">85.6%</div>
-          <div className="text-[10px] text-slate-400">Target 85.0%</div>
-        </div>
-        <div className="bg-white p-2.5 rounded shadow-sm border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-bold uppercase">Availability</div>
-          <div className="text-xl font-black text-indigo-600 mt-1 font-mono">90.2%</div>
-          <div className="text-[10px] text-slate-400">Uptime ratio</div>
-        </div>
-        <div className="bg-white p-2.5 rounded shadow-sm border border-slate-200">
-          <div className="text-[10px] text-slate-500 font-bold uppercase">First Pass Yield</div>
-          <div className="text-xl font-black text-purple-600 mt-1 font-mono">98.9%</div>
-          <div className="text-[10px] text-purple-500">Six Sigma Target</div>
+
+        {/* Quick Action Buttons */}
+        <div className="flex items-center gap-1.5 text-xs">
+          <button className="flex items-center gap-1 px-2.5 py-1 bg-white border border-slate-200 rounded hover:bg-slate-50 text-slate-700 font-medium shadow-2xs">
+            <Download className="w-3.5 h-3.5 text-slate-500" />
+            <span>Export Data</span>
+          </button>
+          <button className="flex items-center gap-1 px-2.5 py-1 bg-white border border-slate-200 rounded hover:bg-slate-50 text-slate-700 font-medium shadow-2xs">
+            <FileText className="w-3.5 h-3.5 text-slate-500" />
+            <span>Reports</span>
+          </button>
         </div>
       </div>
 
-      {/* 3 Plant Cards with Circular OEE Gauges */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
-        {/* Plant 01 Pune */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between border-b pb-2 mb-2">
-            <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-blue-600" /> Plant-01 (Pune)
-            </span>
-            <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded font-mono">84.2%</span>
-          </div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
-              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
-                <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="text-emerald-500" strokeDasharray="84.2, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              </svg>
-              <span className="absolute font-black text-[11px] font-mono text-slate-800">84%</span>
+      {activeView === 'sapphire' ? (
+        <div className="space-y-3">
+          {/* 1. TOP 4 SATURATED HERO CARDS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* Card 1: Cobalt Blue (#1E50ED) - Total Output & Plan */}
+            <div className="bg-gradient-to-br from-[#1E50ED] to-[#1643CD] text-white p-4 rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-100 flex items-center gap-1.5">
+                  <Activity className="w-4 h-4 text-white" /> Total SMT Units & Plan
+                </span>
+                <span className="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full font-mono">
+                  +4.2% pace
+                </span>
+              </div>
+              <div className="my-1">
+                <div className="text-3xl font-black font-mono tracking-tight text-white">118,340</div>
+                <div className="text-xs text-blue-100 font-mono mt-0.5">
+                  Plan Target: <span className="font-bold text-white">125,600 pcs</span> (94.2%)
+                </div>
+              </div>
+              {/* Wave Spline Chart Graphic */}
+              <div className="h-10 my-1 relative">
+                <svg className="w-full h-full overflow-visible" viewBox="0 0 200 40" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="blueWaveGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.45" />
+                      <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.05" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0,32 Q30,12 60,24 T120,14 T160,20 T200,6 L200,40 L0,40 Z"
+                    fill="url(#blueWaveGrad)"
+                  />
+                  <path
+                    d="M0,32 Q30,12 60,24 T120,14 T160,20 T200,6"
+                    fill="none"
+                    stroke="#FFFFFF"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+              <div className="text-[11px] text-blue-100 flex items-center justify-between border-t border-white/20 pt-1.5 font-mono">
+                <span>Pacing: <strong className="text-white">+7,260 pcs</strong></span>
+                <span>Shift A On-Track</span>
+              </div>
             </div>
-            <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">Plan</div>
-                <div className="font-bold font-mono text-[11px]">45k</div>
-              </div>
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">Actual</div>
-                <div className="font-bold text-blue-600 font-mono text-[11px]">42.1k</div>
-              </div>
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">FPY</div>
-                <div className="font-bold text-emerald-600 font-mono text-[11px]">98.6%</div>
-              </div>
-            </div>
-          </div>
-          <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
-            <span>Active Lines: <strong>4 / 4</strong></span>
-            <span className="text-emerald-600 font-bold">● Operational</span>
-          </div>
-        </div>
 
-        {/* Plant 02 Noida */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between border-b pb-2 mb-2">
-            <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-indigo-600" /> Plant-02 (Noida)
-            </span>
-            <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded font-mono">78.6%</span>
-          </div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
-              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
-                <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="text-amber-500" strokeDasharray="78.6, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              </svg>
-              <span className="absolute font-black text-[11px] font-mono text-slate-800">79%</span>
+            {/* Card 2: Ocean Cyan (#00A8B5) - Active SMT Lines */}
+            <div className="bg-gradient-to-br from-[#00A8B5] to-[#008B96] text-white p-4 rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-100 flex items-center gap-1.5">
+                  <Cpu className="w-4 h-4 text-white" /> Active SMT Lines
+                </span>
+                <span className="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full font-mono">
+                  14 Total
+                </span>
+              </div>
+              <div className="flex items-center justify-between my-1">
+                <div>
+                  <div className="text-3xl font-black font-mono tracking-tight text-white">11 Active</div>
+                  <div className="text-xs text-cyan-100 font-mono mt-0.5">
+                    Fleet Utilization: <span className="font-bold text-white">78.6%</span>
+                  </div>
+                </div>
+                {/* Donut Status Ring */}
+                <div className="relative w-12 h-12 shrink-0">
+                  <svg className="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="3.5" />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      fill="none"
+                      stroke="#FFFFFF"
+                      strokeWidth="3.5"
+                      strokeDasharray="78.6, 100"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center font-black text-[10px] font-mono text-white">
+                    79%
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-1 my-1">
+                <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden flex">
+                  <div style={{ width: '78.6%' }} className="bg-white h-full" title="11 Running" />
+                  <div style={{ width: '14.3%' }} className="bg-amber-300 h-full" title="2 Idle" />
+                  <div style={{ width: '7.1%' }} className="bg-red-300 h-full" title="1 Down" />
+                </div>
+              </div>
+              <div className="text-[11px] text-cyan-100 flex items-center justify-between border-t border-white/20 pt-1.5 font-mono">
+                <span>● 11 Run</span>
+                <span>● 2 Idle</span>
+                <span>● 1 Down</span>
+              </div>
             </div>
-            <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">Plan</div>
-                <div className="font-bold font-mono text-[11px]">35k</div>
-              </div>
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">Actual</div>
-                <div className="font-bold text-blue-600 font-mono text-[11px]">30.9k</div>
-              </div>
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">FPY</div>
-                <div className="font-bold text-emerald-600 font-mono text-[11px]">98.1%</div>
-              </div>
-            </div>
-          </div>
-          <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
-            <span>Active Lines: <strong>3 / 4</strong></span>
-            <span className="text-amber-600 font-bold">● Maintenance</span>
-          </div>
-        </div>
 
-        {/* Plant 03 Greater Noida */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between border-b pb-2 mb-2">
-            <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-cyan-600" /> Plant-03 (Greater Noida)
-            </span>
-            <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded font-mono">83.1%</span>
-          </div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
-              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
-                <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="text-cyan-500" strokeDasharray="83.1, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              </svg>
-              <span className="absolute font-black text-[11px] font-mono text-slate-800">83%</span>
+            {/* Card 3: Deep Indigo (#4F46E5) - First Pass Yield */}
+            <div className="bg-gradient-to-br from-[#4F46E5] to-[#3B34AF] text-white p-4 rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-100 flex items-center gap-1.5">
+                  <Shield className="w-4 h-4 text-white" /> First Pass Yield (FPY)
+                </span>
+                <span className="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full font-mono">
+                  Six Sigma
+                </span>
+              </div>
+              <div className="flex items-center justify-between my-1">
+                <div>
+                  <div className="text-3xl font-black font-mono tracking-tight text-white">98.9%</div>
+                  <div className="text-xs text-indigo-100 font-mono mt-0.5">
+                    Shift Delta: <span className="font-bold text-emerald-200">▲ +0.4%</span>
+                  </div>
+                </div>
+                {/* Mini FPY Arc Gauge */}
+                <div className="relative w-12 h-12 shrink-0">
+                  <svg className="w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="3.5" />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      fill="none"
+                      stroke="#A5B4FC"
+                      strokeWidth="3.5"
+                      strokeDasharray="98.9, 100"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center font-black text-[9px] font-mono text-white">
+                    0.011
+                  </span>
+                </div>
+              </div>
+              <div className="w-full bg-white/20 h-1.5 rounded-full overflow-hidden my-1">
+                <div style={{ width: '98.9%' }} className="bg-emerald-300 h-full rounded-full" />
+              </div>
+              <div className="text-[11px] text-indigo-100 flex items-center justify-between border-t border-white/20 pt-1.5 font-mono">
+                <span>Target: <strong>98.5%</strong></span>
+                <span>DPU: <strong>0.011</strong></span>
+              </div>
             </div>
-            <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">Plan</div>
-                <div className="font-bold font-mono text-[11px]">45.6k</div>
-              </div>
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">Actual</div>
-                <div className="font-bold text-blue-600 font-mono text-[11px]">45.3k</div>
-              </div>
-              <div className="bg-slate-50 p-1 rounded">
-                <div className="text-[9px] text-slate-400">FPY</div>
-                <div className="font-bold text-emerald-600 font-mono text-[11px]">99.1%</div>
-              </div>
-            </div>
-          </div>
-          <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
-            <span>Active Lines: <strong>4 / 4</strong></span>
-            <span className="text-emerald-600 font-bold">● Peak Output</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Plan vs Actual Chart + Line Status Donut + Active Alarms */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-        {/* Plan vs Actual Bar (col-span-6) */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 md:col-span-6 flex flex-col justify-between">
-          <div className="font-bold text-xs text-slate-700 mb-1 flex items-center justify-between">
-            <span>Plan vs Actual (All Plants)</span>
-            <span className="text-[10px] text-slate-400 font-mono">118,340 / 125,600 pcs</span>
-          </div>
-          <DpxDualBarChart
-            items={[
-              { label: 'Line 01', plan: 90, actual: 85 },
-              { label: 'Line 02', plan: 95, actual: 92 },
-              { label: 'Line 03', plan: 80, actual: 78 },
-              { label: 'Line 04', plan: 100, actual: 97 },
-              { label: 'Line 05', plan: 85, actual: 81 },
-              { label: 'Line 06', plan: 90, actual: 89 },
-              { label: 'Line 07', plan: 95, actual: 93 },
-              { label: 'Line 08', plan: 75, actual: 70 },
-            ]}
-            height={155}
-          />
-        </div>
-
-        {/* Line Status SVG Donut Chart (col-span-3) */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 md:col-span-3 flex flex-col justify-between">
-          <div className="font-bold text-xs text-slate-700 mb-1">Line Status Overview</div>
-          <div className="py-1 flex justify-center">
-            <DpxDonutChart
-              data={[
-                { label: 'Running', value: 11, color: '#059669' },
-                { label: 'Idle', value: 2, color: '#D97706' },
-                { label: 'Down', value: 1, color: '#DC2626' }
-              ]}
-              size={130}
-              donutWidth={20}
-              centerValue="100%"
-              centerLabel="14 Lines"
-              legendPosition="bottom"
-            />
-          </div>
-          <div className="text-[10px] text-center text-slate-500 border-t pt-1 font-mono">
-            Availability: <strong className="text-emerald-600">92.8% (SEMI E10)</strong>
-          </div>
-        </div>
-
-        {/* Active Alarms (col-span-3) */}
-        <div className="bg-white p-3 rounded shadow-sm border border-slate-200 md:col-span-3 flex flex-col justify-between">
-          <div>
-            <div className="font-bold text-xs text-slate-700 mb-2">Active Cleanroom Alarms</div>
-            <div className="space-y-1.5 text-xs font-mono">
-              <div className="flex items-center justify-between bg-red-50 text-red-700 px-2.5 py-2 rounded border border-red-200">
-                <span className="font-bold font-sans">Critical Alarms</span>
-                <span className="font-black text-sm">2</span>
+            {/* Card 4: Electric Purple (#7E1CE5) - Placement Speed */}
+            <div className="bg-gradient-to-br from-[#7E1CE5] to-[#6012B5] text-white p-4 rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-purple-100 flex items-center gap-1.5">
+                  <Flame className="w-4 h-4 text-white" /> Placement Speed (CPH)
+                </span>
+                <span className="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full font-mono">
+                  Peak Speed
+                </span>
               </div>
-              <div className="flex items-center justify-between bg-amber-50 text-amber-700 px-2.5 py-2 rounded border border-amber-200">
-                <span className="font-bold font-sans">Major Warnings</span>
-                <span className="font-black text-sm">5</span>
+              <div className="my-1">
+                <div className="text-3xl font-black font-mono tracking-tight text-white">44,820</div>
+                <div className="text-xs text-purple-100 font-mono mt-0.5">
+                  Total Throughput: <span className="font-bold text-white">CPH Fleet Pace</span>
+                </div>
               </div>
-              <div className="flex items-center justify-between bg-blue-50 text-blue-700 px-2.5 py-2 rounded border border-blue-200">
-                <span className="font-bold font-sans">Minor Notices</span>
-                <span className="font-black text-sm">3</span>
+              {/* Mini Column Bars */}
+              <div className="h-10 my-1 flex items-end justify-between gap-1 px-1">
+                {[55, 68, 74, 88, 92, 85, 96].map((val, idx) => (
+                  <div key={idx} className="flex-1 flex flex-col items-center gap-0.5">
+                    <div
+                      style={{ height: `${val * 0.35}px` }}
+                      className={`w-full rounded-xs transition-all ${
+                        idx === 6 ? 'bg-white shadow-xs' : 'bg-white/40'
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="text-[11px] text-purple-100 flex items-center justify-between border-t border-white/20 pt-1.5 font-mono">
+                <span>Line 01: <strong>48.2k CPH</strong></span>
+                <span>Line 02: <strong>44.1k CPH</strong></span>
               </div>
             </div>
           </div>
-          <div className="text-[10px] text-slate-400 border-t pt-1 font-mono text-center">
-            Sensor Poll: 2s (Normal)
+
+          {/* 2. SIX SECONDARY WHITE CARDS WITH COLORED BADGES */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5">
+            {/* Card 1: Amber - Line Holds */}
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Line Holds</div>
+                  <div className="text-sm font-black font-mono text-slate-800">0 Holds</div>
+                  <div className="text-[10px] text-slate-400">Watch list: 0</div>
+                </div>
+              </div>
+              <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 rounded font-mono">
+                0 Holds
+              </span>
+            </div>
+
+            {/* Card 2: Green - Stencil & Solder Paste Life */}
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Stencil & Paste</div>
+                  <div className="text-sm font-black font-mono text-slate-800">100% In-Spec</div>
+                  <div className="text-[10px] text-slate-400">Remaining &gt;4.5h</div>
+                </div>
+              </div>
+              <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded font-mono">
+                2 Low
+              </span>
+            </div>
+
+            {/* Card 3: Purple - 21 CFR Part 11 e-Signatures */}
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                  <Shield className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">e-Signatures</div>
+                  <div className="text-sm font-black font-mono text-slate-800">100% Signed</div>
+                  <div className="text-[10px] text-slate-400">972 records</div>
+                </div>
+              </div>
+              <span className="bg-purple-100 text-purple-800 text-[10px] font-bold px-1.5 py-0.5 rounded font-mono">
+                Signed
+              </span>
+            </div>
+
+            {/* Card 4: Orange - Reflow Thermal PWI */}
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center shrink-0">
+                  <Flame className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Thermal PWI</div>
+                  <div className="text-sm font-black font-mono text-slate-800">100% Pass</div>
+                  <div className="text-[10px] text-slate-400">1,238 profiled</div>
+                </div>
+              </div>
+              <span className="bg-orange-100 text-orange-800 text-[10px] font-bold px-1.5 py-0.5 rounded font-mono">
+                Pass
+              </span>
+            </div>
+
+            {/* Card 5: Cyan - Active SMT Equipment */}
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0">
+                  <Layers className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">SMT Equipment</div>
+                  <div className="text-sm font-black font-mono text-slate-800">14 Online</div>
+                  <div className="text-[10px] text-slate-400">0 Downtime</div>
+                </div>
+              </div>
+              <span className="bg-cyan-100 text-cyan-800 text-[10px] font-bold px-1.5 py-0.5 rounded font-mono">
+                14/14
+              </span>
+            </div>
+
+            {/* Card 6: Amber Star - Six Sigma Quality Index */}
+            <div className="bg-white p-3 rounded-lg border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                  <Star className="w-4 h-4 fill-amber-500" />
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Six Sigma Index</div>
+                  <div className="text-sm font-black font-mono text-slate-800">1.48 Cpk</div>
+                  <div className="text-[10px] text-slate-400">3.4 DPMO Goal</div>
+                </div>
+              </div>
+              <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 rounded font-mono">
+                Excellent
+              </span>
+            </div>
+          </div>
+
+          {/* 3. TWO BOTTOM ANALYTICAL VISUALIZATIONS */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+            {/* Left: Daily SMT Production Trend (7 cols) */}
+            <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs lg:col-span-7 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <div className="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                    <Activity className="w-4 h-4 text-[#1E50ED]" /> Daily SMT Production Trend & Takt Velocity
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    Throughput vs planned velocity across Shift A (Units / Hour)
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 text-xs font-mono">
+                  <span className="flex items-center gap-1.5 text-slate-700">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#1E50ED]" /> Actual
+                  </span>
+                  <span className="flex items-center gap-1.5 text-slate-400">
+                    <span className="w-3 h-0.5 bg-slate-300" /> Target (15.7k)
+                  </span>
+                </div>
+              </div>
+
+              {/* Blue Spline Wave Chart */}
+              <div className="h-56 relative w-full pt-2">
+                <svg className="w-full h-full overflow-visible" viewBox="0 0 600 200" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="splineAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#1E50ED" stopOpacity="0.28" />
+                      <stop offset="100%" stopColor="#1E50ED" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Horizontal Grid lines */}
+                  {[40, 80, 120, 160].map((y) => (
+                    <line key={y} x1="40" y1={y} x2="580" y2={y} stroke="#F1F5F9" strokeWidth="1" />
+                  ))}
+
+                  {/* Y-axis Labels */}
+                  <text x="35" y="44" textAnchor="end" fontSize="10" fill="#94A3B8" fontFamily="monospace">20k</text>
+                  <text x="35" y="84" textAnchor="end" fontSize="10" fill="#94A3B8" fontFamily="monospace">15k</text>
+                  <text x="35" y="124" textAnchor="end" fontSize="10" fill="#94A3B8" fontFamily="monospace">10k</text>
+                  <text x="35" y="164" textAnchor="end" fontSize="10" fill="#94A3B8" fontFamily="monospace">5k</text>
+
+                  {/* Target Reference Line */}
+                  <line x1="40" y1="74" x2="580" y2="74" stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 4" />
+
+                  {/* Shaded Area */}
+                  <path
+                    d="M 50,150 C 110,130 150,95 210,85 C 270,75 300,35 360,40 C 420,45 450,75 510,70 C 540,68 560,90 575,95 L 575,180 L 50,180 Z"
+                    fill="url(#splineAreaGrad)"
+                  />
+
+                  {/* Spline Curve */}
+                  <path
+                    d="M 50,150 C 110,130 150,95 210,85 C 270,75 300,35 360,40 C 420,45 450,75 510,70 C 540,68 560,90 575,95"
+                    fill="none"
+                    stroke="#1E50ED"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Data Points */}
+                  {[
+                    { cx: 50, cy: 150, val: '6.2k' },
+                    { cx: 130, cy: 110, val: '11.8k' },
+                    { cx: 210, cy: 85, val: '14.2k' },
+                    { cx: 290, cy: 55, val: '16.9k' },
+                    { cx: 360, cy: 40, val: '18.4k', peak: true },
+                    { cx: 440, cy: 72, val: '15.1k' },
+                    { cx: 510, cy: 70, val: '15.6k' },
+                    { cx: 575, cy: 95, val: '13.2k' }
+                  ].map((pt, i) => (
+                    <g key={i}>
+                      <circle cx={pt.cx} cy={pt.cy} r={pt.peak ? 5 : 4} fill="#FFFFFF" stroke="#1E50ED" strokeWidth="2.5" />
+                      {pt.peak && (
+                        <g>
+                          <rect x={pt.cx - 45} y={pt.cy - 30} width="90" height="20" rx="4" fill="#0A192F" />
+                          <text x={pt.cx} y={pt.cy - 16} textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                            Peak: 18,450 pcs
+                          </text>
+                          <polygon points={`${pt.cx-4},${pt.cy-10} ${pt.cx+4},${pt.cy-10} ${pt.cx},${pt.cy-6}`} fill="#0A192F" />
+                        </g>
+                      )}
+                    </g>
+                  ))}
+
+                  {/* X-axis Labels */}
+                  <text x="50" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">08:00</text>
+                  <text x="130" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">10:00</text>
+                  <text x="210" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">12:00</text>
+                  <text x="290" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">14:00</text>
+                  <text x="360" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">16:00</text>
+                  <text x="440" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">18:00</text>
+                  <text x="510" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">20:00</text>
+                  <text x="575" y="195" textAnchor="middle" fontSize="10" fill="#64748B" fontFamily="monospace">22:00</text>
+                </svg>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between text-xs text-slate-600 border-t border-slate-100 pt-2 font-mono">
+                <span>Shift Avg: <strong className="text-slate-900">14,792 pcs/hr</strong></span>
+                <span>Pace Delta: <strong className="text-emerald-600">+4.2%</strong></span>
+                <span>Adherence: <strong className="text-blue-600">98.4%</strong></span>
+              </div>
+            </div>
+
+            {/* Right: Hourly Output & Takt Pacing Analysis (5 cols) */}
+            <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs lg:col-span-5 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <div className="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                    <BarChart2 className="w-4 h-4 text-emerald-600" /> Hourly Output & Takt Pacing
+                  </div>
+                  <div className="text-xs text-slate-500">Clean histogram takt adherence</div>
+                </div>
+                <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded font-mono">
+                  Peak: 12:00 (18.4k)
+                </span>
+              </div>
+
+              {/* Green Histogram Bar Chart */}
+              <div className="h-56 relative w-full pt-2">
+                <svg className="w-full h-full overflow-visible" viewBox="0 0 350 200" preserveAspectRatio="none">
+                  {/* Grid lines */}
+                  {[40, 80, 120, 160].map((y) => (
+                    <line key={y} x1="30" y1={y} x2="330" y2={y} stroke="#F1F5F9" strokeWidth="1" />
+                  ))}
+
+                  {/* Target benchmark dashed line */}
+                  <line x1="30" y1="75" x2="330" y2="75" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <text x="325" y="70" textAnchor="end" fontSize="8" fill="#D97706" fontFamily="monospace" fontWeight="bold">
+                    Target Takt
+                  </text>
+
+                  {/* Histogram Bars */}
+                  {[
+                    { hour: '08h', val: 95, h: 70 },
+                    { hour: '10h', val: 130, h: 95 },
+                    { hour: '12h', val: 184, h: 140, peak: true },
+                    { hour: '14h', val: 142, h: 105 },
+                    { hour: '16h', val: 168, h: 125 },
+                    { hour: '18h', val: 151, h: 115 },
+                    { hour: '20h', val: 132, h: 100 },
+                  ].map((bar, i) => {
+                    const x = 45 + i * 40;
+                    const y = 175 - bar.h;
+                    return (
+                      <g key={i}>
+                        <rect
+                          x={x}
+                          y={y}
+                          width="24"
+                          height={bar.h}
+                          rx="3"
+                          fill={bar.peak ? '#10B981' : '#34D399'}
+                          className="hover:opacity-90 transition-opacity"
+                        />
+                        <text
+                          x={x + 12}
+                          y={y - 4}
+                          textAnchor="middle"
+                          fontSize="9"
+                          fill="#0F172A"
+                          fontFamily="monospace"
+                          fontWeight={bar.peak ? 'bold' : 'normal'}
+                        >
+                          {(bar.val / 10).toFixed(1)}k
+                        </text>
+                        <text
+                          x={x + 12}
+                          y="190"
+                          textAnchor="middle"
+                          fontSize="9"
+                          fill="#64748B"
+                          fontFamily="monospace"
+                        >
+                          {bar.hour}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-slate-600 border-t border-slate-100 pt-2 font-mono">
+                <span>Mean Takt: <strong className="text-emerald-700">18.2s</strong></span>
+                <span>Target: <strong className="text-slate-700">19.5s</strong></span>
+                <span className="text-emerald-600 font-bold">Beating Takt</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* MULTI-PLANT BREAKDOWN VIEW (PUNE / NOIDA / GREATER NOIDA) */
+        <div className="space-y-3">
+          {/* Top 6 KPI summary */}
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-2 my-2">
+            <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">Total Plan</div>
+              <div className="text-xl font-black text-slate-900 mt-1 font-mono">125,600</div>
+              <div className="text-[10px] text-slate-400">Target units</div>
+            </div>
+            <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">Total Actual</div>
+              <div className="text-xl font-black text-blue-600 mt-1 font-mono">118,340</div>
+              <div className="text-[10px] text-slate-400">Achieved units</div>
+            </div>
+            <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">Achievement</div>
+              <div className="text-xl font-black text-emerald-600 mt-1 font-mono">94.2%</div>
+              <div className="text-[10px] text-emerald-500">↑ 1.2% shift pace</div>
+            </div>
+            <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">Overall OEE</div>
+              <div className="text-xl font-black text-amber-600 mt-1 font-mono">85.6%</div>
+              <div className="text-[10px] text-slate-400">Target 85.0%</div>
+            </div>
+            <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">Availability</div>
+              <div className="text-xl font-black text-indigo-600 mt-1 font-mono">90.2%</div>
+              <div className="text-[10px] text-slate-400">Uptime ratio</div>
+            </div>
+            <div className="bg-white p-2.5 rounded shadow-xs border border-slate-200">
+              <div className="text-[10px] text-slate-500 font-bold uppercase">First Pass Yield</div>
+              <div className="text-xl font-black text-purple-600 mt-1 font-mono">98.9%</div>
+              <div className="text-[10px] text-purple-500">Six Sigma Target</div>
+            </div>
+          </div>
+
+          {/* 3 Plant Cards with Circular OEE Gauges */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+            {/* Plant 01 Pune */}
+            <div className="bg-white p-3 rounded shadow-xs border border-slate-200">
+              <div className="flex items-center justify-between border-b pb-2 mb-2">
+                <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-blue-600" /> Plant-01 (Pune)
+                </span>
+                <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded font-mono">84.2%</span>
+              </div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
+                  <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                    <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className="text-emerald-500" strokeDasharray="84.2, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  </svg>
+                  <span className="absolute font-black text-[11px] font-mono text-slate-800">84%</span>
+                </div>
+                <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">Plan</div>
+                    <div className="font-bold font-mono text-[11px]">45k</div>
+                  </div>
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">Actual</div>
+                    <div className="font-bold text-blue-600 font-mono text-[11px]">42.1k</div>
+                  </div>
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">FPY</div>
+                    <div className="font-bold text-emerald-600 font-mono text-[11px]">98.6%</div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
+                <span>Active Lines: <strong>4 / 4</strong></span>
+                <span className="text-emerald-600 font-bold">● Operational</span>
+              </div>
+            </div>
+
+            {/* Plant 02 Noida */}
+            <div className="bg-white p-3 rounded shadow-xs border border-slate-200">
+              <div className="flex items-center justify-between border-b pb-2 mb-2">
+                <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-indigo-600" /> Plant-02 (Noida)
+                </span>
+                <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded font-mono">78.6%</span>
+              </div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
+                  <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                    <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className="text-amber-500" strokeDasharray="78.6, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  </svg>
+                  <span className="absolute font-black text-[11px] font-mono text-slate-800">79%</span>
+                </div>
+                <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">Plan</div>
+                    <div className="font-bold font-mono text-[11px]">35k</div>
+                  </div>
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">Actual</div>
+                    <div className="font-bold text-blue-600 font-mono text-[11px]">30.9k</div>
+                  </div>
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">FPY</div>
+                    <div className="font-bold text-emerald-600 font-mono text-[11px]">98.1%</div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
+                <span>Active Lines: <strong>3 / 4</strong></span>
+                <span className="text-amber-600 font-bold">● Maintenance</span>
+              </div>
+            </div>
+
+            {/* Plant 03 Greater Noida */}
+            <div className="bg-white p-3 rounded shadow-xs border border-slate-200">
+              <div className="flex items-center justify-between border-b pb-2 mb-2">
+                <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-cyan-600" /> Plant-03 (Greater Noida)
+                </span>
+                <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded font-mono">83.1%</span>
+              </div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="relative w-14 h-14 shrink-0 flex items-center justify-center">
+                  <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                    <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className="text-cyan-500" strokeDasharray="83.1, 100" strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  </svg>
+                  <span className="absolute font-black text-[11px] font-mono text-slate-800">83%</span>
+                </div>
+                <div className="flex-1 grid grid-cols-3 gap-1 text-center text-xs">
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">Plan</div>
+                    <div className="font-bold font-mono text-[11px]">45.6k</div>
+                  </div>
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">Actual</div>
+                    <div className="font-bold text-blue-600 font-mono text-[11px]">45.3k</div>
+                  </div>
+                  <div className="bg-slate-50 p-1 rounded">
+                    <div className="text-[9px] text-slate-400">FPY</div>
+                    <div className="font-bold text-emerald-600 font-mono text-[11px]">99.1%</div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t">
+                <span>Active Lines: <strong>4 / 4</strong></span>
+                <span className="text-emerald-600 font-bold">● Peak Output</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Plan vs Actual Chart + Line Status Donut + Active Alarms */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            {/* Plan vs Actual Bar (col-span-6) */}
+            <div className="bg-white p-3 rounded shadow-xs border border-slate-200 md:col-span-6 flex flex-col justify-between">
+              <div className="font-bold text-xs text-slate-700 mb-1 flex items-center justify-between">
+                <span>Plan vs Actual (All Plants)</span>
+                <span className="text-[10px] text-slate-400 font-mono">118,340 / 125,600 pcs</span>
+              </div>
+              <DpxDualBarChart
+                items={[
+                  { label: 'Line 01', plan: 90, actual: 85 },
+                  { label: 'Line 02', plan: 95, actual: 92 },
+                  { label: 'Line 03', plan: 80, actual: 78 },
+                  { label: 'Line 04', plan: 100, actual: 97 },
+                  { label: 'Line 05', plan: 85, actual: 81 },
+                  { label: 'Line 06', plan: 90, actual: 89 },
+                  { label: 'Line 07', plan: 95, actual: 93 },
+                  { label: 'Line 08', plan: 75, actual: 70 },
+                ]}
+                height={155}
+              />
+            </div>
+
+            {/* Line Status SVG Donut Chart (col-span-3) */}
+            <div className="bg-white p-3 rounded shadow-xs border border-slate-200 md:col-span-3 flex flex-col justify-between">
+              <div className="font-bold text-xs text-slate-700 mb-1">Line Status Overview</div>
+              <div className="py-1 flex justify-center">
+                <DpxDonutChart
+                  data={[
+                    { label: 'Running', value: 11, color: '#059669' },
+                    { label: 'Idle', value: 2, color: '#D97706' },
+                    { label: 'Down', value: 1, color: '#DC2626' }
+                  ]}
+                  size={130}
+                  donutWidth={20}
+                  centerValue="100%"
+                  centerLabel="14 Lines"
+                  legendPosition="bottom"
+                />
+              </div>
+              <div className="text-[10px] text-center text-slate-500 border-t pt-1 font-mono">
+                Availability: <strong className="text-emerald-600">92.8% (SEMI E10)</strong>
+              </div>
+            </div>
+
+            {/* Active Alarms (col-span-3) */}
+            <div className="bg-white p-3 rounded shadow-xs border border-slate-200 md:col-span-3 flex flex-col justify-between">
+              <div>
+                <div className="font-bold text-xs text-slate-700 mb-2">Active Cleanroom Alarms</div>
+                <div className="space-y-1.5 text-xs font-mono">
+                  <div className="flex items-center justify-between bg-red-50 text-red-700 px-2.5 py-2 rounded border border-red-200">
+                    <span className="font-bold font-sans">Critical Alarms</span>
+                    <span className="font-black text-sm">2</span>
+                  </div>
+                  <div className="flex items-center justify-between bg-amber-50 text-amber-700 px-2.5 py-2 rounded border border-amber-200">
+                    <span className="font-bold font-sans">Major Warnings</span>
+                    <span className="font-black text-sm">5</span>
+                  </div>
+                  <div className="flex items-center justify-between bg-blue-50 text-blue-700 px-2.5 py-2 rounded border border-blue-200">
+                    <span className="font-bold font-sans">Minor Notices</span>
+                    <span className="font-black text-sm">3</span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-[10px] text-slate-400 border-t pt-1 font-mono text-center">
+                Sensor Poll: 2s (Normal)
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

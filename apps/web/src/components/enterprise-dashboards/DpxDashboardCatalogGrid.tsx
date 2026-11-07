@@ -12,49 +12,26 @@ interface CatalogGridProps {
 // Micro Visualizations for each of the 20 Catalog Cards matching reference architecture
 export const DpxCardMicroVisualization: React.FC<{ seq: number }> = ({ seq }) => {
   switch (seq) {
-    case 1: // Plant Overview: Mini Donut + Dual Bar
+    case 1: // Plant Overview: Sapphire 4-Hero Quad Layout
       return (
-        <div className="h-16 bg-slate-50 rounded border border-slate-100 p-1 flex items-center justify-between">
-          <div className="flex items-center gap-1 pl-0.5">
-            <svg width="42" height="42" viewBox="0 0 44 44" className="shrink-0">
-              <circle cx="22" cy="22" r="16" fill="none" stroke="#E2E8F0" strokeWidth="6" />
-              <circle
-                cx="22"
-                cy="22"
-                r="16"
-                fill="none"
-                stroke="#10B981"
-                strokeWidth="6"
-                strokeDasharray="75 100"
-                strokeDashoffset="25"
-              />
-              <circle
-                cx="22"
-                cy="22"
-                r="16"
-                fill="none"
-                stroke="#3B82F6"
-                strokeWidth="6"
-                strokeDasharray="20 100"
-                strokeDashoffset="50"
-              />
-              <text x="22" y="25" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#1E293B">94%</text>
-            </svg>
-            <div className="text-[8.5px] font-mono leading-tight">
-              <div className="text-emerald-600 font-bold">● 11 Run</div>
-              <div className="text-blue-600">● 2 Idle</div>
-              <div className="text-red-500">● 1 Down</div>
+        <div className="h-16 bg-[#F0F5FA] rounded border border-blue-200/80 p-1 flex items-center justify-between gap-1">
+          <div className="grid grid-cols-4 gap-1 flex-1 h-full">
+            <div className="bg-[#1E50ED] rounded flex flex-col justify-center items-center text-white px-0.5">
+              <span className="text-[6.5px] uppercase font-bold opacity-80">Plan</span>
+              <span className="text-[8px] font-black font-mono">118k</span>
             </div>
-          </div>
-          <div className="flex items-end gap-1 h-11 pr-1">
-            {[
-              { p: 85, a: 80 }, { p: 90, a: 88 }, { p: 75, a: 72 }, { p: 95, a: 92 }
-            ].map((b, i) => (
-              <div key={i} className="flex gap-0.5 items-end h-full">
-                <div style={{ height: `${b.p * 0.4}px` }} className="w-1.5 bg-blue-500 rounded-xs" />
-                <div style={{ height: `${b.a * 0.4}px` }} className="w-1.5 bg-cyan-400 rounded-xs" />
-              </div>
-            ))}
+            <div className="bg-[#00A8B5] rounded flex flex-col justify-center items-center text-white px-0.5">
+              <span className="text-[6.5px] uppercase font-bold opacity-80">Lines</span>
+              <span className="text-[8px] font-black font-mono">11/14</span>
+            </div>
+            <div className="bg-[#4F46E5] rounded flex flex-col justify-center items-center text-white px-0.5">
+              <span className="text-[6.5px] uppercase font-bold opacity-80">FPY</span>
+              <span className="text-[8px] font-black font-mono">98.9%</span>
+            </div>
+            <div className="bg-[#7E1CE5] rounded flex flex-col justify-center items-center text-white px-0.5">
+              <span className="text-[6.5px] uppercase font-bold opacity-80">CPH</span>
+              <span className="text-[8px] font-black font-mono">44.8k</span>
+            </div>
           </div>
         </div>
       );
