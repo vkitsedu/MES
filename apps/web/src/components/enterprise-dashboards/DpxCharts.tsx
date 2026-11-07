@@ -368,17 +368,17 @@ export const DpxReflowThermalCurve: React.FC<{
   peakTemp = 245
 }) => {
   const width = 500;
-  const height = 170;
-  const padLeft = 40;
+  const height = 195;
+  const padLeft = 42;
   const padRight = 20;
-  const padTop = 20;
-  const padBottom = 30;
+  const padTop = 28;
+  const padBottom = 34;
 
   const chartW = width - padLeft - padRight;
   const chartH = height - padTop - padBottom;
 
   const maxTemp = 280;
-  const minTemp = 25;
+  const minTemp = 20;
 
   const getY = (temp: number) => padTop + chartH - ((temp - minTemp) / (maxTemp - minTemp)) * chartH;
   const getX = (index: number) => padLeft + (index / (zones.length - 1 || 1)) * chartW;
@@ -386,20 +386,58 @@ export const DpxReflowThermalCurve: React.FC<{
   const setPoints = zones.map((z, i) => `${getX(i)},${getY(z.setTemp)}`).join(' ');
   const actualPoints = zones.map((z, i) => `${getX(i)},${getY(z.actualTemp)}`).join(' ');
 
+  // Find peak index
+  const peakIndex = zones.reduce((maxIdx, z, idx, arr) => z.actualTemp > arr[maxIdx].actualTemp ? idx : maxIdx, 6);
+  const peakX = getX(peakIndex);
+  const peakY = getY(peakTemp);
+
   return (
     <div className="w-full">
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto overflow-visible">
-        {/* Shaded Process Window Band (Pre-heat, Soak, Reflow, Cool) */}
-        <rect x={padLeft} y={padTop} width={chartW * 0.3} height={chartH} fill="#EFF6FF" opacity="0.6" />
-        <rect x={padLeft + chartW * 0.3} y={padTop} width={chartW * 0.3} height={chartH} fill="#FEF3C7" opacity="0.4" />
-        <rect x={padLeft + chartW * 0.6} y={padTop} width={chartW * 0.25} height={chartH} fill="#FEE2E2" opacity="0.5" />
-        <rect x={padLeft + chartW * 0.85} y={padTop} width={chartW * 0.15} height={chartH} fill="#F0FDF4" opacity="0.6" />
+        {/* Top Phase Header Band (Clean, non-overlapping header badges) */}
+        <rect x={padLeft} y={3} width={chartW * 0.3 - 2} height={18} rx="3" fill="#EFF6FF" />
+        <text x={padLeft + (chartW * 0.3 - 2) / 2} y={15} textAnchor="middle" fontSize="8.5" fill="#1D4ED8" fontWeight="bold" fontFamily="monospace">
+          PRE-HEAT (Z1-Z3)
+        </text>
 
-        {/* Phase Labels */}
-        <text x={padLeft + chartW * 0.15} y={padTop + 12} textAnchor="middle" fontSize="9" fill="#3B82F6" fontWeight="bold">PRE-HEAT</text>
-        <text x={padLeft + chartW * 0.45} y={padTop + 12} textAnchor="middle" fontSize="9" fill="#D97706" fontWeight="bold">SOAK</text>
-        <text x={padLeft + chartW * 0.72} y={padTop + 12} textAnchor="middle" fontSize="9" fill="#DC2626" fontWeight="bold">REFLOW</text>
-        <text x={padLeft + chartW * 0.92} y={padTop + 12} textAnchor="middle" fontSize="9" fill="#059669" fontWeight="bold">COOL</text>
+        <rect x={padLeft + chartW * 0.3} y={3} width={chartW * 0.3 - 2} height={18} rx="3" fill="#FEF3C7" />
+        <text x={padLeft + chartW * 0.3 + (chartW * 0.3 - 2) / 2} y={15} textAnchor="middle" fontSize="8.5" fill="#B45309" fontWeight="bold" fontFamily="monospace">
+          SOAK (Z4-Z6)
+        </text>
+
+        <rect x={padLeft + chartW * 0.6} y={3} width={chartW * 0.25 - 2} height={18} rx="3" fill="#FEE2E2" />
+        <text x={padLeft + chartW * 0.6 + (chartW * 0.25 - 2) / 2} y={15} textAnchor="middle" fontSize="8.5" fill="#B91C1C" fontWeight="bold" fontFamily="monospace">
+          REFLOW (Z7-Z8)
+        </text>
+
+        <rect x={padLeft + chartW * 0.85} y={3} width={chartW * 0.15} height={18} rx="3" fill="#ECFDF5" />
+        <text x={padLeft + chartW * 0.85 + (chartW * 0.15) / 2} y={15} textAnchor="middle" fontSize="8.5" fill="#047857" fontWeight="bold" fontFamily="monospace">
+          COOL (Z9-Z10)
+        </text>
+
+        {/* Shaded Process Window Background Bands */}
+        <rect x={padLeft} y={padTop} width={chartW * 0.3} height={chartH} fill="#EFF6FF" opacity="0.4" />
+        <rect x={padLeft + chartW * 0.3} y={padTop} width={chartW * 0.3} height={chartH} fill="#FEF3C7" opacity="0.3" />
+        <rect x={padLeft + chartW * 0.6} y={padTop} width={chartW * 0.25} height={chartH} fill="#FEE2E2" opacity="0.35" />
+        <rect x={padLeft + chartW * 0.85} y={padTop} width={chartW * 0.15} height={chartH} fill="#F0FDF4" opacity="0.4" />
+
+        {/* Temperature Grid Lines & Y-Axis Labels */}
+        {[50, 100, 150, 200, 250].map((t) => (
+          <g key={t}>
+            <line
+              x1={padLeft}
+              y1={getY(t)}
+              x2={width - padRight}
+              y2={getY(t)}
+              stroke="#E2E8F0"
+              strokeWidth="0.8"
+              strokeDasharray="2,3"
+            />
+            <text x={padLeft - 5} y={getY(t) + 3} textAnchor="end" fontSize="7.5" fill="#94A3B8" fontFamily="monospace">
+              {t}°
+            </text>
+          </g>
+        ))}
 
         {/* Liquidus 217°C Line */}
         <line
@@ -411,33 +449,43 @@ export const DpxReflowThermalCurve: React.FC<{
           strokeWidth="1.2"
           strokeDasharray="4,2"
         />
-        <text x={width - padRight} y={getY(liquidusTemp) - 3} textAnchor="end" fontSize="8.5" fill="#EF4444" fontWeight="bold">
-          Liquidus {liquidusTemp}°C
+        <rect x={padLeft + 4} y={getY(liquidusTemp) - 13} width="118" height="12" rx="2" fill="#FEF2F2" stroke="#FCA5A5" strokeWidth="0.8" />
+        <text x={padLeft + 8} y={getY(liquidusTemp) - 4} textAnchor="start" fontSize="7.5" fill="#DC2626" fontWeight="bold" fontFamily="monospace">
+          TAL: Liquidus {liquidusTemp}°C
         </text>
 
         {/* Setpoint Profile (Blue Dashed) */}
-        <polyline fill="none" stroke="#93C5FD" strokeWidth="2" strokeDasharray="3,3" points={setPoints} />
+        <polyline fill="none" stroke="#93C5FD" strokeWidth="1.8" strokeDasharray="3,3" points={setPoints} />
 
-        {/* Actual Thermocouple Curve (Red/Orange Bold) */}
+        {/* Actual Thermocouple Curve (Red Bold) */}
         <polyline fill="none" stroke="#DC2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" points={actualPoints} />
 
-        {/* Zone Markers */}
+        {/* Zone Markers & Bottom Axis */}
         {zones.map((z, i) => (
           <g key={i}>
-            <circle cx={getX(i)} cy={getY(z.actualTemp)} r="3" fill="#DC2626" stroke="#ffffff" strokeWidth="1.5" />
-            <text x={getX(i)} y={height - 10} textAnchor="middle" fontSize="8.5" fill="#475569" fontFamily="monospace">
+            <circle cx={getX(i)} cy={getY(z.actualTemp)} r="3.2" fill="#DC2626" stroke="#ffffff" strokeWidth="1.5" />
+            <text x={getX(i)} y={height - 18} textAnchor="middle" fontSize="8" fill="#334155" fontWeight="bold" fontFamily="monospace">
               Z{z.zone}
+            </text>
+            <text x={getX(i)} y={height - 7} textAnchor="middle" fontSize="7" fill="#64748B" fontFamily="monospace">
+              {z.actualTemp}°
             </text>
           </g>
         ))}
 
-        {/* Peak Indicator */}
-        <text x={getX(7)} y={getY(peakTemp) - 8} textAnchor="middle" fontSize="9.5" fill="#B91C1C" fontWeight="bold">
-          ▲ Peak {peakTemp}°C
-        </text>
+        {/* Dedicated Non-Overlapping Peak Indicator Callout */}
+        <g>
+          {/* Stem connecting callout to peak point */}
+          <line x1={peakX} y1={peakY} x2={peakX} y2={peakY - 14} stroke="#DC2626" strokeWidth="1.2" strokeDasharray="1,1" />
+          {/* Badge */}
+          <rect x={peakX - 35} y={peakY - 25} width="70" height="14" rx="3" fill="#DC2626" />
+          <text x={peakX} y={peakY - 15} textAnchor="middle" fontSize="8" fill="#ffffff" fontWeight="bold" fontFamily="monospace">
+            ▲ PEAK {peakTemp}°C
+          </text>
+        </g>
       </svg>
 
-      <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t font-mono">
+      <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1.5 border-t font-mono">
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 bg-blue-400 border border-blue-600 inline-block" /> Recipe Target</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-1 bg-red-600 inline-block" /> Live Thermocouple Actual</span>
         <span className="text-emerald-700 font-bold">PWI: 64.2% (IN SPEC)</span>
